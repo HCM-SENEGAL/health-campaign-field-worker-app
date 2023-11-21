@@ -110,7 +110,7 @@ class MainApplicationState extends State<MainApplication>
             ],
             child: BlocBuilder<AppInitializationBloc, AppInitializationState>(
               builder: (context, appConfigState) {
-                const defaultLocale = Locale('pt', 'MZ');
+                const defaultLocale = Locale('en', 'MZ');
 
                 return BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, authState) {
@@ -118,7 +118,7 @@ class MainApplicationState extends State<MainApplication>
                       return const MaterialApp(
                         home: Scaffold(
                           body: Center(
-                            child: Text('Carregando'),
+                            child: Text('Loading'),
                           ),
                         ),
                       );
@@ -153,7 +153,7 @@ class MainApplicationState extends State<MainApplication>
                                             .join(',')
                                             .toString(),
                                         tenantId: appConfig.tenantId.toString(),
-                                        locale: firstLanguage,
+                                        locale: 'en_MZ',
                                         path: Constants.localizationApiPath,
                                       ),
                                     )
@@ -249,7 +249,7 @@ class MainApplicationState extends State<MainApplication>
                                                   const EdgeInsets.all(8.0),
                                               child: Center(
                                                 child: AutoSizeText(
-                                                  'Formação'.toUpperCase(),
+                                                  'Training'.toUpperCase(),
                                                   maxLines: 1,
                                                   style: TextStyle(
                                                     fontSize: 50,
