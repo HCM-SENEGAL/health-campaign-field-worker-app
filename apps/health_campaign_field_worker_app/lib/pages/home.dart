@@ -4,23 +4,16 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:digit_components/digit_components.dart';
 import 'package:digit_components/widgets/atoms/digit_toaster.dart';
 import 'package:digit_components/widgets/digit_sync_dialog.dart';
-import 'package:drift/drift.dart' hide Column;
 import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:isar/isar.dart';
 import 'package:overlay_builder/overlay_builder.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../../data/local_store/no_sql/schema/app_configuration.dart'
-    as app_config;
-import '../blocs/app_initialization/app_initialization.dart';
 import '../blocs/auth/auth.dart';
 import '../blocs/search_households/search_households.dart';
 import '../blocs/sync/sync.dart';
 import '../data/data_repository.dart';
-import '../data/local_store/no_sql/schema/oplog.dart';
 
 import '../data/local_store/secure_store/secure_store.dart';
 import '../data/local_store/sql_store/sql_store.dart';
@@ -29,7 +22,6 @@ import '../router/app_router.dart';
 import '../utils/debound.dart';
 import '../utils/i18_key_constants.dart' as i18;
 import '../utils/utils.dart';
-import '../widgets/action_card/action_card.dart';
 import '../widgets/header/back_navigation_help_header.dart';
 import '../widgets/home/home_item_card.dart';
 import '../widgets/localized.dart';

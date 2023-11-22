@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:digit_components/digit_components.dart';
+import 'package:digit_components/widgets/atoms/digit_toaster.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -80,7 +81,7 @@ class _BoundarySelectionPageState extends State<BoundarySelectionPage> {
                                 initialValue: formControls[label]?.value,
                                 label: label,
                                 menuItems: filteredItems,
-                                isRequired: labelIndex == 0,
+                                isRequired: true,
                                 onChanged: (value) {
                                   if (value == null) return;
 
@@ -118,18 +119,33 @@ class _BoundarySelectionPageState extends State<BoundarySelectionPage> {
                             onPressed: selectedBoundary == null
                                 ? null
                                 : () async {
-                                    setState(() {
-                                      shouldPop = true;
-                                    });
+                                    if (!form.valid) {
+                                      await DigitToast.show(
+                                        context,
+                                        options: DigitToastOptions(
+                                          AppLocalizations.of(
+                                            context,
+                                          ).translate(
+                                            i18.common.corecommonRequired,
+                                          ),
+                                          true,
+                                          Theme.of(context),
+                                        ),
+                                      );
+                                    } else {
+                                      setState(() {
+                                        shouldPop = true;
+                                      });
 
-                                    context.read<BoundaryBloc>().add(
-                                          const BoundarySubmitEvent(),
-                                        );
+                                      context.read<BoundaryBloc>().add(
+                                            const BoundarySubmitEvent(),
+                                          );
 
-                                    Future.delayed(
-                                      const Duration(milliseconds: 100),
-                                      () => context.router.pop(),
-                                    );
+                                      Future.delayed(
+                                        const Duration(milliseconds: 100),
+                                        () => context.router.pop(),
+                                      );
+                                    }
                                   },
                             child: const Text('Submit'),
                           ),
@@ -162,7 +178,7 @@ class _BoundarySelectionPageState extends State<BoundarySelectionPage> {
 
     for (final label in labelList) {
       formControls[label] = FormControl<BoundaryModel>(
-        validators: label == labelList.first ? [Validators.required] : [],
+        validators: [Validators.required],
         value: state.selectedBoundaryMap[label],
       );
     }
