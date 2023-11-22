@@ -305,7 +305,7 @@ class _StockReconciliationPageState
                                           ),
                                           label: localizations.translate(
                                             i18.stockReconciliationDetails
-                                                .facilityName,
+                                                .facilityLabel,
                                           ),
                                           suffix: const Padding(
                                             padding: EdgeInsets.all(8.0),
@@ -351,7 +351,7 @@ class _StockReconciliationPageState
                                                   _productVariantKey,
                                               label: localizations.translate(
                                                 i18.stockReconciliationDetails
-                                                    .spaqLabel,
+                                                    .productLabel,
                                               ),
                                               isRequired: true,
                                               onChanged: (value) {
@@ -415,7 +415,7 @@ class _StockReconciliationPageState
                                       element: {
                                         localizations.translate(
                                           i18.stockReconciliationDetails
-                                              .spaqReceived,
+                                              .stockReceived,
                                         ): stockState.stockReceived
                                             .toStringAsFixed(0),
                                       },
@@ -427,7 +427,7 @@ class _StockReconciliationPageState
                                       element: {
                                         localizations.translate(
                                           i18.stockReconciliationDetails
-                                              .spaqSent,
+                                              .stockIssued,
                                         ): stockState.stockIssued
                                             .toStringAsFixed(0),
                                       },
@@ -439,7 +439,7 @@ class _StockReconciliationPageState
                                       element: {
                                         localizations.translate(
                                           i18.stockReconciliationDetails
-                                              .spaqReturned,
+                                              .stockReturned,
                                         ): stockState.stockReturned
                                             .toStringAsFixed(0),
                                       },
@@ -451,7 +451,7 @@ class _StockReconciliationPageState
                                       element: {
                                         localizations.translate(
                                           i18.stockReconciliationDetails
-                                              .spaqTheoretical,
+                                              .stockOnHand,
                                         ): stockState.stockInHand
                                             .toStringAsFixed(0),
                                       },
@@ -476,7 +476,7 @@ class _StockReconciliationPageState
                                       isRequired: true,
                                       label: localizations.translate(
                                         i18.stockReconciliationDetails
-                                            .physicalSpaqCount,
+                                            .manualCountLabel,
                                       ),
                                       formControlName: _manualCountKey,
                                       keyboardType:
@@ -553,9 +553,8 @@ class _StockReconciliationPageState
                                           _reconciliationCommentsKey,
                                       validationMessages: {
                                         "required": (object) =>
-                                            localizations.translate(i18
-                                                .stockReconciliationDetails
-                                                .reconciliationCommentRequiredError),
+                                            localizations.translate(
+                                                i18.common.corecommonRequired),
                                         "min3": (object) =>
                                             localizations.translate(
                                               i18.common.min3CharsRequired,

@@ -3,13 +3,10 @@ import 'package:digit_components/digit_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:recase/recase.dart';
 
-import '../../../blocs/app_initialization/app_initialization.dart';
 import '../../../blocs/facility/facility.dart';
 import '../../../blocs/product_variant/product_variant.dart';
 import '../../../blocs/record_stock/record_stock.dart';
-import '../../../data/local_store/no_sql/schema/app_configuration.dart';
 import '../../../models/data_model.dart';
 import '../../../router/app_router.dart';
 import '../../../utils/i18_key_constants.dart' as i18;
@@ -32,9 +29,9 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
   static const _productVariantKey = 'productVariant';
   static const _transactingPartyKey = 'transactingParty';
   static const _transactionQuantityKey = 'quantity';
-  static const _transactionDamagedQuantityKey = 'quantityDamaged';
   static const _commentsKey = 'comments';
-  List<ValidatorFunction> damagedQuantityValidator = [];
+  static const _waybillNumberKey = 'waybillNumber';
+  static const _waybillQuantityKey = 'waybillQuantity';
 
   FormGroup _form() {
     return fb.group({
@@ -50,8 +47,17 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
         Validators.min(0),
         Validators.max(10000),
       ]),
-      _transactionDamagedQuantityKey:
-          FormControl<int>(validators: damagedQuantityValidator),
+      _waybillNumberKey: FormControl<String>(
+        validators: [Validators.required],
+      ),
+      _waybillQuantityKey: FormControl<int>(
+        validators: [
+          Validators.number,
+          Validators.required,
+          Validators.min(0),
+          Validators.max(10000),
+        ],
+      ),
       _commentsKey: FormControl<String>(),
     });
   }
@@ -103,12 +109,6 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                   transactionPartyLabel = module.selectTransactingPartyReturned;
                   quantityCountLabel = module.quantityReturnedLabel;
                   transactionType = TransactionType.received;
-                  damagedQuantityValidator = [
-                    Validators.number,
-                    Validators.required,
-                    Validators.min(0),
-                    Validators.max(10000),
-                  ];
                   break;
                 case StockRecordEntryType.loss:
                   pageTitle = module.lostPageTitle;
@@ -196,9 +196,12 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                         .control(_transactionQuantityKey)
                                         .value;
 
-                                    final damagedQuantity = form
-                                        .control(_transactionDamagedQuantityKey)
-                                        .value;
+                                    final waybillNumber = form
+                                        .control(_waybillNumberKey)
+                                        .value as String?;
+
+                                    final waybillQuantity =
+                                        form.control(_waybillQuantityKey).value;
 
                                     final lat = locationState.latitude;
                                     final lng = locationState.longitude;
@@ -240,6 +243,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                       referenceId: stockState.projectId,
                                       referenceIdType: 'PROJECT',
                                       quantity: quantity.toString(),
+                                      waybillNumber: waybillNumber,
                                       auditDetails: AuditDetails(
                                         createdBy: context.loggedInUserUuid,
                                         createdTime:
@@ -255,18 +259,18 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                             context.millisecondsSinceEpoch(),
                                       ),
                                       additionalFields: [
+                                                waybillQuantity,
                                                 comments,
-                                                damagedQuantity,
                                               ].any((element) =>
                                                   element != null) ||
                                               hasLocationData
                                           ? StockAdditionalFields(
                                               version: 1,
                                               fields: [
-                                                if (damagedQuantity != null)
+                                                if (waybillQuantity != null)
                                                   AdditionalField(
-                                                    'damaged_quantity',
-                                                    damagedQuantity,
+                                                    'waybill_quantity',
+                                                    waybillQuantity.toString(),
                                                   ),
                                                 if (comments != null)
                                                   AdditionalField(
@@ -356,7 +360,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                         ProductVariantModel>(
                                       formControlName: _productVariantKey,
                                       label: localizations.translate(
-                                        module.selectSpaqVariant,
+                                        module.selectProductLabel,
                                       ),
                                       isRequired: true,
                                       valueMapper: (value) {
@@ -367,7 +371,9 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                       menuItems: productVariants,
                                       validationMessages: {
                                         'required': (object) =>
-                                            '${module.selectProductLabel}_IS_REQUIRED',
+                                            localizations.translate(
+                                              '${module.selectProductLabel}_IS_REQUIRED',
+                                            ),
                                       },
                                     );
                                   },
@@ -410,6 +416,12 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                     form.control(_transactingPartyKey).value =
                                         facility;
                                   },
+                                  validationMessages: {
+                                    'required': (object) =>
+                                        localizations.translate(
+                                          i18.common.corecommonRequired,
+                                        ),
+                                  },
                                 );
                               },
                             ),
@@ -435,31 +447,41 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                 quantityCountLabel,
                               ),
                             ),
-                            if ([
-                              StockRecordEntryType.returned,
-                            ].contains(entryType))
-                              DigitTextFormField(
-                                formControlName: _transactionDamagedQuantityKey,
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                  decimal: true,
-                                ),
-                                isRequired: true,
-                                validationMessages: {
-                                  "number": (object) => localizations.translate(
-                                        '${quantityCountLabel}_VALIDATION',
-                                      ),
-                                  "max": (object) => localizations.translate(
-                                        '${quantityCountLabel}_MAX_ERROR',
-                                      ),
-                                  "min": (object) => localizations.translate(
-                                        '${quantityCountLabel}_MIN_ERROR',
-                                      ),
-                                },
-                                label: localizations.translate(
-                                  i18.stockDetails.quantityDamagedCountLabel,
-                                ),
+                            DigitTextFormField(
+                              label: localizations.translate(
+                                i18.stockDetails.waybillNumberLabel,
                               ),
+                              isRequired: true,
+                              formControlName: _waybillNumberKey,
+                              validationMessages: {
+                                'required': (object) => localizations.translate(
+                                      i18.common.corecommonRequired,
+                                    ),
+                              },
+                            ),
+                            DigitTextFormField(
+                              label: localizations.translate(
+                                i18.stockDetails
+                                    .quantityOfProductIndicatedOnWaybillLabel,
+                              ),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                decimal: true,
+                              ),
+                              isRequired: true,
+                              formControlName: _waybillQuantityKey,
+                              validationMessages: {
+                                "number": (object) => localizations.translate(
+                                      '${i18.stockDetails.quantityOfProductIndicatedOnWaybillLabel}_ERROR',
+                                    ),
+                                "max": (object) => localizations.translate(
+                                      '${quantityCountLabel}_MAX_ERROR',
+                                    ),
+                                "min": (object) => localizations.translate(
+                                      '${quantityCountLabel}_MIN_ERROR',
+                                    ),
+                              },
+                            ),
                             DigitTextFormField(
                               label: localizations.translate(
                                 i18.stockDetails.commentsLabel,

@@ -49,8 +49,7 @@ class FacilitySelectionPage extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       child: DigitTextFormField(
                         label: localizations.translate(
-                          i18.stockReconciliationDetails
-                              .facilityNameCommunitySupervisor,
+                          i18.stockReconciliationDetails.facilityLabel,
                         ),
                         formControlName: _facilityName,
                       ),

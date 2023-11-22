@@ -163,7 +163,7 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                   readOnly: true,
                                   formControlName: _administrativeUnitKey,
                                   label: localizations.translate(
-                                    i18.warehouseDetails.organizationUnit,
+                                    i18.warehouseDetails.administrativeUnit,
                                   ),
                                 ),
                               ]),
@@ -173,8 +173,7 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                 ),
                                 isRequired: true,
                                 label: localizations.translate(
-                                  i18.warehouseDetails
-                                      .usNameCommunitySupervisor,
+                                  i18.warehouseDetails.warehouseNameId,
                                 ),
                                 suffix: const Padding(
                                   padding: EdgeInsets.all(8.0),

@@ -46,9 +46,9 @@ class _ManageStocksPageState extends LocalizedState<ManageStocksPage> {
               Column(children: [
                 DigitListView(
                   title: localizations
-                      .translate(i18.manageStock.recordSpaqReceipt),
+                      .translate(i18.manageStock.recordStockReceiptLabel),
                   description: localizations
-                      .translate(i18.manageStock.recordSpaqReceivedAtFacility),
+                      .translate(i18.manageStock.recordStockReceiptDescription),
                   prefixIcon: Icons.file_download_outlined,
                   sufixIcon: Icons.arrow_circle_right,
                   onPressed: () => context.router.push(
@@ -58,10 +58,10 @@ class _ManageStocksPageState extends LocalizedState<ManageStocksPage> {
                   ),
                 ),
                 DigitListView(
-                  title:
-                      localizations.translate(i18.manageStock.recordSpaqIssued),
+                  title: localizations
+                      .translate(i18.manageStock.recordStockIssuedLabel),
                   description: localizations
-                      .translate(i18.manageStock.spaqSentFromFacility),
+                      .translate(i18.manageStock.recordStockIssuedDescription),
                   prefixIcon: Icons.file_upload_outlined,
                   sufixIcon: Icons.arrow_circle_right,
                   onPressed: () => context.router.push(
@@ -72,9 +72,9 @@ class _ManageStocksPageState extends LocalizedState<ManageStocksPage> {
                 ),
                 DigitListView(
                   title: localizations
-                      .translate(i18.manageStock.recordSpaqReturned),
+                      .translate(i18.manageStock.recordStockReturnedLabel),
                   description: localizations.translate(
-                    i18.manageStock.recordSpaqReturnedToFacility,
+                    i18.manageStock.recordStockReturnedDescription,
                   ),
                   prefixIcon: Icons.settings_backup_restore,
                   sufixIcon: Icons.arrow_circle_right,
