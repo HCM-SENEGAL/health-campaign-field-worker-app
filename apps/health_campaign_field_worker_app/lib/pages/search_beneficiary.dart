@@ -257,12 +257,9 @@ class _SearchBeneficiaryPageState
                   builder: (context, state) {
                     final router = context.router;
 
-                    final searchQuery = state.searchQuery;
                     VoidCallback? onPressed;
 
-                    onPressed = state.loading ||
-                            searchQuery == null ||
-                            searchQuery.isEmpty
+                    onPressed = state.loading
                         ? null
                         : () {
                             FocusManager.instance.primaryFocus?.unfocus();

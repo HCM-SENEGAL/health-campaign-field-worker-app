@@ -87,19 +87,19 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
 
               switch (entryType) {
                 case StockRecordEntryType.receipt:
-                  pageTitle = module.receivedSpaqDetails;
+                  pageTitle = module.receivedPageTitle;
                   transactionPartyLabel = module.selectTransactingPartyReceived;
                   quantityCountLabel = module.quantityReceivedLabel;
                   transactionType = TransactionType.received;
                   break;
                 case StockRecordEntryType.dispatch:
-                  pageTitle = module.issuedSpaqDetails;
+                  pageTitle = module.issuedPageTitle;
                   transactionPartyLabel = module.selectTransactingPartyIssued;
                   quantityCountLabel = module.quantitySentLabel;
                   transactionType = TransactionType.dispatched;
                   break;
                 case StockRecordEntryType.returned:
-                  pageTitle = module.returnedSpaqDetails;
+                  pageTitle = module.returnedPageTitle;
                   transactionPartyLabel = module.selectTransactingPartyReturned;
                   quantityCountLabel = module.quantityReturnedLabel;
                   transactionType = TransactionType.received;

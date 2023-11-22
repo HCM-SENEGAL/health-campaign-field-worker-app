@@ -176,18 +176,14 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             cellKey: 'beneficiary',
           ),
           TableData(
-            isHead
-                ? localizations.translate(
-                    i18.householdOverView.householdOverViewHouseholderHeadLabel,
-                  )
-                : getTableCellText(
-                    isNotEligible,
-                    taskdata,
-                    isBeneficiaryRefused,
-                    isBeneficiaryIneligible,
-                    isBeneficiaryReferred,
-                    isStatusReset,
-                  ),
+            getTableCellText(
+              isNotEligible,
+              taskdata,
+              isBeneficiaryRefused,
+              isBeneficiaryIneligible,
+              isBeneficiaryReferred,
+              isStatusReset,
+            ),
             cellKey: 'delivery',
             style: TextStyle(
               color: getTableCellTextColor(

@@ -450,8 +450,7 @@ class HouseholdOverView {
   String get householdOverViewHouseholdHeadNameLabel =>
       'HOUSEHOLD_OVER_VIEW_HOUSEHOLD_HEAD_NAME_LABEL';
 
-  String get householdOverViewActionText =>
-      'HOUSEHOLD_OVER_VIEW_ACTION_TEXT_SPAQ';
+  String get householdOverViewActionText => 'HOUSEHOLD_OVER_VIEW_ACTION_TEXT';
 
   String get viewDeliveryLabel => 'VIEW_DELIVERY_DETAILS_LABEL';
 
@@ -511,16 +510,16 @@ class DeliverIntervention {
       'DELIVER_INTERVENTION_DATE_OF_REGISTRATION_LABEL';
 
   String get resourceDeliveredLabel =>
-      'DELIVER_INTERVENTION_RESOURCE_DELIVERED_LABEL_SPAQ';
+      'DELIVER_INTERVENTION_RESOURCE_DELIVERED_LABEL';
 
   String get resourceDeliveredError =>
       'DELIVER_INTERVENTION_RESOURCE_DELIVERED_ERROR';
 
   String get quantityDistributedLabel =>
-      'DELIVER_INTERVENTION_QUANTITY_DISTRIBUTED_LABEL_SPAQ';
+      'DELIVER_INTERVENTION_QUANTITY_DISTRIBUTED_LABEL';
 
   String get quantityWastedLabel =>
-      'DELIVER_INTERVENTION_QUANTITY_WASTED_LABEL_SPAQ';
+      'DELIVER_INTERVENTION_QUANTITY_WASTED_LABEL';
 
   String get deliveryCommentLabel =>
       'DELIVER_INTERVENTION_DELIVERY_COMMENT_LABEL';
@@ -532,7 +531,7 @@ class DeliverIntervention {
   String get memberCountText => 'DELIVER_INTERVENTION_MEMBER_COUNT_TEXT';
 
   String get noOfResourcesForDelivery =>
-      'DELIVER_INTERVENTION_NO_OF_RESOURCES_FOR_DELIVERY_SPAQ';
+      'DELIVER_INTERVENTION_NO_OF_RESOURCES_FOR_DELIVERY';
 
   String get dialogTitle => 'DELIVER_INTERVENTION_DIALOG_TITLE';
 
@@ -648,11 +647,11 @@ class StockDetails {
   }
 
   /// Quantity sent/received/lost/damaged label
-  String get quantityReceivedLabel => 'STOCK_DETAILS_QUANTITY_RECEIVED_SPAQ';
+  String get quantityReceivedLabel => 'STOCK_DETAILS_QUANTITY_RECEIVED';
 
-  String get quantitySentLabel => 'STOCK_DETAILS_QUANTITY_SENT_SPAQ';
+  String get quantitySentLabel => 'STOCK_DETAILS_QUANTITY_SENT';
 
-  String get quantityReturnedLabel => 'STOCK_DETAILS_QUANTITY_RETURNED_SPAQ';
+  String get quantityReturnedLabel => 'STOCK_DETAILS_QUANTITY_RETURNED';
 
   String get quantityLostLabel => 'STOCK_DETAILS_QUANTITY_LOST';
 
@@ -663,7 +662,7 @@ class StockDetails {
 
   /// Number of product indicated on waybill title
   String get quantityOfProductIndicatedOnWaybillLabel {
-    return 'STOCK_DETAILS_WAYBILL_QUANTITY_SPAQ';
+    return 'STOCK_DETAILS_WAYBILL_QUANTITY';
   }
 
   /// Lost/Damaged during label

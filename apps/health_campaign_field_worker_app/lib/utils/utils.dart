@@ -303,10 +303,7 @@ bool checkEligibilityForAgeAndSideEffect(
               : false
           : false;
     } else {
-      return totalAgeMonths >= projectType!.validMinAge! &&
-              totalAgeMonths <= projectType.validMaxAge!
-          ? true
-          : false;
+      return true;
     }
   }
 
@@ -466,12 +463,13 @@ DoseCriteriaModel? fetchProductVariant(
       final condition = criteria.condition;
       if (condition != null) {
         //{TODO: Expression package need to be parsed
-        final ageRange = condition.split("<=age<");
+        final ageRange = condition.split("<=height<");
         final minAge = int.parse(ageRange.first);
         final maxAge = int.parse(ageRange.last);
 
-        return individualAgeInMonths >= minAge &&
-            individualAgeInMonths <= maxAge;
+        // return individualAgeInMonths >= minAge &&
+        //     individualAgeInMonths <= maxAge;
+        return true;
       }
 
       return false;

@@ -330,10 +330,10 @@ class _DoseAdministeredPageState extends LocalizedState<DoseAdministeredPage> {
                                       ): '${fetchProductVariant(
                                         deliveryState.futureDeliveries?.first,
                                         overViewBloc.selectedIndividual,
-                                      )?.condition?.split('<=age<').first} - ${fetchProductVariant(
+                                      )?.condition?.split('<=height<').first} - ${fetchProductVariant(
                                         deliveryState.futureDeliveries?.first,
                                         overViewBloc.selectedIndividual,
-                                      )?.condition?.split('<=age<').last} months',
+                                      )?.condition?.split('<=height<').last} months',
                                     },
                                     //[TODO:: Need to parse <=age< as an Expression
                                   ),
