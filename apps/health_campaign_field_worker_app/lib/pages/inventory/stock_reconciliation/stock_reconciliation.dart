@@ -278,7 +278,7 @@ class _StockReconciliationPageState
                                     Text(
                                       localizations.translate(
                                         i18.stockReconciliationDetails
-                                            .spaqReconciliation,
+                                            .reconciliationPageTitle,
                                       ),
                                       style: Theme.of(context)
                                           .textTheme
