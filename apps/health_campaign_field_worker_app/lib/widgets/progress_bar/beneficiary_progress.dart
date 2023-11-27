@@ -105,7 +105,7 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
 
   @override
   Widget build(BuildContext context) {
-    final target = 65;
+    final target = 250;
 
     return ProgressIndicatorContainer(
       label: '${max(target - current, 0).round()} ${widget.label}',

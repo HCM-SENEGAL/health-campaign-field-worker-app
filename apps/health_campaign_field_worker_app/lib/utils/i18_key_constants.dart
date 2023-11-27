@@ -372,6 +372,8 @@ class HouseholdLocation {
 
   String get landmarkFormLabel => 'LANDMARK_FORM_LABEL';
 
+  String get accuracyFormLabel => 'ACCURACY_FORM_LABEL';
+
   String get householdAddressLine2LabelText =>
       'HOUSEHOLD_ADDRESS_LINE_2_FORM_LABEL';
 

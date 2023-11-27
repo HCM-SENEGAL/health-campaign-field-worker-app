@@ -28,6 +28,7 @@ class _HouseholdLocationPageState
   static const _latKey = 'lat';
   static const _lngKey = 'lng';
   static const _accuracyKey = 'accuracy';
+  static const _landmarkKey = 'landmark';
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,8 @@ class _HouseholdLocationPageState
                           onPressed: () {
                             form.markAllAsTouched();
                             if (!form.valid) return;
-
+                            
+                            final landmark = form.control(_landmarkKey).value as String?;
                             registrationState.maybeWhen(
                               orElse: () {
                                 return;
@@ -92,6 +94,10 @@ class _HouseholdLocationPageState
                               ) {
                                 var addressModel = AddressModel(
                                   addressLine1: context.boundary.name,
+                                  landmark: landmark != null &&
+                                          landmark.trim().isNotEmpty
+                                      ? landmark
+                                      : null,
                                   type: AddressType.correspondence,
                                   latitude: form.control(_latKey).value ??
                                       locationState.latitude,
@@ -137,6 +143,9 @@ class _HouseholdLocationPageState
                               ) {
                                 var addressModel = address.copyWith(
                                   addressLine1: context.boundary.name,
+                                  landmark: landmark != null &&
+                                          landmark.trim().isNotEmpty
+                                      ? landmark : null,
                                   type: AddressType.correspondence,
                                   latitude: form.control(_latKey).value,
                                   longitude: form.control(_lngKey).value,
@@ -191,6 +200,19 @@ class _HouseholdLocationPageState
                                   ),
                             },
                           ),
+                          DigitTextFormField(
+                            formControlName: _accuracyKey,
+                            readOnly: true,
+                            label: localizations.translate(
+                              i18.householdLocation.accuracyFormLabel,
+                            ),
+                          ),
+                          DigitTextFormField(
+                            formControlName: _landmarkKey,
+                            label: localizations.translate(
+                              i18.householdLocation.landmarkFormLabel,
+                            ),
+                          ),
                         ]),
                         const SizedBox(height: 16),
                       ],
@@ -224,6 +246,8 @@ class _HouseholdLocationPageState
       _accuracyKey: FormControl<double>(
         value: addressModel?.locationAccuracy,
       ),
+      _landmarkKey:
+          FormControl<String>(value: addressModel?.landmark),
     });
   }
 }
