@@ -185,27 +185,17 @@ class _DeliverInterventionPageState
                                                     ),
                                                   );
                                                 } else if ((((form.control(
-                                                              _quantityDistributedKey,
-                                                            ) as FormArray)
-                                                                .value) ??
-                                                            [])
-                                                        .any((e) =>
-                                                            e != null &&
-                                                            int.parse(e
-                                                                    .toString()) >
-                                                                1) &&
-                                                    (form
-                                                            .control(
-                                                              _deliveryCommentKey,
-                                                            )
-                                                            .value as String)
-                                                        .isEmpty) {
+                                                          _quantityDistributedKey,
+                                                        ) as FormArray)
+                                                            .value) ??
+                                                        [])
+                                                    .any((e) => e == 0)) {
                                                   await DigitToast.show(
                                                     context,
                                                     options: DigitToastOptions(
                                                       localizations.translate(i18
                                                           .deliverIntervention
-                                                          .deliveryCommentRequired),
+                                                          .resourceCannotBeZero),
                                                       true,
                                                       theme,
                                                     ),
