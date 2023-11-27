@@ -15,7 +15,6 @@ class ResourceBeneficiaryCard extends LocalizedStatefulWidget {
   final FormGroup form;
   final int totalItems;
   final bool isAdministered;
-  final void Function(bool) checkDoseAdministration;
 
   const ResourceBeneficiaryCard({
     Key? key,
@@ -25,7 +24,6 @@ class ResourceBeneficiaryCard extends LocalizedStatefulWidget {
     required this.form,
     required this.totalItems,
     this.isAdministered = false,
-    required this.checkDoseAdministration,
   }) : super(key: key);
 
   @override
@@ -75,20 +73,14 @@ class _ResourceBeneficiaryCardState
               );
             },
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: DigitCheckbox(
-              label: localizations.translate(
-                i18.deliverIntervention.deliverInteventionAdministeredLabel,
-              ),
-              value: doseAdministered,
-              onChanged: (value) {
-                setState(() {
-                  doseAdministered = value!;
-                  widget.checkDoseAdministration(value);
-                });
-              },
+          DigitIntegerFormPicker(
+            incrementer: true,
+            formControlName: 'quantityDistributed.${widget.cardIndex}',
+            form: widget.form,
+            label: localizations.translate(
+              i18.deliverIntervention.quantityDistributedLabel,
             ),
+            minimum: 1,
           ),
           DigitTextFormField(
             formControlName: 'quantityWasted.${widget.cardIndex}',

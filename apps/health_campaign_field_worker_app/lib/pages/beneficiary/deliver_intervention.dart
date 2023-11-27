@@ -46,20 +46,12 @@ class _DeliverInterventionPageState
   static const _deliveryCommentKey = 'deliveryComment';
   static const _doseAdministrationKey = 'doseAdministered';
   static const _dateOfAdministrationKey = 'dateOfAdministration';
-  static const _defaultQuantity = 1;
-  static const _administeredQuantity = 2;
+
   // Variable to track dose administration status
   bool doseAdministered = false;
 
   // List of controllers for form elements
   final List _controllers = [];
-
-  // toggle doseAdministered
-  void checkDoseAdministration(bool newValue) {
-    setState(() {
-      doseAdministered = newValue;
-    });
-  }
 
 // Initialize the currentStep variable to keep track of the current step in a process.
   int currentStep = 0;
@@ -192,13 +184,22 @@ class _DeliverInterventionPageState
                                                       theme,
                                                     ),
                                                   );
-                                                } else if (doseAdministered &&
-                                                    form
+                                                } else if ((((form.control(
+                                                              _quantityDistributedKey,
+                                                            ) as FormArray)
+                                                                .value) ??
+                                                            [])
+                                                        .any((e) =>
+                                                            e != null &&
+                                                            int.parse(e
+                                                                    .toString()) >
+                                                                1) &&
+                                                    (form
                                                             .control(
                                                               _deliveryCommentKey,
                                                             )
-                                                            .value ==
-                                                        null) {
+                                                            .value as String)
+                                                        .isEmpty) {
                                                   await DigitToast.show(
                                                     context,
                                                     options: DigitToastOptions(
@@ -430,8 +431,6 @@ class _DeliverInterventionPageState
                                                                   .length,
                                                           isAdministered:
                                                               doseAdministered,
-                                                          checkDoseAdministration:
-                                                              checkDoseAdministration,
                                                           onDelete: (index) {
                                                             (form.control(
                                                               _resourceDeliveredKey,
@@ -593,9 +592,9 @@ class _DeliverInterventionPageState
                 taskId: task?.id,
                 tenantId: envConfig.variables.tenantId,
                 rowVersion: oldTask?.rowVersion ?? 1,
-                quantity: doseAdministered
-                    ? _administeredQuantity.toString()
-                    : _defaultQuantity.toString(),
+                quantity: (((form.control(_quantityDistributedKey) as FormArray)
+                        .value)?[productvariantList.indexOf(e)])
+                    .toString(),
                 clientAuditDetails: ClientAuditDetails(
                   createdBy: context.loggedInUserUuid,
                   createdTime: context.millisecondsSinceEpoch(),
@@ -696,9 +695,9 @@ class _DeliverInterventionPageState
               )),
         ],
       ),
-      _quantityDistributedKey: FormArray<String>([
+      _quantityDistributedKey: FormArray<int>([
         ..._controllers.map(
-          (e) => FormControl<String>(validators: [Validators.required]),
+          (e) => FormControl<int>(value: 0, validators: [Validators.min(1)]),
         ),
       ]),
       _quantityWastedKey: FormArray<String>([
