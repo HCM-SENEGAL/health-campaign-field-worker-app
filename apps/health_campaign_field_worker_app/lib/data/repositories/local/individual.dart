@@ -205,6 +205,11 @@ class IndividualLocalRepository extends IndividualLocalBaseRepository {
                   ),
                 ),
             ],
+            additionalFields: individual.additionalFields == null
+                ? null
+                : Mapper.fromJson<IndividualAdditionalFields>(
+                    individual.additionalFields!,
+                  ),
           );
         })
         .where((element) => element.isDeleted != true)

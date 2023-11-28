@@ -526,6 +526,8 @@ class DeliverIntervention {
   String get deliveryCommentLabel =>
       'DELIVER_INTERVENTION_DELIVERY_COMMENT_LABEL';
 
+  String get disabilityLabel => 'DELIVER_INTERVENTION_DISABILITY_LABEL';
+
   String get idTypeText => 'DELIVER_INTERVENTION_ID_TYPE_TEXT';
 
   String get idNumberText => 'DELIVER_INTERVENTION_ID_NUMBER_TEXT';
