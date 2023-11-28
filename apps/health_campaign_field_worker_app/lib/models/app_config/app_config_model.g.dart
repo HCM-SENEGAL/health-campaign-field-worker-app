@@ -83,6 +83,10 @@ _$_AppConfigPrimaryWrapperModel _$$_AppConfigPrimaryWrapperModelFromJson(
           ? null
           : IneligibilityReasonsWrapperModel.fromJson(
               json['HCM-INELIGIBILITY-REASONS'] as Map<String, dynamic>),
+      disabilityTypes: json['HCM-DISABILITY-TYPES'] == null
+          ? null
+          : DisabilityTypesWrapperModel.fromJson(
+              json['HCM-DISABILITY-TYPES'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_AppConfigPrimaryWrapperModelToJson(
@@ -93,6 +97,7 @@ Map<String, dynamic> _$$_AppConfigPrimaryWrapperModelToJson(
       'HCM-SYMPTOMS-TYPES': instance.symptomsTypes,
       'HCM-REFERRAL-REASONS': instance.referralReasons,
       'HCM-INELIGIBILITY-REASONS': instance.ineligibilityReasons,
+      'HCM-DISABILITY-TYPES': instance.disabilityTypes,
     };
 
 _$_AppConfigSecondaryWrapperModel _$$_AppConfigSecondaryWrapperModelFromJson(

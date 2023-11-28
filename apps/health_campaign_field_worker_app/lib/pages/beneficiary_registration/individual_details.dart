@@ -42,6 +42,7 @@ class _IndividualDetailsPageState
   static const _dobKey = 'dob';
   static const _genderKey = 'gender';
   static const _mobileNumberKey = 'mobileNumber';
+  static const _disabilityTypeKey = 'disabilityType';
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +264,7 @@ class _IndividualDetailsPageState
                                     i18.individualDetails
                                         .firstNameIsRequiredError,
                                   ),
-                              'minLength': (object) => localizations.translate(
+                              'min3': (object) => localizations.translate(
                                     i18.individualDetails.firstNameLengthError,
                                   ),
                               'maxLength': (object) => localizations.translate(
@@ -283,7 +284,7 @@ class _IndividualDetailsPageState
                                     i18.individualDetails
                                         .lastNameIsRequiredError,
                                   ),
-                              'minLength': (object) => localizations.translate(
+                              'min3': (object) => localizations.translate(
                                     i18.individualDetails.lastNameLengthError,
                                   ),
                               'maxLength': (object) => localizations.translate(
@@ -389,6 +390,36 @@ class _IndividualDetailsPageState
                                       .mobileNumberInvalidFormatValidationMessage),
                             },
                           ),
+                          BlocBuilder<AppInitializationBloc,
+                              AppInitializationState>(
+                            builder: (context, state) {
+                              if (state is! AppInitialized) {
+                                return const Offstage();
+                              }
+
+                              final disabilityTypes =
+                                  state.appConfiguration.disabilityTypes ??
+                                      <DisabilityTypes>[];
+
+                              return DigitReactiveDropdown<String>(
+                                label: localizations.translate(
+                                  i18.deliverIntervention.disabilityLabel,
+                                ),
+                                isRequired: true,
+                                valueMapper: (value) =>
+                                    localizations.translate(value),
+                                initialValue: disabilityTypes.firstOrNull?.code,
+                                menuItems: disabilityTypes.map((e) {
+                                  return e.code;
+                                }).toList(),
+                                formControlName: _disabilityTypeKey,
+                                validationMessages: {
+                                  'required': (object) => localizations
+                                      .translate(i18.common.corecommonRequired),
+                                },
+                              );
+                            },
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -474,6 +505,8 @@ class _IndividualDetailsPageState
       ),
     );
 
+    final disabilityType = form.control(_disabilityTypeKey).value;
+
     individual = individual.copyWith(
       name: name.copyWith(
         givenName: form.control(_individualNameKey).value,
@@ -492,6 +525,17 @@ class _IndividualDetailsPageState
           identifierType: 'DEFAULT',
         ),
       ],
+      additionalFields: disabilityType != null
+          ? IndividualAdditionalFields(
+              version: 1,
+              fields: [
+                AdditionalField(
+                  _disabilityTypeKey,
+                  disabilityType,
+                ),
+              ],
+            )
+          : null,
     );
 
     return individual;
@@ -510,11 +554,15 @@ class _IndividualDetailsPageState
       },
     );
 
+    final disabilityType = individual?.additionalFields?.fields
+        .firstWhereOrNull((element) => element.key == _disabilityTypeKey)
+        ?.value;
+
     return fb.group(<String, Object>{
       _individualNameKey: FormControl<String>(
         validators: [
           Validators.required,
-          Validators.minLength(validation.individual.nameMinLength),
+          CustomValidator.requiredMin3,
           Validators.maxLength(validation.individual.nameMaxLength),
         ],
         value: individual?.name?.givenName ?? searchQuery?.trim(),
@@ -522,7 +570,7 @@ class _IndividualDetailsPageState
       _individualLastNameKey: FormControl<String>(
         validators: [
           Validators.required,
-          Validators.minLength(validation.individual.nameMinLength),
+          CustomValidator.requiredMin3,
           Validators.maxLength(validation.individual.nameMaxLength),
         ],
         value: individual?.name?.familyName ?? '',
@@ -554,6 +602,10 @@ class _IndividualDetailsPageState
       _mobileNumberKey:
           FormControl<String>(value: individual?.mobileNumber, validators: [
         CustomValidator.validMobileNumber,
+      ]),
+      _disabilityTypeKey:
+          FormControl<String>(value: disabilityType, validators: [
+        Validators.required,
       ]),
     });
   }

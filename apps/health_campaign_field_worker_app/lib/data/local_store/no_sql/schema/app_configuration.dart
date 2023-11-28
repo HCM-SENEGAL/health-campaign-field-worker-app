@@ -75,6 +75,8 @@ class AppConfiguration {
   late List<ReferralReasons>? referralReasons;
 
   late List<IneligibilityReasons>? ineligibilityReasons;
+
+  late List<DisabilityTypes>? disabilityTypes;
 }
 
 @embedded
@@ -202,6 +204,13 @@ class ReferralReasons {
 
 @embedded
 class IneligibilityReasons {
+  late String code;
+  late String name;
+  late bool active;
+}
+
+@embedded
+class DisabilityTypes {
   late String code;
   late String name;
   late bool active;

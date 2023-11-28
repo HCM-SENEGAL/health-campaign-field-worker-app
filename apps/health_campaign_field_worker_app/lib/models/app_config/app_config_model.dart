@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../data/local_store/no_sql/schema/app_configuration.dart';
+import '../disability_types/disability_types_model.dart';
 import '../ineligibility_reasons/ineligibility_reasons_model.dart';
 import '../referral_reasons/referral_reasons_model.dart';
 import '../symptoms_types/symptoms_types_model.dart';
@@ -60,6 +61,8 @@ class AppConfigPrimaryWrapperModel with _$AppConfigPrimaryWrapperModel {
     final ReferralReasonsWrapperModel? referralReasons,
     @JsonKey(name: 'HCM-INELIGIBILITY-REASONS')
     final IneligibilityReasonsWrapperModel? ineligibilityReasons,
+    @JsonKey(name: 'HCM-DISABILITY-TYPES')
+    final DisabilityTypesWrapperModel? disabilityTypes,
   }) = _AppConfigPrimaryWrapperModel;
 
   factory AppConfigPrimaryWrapperModel.fromJson(

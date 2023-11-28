@@ -317,6 +317,16 @@ class MdmsRepository {
       return reasonTypes;
     }).toList();
 
+    appConfiguration.disabilityTypes =
+        result.disabilityTypes?.disabilityTypesList?.map((e) {
+      final reasonTypes = DisabilityTypes()
+        ..name = e.name
+        ..code = e.code
+        ..active = e.active;
+
+      return reasonTypes;
+    }).toList();
+
     await isar.writeTxn(() async {
       await isar.appConfigurations.put(appConfiguration);
       await isar.rowVersionLists.putAll(rowVersionList);
