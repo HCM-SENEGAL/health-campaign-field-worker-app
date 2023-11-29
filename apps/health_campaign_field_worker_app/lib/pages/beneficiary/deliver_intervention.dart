@@ -685,9 +685,10 @@ class _DeliverInterventionPageState
               )),
         ],
       ),
-      _quantityDistributedKey: FormArray<int>([
+      _quantityDistributedKey: FormArray<double>([
         ..._controllers.map(
-          (e) => FormControl<int>(value: 0, validators: [Validators.min(1)]),
+          (e) =>
+              FormControl<double>(value: 0, validators: [Validators.min(.5)]),
         ),
       ]),
       _quantityWastedKey: FormArray<String>([

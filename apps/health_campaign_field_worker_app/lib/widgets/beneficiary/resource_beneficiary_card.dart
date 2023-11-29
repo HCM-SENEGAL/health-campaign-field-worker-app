@@ -74,13 +74,13 @@ class _ResourceBeneficiaryCardState
             },
           ),
           DigitIntegerFormPicker(
+            decimal: true,
             incrementer: true,
             formControlName: 'quantityDistributed.${widget.cardIndex}',
             form: widget.form,
             label: '${localizations.translate(
               i18.deliverIntervention.quantityDistributedLabel,
             )}*',
-            minimum: 1,
           ),
           DigitTextFormField(
             formControlName: 'quantityWasted.${widget.cardIndex}',
