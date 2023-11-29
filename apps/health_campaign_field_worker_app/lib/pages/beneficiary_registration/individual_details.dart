@@ -471,12 +471,6 @@ class _IndividualDetailsPageState
         lastModifiedBy: context.loggedInUserUuid,
         lastModifiedTime: context.millisecondsSinceEpoch(),
       ),
-      additionalFields: IndividualAdditionalFields(version: 1, fields: [
-        AdditionalField(
-          'height',
-          form.control(_heightKey).value,
-        ),
-      ]),
     );
 
     var name = individual.name;
@@ -522,6 +516,8 @@ class _IndividualDetailsPageState
 
     final disabilityType = form.control(_disabilityTypeKey).value;
 
+    final height = form.control(_heightKey).value;
+
     individual = individual.copyWith(
       name: name.copyWith(
         givenName: form.control(_individualNameKey).value,
@@ -548,6 +544,10 @@ class _IndividualDetailsPageState
                   _disabilityTypeKey,
                   disabilityType,
                 ),
+                AdditionalField(
+                  _heightKey,
+                  height,
+                ),
               ],
             )
           : null,
@@ -571,6 +571,10 @@ class _IndividualDetailsPageState
 
     final disabilityType = individual?.additionalFields?.fields
         .firstWhereOrNull((element) => element.key == _disabilityTypeKey)
+        ?.value;
+
+    final height = individual?.additionalFields?.fields
+        .firstWhereOrNull((element) => element.key == _heightKey)
         ?.value;
 
     return fb.group(<String, Object>{
@@ -615,7 +619,7 @@ class _IndividualDetailsPageState
             ),
       ),
       _heightKey: FormControl<String>(
-        value: individual?.additionalFields?.fields.first.value,
+        value: height,
         validators: [Validators.required],
       ),
       _mobileNumberKey:

@@ -292,6 +292,7 @@ class BeneficiaryDetails {
   String get currentCycleLabel => 'BENEFICIARY_DETAILS_CURRENT_CYCLE_LABEL';
   String get fromCurrentLocation => 'FROM_CURRENT_LOCATION';
   String get beneficiary => 'BENEFICIARY';
+  String get beneficiaryCriteria => 'BENEFICIARY_CRITERIA';
 }
 
 class IndividualDetails {
