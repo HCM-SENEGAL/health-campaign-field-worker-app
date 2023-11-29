@@ -43,6 +43,7 @@ class _IndividualDetailsPageState
   static const _genderKey = 'gender';
   static const _mobileNumberKey = 'mobileNumber';
   static const _disabilityTypeKey = 'disabilityType';
+  static const _heightKey = 'height';
 
   @override
   Widget build(BuildContext context) {
@@ -390,6 +391,14 @@ class _IndividualDetailsPageState
                                       .mobileNumberInvalidFormatValidationMessage),
                             },
                           ),
+                          DigitTextFormField(
+                            keyboardType: TextInputType.number,
+                            formControlName: _heightKey,
+                            label: localizations.translate(
+                              i18.individualDetails.heightLabelText,
+                            ),
+                            maxLength: 10,
+                          ),
                           BlocBuilder<AppInitializationBloc,
                               AppInitializationState>(
                             builder: (context, state) {
@@ -462,6 +471,12 @@ class _IndividualDetailsPageState
         lastModifiedBy: context.loggedInUserUuid,
         lastModifiedTime: context.millisecondsSinceEpoch(),
       ),
+      additionalFields: IndividualAdditionalFields(version: 1, fields: [
+        AdditionalField(
+          'height',
+          form.control(_heightKey).value,
+        ),
+      ]),
     );
 
     var name = individual.name;
@@ -598,6 +613,10 @@ class _IndividualDetailsPageState
                     );
               },
             ),
+      ),
+      _heightKey: FormControl<String>(
+        value: individual?.additionalFields?.fields.first.value,
+        validators: [Validators.required],
       ),
       _mobileNumberKey:
           FormControl<String>(value: individual?.mobileNumber, validators: [
