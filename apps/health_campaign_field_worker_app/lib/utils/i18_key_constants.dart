@@ -391,6 +391,8 @@ class AcknowledgementSuccess {
       'ACKNOWLEDGEMENT_SUCCESS_DESCRIPTION_TEXT';
 
   String get acknowledgementLabelText => 'ACKNOWLEDGEMENT_SUCCESS_LABEL_TEXT';
+
+  String get beneficiaryAcknowledgementLabelText => "BENEFICIARY_ACKNOWLEDGEMENT_SUCCESS_LABEL_TEXT";
 }
 
 class HouseholdDetails {

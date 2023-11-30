@@ -24,6 +24,7 @@ import '../pages/beneficiary_registration/beneficiary_registration_wrapper.dart'
 import '../pages/beneficiary_registration/household_details.dart';
 import '../pages/beneficiary_registration/household_location.dart';
 import '../pages/beneficiary_registration/individual_details.dart';
+import '../pages/beneficiary_registration/widgets/beneficiary_acknowledgement.dart';
 import '../pages/boundary_selection.dart';
 import '../pages/checklist/checklist.dart';
 import '../pages/checklist/checklist_boundary_view.dart';
@@ -157,7 +158,7 @@ part 'app_router.gr.dart';
           AutoRoute(page: ChecklistViewPage, path: 'view'),
           AutoRoute(page: ChecklistPreviewPage, path: 'preview'),
         ]),
-
+        AutoRoute(page: BeneficiaryAcknowledgementPage, path: 'beneficiary-acknowledgement'),
         AutoRoute(page: AcknowledgementPage, path: 'acknowledgement'),
         AutoRoute(
           page: ComplaintsAcknowledgementPage,
