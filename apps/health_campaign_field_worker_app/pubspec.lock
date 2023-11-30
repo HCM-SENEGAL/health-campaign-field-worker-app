@@ -778,6 +778,14 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  formula_parser:
+    dependency: "direct main"
+    description:
+      name: formula_parser
+      sha256: cdf2539f3f6c724b0a96698357b5fe76971b81d97a69d961352c5c22e153e1df
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   freezed:
     dependency: "direct dev"
     description:

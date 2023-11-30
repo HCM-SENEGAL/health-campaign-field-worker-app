@@ -43,6 +43,7 @@ class _IndividualDetailsPageState
   static const _genderKey = 'gender';
   static const _mobileNumberKey = 'mobileNumber';
   static const _disabilityTypeKey = 'disabilityType';
+  static const _heightKey = 'height';
 
   @override
   Widget build(BuildContext context) {
@@ -392,6 +393,14 @@ class _IndividualDetailsPageState
                                       .mobileNumberInvalidFormatValidationMessage),
                             },
                           ),
+                          DigitTextFormField(
+                            keyboardType: TextInputType.number,
+                            formControlName: _heightKey,
+                            label: localizations.translate(
+                              i18.individualDetails.heightLabelText,
+                            ),
+                            maxLength: 10,
+                          ),
                           BlocBuilder<AppInitializationBloc,
                               AppInitializationState>(
                             builder: (context, state) {
@@ -509,6 +518,8 @@ class _IndividualDetailsPageState
 
     final disabilityType = form.control(_disabilityTypeKey).value;
 
+    final height = form.control(_heightKey).value;
+
     individual = individual.copyWith(
       name: name.copyWith(
         givenName: form.control(_individualNameKey).value,
@@ -535,6 +546,10 @@ class _IndividualDetailsPageState
                   _disabilityTypeKey,
                   disabilityType,
                 ),
+                AdditionalField(
+                  _heightKey,
+                  height,
+                ),
               ],
             )
           : null,
@@ -558,6 +573,10 @@ class _IndividualDetailsPageState
 
     final disabilityType = individual?.additionalFields?.fields
         .firstWhereOrNull((element) => element.key == _disabilityTypeKey)
+        ?.value;
+
+    final height = individual?.additionalFields?.fields
+        .firstWhereOrNull((element) => element.key == _heightKey)
         ?.value;
 
     return fb.group(<String, Object>{
@@ -600,6 +619,10 @@ class _IndividualDetailsPageState
                     );
               },
             ),
+      ),
+      _heightKey: FormControl<String>(
+        value: height,
+        validators: [Validators.required],
       ),
       _mobileNumberKey:
           FormControl<String>(value: individual?.mobileNumber, validators: [

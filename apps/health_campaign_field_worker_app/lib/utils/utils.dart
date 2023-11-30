@@ -2,7 +2,7 @@ library app_utils;
 
 import 'dart:async';
 import 'dart:math';
-
+import 'package:formula_parser/formula_parser.dart';
 import 'package:collection/collection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:digit_components/theme/digit_theme.dart';
@@ -459,17 +459,31 @@ DoseCriteriaModel? fetchProductVariant(
     );
     final individualAgeInMonths =
         individualAge.years * 12 + individualAge.months;
+
+    final height =
+        int.parse(individualModel.additionalFields?.fields.last.value ?? 0);
     final filteredCriteria = currentDelivery.doseCriteria?.where((criteria) {
       final condition = criteria.condition;
       if (condition != null) {
-        //{TODO: Expression package need to be parsed
-        final ageRange = condition.split("<=height<");
-        final minAge = int.parse(ageRange.first);
-        final maxAge = int.parse(ageRange.last);
+        final conditions = condition.split('and');
 
-        // return individualAgeInMonths >= minAge &&
-        //     individualAgeInMonths <= maxAge;
-        return true;
+        List expressionParser = [];
+        for (var element in conditions) {
+          final expression = FormulaParser(
+            element,
+            {
+              'height': height,
+              'age': individualAgeInMonths,
+            },
+          );
+          expressionParser.add(expression.parse.toString().split(':').last);
+        }
+
+        return expressionParser
+                .map((e) => e.toString().trim())
+                .where((element) => element == 'true')
+                .length ==
+            expressionParser.length;
       }
 
       return false;
