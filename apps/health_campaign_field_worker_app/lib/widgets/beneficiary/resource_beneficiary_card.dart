@@ -77,6 +77,7 @@ class _ResourceBeneficiaryCardState
             decimal: true,
             incrementer: true,
             formControlName: 'quantityDistributed.${widget.cardIndex}',
+            minimum: 0,
             form: widget.form,
             label: '${localizations.translate(
               i18.deliverIntervention.quantityDistributedLabel,

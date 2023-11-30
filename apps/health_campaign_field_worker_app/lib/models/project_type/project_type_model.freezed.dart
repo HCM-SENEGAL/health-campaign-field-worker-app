@@ -1369,7 +1369,7 @@ ProductVariantsModel _$ProductVariantsModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ProductVariantsModel {
   String? get productVariantId => throw _privateConstructorUsedError;
-  int? get quantity => throw _privateConstructorUsedError;
+  double? get quantity => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1383,7 +1383,7 @@ abstract class $ProductVariantsModelCopyWith<$Res> {
           $Res Function(ProductVariantsModel) then) =
       _$ProductVariantsModelCopyWithImpl<$Res, ProductVariantsModel>;
   @useResult
-  $Res call({String? productVariantId, int? quantity});
+  $Res call({String? productVariantId, double? quantity});
 }
 
 /// @nodoc
@@ -1411,7 +1411,7 @@ class _$ProductVariantsModelCopyWithImpl<$Res,
       quantity: freezed == quantity
           ? _value.quantity
           : quantity // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
     ) as $Val);
   }
 }
@@ -1424,7 +1424,7 @@ abstract class _$$_ProductVariantsModelCopyWith<$Res>
       __$$_ProductVariantsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? productVariantId, int? quantity});
+  $Res call({String? productVariantId, double? quantity});
 }
 
 /// @nodoc
@@ -1449,7 +1449,7 @@ class __$$_ProductVariantsModelCopyWithImpl<$Res>
       quantity: freezed == quantity
           ? _value.quantity
           : quantity // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
     ));
   }
 }
@@ -1465,7 +1465,7 @@ class _$_ProductVariantsModel implements _ProductVariantsModel {
   @override
   final String? productVariantId;
   @override
-  final int? quantity;
+  final double? quantity;
 
   @override
   String toString() {
@@ -1505,7 +1505,7 @@ class _$_ProductVariantsModel implements _ProductVariantsModel {
 abstract class _ProductVariantsModel implements ProductVariantsModel {
   const factory _ProductVariantsModel(
       {final String? productVariantId,
-      final int? quantity}) = _$_ProductVariantsModel;
+      final double? quantity}) = _$_ProductVariantsModel;
 
   factory _ProductVariantsModel.fromJson(Map<String, dynamic> json) =
       _$_ProductVariantsModel.fromJson;
@@ -1513,7 +1513,7 @@ abstract class _ProductVariantsModel implements ProductVariantsModel {
   @override
   String? get productVariantId;
   @override
-  int? get quantity;
+  double? get quantity;
   @override
   @JsonKey(ignore: true)
   _$$_ProductVariantsModelCopyWith<_$_ProductVariantsModel> get copyWith =>

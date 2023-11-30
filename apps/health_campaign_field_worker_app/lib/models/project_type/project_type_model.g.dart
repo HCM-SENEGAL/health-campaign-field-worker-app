@@ -127,7 +127,7 @@ _$_ProductVariantsModel _$$_ProductVariantsModelFromJson(
         Map<String, dynamic> json) =>
     _$_ProductVariantsModel(
       productVariantId: json['productVariantId'] as String?,
-      quantity: json['quantity'] as int?,
+      quantity: (json['quantity'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$_ProductVariantsModelToJson(
