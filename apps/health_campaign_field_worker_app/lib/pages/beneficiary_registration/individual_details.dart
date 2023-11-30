@@ -558,7 +558,7 @@ class _IndividualDetailsPageState
                 ),
                 AdditionalField(
                   _heightKey,
-                  height,
+                  '0$height',
                 ),
               ],
             )
