@@ -395,11 +395,21 @@ class _IndividualDetailsPageState
                           ),
                           DigitTextFormField(
                             keyboardType: TextInputType.number,
+                            isRequired: true,
                             formControlName: _heightKey,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]"),
+                              ),
+                            ],
                             label: localizations.translate(
                               i18.individualDetails.heightLabelText,
                             ),
-                            maxLength: 10,
+                            maxLength: 3,
+                            validationMessages: {
+                              'required': (object) => localizations
+                                  .translate(i18.common.corecommonRequired),
+                            },
                           ),
                           BlocBuilder<AppInitializationBloc,
                               AppInitializationState>(

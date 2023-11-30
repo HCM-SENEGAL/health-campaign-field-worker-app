@@ -64,13 +64,36 @@ Widget buildTableContent(
               fraction: 2.5,
               element: {
                 localizations.translate(
-                  i18.beneficiaryDetails.beneficiaryCriteria,
+                  i18.beneficiaryDetails.beneficiaryAge,
                 ): localizations.translate(
-                  '${fetchProductVariant(item, individualModel)?.condition}',
+                  '${getAgeConditionString('${fetchProductVariant(item, individualModel)?.condition}')}',
                 ),
               },
             ),
             const Divider(),
+            getHeightConditionString(
+                      '${fetchProductVariant(item, individualModel)?.condition}',
+                    ) !=
+                    null
+                ? DigitTableCard(
+                    topPadding: const EdgeInsets.only(top: 0.0),
+                    padding: const EdgeInsets.only(bottom: kPadding / 2),
+                    fraction: 2.5,
+                    element: {
+                      localizations.translate(
+                        i18.beneficiaryDetails.beneficiaryAge,
+                      ): localizations.translate(
+                        '${getHeightConditionString('${fetchProductVariant(item, individualModel)?.condition}')}',
+                      ),
+                    },
+                  )
+                : const Offstage(),
+            getHeightConditionString(
+                      '${fetchProductVariant(item, individualModel)?.condition}',
+                    ) !=
+                    null
+                ? const Divider()
+                : const Offstage(),
             // Build the DigitTable with the data
             DigitTable(
               headerList: headerListResource,

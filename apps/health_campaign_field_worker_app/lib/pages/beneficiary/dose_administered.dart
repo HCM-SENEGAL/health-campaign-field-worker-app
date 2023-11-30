@@ -329,14 +329,51 @@ class _DoseAdministeredPageState extends LocalizedState<DoseAdministeredPage> {
                                         i18.beneficiaryDetails
                                             .beneficiaryCriteria,
                                       ): localizations.translate(
-                                        '${fetchProductVariant(
+                                        '${getAgeConditionString('${fetchProductVariant(
                                           deliveryState.futureDeliveries?.first,
                                           overViewBloc.selectedIndividual,
-                                        )?.condition}',
+                                        )?.condition}')}',
                                       ),
                                     },
                                   ),
                                   const Divider(),
+                                  getHeightConditionString(
+                                            '${fetchProductVariant(
+                                              deliveryState
+                                                  .futureDeliveries?.first,
+                                              overViewBloc.selectedIndividual,
+                                            )?.condition}',
+                                          ) !=
+                                          null
+                                      ? DigitTableCard(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 4.0),
+                                          topPadding:
+                                              const EdgeInsets.only(top: 4.0),
+                                          element: {
+                                            localizations.translate(
+                                              i18.beneficiaryDetails
+                                                  .beneficiaryCriteria,
+                                            ): localizations.translate(
+                                              '${getHeightConditionString('${fetchProductVariant(
+                                                deliveryState
+                                                    .futureDeliveries?.first,
+                                                overViewBloc.selectedIndividual,
+                                              )?.condition}')}',
+                                            ),
+                                          },
+                                        )
+                                      : const Offstage(),
+                                  getHeightConditionString(
+                                            '${fetchProductVariant(
+                                              deliveryState
+                                                  .futureDeliveries?.first,
+                                              overViewBloc.selectedIndividual,
+                                            )?.condition}',
+                                          ) !=
+                                          null
+                                      ? const Divider()
+                                      : const Offstage(),
                                   DigitTable(
                                     headerList: headerListResource,
                                     tableData: tableDataRows,

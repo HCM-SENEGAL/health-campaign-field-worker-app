@@ -23,6 +23,9 @@ export 'app_exception.dart';
 export 'constants.dart';
 export 'extensions/extensions.dart';
 
+String lessThanSymbol = '<';
+String greaterThanSymbol = '>=';
+
 Expression<bool> buildAnd(Iterable<Expression<bool?>> iterable) {
   if (iterable.isEmpty) return const Constant(true);
   final result = iterable.reduce((value, element) => value & element);
@@ -493,4 +496,53 @@ DoseCriteriaModel? fetchProductVariant(
   }
 
   return null;
+}
+
+String? getAgeConditionString(String condition) {
+  String? finalCondition;
+  final ageConditions =
+      condition.split('and').where((element) => element.contains('age'));
+  if (ageConditions.length == 2) {
+    String? lessThanCondition = ageConditions.firstWhereOrNull((element) {
+      return element.contains(lessThanSymbol);
+    });
+    String lessThanAge = lessThanCondition?.split(lessThanSymbol).last ?? '0';
+
+    String? greaterThanCondition = ageConditions
+        .firstWhereOrNull((element) => element.contains(greaterThanSymbol));
+
+    String greaterThanAge =
+        greaterThanCondition?.split(greaterThanSymbol).last ?? '0';
+
+    finalCondition =
+        '${(int.parse(greaterThanAge) / 12).round()} - ${(int.parse(lessThanAge) / 12).round()} yrs';
+  } else {
+    if (ageConditions.first.contains(greaterThanSymbol)) {
+      String age = ageConditions.first.split(greaterThanSymbol).last;
+      finalCondition = '$age yrs and above';
+    }
+  }
+
+  return finalCondition;
+}
+
+String? getHeightConditionString(String condition) {
+  String? finalCondition;
+  final heightConditions =
+      condition.split('and').where((element) => element.contains('height'));
+  if (heightConditions.isNotEmpty) {
+    String? lessThanCondition = heightConditions
+        .firstWhereOrNull((element) => element.contains(lessThanSymbol));
+    String lessThan = lessThanCondition?.split(lessThanSymbol).last ?? '0';
+
+    String? greaterThanCondition = heightConditions
+        .firstWhereOrNull((element) => element.contains(greaterThanSymbol));
+
+    String greaterThan =
+        greaterThanCondition?.split(greaterThanSymbol).last ?? '0';
+
+    finalCondition = '${int.parse(greaterThan)} - ${int.parse(lessThan)} cm';
+  }
+
+  return finalCondition;
 }

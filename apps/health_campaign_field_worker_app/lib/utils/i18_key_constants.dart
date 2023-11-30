@@ -278,6 +278,7 @@ class BeneficiaryDetails {
   String get resourcesTobeProvided => 'RESOURCES_TO_BE_PROVIDED';
 
   String get beneficiaryAge => 'BENEFICIARY_AGE';
+  String get beneficiaryHeight => 'BENEFICIARY_HEIGHT';
   String get ctaProceed => 'PROCEED';
   String get beneficiaryDoseNo => 'BENEFICIARY_DETAILS_DOSE_NO';
   String get beneficiaryDose => 'BENEFICIARY_DETAILS_DOSE';
@@ -393,7 +394,8 @@ class AcknowledgementSuccess {
 
   String get acknowledgementLabelText => 'ACKNOWLEDGEMENT_SUCCESS_LABEL_TEXT';
 
-  String get beneficiaryAcknowledgementLabelText => "BENEFICIARY_ACKNOWLEDGEMENT_SUCCESS_LABEL_TEXT";
+  String get beneficiaryAcknowledgementLabelText =>
+      "BENEFICIARY_ACKNOWLEDGEMENT_SUCCESS_LABEL_TEXT";
 }
 
 class HouseholdDetails {
