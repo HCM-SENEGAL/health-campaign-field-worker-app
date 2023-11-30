@@ -24,7 +24,7 @@ export 'constants.dart';
 export 'extensions/extensions.dart';
 
 String lessThanSymbol = '<';
-String greaterThanSymbol = '>=';
+String greaterThanSymbol = '>';
 
 Expression<bool> buildAnd(Iterable<Expression<bool?>> iterable) {
   if (iterable.isEmpty) return const Constant(true);
@@ -276,43 +276,41 @@ bool checkEligibilityForAgeAndSideEffect(
   TaskModel? tasks,
   List<SideEffectModel>? sideEffects,
 ) {
-  return true;
+  int totalAgeMonths = age.years * 12 + age.months;
+  final currentCycle = projectType?.cycles?.firstWhereOrNull(
+    (e) =>
+        (e.startDate!) < DateTime.now().millisecondsSinceEpoch &&
+        (e.endDate!) > DateTime.now().millisecondsSinceEpoch,
+    // Return null when no matching cycle is found
+  );
+  if (currentCycle != null &&
+      currentCycle.startDate != null &&
+      currentCycle.endDate != null) {
+    bool recordedSideEffect = false;
+    if ((tasks != null) && sideEffects != null && sideEffects.isNotEmpty) {
+      final lastTaskTime =
+          tasks.clientReferenceId == sideEffects.last.taskClientReferenceId
+              ? tasks.clientAuditDetails?.createdTime
+              : null;
+      recordedSideEffect = lastTaskTime != null &&
+          (lastTaskTime >= currentCycle.startDate! &&
+              lastTaskTime <= currentCycle.endDate!);
 
-  // int totalAgeMonths = age.years * 12 + age.months;
-  // final currentCycle = projectType?.cycles?.firstWhereOrNull(
-  //   (e) =>
-  //       (e.startDate!) < DateTime.now().millisecondsSinceEpoch &&
-  //       (e.endDate!) > DateTime.now().millisecondsSinceEpoch,
-  //   // Return null when no matching cycle is found
-  // );
-  // if (currentCycle != null &&
-  //     currentCycle.startDate != null &&
-  //     currentCycle.endDate != null) {
-  //   bool recordedSideEffect = false;
-  //   if ((tasks != null) && sideEffects != null && sideEffects.isNotEmpty) {
-  //     final lastTaskTime =
-  //         tasks.clientReferenceId == sideEffects.last.taskClientReferenceId
-  //             ? tasks.clientAuditDetails?.createdTime
-  //             : null;
-  //     recordedSideEffect = lastTaskTime != null &&
-  //         (lastTaskTime >= currentCycle.startDate! &&
-  //             lastTaskTime <= currentCycle.endDate!);
+      return projectType?.validMinAge != null &&
+              projectType?.validMaxAge != null
+          ? totalAgeMonths >= projectType!.validMinAge! &&
+                  totalAgeMonths <= projectType.validMaxAge!
+              ? recordedSideEffect && !checkStatus([tasks], currentCycle)
+                  ? false
+                  : true
+              : false
+          : false;
+    } else {
+      return true;
+    }
+  }
 
-  //     return projectType?.validMinAge != null &&
-  //             projectType?.validMaxAge != null
-  //         ? totalAgeMonths >= projectType!.validMinAge! &&
-  //                 totalAgeMonths <= projectType.validMaxAge!
-  //             ? recordedSideEffect && !checkStatus([tasks], currentCycle)
-  //                 ? false
-  //                 : true
-  //             : false
-  //         : false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
-
-  // return false;
+  return false;
 }
 
 bool checkIfBeneficiaryRefused(
@@ -349,39 +347,37 @@ bool checkStatus(
   List<TaskModel>? tasks,
   Cycle? currentCycle,
 ) {
-  return true;
+  if (currentCycle != null &&
+      currentCycle.startDate != null &&
+      currentCycle.endDate != null) {
+    if (tasks != null && tasks.isNotEmpty) {
+      final lastTask = tasks.last;
+      final lastTaskCreatedTime = lastTask.clientAuditDetails?.createdTime;
+      // final lastDose = lastTask.additionalFields?.fields.where((e) => e.key = AdditionalFieldsType.doseIndex)
+      if (lastTaskCreatedTime != null) {
+        final date = DateTime.fromMillisecondsSinceEpoch(lastTaskCreatedTime);
+        final diff = DateTime.now().difference(date);
+        final isLastCycleRunning =
+            lastTaskCreatedTime >= currentCycle.startDate! &&
+                lastTaskCreatedTime <= currentCycle.endDate!;
 
-  // if (currentCycle != null &&
-  //     currentCycle.startDate != null &&
-  //     currentCycle.endDate != null) {
-  //   if (tasks != null && tasks.isNotEmpty) {
-  //     final lastTask = tasks.last;
-  //     final lastTaskCreatedTime = lastTask.clientAuditDetails?.createdTime;
-  //     // final lastDose = lastTask.additionalFields?.fields.where((e) => e.key = AdditionalFieldsType.doseIndex)
-  //     if (lastTaskCreatedTime != null) {
-  //       final date = DateTime.fromMillisecondsSinceEpoch(lastTaskCreatedTime);
-  //       final diff = DateTime.now().difference(date);
-  //       final isLastCycleRunning =
-  //           lastTaskCreatedTime >= currentCycle.startDate! &&
-  //               lastTaskCreatedTime <= currentCycle.endDate!;
-
-  //       return isLastCycleRunning
-  //           ? lastTask.status == Status.delivered.name
-  //               ? true
-  //               : diff.inHours >=
-  //                       24 //[TODO: Need to move gap between doses to config
-  //                   ? true
-  //                   : false
-  //           : true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } else {
-  //     return true;
-  //   }
-  // } else {
-  //   return false;
-  // }
+        return isLastCycleRunning
+            ? lastTask.status == Status.delivered.name
+                ? true
+                : diff.inHours >=
+                        24 //[TODO: Need to move gap between doses to config
+                    ? true
+                    : false
+            : true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
 }
 
 bool recordedSideEffect(
@@ -523,7 +519,7 @@ String? getAgeConditionString(String condition) {
   } else {
     if (ageConditions.first.contains(greaterThanSymbol)) {
       String age = ageConditions.first.split(greaterThanSymbol).last;
-      finalCondition = '$age yrs and above';
+      finalCondition = '${(int.parse(age) / 12).round()} yrs and above';
     }
   }
 
@@ -534,7 +530,7 @@ String? getHeightConditionString(String condition) {
   String? finalCondition;
   final heightConditions =
       condition.split('and').where((element) => element.contains('height'));
-  if (heightConditions.isNotEmpty) {
+  if (heightConditions.length == 2) {
     String? lessThanCondition = heightConditions
         .firstWhereOrNull((element) => element.contains(lessThanSymbol));
     String lessThan = lessThanCondition?.split(lessThanSymbol).last ?? '0';
@@ -545,7 +541,14 @@ String? getHeightConditionString(String condition) {
     String greaterThan =
         greaterThanCondition?.split(greaterThanSymbol).last ?? '0';
 
-    finalCondition = '${int.parse(greaterThan)} - ${int.parse(lessThan)} cm';
+    finalCondition =
+        '${int.parse(greaterThan) + 1} - ${int.parse(lessThan) - 1} cm';
+  } else if (heightConditions.length == 1) {
+    if (heightConditions.first.contains(greaterThanSymbol)) {
+      int height =
+          int.parse(heightConditions.first.split(greaterThanSymbol).last) + 1;
+      finalCondition = '$height cm and above';
+    }
   }
 
   return finalCondition;
