@@ -528,7 +528,7 @@ class _IndividualDetailsPageState
 
     final disabilityType = form.control(_disabilityTypeKey).value;
 
-    final height = form.control(_heightKey).value;
+    final height = form.control(_heightKey).value as String;
 
     individual = individual.copyWith(
       name: name.copyWith(
@@ -558,7 +558,7 @@ class _IndividualDetailsPageState
                 ),
                 AdditionalField(
                   _heightKey,
-                  '0$height',
+                  height.length == 1 ? '0$height' : height,
                 ),
               ],
             )
