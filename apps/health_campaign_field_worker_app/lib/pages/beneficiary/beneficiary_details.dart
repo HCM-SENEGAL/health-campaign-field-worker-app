@@ -39,6 +39,9 @@ class _BeneficiaryDetailsPageState
     super.initState();
   }
 
+  static const _disabilityTypeKey = 'disabilityType';
+  static const _heightKey = 'height';
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -300,6 +303,44 @@ class _BeneficiaryDetailsPageState
                                               .selectedIndividual?.gender?.name
                                               .toUpperCase() ??
                                           '--'),
+                                  localizations.translate(
+                                    i18.common.coreCommonMobileNumber,
+                                  ): context.beneficiaryType !=
+                                          BeneficiaryType.individual
+                                      ? localizations.translate(
+                                          householdMemberWrapper.headOfHousehold
+                                                  .mobileNumber ??
+                                              '--',
+                                        )
+                                      : localizations.translate(
+                                          state.selectedIndividual
+                                                  ?.mobileNumber ??
+                                              '--',
+                                        ),
+                                  localizations.translate(i18
+                                      .individualDetails.heightLabelText): () {
+                                    final height = state.selectedIndividual
+                                        ?.additionalFields?.fields
+                                        .firstWhereOrNull((element) =>
+                                            element.key == _heightKey)
+                                        ?.value;
+
+                                    return height;
+                                  }(),
+                                  localizations.translate(i18
+                                      .deliverIntervention
+                                      .disabilityLabel): () {
+                                    final disabilityType = state
+                                        .selectedIndividual
+                                        ?.additionalFields
+                                        ?.fields
+                                        .firstWhereOrNull((element) =>
+                                            element.key == _disabilityTypeKey)
+                                        ?.value;
+
+                                    return localizations
+                                        .translate(disabilityType);
+                                  }(),
                                   localizations.translate(i18
                                       .deliverIntervention
                                       .dateOfRegistrationLabel): () {

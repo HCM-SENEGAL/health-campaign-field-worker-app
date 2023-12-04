@@ -81,7 +81,7 @@ Widget buildTableContent(
                     fraction: 2.5,
                     element: {
                       localizations.translate(
-                        i18.beneficiaryDetails.beneficiaryAge,
+                        i18.beneficiaryDetails.beneficiaryHeight,
                       ): localizations.translate(
                         '${getHeightConditionString('${fetchProductVariant(item, individualModel)?.condition}')}',
                       ),

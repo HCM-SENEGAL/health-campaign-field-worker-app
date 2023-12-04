@@ -326,8 +326,7 @@ class _DoseAdministeredPageState extends LocalizedState<DoseAdministeredPage> {
                                     topPadding: const EdgeInsets.only(top: 4.0),
                                     element: {
                                       localizations.translate(
-                                        i18.beneficiaryDetails
-                                            .beneficiaryCriteria,
+                                        i18.beneficiaryDetails.beneficiaryAge,
                                       ): localizations.translate(
                                         '${getAgeConditionString('${fetchProductVariant(
                                           deliveryState.futureDeliveries?.first,
@@ -353,7 +352,7 @@ class _DoseAdministeredPageState extends LocalizedState<DoseAdministeredPage> {
                                           element: {
                                             localizations.translate(
                                               i18.beneficiaryDetails
-                                                  .beneficiaryCriteria,
+                                                  .beneficiaryHeight,
                                             ): localizations.translate(
                                               '${getHeightConditionString('${fetchProductVariant(
                                                 deliveryState
