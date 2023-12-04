@@ -87,9 +87,8 @@ class _ResourceBeneficiaryCardState
             formControlName: 'quantityWasted.${widget.cardIndex}',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
-              LengthLimitingTextInputFormatter(3),
               FilteringTextInputFormatter.allow(
-                RegExp(r'^(1000|[1-9][0-9]{0,2}|0)$'),
+                RegExp(r'^\d*\.?(0|5)?$'),
               ),
             ],
             label: localizations.translate(
