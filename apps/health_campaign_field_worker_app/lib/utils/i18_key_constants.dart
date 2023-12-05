@@ -690,6 +690,16 @@ class StockDetails {
 
   String get dialogContent => 'STOCK_DETAILS_DIALOG_CONTENT';
 
+  String get countDialogTitle => 'STOCK_DETAILS_COUNT_DIALOG_TITLE';
+
+  String get countContent => 'STOCK_DETAILS_COUNT_DIALOG_CONTENT';
+
+  String get countDialogSuccess =>
+      'STOCK_DETAILS_COUNT_DIALOG_SUCCESS_ACTION_LABEL';
+
+  String get countDialogCancel =>
+      'STOCK_DETAILS_COUNT_DIALOG_CANCEL_ACTION_LABEL';
+
   String get transportTypeLabel => 'STOCK_DETAILS_TRANSPORT_TYPE';
 
   String get receivedSpaqDetails => 'RECEIVED_SPAQ_DETAILS';

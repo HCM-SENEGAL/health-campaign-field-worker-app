@@ -232,6 +232,49 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
 
                                     transactingPartyType ??= 'WAREHOUSE';
 
+                                    if (entryType ==
+                                        StockRecordEntryType.dispatch) {
+                                      int issueQuantity = quantity ?? 0;
+
+                                      if (issueQuantity >
+                                          stockState.stockInHand) {
+                                        final alert =
+                                            await DigitDialog.show<bool>(
+                                          context,
+                                          options: DigitDialogOptions(
+                                            titleText: localizations.translate(
+                                              i18.stockDetails.countDialogTitle,
+                                            ),
+                                            contentText: localizations
+                                                .translate(
+                                                  i18.stockDetails.countContent,
+                                                )
+                                                .replaceAll(
+                                                  '{}',
+                                                  stockState.stockInHand
+                                                      .toString(),
+                                                ),
+                                            primaryAction: DigitDialogActions(
+                                              label: localizations.translate(
+                                                i18.stockDetails
+                                                    .countDialogSuccess,
+                                              ),
+                                              action: (context) {
+                                                Navigator.of(
+                                                  context,
+                                                  rootNavigator: true,
+                                                ).pop(false);
+                                              },
+                                            ),
+                                          ),
+                                        );
+
+                                        if (!(alert ?? false)) {
+                                          return;
+                                        }
+                                      }
+                                    }
+
                                     final stockModel = StockModel(
                                       clientReferenceId: IdGen.i.identifier,
                                       productVariantId: productVariant.id,
