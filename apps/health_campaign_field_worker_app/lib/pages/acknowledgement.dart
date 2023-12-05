@@ -2,6 +2,7 @@ import 'package:digit_components/digit_components.dart';
 import 'package:flutter/material.dart';
 
 import '../router/app_router.dart';
+import '../utils/extensions/extensions.dart';
 import '../utils/i18_key_constants.dart' as i18;
 import '../widgets/localized.dart';
 
@@ -23,8 +24,9 @@ class _AcknowledgementPageState extends LocalizedState<AcknowledgementPage> {
         action: () {
           context.router.pop();
         },
-        actionLabel:
-            localizations.translate(i18.acknowledgementSuccess.actionLabelText),
+        actionLabel: localizations.translate(context.showProgressBar
+            ? i18.acknowledgementSuccess.actionLabelText
+            : i18.acknowledgementSuccess.stockActionLabelText),
         description: localizations.translate(
           i18.acknowledgementSuccess.acknowledgementDescriptionText,
         ),

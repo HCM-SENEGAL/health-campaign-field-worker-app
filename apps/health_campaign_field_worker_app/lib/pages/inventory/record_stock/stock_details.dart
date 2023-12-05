@@ -45,7 +45,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
         Validators.number,
         Validators.required,
         Validators.min(0),
-        Validators.max(10000),
+        Validators.max(10000000),
       ]),
       _waybillNumberKey: FormControl<String>(
         validators: [Validators.required],
@@ -55,7 +55,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
           Validators.number,
           Validators.required,
           Validators.min(0),
-          Validators.max(10000),
+          Validators.max(10000000),
         ],
       ),
       _commentsKey: FormControl<String>(),
