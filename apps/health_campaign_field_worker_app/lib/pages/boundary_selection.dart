@@ -81,7 +81,7 @@ class _BoundarySelectionPageState extends State<BoundarySelectionPage> {
                                 initialValue: formControls[label]?.value,
                                 label: label,
                                 menuItems: filteredItems,
-                                isRequired: true,
+                                isRequired: labelIndex == 0,
                                 onChanged: (value) {
                                   if (value == null) return;
 
@@ -178,7 +178,7 @@ class _BoundarySelectionPageState extends State<BoundarySelectionPage> {
 
     for (final label in labelList) {
       formControls[label] = FormControl<BoundaryModel>(
-        validators: [Validators.required],
+        validators: label == labelList.first ? [Validators.required] : [],
         value: state.selectedBoundaryMap[label],
       );
     }
