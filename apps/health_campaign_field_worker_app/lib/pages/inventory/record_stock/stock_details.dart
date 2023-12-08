@@ -236,8 +236,40 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                         StockRecordEntryType.dispatch) {
                                       int issueQuantity = quantity ?? 0;
 
-                                      if (issueQuantity >
-                                          stockState.stockInHand) {
+                                      List<StockModel> stocksByProductVAriant =
+                                          stockState.existingStocks
+                                              .where((element) =>
+                                                  element.productVariantId ==
+                                                  productVariant.id)
+                                              .toList();
+
+                                      num stockReceived = _getQuantityCount(
+                                        stocksByProductVAriant.where((e) =>
+                                            e.transactionType ==
+                                                TransactionType.received &&
+                                            e.transactionReason ==
+                                                TransactionReason.received),
+                                      );
+
+                                      num stockIssued = _getQuantityCount(
+                                        stocksByProductVAriant.where((e) =>
+                                            e.transactionType ==
+                                                TransactionType.dispatched &&
+                                            e.transactionReason == null),
+                                      );
+
+                                      num stockReturned = _getQuantityCount(
+                                        stocksByProductVAriant.where((e) =>
+                                            e.transactionType ==
+                                                TransactionType.received &&
+                                            e.transactionReason ==
+                                                TransactionReason.returned),
+                                      );
+
+                                      num stockInHand =
+                                          (stockReceived + stockReturned) -
+                                              (stockIssued);
+                                      if (issueQuantity > stockInHand) {
                                         final alert =
                                             await DigitDialog.show<bool>(
                                           context,
@@ -251,7 +283,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                                 )
                                                 .replaceAll(
                                                   '{}',
-                                                  stockState.stockInHand
+                                                  stockInHand
                                                       .toString(),
                                                 ),
                                             primaryAction: DigitDialogActions(
@@ -544,6 +576,13 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
           );
         },
       ),
+    );
+  }
+
+  num _getQuantityCount(Iterable<StockModel> stocks) {
+    return stocks.fold<num>(
+      0.0,
+      (old, e) => (num.tryParse(e.quantity ?? '') ?? 0.0) + old,
     );
   }
 }
