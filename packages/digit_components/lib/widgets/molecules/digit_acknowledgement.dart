@@ -122,9 +122,9 @@ class DigitAcknowledgement extends StatelessWidget {
             if (enableBackToSearch)
               Padding(
                 padding: const EdgeInsets.fromLTRB(
+                  kPadding - 1.5,
                   kPadding,
-                  kPadding,
-                  kPadding,
+                  kPadding - 1.5,
                   kPadding * 2,
                 ),
                 child: Column(
@@ -139,33 +139,32 @@ class DigitAcknowledgement extends StatelessWidget {
                             height: kPadding + 2,
                           ),
                           DigitOutLineButton(
-                              onPressed: action,
-                              label: actionLabel ?? '',
-                              buttonStyle: OutlinedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                side: BorderSide(
-                                  width: 1.0,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                minimumSize: Size(
-                                  MediaQuery.of(context).size.width / 1,
-                                  50,
-                                ),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero,
-                                ),
+                            onPressed: action,
+                            label: actionLabel ?? '',
+                            buttonStyle: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: BorderSide(
+                                width: 1.0,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              minimumSize: Size(
+                                MediaQuery.of(context).size.width / 1,
+                                50,
+                              ),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
                               ),
                             ),
+                          ),
                         ],
                       )
                     else if (isActionLabel)
                       Column(
                         children: [
                           DigitElevatedButton(
-                              onPressed: action,
-                              child: Text(actionLabel ?? ''),
-                            ),
+                            onPressed: action,
+                            child: Text(actionLabel ?? ''),
+                          ),
                           const SizedBox(
                             height: kPadding,
                           ),
