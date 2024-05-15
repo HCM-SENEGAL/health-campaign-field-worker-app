@@ -1,0 +1,14 @@
+{
+  "name": "ProjectTypes",
+  "enumValues": [
+    {
+      "name": "lf",
+      "value": "LF"
+    },
+    {
+      "name": "smc",
+      "value": "SMC"
+    }
+  ],
+  "isEnum": true
+}
