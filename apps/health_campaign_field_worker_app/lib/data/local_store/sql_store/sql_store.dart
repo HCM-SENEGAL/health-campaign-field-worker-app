@@ -98,18 +98,43 @@ part 'sql_store.g.dart';
   DownsyncCriteria,
   HFReferral,
 ])
+/* Singleton class : 
+Same instance be used by Background service and Main method */
 class LocalSqlDataStore extends _$LocalSqlDataStore {
-  LocalSqlDataStore() : super(_openConnection());
+  static LocalSqlDataStore? _instance;
+  @override
+  // Private constructor
+  LocalSqlDataStore._([
+    QueryExecutor? executor,
+  ]) : super(executor ?? _openConnection());
+
+  // Factory constructor to return the singleton instance
+  factory LocalSqlDataStore([
+    QueryExecutor? executor,
+  ]) {
+    // Create a new instance only if it hasn't been created yet
+    _instance ??= LocalSqlDataStore._(executor);
+
+    return _instance!;
+  }
+
+  static LocalSqlDataStore get instance => _instance!;
 
   @override
   int get schemaVersion => 4;
 
   static LazyDatabase _openConnection() {
+    // Your logic to open the connection
+    // For example:
+    // return NativeDatabase(file, logStatements: true, setup: (data) {});
     return LazyDatabase(() async {
       final dbFolder = await getApplicationDocumentsDirectory();
       final file = File(p.join(dbFolder.path, 'db.sqlite'));
 
-      return NativeDatabase(file, logStatements: true, setup: (data) {});
+      return NativeDatabase.createInBackground(
+        file,
+        logStatements: true,
+      );
     });
   }
 
