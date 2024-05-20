@@ -529,31 +529,37 @@ class _IndividualDetailsPageState
                                 },
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                kPadding / 2,
-                                kPadding,
-                                kPadding / 2,
-                                0,
-                              ),
-                              child: DigitTextFormField(
-                                keyboardType: TextInputType.number,
-                                formControlName: _mobileNumberKey,
-                                label: localizations.translate(
-                                  i18.individualDetails.mobileNumberLabelText,
+                            Offstage(
+                              offstage: context.projectTypeCode ==
+                                      ProjectTypes.smc.toValue()
+                                  ? !widget.isHeadOfHousehold
+                                  : false,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  kPadding / 2,
+                                  kPadding,
+                                  kPadding / 2,
+                                  0,
                                 ),
-                                maxLength: 11,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                    RegExp("[0-9]"),
+                                child: DigitTextFormField(
+                                  keyboardType: TextInputType.number,
+                                  formControlName: _mobileNumberKey,
+                                  label: localizations.translate(
+                                    i18.individualDetails.mobileNumberLabelText,
                                   ),
-                                ],
-                                validationMessages: {
-                                  'mobileNumber': (object) =>
-                                      localizations.translate(i18
-                                          .individualDetails
-                                          .mobileNumberInvalidFormatValidationMessage),
-                                },
+                                  maxLength: 11,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9]"),
+                                    ),
+                                  ],
+                                  validationMessages: {
+                                    'mobileNumber': (object) =>
+                                        localizations.translate(i18
+                                            .individualDetails
+                                            .mobileNumberInvalidFormatValidationMessage),
+                                  },
+                                ),
                               ),
                             ),
                           ],
