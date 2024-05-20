@@ -6,6 +6,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../blocs/beneficiary_registration/beneficiary_registration.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
 import '../../router/app_router.dart';
 import '../../utils/environment_config.dart';
 import '../../utils/i18_key_constants.dart' as i18;
@@ -220,29 +221,33 @@ class _HouseholdLocationPageState
                                 },
                               ),
                             ),
-                            DigitTextFormField(
-                              formControlName: _accuracyKey,
-                              readOnly: true,
-                              label: localizations.translate(
-                                i18.householdLocation.accuracyFormLabel,
-                              ),
-                            ),
-                            householdLocationShowcaseData.landmark.buildWith(
-                              child: DigitTextFormField(
-                                formControlName: _landmarkKey,
+                            if (context.projectTypeCode ==
+                                ProjectTypes.lf.toValue())
+                              DigitTextFormField(
+                                formControlName: _accuracyKey,
+                                readOnly: true,
                                 label: localizations.translate(
-                                  i18.householdLocation.landmarkFormLabel,
+                                  i18.householdLocation.accuracyFormLabel,
                                 ),
-                                validationMessages: {
-                                  'required': (_) => localizations.translate(
-                                        i18.common.min2CharsRequired,
-                                      ),
-                                  'maxLength': (object) => localizations
-                                      .translate(i18.common.maxCharsRequired)
-                                      .replaceAll('{}', maxLength.toString()),
-                                },
                               ),
-                            ),
+                            if (context.projectTypeCode ==
+                                ProjectTypes.lf.toValue())
+                              householdLocationShowcaseData.landmark.buildWith(
+                                child: DigitTextFormField(
+                                  formControlName: _landmarkKey,
+                                  label: localizations.translate(
+                                    i18.householdLocation.landmarkFormLabel,
+                                  ),
+                                  validationMessages: {
+                                    'required': (_) => localizations.translate(
+                                          i18.common.min2CharsRequired,
+                                        ),
+                                    'maxLength': (object) => localizations
+                                        .translate(i18.common.maxCharsRequired)
+                                        .replaceAll('{}', maxLength.toString()),
+                                  },
+                                ),
+                              ),
                           ]),
                         ],
                       ),
