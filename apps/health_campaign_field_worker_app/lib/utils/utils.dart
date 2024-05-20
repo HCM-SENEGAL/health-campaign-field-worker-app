@@ -17,6 +17,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formula_parser/formula_parser.dart';
 import 'package:isar/isar.dart';
+import 'package:path/path.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,7 +27,9 @@ import '../blocs/search_households/search_households.dart';
 import '../data/local_store/app_shared_preferences.dart';
 import '../data/local_store/no_sql/schema/localization.dart';
 import '../data/local_store/secure_store/secure_store.dart';
+import '../data/local_store/sql_store/tables/project.dart';
 import '../models/data_model.dart';
+import '../models/entities/project_types.dart';
 import '../models/project_type/project_type_model.dart';
 import '../router/app_router.dart';
 import '../widgets/progress_indicator/progress_indicator.dart';
@@ -320,14 +323,15 @@ bool checkEligibilityForAgeAndSideEffect(
     Cycle? currentCycle = getCurrentCycle(projectType);
 
     // todo : implement check so that it works for both LF and SMC
-    if (true) {
+    if (projectType!.code == ProjectTypes.lf.toValue()) {
       return currentCycle == null || currentCycle.deliveries == null
           ? false
-          : fetchProductVariant(currentCycle.deliveries!.first, individual) ==
+          : fetchProductVariant(currentCycle.deliveries!.first, individual,
+                      projectType!.code) ==
                   null
               ? false
               : true;
-    } else {
+    } else if (projectType!.code == ProjectTypes.smc.toValue()) {
       return checkEligibilityForAgeAndSideEffects(
         DigitDOBAge(
           years: ageInYears,
@@ -531,6 +535,7 @@ bool allDosesDelivered(
 DoseCriteriaModel? fetchProductVariant(
   DeliveryModel? currentDelivery,
   IndividualModel? individualModel,
+  String? code,
 ) {
   if (currentDelivery != null && individualModel != null) {
     final individualAge = DigitDateUtils.calculateAge(
@@ -553,35 +558,71 @@ DoseCriteriaModel? fetchProductVariant(
         : 0);
     final filteredCriteria = currentDelivery.doseCriteria?.where((criteria) {
       final condition = criteria.condition;
-      if (condition != null) {
-        final conditions = condition.split('and');
 
-        List expressionParser = [];
-        for (var element in conditions) {
-          final expression = FormulaParser(
-            element,
-            {
-              'height': height,
-              'age': individualAgeInMonths,
-            },
-          );
-          expressionParser.add(expression.parse.toString().split(':').last);
-        }
-
-        return expressionParser
-                .map((e) => e.toString().trim())
-                .where((element) => element == 'true')
-                .length ==
-            expressionParser.length;
+      if (code == ProjectTypes.lf.toValue()) {
+        return isLFConditionTrue(condition, height, individualAgeInMonths);
+      } else if (code == ProjectTypes.smc.toValue()) {
+        return isSMCConditionTrue(condition, individualAgeInMonths);
+      } else {
+        return false;
       }
-
-      return false;
     }).toList();
 
     return (filteredCriteria ?? []).isNotEmpty ? filteredCriteria?.first : null;
   }
 
   return null;
+}
+
+bool isLFConditionTrue(
+  String? condition,
+  int height,
+  int individualAgeInMonths,
+) {
+  if (condition != null) {
+    final conditions = condition.split('and');
+
+    List expressionParser = [];
+    for (var element in conditions) {
+      final expression = FormulaParser(
+        element,
+        {
+          'height': height,
+          'age': individualAgeInMonths,
+        },
+      );
+      expressionParser.add(expression.parse.toString().split(':').last);
+    }
+
+    return expressionParser
+            .map((e) => e.toString().trim())
+            .where((element) => element == 'true')
+            .length ==
+        expressionParser.length;
+  }
+
+  return false;
+}
+
+bool isSMCConditionTrue(
+  String? condition,
+  int individualAgeInMonths,
+) {
+  if (condition != null) {
+    //{TODO: Expression package need to be parsed
+    final ageRange = condition.split("<=age<");
+    final minAge = int.parse(ageRange.first);
+    final maxAge = int.parse(ageRange.last);
+
+    // temp change for SMC specific use case
+    if (maxAge == 59 && individualAgeInMonths > 59) {
+      return true;
+    }
+
+    return individualAgeInMonths >= minAge && individualAgeInMonths <= maxAge;
+  }
+
+  return false;
 }
 
 String? getAgeConditionString(String condition) {
@@ -821,4 +862,16 @@ getSelectedLanguage(AppInitialized state, int index) {
       state.appConfiguration.languages![index].value == selectedLanguage;
 
   return isSelected;
+}
+
+getAgeMessageBasedOnProjectType(
+  String? projectTypeCode,
+  String message1,
+  String message2,
+) {
+  if (projectTypeCode == ProjectTypes.lf.toValue()) {
+    return message1;
+  } else if (projectTypeCode == ProjectTypes.smc.toValue()) {
+    return message2;
+  }
 }

@@ -154,6 +154,7 @@ class _DeliverInterventionPageState
                                               .deliveries?[
                                           deliveryInterventionstate.dose - 1],
                                       state.selectedIndividual,
+                                      context.projectTypeCode,
                                     )?.productVariants)
                                   : projectState.projectType?.resources;
                           final int numberOfDoses = (projectState

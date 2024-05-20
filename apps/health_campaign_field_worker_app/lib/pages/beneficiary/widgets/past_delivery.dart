@@ -7,6 +7,7 @@ import '../../../blocs/delivery_intervention/deliver_intervention.dart';
 import '../../../blocs/localization/app_localization.dart';
 import '../../../blocs/project/project.dart';
 import '../../../models/data_model.dart';
+import '../../../models/entities/project_types.dart';
 import '../../../utils/i18_key_constants.dart' as i18;
 import '../../../utils/utils.dart';
 
@@ -44,7 +45,8 @@ Widget buildTableContent(
   final item = projectState
       .projectType!.cycles![currentCycle - 1].deliveries![currentDose - 1];
   final productVariants =
-      fetchProductVariant(item, individualModel)?.productVariants;
+      fetchProductVariant(item, individualModel, context.projectTypeCode)
+          ?.productVariants;
   final numRows = productVariants?.length ?? 0;
   const rowHeight = 82;
   const paddingHeight = kPadding * 2;
@@ -77,8 +79,14 @@ Widget buildTableContent(
               element: {
                 localizations.translate(
                   i18.beneficiaryDetails.beneficiaryAge,
-                ): localizations.translate(
-                  '${getAgeConditionString('${fetchProductVariant(item, individualModel)?.condition}')}',
+                ): getAgeMessageBasedOnProjectType(
+                  context.projectTypeCode,
+                  localizations.translate(
+                    context.projectTypeCode == ProjectTypes.lf.toValue()
+                        ? '${getAgeConditionString('${fetchProductVariant(item, individualModel, context.projectTypeCode)?.condition}')}'
+                        : '',
+                  ),
+                  '${fetchProductVariant(item, individualModel, context.projectTypeCode)?.condition?.split('<=age<').first} - ${fetchProductVariant(item, individualModel, context.projectTypeCode)?.condition?.split('<=age<').last} months',
                 ),
               },
             ),
@@ -86,7 +94,7 @@ Widget buildTableContent(
               thickness: 1,
             ),
             getHeightConditionString(
-                      '${fetchProductVariant(item, individualModel)?.condition}',
+                      '${fetchProductVariant(item, individualModel, context.projectTypeCode)?.condition}',
                     ) !=
                     null
                 ? DigitTableCard(
@@ -97,13 +105,13 @@ Widget buildTableContent(
                       localizations.translate(
                         i18.beneficiaryDetails.beneficiaryHeight,
                       ): localizations.translate(
-                        '${getHeightConditionString('${fetchProductVariant(item, individualModel)?.condition}')}',
+                        '${getHeightConditionString('${fetchProductVariant(item, individualModel, context.projectTypeCode)?.condition}')}',
                       ),
                     },
                   )
                 : const Offstage(),
             getHeightConditionString(
-                      '${fetchProductVariant(item, individualModel)?.condition}',
+                      '${fetchProductVariant(item, individualModel, context.projectTypeCode)?.condition}',
                     ) !=
                     null
                 ? const Divider(
@@ -114,7 +122,11 @@ Widget buildTableContent(
             DigitTable(
               headerList: headerListResource,
               tableData: [
-                ...fetchProductVariant(item, individualModel)!
+                ...fetchProductVariant(
+                  item,
+                  individualModel,
+                  context.projectTypeCode,
+                )!
                     .productVariants!
                     .map(
                   (e) {
@@ -130,7 +142,8 @@ Widget buildTableContent(
                       // Display the dose information in the first column if it's the first row,
                       // otherwise, display an empty cell.
 
-                      fetchProductVariant(item, individualModel)!
+                      fetchProductVariant(item, individualModel,
+                                      context.projectTypeCode)!
                                   .productVariants
                                   ?.indexOf(e) ==
                               0
@@ -149,7 +162,8 @@ Widget buildTableContent(
                 ),
               ],
               columnWidth: 140,
-              height: ((fetchProductVariant(item, individualModel)!
+              height: ((fetchProductVariant(item, individualModel,
+                                      context.projectTypeCode)!
                                   .productVariants ??
                               [])
                           .length +

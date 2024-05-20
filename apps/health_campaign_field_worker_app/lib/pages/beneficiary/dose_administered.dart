@@ -161,6 +161,7 @@ class _DoseAdministeredPageState extends LocalizedState<DoseAdministeredPage> {
                                             resources: fetchProductVariant(
                                               e,
                                               overViewBloc.selectedIndividual,
+                                              context.projectTypeCode,
                                             )
                                                 ?.productVariants
                                                 ?.map((variant) =>
@@ -347,6 +348,7 @@ class _DoseAdministeredPageState extends LocalizedState<DoseAdministeredPage> {
                                     List<String> skus = fetchProductVariant(
                                       e,
                                       overViewBloc.selectedIndividual,
+                                      context.projectTypeCode,
                                     )!
                                         .productVariants!
                                         .map((ele) {
@@ -401,10 +403,12 @@ class _DoseAdministeredPageState extends LocalizedState<DoseAdministeredPage> {
                                             deliveryState
                                                 .futureDeliveries?.first,
                                             overViewBloc.selectedIndividual,
+                                            context.projectTypeCode,
                                           )?.condition?.split('<=age<').first} - ${fetchProductVariant(
                                             deliveryState
                                                 .futureDeliveries?.first,
                                             overViewBloc.selectedIndividual,
+                                            context.projectTypeCode,
                                           )?.condition?.split('<=age<').last} months',
                                         },
                                         //[TODO:: Need to parse <=age< as an Expression
