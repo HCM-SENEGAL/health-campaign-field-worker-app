@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:drift/isolate.dart';
 
 import '../../../models/data_model.dart';
 import '../../../utils/utils.dart';
 import '../../data_repository.dart';
-import '../../local_store/sql_store/sql_store.dart';
 
 class ProjectBeneficiaryLocalRepository extends LocalRepository<
     ProjectBeneficiaryModel, ProjectBeneficiarySearchModel> {
@@ -171,22 +169,15 @@ class ProjectBeneficiaryLocalRepository extends LocalRepository<
   }) async {
     final projectBeneficiaryCompanion = entity.companion;
 
-    await sql.computeWithDatabase(
-      computation: (database) async {
-        await sql.batch((batch) {
-          batch.update(
-            sql.projectBeneficiary,
-            projectBeneficiaryCompanion,
-            where: (table) => table.clientReferenceId.equals(
-              entity.clientReferenceId,
-            ),
-          );
-        });
-      },
-      connect: (connect) {
-        return LocalSqlDataStore(connect);
-      },
-    );
+    await sql.batch((batch) {
+      batch.update(
+        sql.projectBeneficiary,
+        projectBeneficiaryCompanion,
+        where: (table) => table.clientReferenceId.equals(
+          entity.clientReferenceId,
+        ),
+      );
+    });
 
     return super.update(entity, createOpLog: createOpLog);
   }

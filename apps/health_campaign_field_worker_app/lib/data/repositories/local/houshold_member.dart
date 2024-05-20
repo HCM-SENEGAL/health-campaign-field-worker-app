@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:drift/isolate.dart';
 
 import '../../../models/data_model.dart';
 import '../../../utils/utils.dart';
 import '../../data_repository.dart';
-import '../../local_store/sql_store/sql_store.dart';
 
 class HouseholdMemberLocalRepository
     extends LocalRepository<HouseholdMemberModel, HouseholdMemberSearchModel> {
@@ -136,22 +134,15 @@ class HouseholdMemberLocalRepository
   }) async {
     final householdMemberCompanion = entity.companion;
 
-    await sql.computeWithDatabase(
-      computation: (database) async {
-        await sql.batch((batch) {
-          batch.update(
-            sql.householdMember,
-            householdMemberCompanion,
-            where: (table) => table.clientReferenceId.equals(
-              entity.clientReferenceId,
-            ),
-          );
-        });
-      },
-      connect: (connect) {
-        return LocalSqlDataStore(connect);
-      },
-    );
+    await sql.batch((batch) {
+      batch.update(
+        sql.householdMember,
+        householdMemberCompanion,
+        where: (table) => table.clientReferenceId.equals(
+          entity.clientReferenceId,
+        ),
+      );
+    });
 
     await super.update(entity, createOpLog: createOpLog);
   }
