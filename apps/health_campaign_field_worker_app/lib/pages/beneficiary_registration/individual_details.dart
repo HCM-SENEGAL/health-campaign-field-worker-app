@@ -17,6 +17,7 @@ import '../../blocs/search_households/search_bloc_common_wrapper.dart';
 import '../../blocs/search_households/search_households.dart';
 import '../../data/local_store/no_sql/schema/app_configuration.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
 import '../../router/app_router.dart';
 import '../../utils/environment_config.dart';
 import '../../utils/i18_key_constants.dart' as i18;
@@ -557,70 +558,76 @@ class _IndividualDetailsPageState
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            kPadding / 2,
-                            0,
-                            kPadding / 2,
-                            0,
-                          ),
-                          child: DigitTextFormField(
-                            keyboardType: TextInputType.number,
-                            isRequired: true,
-                            formControlName: _heightKey,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp("[0-9]"),
-                              ),
-                            ],
-                            label: localizations.translate(
-                              i18.individualDetails.heightLabelText,
+                        if (context.projectTypeCode ==
+                            ProjectTypes.lf.toValue())
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              kPadding / 2,
+                              0,
+                              kPadding / 2,
+                              0,
                             ),
-                            maxLength: 3,
-                            validationMessages: {
-                              'required': (object) => localizations
-                                  .translate(i18.common.corecommonRequired),
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            kPadding / 2,
-                            0,
-                            kPadding / 2,
-                            0,
-                          ),
-                          child: BlocBuilder<AppInitializationBloc,
-                              AppInitializationState>(
-                            builder: (context, state) {
-                              if (state is! AppInitialized) {
-                                return const Offstage();
-                              }
-
-                              final disabilityTypes =
-                                  state.appConfiguration.disabilityTypes ??
-                                      <DisabilityTypes>[];
-
-                              return DigitReactiveDropdown<String>(
-                                label: localizations.translate(
-                                  i18.deliverIntervention.disabilityLabel,
+                            child: DigitTextFormField(
+                              keyboardType: TextInputType.number,
+                              isRequired: true,
+                              formControlName: _heightKey,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]"),
                                 ),
-                                isRequired: true,
-                                valueMapper: (value) =>
-                                    localizations.translate(value),
-                                initialValue: disabilityTypes.firstOrNull?.code,
-                                menuItems: disabilityTypes.map((e) {
-                                  return e.code;
-                                }).toList(),
-                                formControlName: _disabilityTypeKey,
-                                validationMessages: {
-                                  'required': (object) => localizations
-                                      .translate(i18.common.corecommonRequired),
-                                },
-                              );
-                            },
+                              ],
+                              label: localizations.translate(
+                                i18.individualDetails.heightLabelText,
+                              ),
+                              maxLength: 3,
+                              validationMessages: {
+                                'required': (object) => localizations
+                                    .translate(i18.common.corecommonRequired),
+                              },
+                            ),
                           ),
-                        ),
+                        if (context.projectTypeCode ==
+                            ProjectTypes.lf.toValue())
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              kPadding / 2,
+                              0,
+                              kPadding / 2,
+                              0,
+                            ),
+                            child: BlocBuilder<AppInitializationBloc,
+                                AppInitializationState>(
+                              builder: (context, state) {
+                                if (state is! AppInitialized) {
+                                  return const Offstage();
+                                }
+
+                                final disabilityTypes =
+                                    state.appConfiguration.disabilityTypes ??
+                                        <DisabilityTypes>[];
+
+                                return DigitReactiveDropdown<String>(
+                                  label: localizations.translate(
+                                    i18.deliverIntervention.disabilityLabel,
+                                  ),
+                                  isRequired: true,
+                                  valueMapper: (value) =>
+                                      localizations.translate(value),
+                                  initialValue:
+                                      disabilityTypes.firstOrNull?.code,
+                                  menuItems: disabilityTypes.map((e) {
+                                    return e.code;
+                                  }).toList(),
+                                  formControlName: _disabilityTypeKey,
+                                  validationMessages: {
+                                    'required': (object) =>
+                                        localizations.translate(
+                                            i18.common.corecommonRequired),
+                                  },
+                                );
+                              },
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -730,14 +737,16 @@ class _IndividualDetailsPageState
           ? IndividualAdditionalFields(
               version: 1,
               fields: [
-                AdditionalField(
-                  _disabilityTypeKey,
-                  disabilityType,
-                ),
-                AdditionalField(
-                  _heightKey,
-                  height.length == 1 ? '0$height' : height,
-                ),
+                if (context.projectTypeCode == ProjectTypes.lf.toValue())
+                  AdditionalField(
+                    _disabilityTypeKey,
+                    disabilityType,
+                  ),
+                if (context.projectTypeCode == ProjectTypes.lf.toValue())
+                  AdditionalField(
+                    _heightKey,
+                    height.length == 1 ? '0$height' : height,
+                  ),
               ],
             )
           : null,
