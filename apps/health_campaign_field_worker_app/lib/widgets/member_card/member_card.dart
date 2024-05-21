@@ -6,6 +6,7 @@ import '../../blocs/delivery_intervention/deliver_intervention.dart';
 import '../../blocs/household_overview/household_overview.dart';
 import '../../blocs/localization/app_localization.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
 import '../../router/app_router.dart';
 import '../../utils/environment_config.dart';
 import '../../utils/i18_key_constants.dart' as i18;
@@ -523,44 +524,48 @@ class MemberCard extends StatelessWidget {
                                             );
                                           },
                                   ),
-                                  // Solution customization
-                                  // DigitOutLineButton(
-                                  //   label: localizations.translate(
-                                  //     i18.memberCard.recordAdverseEventsLabel,
-                                  //   ),
-                                  //   buttonStyle: OutlinedButton.styleFrom(
-                                  //     shape: const RoundedRectangleBorder(
-                                  //       borderRadius: BorderRadius.zero,
-                                  //     ),
-                                  //     backgroundColor: Colors.white,
-                                  //     side: BorderSide(
-                                  //       width: 1.0,
-                                  //       color: tasks != null &&
-                                  //               (tasks ?? []).isNotEmpty
-                                  //           ? theme.colorScheme.secondary
-                                  //           : theme.colorScheme.outline,
-                                  //     ),
-                                  //     minimumSize: Size(
-                                  //       MediaQuery.of(context).size.width /
-                                  //           1.25,
-                                  //       50,
-                                  //     ),
-                                  //   ),
-                                  //   onPressed: tasks != null &&
-                                  //           (tasks ?? []).isNotEmpty
-                                  //       ? () async {
-                                  //           Navigator.of(
-                                  //             context,
-                                  //             rootNavigator: true,
-                                  //           ).pop();
-                                  //           await context.router.push(
-                                  //             SideEffectsRoute(
-                                  //               tasks: tasks!,
-                                  //             ),
-                                  //           );
-                                  //         }
-                                  //       : null,
-                                  // ),
+                                  if (context.projectTypeCode ==
+                                      ProjectTypes.smc.toValue())
+                                    const SizedBox(
+                                      height: kPadding * 2,
+                                    ),
+                                  DigitOutLineButton(
+                                    label: localizations.translate(
+                                      i18.memberCard.recordAdverseEventsLabel,
+                                    ),
+                                    buttonStyle: OutlinedButton.styleFrom(
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.zero,
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      side: BorderSide(
+                                        width: 1.0,
+                                        color: tasks != null &&
+                                                (tasks ?? []).isNotEmpty
+                                            ? theme.colorScheme.secondary
+                                            : theme.colorScheme.outline,
+                                      ),
+                                      minimumSize: Size(
+                                        MediaQuery.of(context).size.width /
+                                            1.25,
+                                        50,
+                                      ),
+                                    ),
+                                    onPressed: tasks != null &&
+                                            (tasks ?? []).isNotEmpty
+                                        ? () async {
+                                            Navigator.of(
+                                              context,
+                                              rootNavigator: true,
+                                            ).pop();
+                                            await context.router.push(
+                                              SideEffectsRoute(
+                                                tasks: tasks!,
+                                              ),
+                                            );
+                                          }
+                                        : null,
+                                  ),
                                 ],
                               ),
                             );
