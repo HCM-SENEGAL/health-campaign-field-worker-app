@@ -13,6 +13,7 @@ import '../../blocs/product_variant/product_variant.dart';
 import '../../blocs/project/project.dart';
 import '../../data/local_store/no_sql/schema/app_configuration.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
 import '../../models/project_type/project_type_model.dart';
 import '../../router/app_router.dart';
 import '../../utils/environment_config.dart';
@@ -573,54 +574,81 @@ class _DeliverInterventionPageState
                                                         style: theme.textTheme
                                                             .displayMedium,
                                                       ),
-                                                      // if (context
-                                                      //         .beneficiaryType ==
-                                                      //     BeneficiaryType
-                                                      //         .individual)
-                                                      //   DigitStepper(
-                                                      //     activeStep:
-                                                      //         deliveryInterventionstate
-                                                      //                 .dose -
-                                                      //             1,
-                                                      //     stepRadius: 12.5,
-                                                      //     steps: steps,
-                                                      //     maxStepReached: 3,
-                                                      //     lineLength: (MediaQuery.of(
-                                                      //                     context)
-                                                      //                 .size
-                                                      //                 .width -
-                                                      //             12.5 *
-                                                      //                 2 *
-                                                      //                 steps
-                                                      //                     .length -
-                                                      //             50) /
-                                                      //         (steps.length - 1),
-                                                      //   ),
+                                                      if (context
+                                                              .projectTypeCode ==
+                                                          ProjectTypes.smc
+                                                              .toValue())
+                                                        DigitTextFormField(
+                                                          readOnly: true,
+                                                          formControlName:
+                                                              _doseAdministrationKey,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          label: localizations
+                                                              .translate(i18
+                                                                  .deliverIntervention
+                                                                  .currentCycle),
+                                                        ),
+                                                      if (context.beneficiaryType ==
+                                                              BeneficiaryType
+                                                                  .individual &&
+                                                          context.projectTypeCode ==
+                                                              ProjectTypes.smc
+                                                                  .toValue())
+                                                        DigitStepper(
+                                                          activeStep:
+                                                              deliveryInterventionstate
+                                                                      .dose -
+                                                                  1,
+                                                          stepRadius: 12.5,
+                                                          steps: steps,
+                                                          maxStepReached: 3,
+                                                          lineLength: (MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width -
+                                                                  12.5 *
+                                                                      2 *
+                                                                      steps
+                                                                          .length -
+                                                                  50) /
+                                                              (steps.length -
+                                                                  1),
+                                                        ),
                                                       // Solution Customizations
-                                                      // DigitDateFormPicker(
-                                                      //   isEnabled: false,
-                                                      //   formControlName:
-                                                      //       _dateOfAdministrationKey,
-                                                      //   label: localizations
-                                                      //       .translate(
-                                                      //     i18.householdDetails
-                                                      //         .dateOfRegistrationLabel,
-                                                      //   ),
-                                                      //   confirmText: localizations
-                                                      //       .translate(
-                                                      //     i18.common.coreCommonOk,
-                                                      //   ),
-                                                      //   cancelText: localizations
-                                                      //       .translate(
-                                                      //     i18.common
-                                                      //         .coreCommonCancel,
-                                                      //   ),
-                                                      //   isRequired: false,
-                                                      //   padding:
-                                                      //       const EdgeInsets.only(
-                                                      //     top: kPadding,
-                                                      //   ),
-                                                      // ),
+                                                      if (context
+                                                              .projectTypeCode ==
+                                                          ProjectTypes.smc
+                                                              .toValue())
+                                                        DigitDateFormPicker(
+                                                          isEnabled: false,
+                                                          formControlName:
+                                                              _dateOfAdministrationKey,
+                                                          label: localizations
+                                                              .translate(
+                                                            i18.householdDetails
+                                                                .dateOfRegistrationLabel,
+                                                          ),
+                                                          confirmText:
+                                                              localizations
+                                                                  .translate(
+                                                            i18.common
+                                                                .coreCommonOk,
+                                                          ),
+                                                          cancelText:
+                                                              localizations
+                                                                  .translate(
+                                                            i18.common
+                                                                .coreCommonCancel,
+                                                          ),
+                                                          isRequired: false,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            top: kPadding,
+                                                          ),
+                                                        ),
                                                     ],
                                                   ),
                                                 ),
