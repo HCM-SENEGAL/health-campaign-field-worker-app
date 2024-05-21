@@ -13,6 +13,7 @@ import '../../blocs/localization/app_localization.dart';
 import '../../blocs/product_variant/product_variant.dart';
 import '../../blocs/project/project.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
 import '../../router/app_router.dart';
 import '../../utils/i18_key_constants.dart' as i18;
 import '../../utils/utils.dart';
@@ -309,44 +310,52 @@ class _BeneficiaryDetailsPageState
                                               .selectedIndividual?.gender?.name
                                               .toUpperCase() ??
                                           '--'),
-                                  localizations.translate(
-                                    i18.common.coreCommonMobileNumber,
-                                  ): context.beneficiaryType !=
-                                          BeneficiaryType.individual
-                                      ? localizations.translate(
-                                          householdMemberWrapper.headOfHousehold
-                                                  .mobileNumber ??
-                                              '--',
-                                        )
-                                      : localizations.translate(
-                                          state.selectedIndividual
-                                                  ?.mobileNumber ??
-                                              '--',
-                                        ),
-                                  localizations.translate(i18
-                                      .individualDetails.heightLabelText): () {
-                                    final height = state.selectedIndividual
-                                        ?.additionalFields?.fields
-                                        .firstWhereOrNull((element) =>
-                                            element.key == _heightKey)
-                                        ?.value;
+                                  if (context.projectTypeCode ==
+                                      ProjectTypes.lf.toValue())
+                                    localizations.translate(
+                                      i18.common.coreCommonMobileNumber,
+                                    ): context.beneficiaryType !=
+                                            BeneficiaryType.individual
+                                        ? localizations.translate(
+                                            householdMemberWrapper
+                                                    .headOfHousehold
+                                                    .mobileNumber ??
+                                                '--',
+                                          )
+                                        : localizations.translate(
+                                            state.selectedIndividual
+                                                    ?.mobileNumber ??
+                                                '--',
+                                          ),
+                                  if (context.projectTypeCode ==
+                                      ProjectTypes.lf.toValue())
+                                    localizations.translate(i18
+                                        .individualDetails
+                                        .heightLabelText): () {
+                                      final height = state.selectedIndividual
+                                          ?.additionalFields?.fields
+                                          .firstWhereOrNull((element) =>
+                                              element.key == _heightKey)
+                                          ?.value;
 
-                                    return height;
-                                  }(),
-                                  localizations.translate(i18
-                                      .deliverIntervention
-                                      .disabilityLabel): () {
-                                    final disabilityType = state
-                                        .selectedIndividual
-                                        ?.additionalFields
-                                        ?.fields
-                                        .firstWhereOrNull((element) =>
-                                            element.key == _disabilityTypeKey)
-                                        ?.value;
+                                      return height;
+                                    }(),
+                                  if (context.projectTypeCode ==
+                                      ProjectTypes.lf.toValue())
+                                    localizations.translate(i18
+                                        .deliverIntervention
+                                        .disabilityLabel): () {
+                                      final disabilityType = state
+                                          .selectedIndividual
+                                          ?.additionalFields
+                                          ?.fields
+                                          .firstWhereOrNull((element) =>
+                                              element.key == _disabilityTypeKey)
+                                          ?.value;
 
-                                    return localizations
-                                        .translate(disabilityType);
-                                  }(),
+                                      return localizations
+                                          .translate(disabilityType);
+                                    }(),
                                   localizations.translate(i18
                                       .deliverIntervention
                                       .dateOfRegistrationLabel): () {
