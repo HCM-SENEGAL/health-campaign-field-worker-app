@@ -253,13 +253,20 @@ class _DeliverInterventionPageState
                                                                   theme,
                                                                 ),
                                                               );
-                                                            } else if ((((form
-                                                                            .control(
-                                                                      _quantityDistributedKey,
-                                                                    ) as FormArray)
-                                                                        .value) ??
-                                                                    [])
-                                                                .any((e) => e == 0)) {
+                                                            } else if ((context
+                                                                        .projectTypeCode ==
+                                                                    ProjectTypes
+                                                                        .lf
+                                                                        .toValue()) &&
+                                                                (((form.control(
+                                                                          _quantityDistributedKey,
+                                                                        )
+                                                                                as FormArray)
+                                                                            .value) ??
+                                                                        [])
+                                                                    .any((e) =>
+                                                                        e ==
+                                                                        0)) {
                                                               await DigitToast
                                                                   .show(
                                                                 context,
@@ -273,7 +280,12 @@ class _DeliverInterventionPageState
                                                                   theme,
                                                                 ),
                                                               );
-                                                            } else if (isCommentMandatory(
+                                                            } else if ((context
+                                                                        .projectTypeCode ==
+                                                                    ProjectTypes
+                                                                        .lf
+                                                                        .toValue()) &&
+                                                                isCommentMandatory(
                                                                   isCommentRequired,
                                                                   productVariants,
                                                                   form,
