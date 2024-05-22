@@ -1,4 +1,5 @@
 import 'package:digit_components/digit_components.dart';
+import 'package:digit_components/widgets/atoms/digit_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,8 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../blocs/product_variant/product_variant.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
+import '../../utils/extensions/extensions.dart';
 import '../../utils/i18_key_constants.dart' as i18;
 import '../localized.dart';
 
@@ -14,6 +17,7 @@ class ResourceBeneficiaryCard extends LocalizedStatefulWidget {
   final int cardIndex;
   final FormGroup form;
   final int totalItems;
+  final void Function(bool) checkDoseAdministration;
 
   const ResourceBeneficiaryCard({
     Key? key,
@@ -22,6 +26,7 @@ class ResourceBeneficiaryCard extends LocalizedStatefulWidget {
     required this.cardIndex,
     required this.form,
     required this.totalItems,
+    required this.checkDoseAdministration,
   }) : super(key: key);
 
   @override
@@ -31,6 +36,8 @@ class ResourceBeneficiaryCard extends LocalizedStatefulWidget {
 
 class _ResourceBeneficiaryCardState
     extends LocalizedState<ResourceBeneficiaryCard> {
+  bool doseAdministered = false;
+  static const _deliveryCommentKey = 'deliveryComment';
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,16 +86,40 @@ class _ResourceBeneficiaryCardState
               );
             },
           ),
-          DigitIntegerFormPicker(
-            incrementer: true,
-            decimal: true,
-            formControlName: 'quantityDistributed.${widget.cardIndex}',
-            form: widget.form,
-            label: localizations.translate(
-              i18.deliverIntervention.quantityDistributedLabel,
+          if (context.projectTypeCode == ProjectTypes.smc.toValue())
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: DigitCheckbox(
+                label: localizations.translate(
+                  i18.deliverIntervention.deliverInteventionAdministeredLabel,
+                ),
+                value: doseAdministered,
+                onChanged: (value) {
+                  setState(() {
+                    doseAdministered = value!;
+                    widget.checkDoseAdministration(value);
+                    if (!value) {
+                      widget.form
+                          .control(
+                            _deliveryCommentKey,
+                          )
+                          .value = null;
+                    }
+                  });
+                },
+              ),
             ),
-            minimum: 0,
-          ),
+          if (context.projectTypeCode == ProjectTypes.lf.toValue())
+            DigitIntegerFormPicker(
+              incrementer: true,
+              decimal: true,
+              formControlName: 'quantityDistributed.${widget.cardIndex}',
+              form: widget.form,
+              label: localizations.translate(
+                i18.deliverIntervention.quantityDistributedLabel,
+              ),
+              minimum: 0,
+            ),
           DigitTextFormField(
             formControlName: 'quantityWasted.${widget.cardIndex}',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),

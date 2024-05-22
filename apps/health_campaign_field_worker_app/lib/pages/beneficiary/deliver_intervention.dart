@@ -53,6 +53,13 @@ class _DeliverInterventionPageState
 
   bool isCommentRequired = false;
 
+  // toggle doseAdministered
+  void checkDoseAdministration(bool newValue) {
+    setState(() {
+      doseAdministered = newValue;
+    });
+  }
+
   // List of controllers for form elements
   final List _controllers = [];
 
@@ -679,6 +686,8 @@ class _DeliverInterventionPageState
                                                               totalItems:
                                                                   _controllers
                                                                       .length,
+                                                              checkDoseAdministration:
+                                                                  checkDoseAdministration,
                                                               onDelete:
                                                                   (index) {
                                                                 (form.control(
