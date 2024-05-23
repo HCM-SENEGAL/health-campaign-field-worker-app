@@ -869,13 +869,10 @@ class _IndividualDetailsPageState
           value: height,
           validators: [Validators.required],
         ),
-      if ((widget.isHeadOfHousehold &&
-              context.projectTypeCode == ProjectTypes.smc.toValue()) ||
-          (context.projectTypeCode == ProjectTypes.lf.toValue()))
-        _mobileNumberKey:
-            FormControl<String>(value: individual?.mobileNumber, validators: [
-          CustomValidator.validMobileNumber,
-        ]),
+      _mobileNumberKey:
+          FormControl<String>(value: individual?.mobileNumber, validators: [
+        CustomValidator.validMobileNumber,
+      ]),
       if (context.projectTypeCode == ProjectTypes.lf.toValue())
         _disabilityTypeKey:
             FormControl<String>(value: disabilityType, validators: [
