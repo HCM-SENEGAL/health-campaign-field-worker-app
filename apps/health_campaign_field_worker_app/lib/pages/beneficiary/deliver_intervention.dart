@@ -543,6 +543,43 @@ class _DeliverInterventionPageState
                                                                         ),
                                                                       ),
                                                                     );
+                                                                  } else {
+                                                                    context
+                                                                        .read<
+                                                                            DeliverInterventionBloc>()
+                                                                        .add(
+                                                                          DeliverInterventionSubmitEvent(
+                                                                            taskData.first,
+                                                                            false,
+                                                                            context.boundary,
+                                                                          ),
+                                                                        );
+                                                                    if (state
+                                                                                .futureDeliveries !=
+                                                                            null &&
+                                                                        state
+                                                                            .futureDeliveries!
+                                                                            .isNotEmpty &&
+                                                                        projectState.projectType?.cycles?.isNotEmpty ==
+                                                                            true) {
+                                                                      context
+                                                                          .router
+                                                                          .push(
+                                                                        SplashAcknowledgementRoute(
+                                                                          enableBackToSearch:
+                                                                              false,
+                                                                        ),
+                                                                      );
+                                                                    } else {
+                                                                      context
+                                                                          .router
+                                                                          .push(
+                                                                        SplashAcknowledgementRoute(
+                                                                          enableBackToSearch:
+                                                                              true,
+                                                                        ),
+                                                                      );
+                                                                    }
                                                                   }
                                                                 }
                                                               }
