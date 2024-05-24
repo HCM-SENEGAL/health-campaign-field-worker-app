@@ -555,7 +555,7 @@ DoseCriteriaModel? fetchProductVariant(
             .where((element) => element.key == "height")
             .first
             .value
-        : 0);
+        : "0");
     final filteredCriteria = currentDelivery.doseCriteria?.where((criteria) {
       final condition = criteria.condition;
 

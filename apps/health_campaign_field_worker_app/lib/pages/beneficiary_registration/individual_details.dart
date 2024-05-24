@@ -717,9 +717,13 @@ class _IndividualDetailsPageState
       ),
     );
 
-    final disabilityType = form.control(_disabilityTypeKey).value;
+    final disabilityType = context.projectTypeCode == ProjectTypes.lf.toValue()
+        ? form.control(_disabilityTypeKey).value
+        : null;
 
-    final height = form.control(_heightKey).value as String;
+    final height = context.projectTypeCode == ProjectTypes.lf.toValue()
+        ? form.control(_heightKey).value as String
+        : "";
 
     individual = individual.copyWith(
       name: name.copyWith(
@@ -739,7 +743,8 @@ class _IndividualDetailsPageState
           identifierType: 'DEFAULT',
         ),
       ],
-      additionalFields: disabilityType != null
+      additionalFields: context.projectTypeCode == ProjectTypes.lf.toValue() &&
+              disabilityType != null
           ? IndividualAdditionalFields(
               version: 1,
               fields: [
@@ -765,25 +770,27 @@ class _IndividualDetailsPageState
         : context.selectedProjectType!.id;
 
     individual = individual.copyWith(
-      additionalFields: individual.additionalFields!.copyWith(
-        fields: [
-          ...individual.additionalFields!.fields,
-          AdditionalField(
-            "projectId",
-            context.projectId,
-          ),
-          if (cycleIndex.isNotEmpty)
-            AdditionalField(
-              "cycleIndex",
-              cycleIndex,
+      additionalFields: individual.additionalFields == null
+          ? null
+          : individual.additionalFields!.copyWith(
+              fields: [
+                ...individual.additionalFields!.fields,
+                AdditionalField(
+                  "projectId",
+                  context.projectId,
+                ),
+                if (cycleIndex.isNotEmpty)
+                  AdditionalField(
+                    "cycleIndex",
+                    cycleIndex,
+                  ),
+                if (projectTypeId.isNotEmpty)
+                  AdditionalField(
+                    "projectTypeId",
+                    projectTypeId,
+                  ),
+              ],
             ),
-          if (projectTypeId.isNotEmpty)
-            AdditionalField(
-              "projectTypeId",
-              projectTypeId,
-            ),
-        ],
-      ),
     );
 
     return individual;
@@ -857,18 +864,20 @@ class _IndividualDetailsPageState
               },
             ),
       ),
-      _heightKey: FormControl<String>(
-        value: height,
-        validators: [Validators.required],
-      ),
+      if (context.projectTypeCode == ProjectTypes.lf.toValue())
+        _heightKey: FormControl<String>(
+          value: height,
+          validators: [Validators.required],
+        ),
       _mobileNumberKey:
           FormControl<String>(value: individual?.mobileNumber, validators: [
         CustomValidator.validMobileNumber,
       ]),
-      _disabilityTypeKey:
-          FormControl<String>(value: disabilityType, validators: [
-        Validators.required,
-      ]),
+      if (context.projectTypeCode == ProjectTypes.lf.toValue())
+        _disabilityTypeKey:
+            FormControl<String>(value: disabilityType, validators: [
+          Validators.required,
+        ]),
     });
   }
 }
