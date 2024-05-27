@@ -416,109 +416,49 @@ class _DeliverInterventionPageState
                                                                           long,
                                                                     ),
                                                                   );
-                                                                  DigitDialog
-                                                                      .show<
-                                                                          bool>(
-                                                                    context,
-                                                                    options:
-                                                                        DigitDialogOptions(
-                                                                      titleText: localizations.translate(i18
-                                                                          .deliverIntervention
-                                                                          .didYouObservePreviousAdvEventsTitle),
-                                                                      barrierDismissible:
-                                                                          false,
-                                                                      enableRecordPast:
-                                                                          true,
-                                                                      dialogPadding:
-                                                                          const EdgeInsets
-                                                                              .fromLTRB(
-                                                                        kPadding,
-                                                                        kPadding,
-                                                                        kPadding,
-                                                                        0,
-                                                                      ),
-                                                                      primaryAction:
-                                                                          DigitDialogActions(
-                                                                        label: localizations
-                                                                            .translate(
-                                                                          i18.common
-                                                                              .coreCommonNo,
+                                                                  if (context
+                                                                          .projectTypeCode ==
+                                                                      ProjectTypes
+                                                                          .lf
+                                                                          .toValue()) {
+                                                                    DigitDialog
+                                                                        .show<
+                                                                            bool>(
+                                                                      context,
+                                                                      options:
+                                                                          DigitDialogOptions(
+                                                                        titleText: localizations.translate(i18
+                                                                            .deliverIntervention
+                                                                            .didYouObservePreviousAdvEventsTitle),
+                                                                        barrierDismissible:
+                                                                            false,
+                                                                        enableRecordPast:
+                                                                            true,
+                                                                        dialogPadding:
+                                                                            const EdgeInsets.fromLTRB(
+                                                                          kPadding,
+                                                                          kPadding,
+                                                                          kPadding,
+                                                                          0,
                                                                         ),
-                                                                        action:
-                                                                            (ctx) {
-                                                                          if (!interventionSubmitted) {
-                                                                            interventionSubmitted =
-                                                                                true;
-                                                                            context.read<DeliverInterventionBloc>().add(
-                                                                                  DeliverInterventionSubmitEvent(
-                                                                                    taskData.first,
-                                                                                    false,
-                                                                                    context.boundary,
-                                                                                  ),
-                                                                                );
-                                                                            final reloadState =
-                                                                                context.read<HouseholdOverviewBloc>();
-                                                                            Future.delayed(
-                                                                              const Duration(
-                                                                                milliseconds: 1000,
-                                                                              ),
-                                                                              () {
-                                                                                reloadState.add(
-                                                                                  HouseholdOverviewReloadEvent(
-                                                                                    projectId: context.projectId,
-                                                                                    projectBeneficiaryType: context.beneficiaryType,
-                                                                                  ),
-                                                                                );
-                                                                              },
-                                                                            ).then(
-                                                                              (value) {
-                                                                                context.router.popAndPush(
-                                                                                  HouseholdAcknowledgementRoute(
-                                                                                    enableViewHousehold: true,
-                                                                                  ),
-                                                                                );
-                                                                                Navigator.pop(ctx);
-                                                                              },
-                                                                            );
-                                                                          }
-                                                                        },
-                                                                      ),
-                                                                      secondaryAction:
-                                                                          DigitDialogActions(
-                                                                        label: localizations
-                                                                            .translate(
-                                                                          i18.common
-                                                                              .coreCommonYes,
-                                                                        ),
-                                                                        action:
-                                                                            (ctx) async {
-                                                                          if (!interventionSubmitted) {
-                                                                            interventionSubmitted =
-                                                                                true;
-                                                                            context.read<DeliverInterventionBloc>().add(
-                                                                                  DeliverInterventionSubmitEvent(
-                                                                                    taskData.first,
-                                                                                    false,
-                                                                                    context.boundary,
-                                                                                  ),
-                                                                                );
-                                                                            Navigator.pop(
-                                                                              ctx,
-                                                                            );
-                                                                            final reloadState =
-                                                                                context.read<HouseholdOverviewBloc>();
-                                                                            final response =
-                                                                                await router.push(
-                                                                              SideEffectsRoute(
-                                                                                tasks: [
-                                                                                  (taskData).last,
-                                                                                ],
-                                                                                fromSurvey: true,
-                                                                              ),
-                                                                            );
-
-                                                                            if (response ==
-                                                                                null) {
+                                                                        primaryAction:
+                                                                            DigitDialogActions(
+                                                                          label:
+                                                                              localizations.translate(
+                                                                            i18.common.coreCommonNo,
+                                                                          ),
+                                                                          action:
+                                                                              (ctx) {
+                                                                            if (!interventionSubmitted) {
+                                                                              interventionSubmitted = true;
+                                                                              context.read<DeliverInterventionBloc>().add(
+                                                                                    DeliverInterventionSubmitEvent(
+                                                                                      taskData.first,
+                                                                                      false,
+                                                                                      context.boundary,
+                                                                                    ),
+                                                                                  );
+                                                                              final reloadState = context.read<HouseholdOverviewBloc>();
                                                                               Future.delayed(
                                                                                 const Duration(
                                                                                   milliseconds: 1000,
@@ -542,11 +482,105 @@ class _DeliverInterventionPageState
                                                                                 },
                                                                               );
                                                                             }
-                                                                          }
-                                                                        },
+                                                                          },
+                                                                        ),
+                                                                        secondaryAction:
+                                                                            DigitDialogActions(
+                                                                          label:
+                                                                              localizations.translate(
+                                                                            i18.common.coreCommonYes,
+                                                                          ),
+                                                                          action:
+                                                                              (ctx) async {
+                                                                            if (!interventionSubmitted) {
+                                                                              interventionSubmitted = true;
+                                                                              context.read<DeliverInterventionBloc>().add(
+                                                                                    DeliverInterventionSubmitEvent(
+                                                                                      taskData.first,
+                                                                                      false,
+                                                                                      context.boundary,
+                                                                                    ),
+                                                                                  );
+                                                                              Navigator.pop(
+                                                                                ctx,
+                                                                              );
+                                                                              final reloadState = context.read<HouseholdOverviewBloc>();
+                                                                              final response = await router.push(
+                                                                                SideEffectsRoute(
+                                                                                  tasks: [
+                                                                                    (taskData).last,
+                                                                                  ],
+                                                                                  fromSurvey: true,
+                                                                                ),
+                                                                              );
+
+                                                                              if (response == null) {
+                                                                                Future.delayed(
+                                                                                  const Duration(
+                                                                                    milliseconds: 1000,
+                                                                                  ),
+                                                                                  () {
+                                                                                    reloadState.add(
+                                                                                      HouseholdOverviewReloadEvent(
+                                                                                        projectId: context.projectId,
+                                                                                        projectBeneficiaryType: context.beneficiaryType,
+                                                                                      ),
+                                                                                    );
+                                                                                  },
+                                                                                ).then(
+                                                                                  (value) {
+                                                                                    context.router.popAndPush(
+                                                                                      HouseholdAcknowledgementRoute(
+                                                                                        enableViewHousehold: true,
+                                                                                      ),
+                                                                                    );
+                                                                                    Navigator.pop(ctx);
+                                                                                  },
+                                                                                );
+                                                                              }
+                                                                            }
+                                                                          },
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  );
+                                                                    );
+                                                                  } else {
+                                                                    context
+                                                                        .read<
+                                                                            DeliverInterventionBloc>()
+                                                                        .add(
+                                                                          DeliverInterventionSubmitEvent(
+                                                                            taskData.first,
+                                                                            false,
+                                                                            context.boundary,
+                                                                          ),
+                                                                        );
+                                                                    if (state
+                                                                                .futureDeliveries !=
+                                                                            null &&
+                                                                        state
+                                                                            .futureDeliveries!
+                                                                            .isNotEmpty &&
+                                                                        projectState.projectType?.cycles?.isNotEmpty ==
+                                                                            true) {
+                                                                      context
+                                                                          .router
+                                                                          .push(
+                                                                        SplashAcknowledgementRoute(
+                                                                          enableBackToSearch:
+                                                                              false,
+                                                                        ),
+                                                                      );
+                                                                    } else {
+                                                                      context
+                                                                          .router
+                                                                          .push(
+                                                                        SplashAcknowledgementRoute(
+                                                                          enableBackToSearch:
+                                                                              true,
+                                                                        ),
+                                                                      );
+                                                                    }
+                                                                  }
                                                                 }
                                                               }
                                                             }
