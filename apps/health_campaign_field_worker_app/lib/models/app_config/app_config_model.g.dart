@@ -78,14 +78,26 @@ _$AppConfigPrimaryWrapperModelImpl _$$AppConfigPrimaryWrapperModelImplFromJson(
           ? null
           : SymptomsTypesSecondaryWrapperModel.fromJson(
               json['HCM-SYMPTOMS-TYPES'] as Map<String, dynamic>),
+      symptomsTypesSmc: json['HCM-SYMPTOMS-TYPES-SMC'] == null
+          ? null
+          : SymptomsTypesSecondaryWrapperModel.fromJson(
+              json['HCM-SYMPTOMS-TYPES-SMC'] as Map<String, dynamic>),
       referralReasons: json['HCM-REFERRAL-REASONS'] == null
           ? null
           : ReferralReasonsWrapperModel.fromJson(
               json['HCM-REFERRAL-REASONS'] as Map<String, dynamic>),
+      referralReasonsSmc: json['HCM-REFERRAL-REASONS-SMC'] == null
+          ? null
+          : ReferralReasonsWrapperModel.fromJson(
+              json['HCM-REFERRAL-REASONS-SMC'] as Map<String, dynamic>),
       ineligibilityReasons: json['HCM-INELIGIBILITY-REASONS'] == null
           ? null
           : IneligibilityReasonsWrapperModel.fromJson(
               json['HCM-INELIGIBILITY-REASONS'] as Map<String, dynamic>),
+      ineligibilityReasonsSmc: json['HCM-INELIGIBILITY-REASONS-SMC'] == null
+          ? null
+          : IneligibilityReasonsWrapperModel.fromJson(
+              json['HCM-INELIGIBILITY-REASONS-SMC'] as Map<String, dynamic>),
       disabilityTypes: json['HCM-DISABILITY-TYPES'] == null
           ? null
           : DisabilityTypesWrapperModel.fromJson(
@@ -98,8 +110,11 @@ Map<String, dynamic> _$$AppConfigPrimaryWrapperModelImplToJson(
       'HCM-FIELD-APP-CONFIG': instance.appConfig,
       'module-version': instance.rowVersions,
       'HCM-SYMPTOMS-TYPES': instance.symptomsTypes,
+      'HCM-SYMPTOMS-TYPES-SMC': instance.symptomsTypesSmc,
       'HCM-REFERRAL-REASONS': instance.referralReasons,
+      'HCM-REFERRAL-REASONS-SMC': instance.referralReasonsSmc,
       'HCM-INELIGIBILITY-REASONS': instance.ineligibilityReasons,
+      'HCM-INELIGIBILITY-REASONS-SMC': instance.ineligibilityReasonsSmc,
       'HCM-DISABILITY-TYPES': instance.disabilityTypes,
     };
 
