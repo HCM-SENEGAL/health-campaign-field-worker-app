@@ -194,7 +194,9 @@ class _ReferBeneficiaryPageState extends LocalizedState<ReferBeneficiaryPage> {
                                             referralCode
                                                 .toString()
                                                 .trim()
-                                                .isNotEmpty)
+                                                .isNotEmpty &&
+                                            context.projectTypeCode ==
+                                                ProjectTypes.smc.toValue())
                                           AdditionalField(
                                             _referralCode,
                                             referralCode,
@@ -474,7 +476,9 @@ class _ReferBeneficiaryPageState extends LocalizedState<ReferBeneficiaryPage> {
           FormControl<FacilityModel>(validators: [Validators.required]),
       _referralReason: FormControl<KeyValue>(value: null),
       _referralComments: FormControl<String>(value: null),
-      _referralCode: FormControl<String>(validators: [Validators.required]),
+      _referralCode: context.projectTypeCode == ProjectTypes.smc.toValue()
+          ? FormControl<String>(validators: [Validators.required])
+          : FormControl<String>(value: null),
     });
   }
 }
