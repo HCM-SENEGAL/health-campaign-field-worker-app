@@ -455,9 +455,10 @@ bool checkStatus(
         final isLastCycleRunning =
             lastTaskCreatedTime >= currentCycle.startDate! &&
                 lastTaskCreatedTime <= currentCycle.endDate!;
+        // value here in status is coming as UpperCase
 
         return isLastCycleRunning
-            ? lastTask.status == Status.delivered.name
+            ? lastTask.status == Status.delivered.toValue()
                 ? true
                 : false
             : true;
