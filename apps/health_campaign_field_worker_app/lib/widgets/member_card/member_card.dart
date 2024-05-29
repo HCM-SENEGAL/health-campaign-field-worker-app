@@ -552,7 +552,18 @@ class MemberCard extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: tasks != null &&
-                                              (tasks ?? []).isNotEmpty
+                                              (tasks ?? [])
+                                                  .where((element) =>
+                                                      element.status !=
+                                                          Status
+                                                              .beneficiaryRefused
+                                                              .toValue() &&
+                                                      element.status !=
+                                                          Status
+                                                              .beneficiaryReferred
+                                                              .toValue())
+                                                  .toList()
+                                                  .isNotEmpty
                                           ? () async {
                                               Navigator.of(
                                                 context,
