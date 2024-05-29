@@ -364,6 +364,11 @@ bool checkEligibilityForAgeAndSideEffects(
   List<SideEffectModel>? sideEffects,
 ) {
   int totalAgeMonths = age.years * 12 + age.months;
+  bool skipAge = [
+    Status.administeredFailed.toValue(),
+    Status.administeredSuccess.toValue(),
+    Status.delivered.toValue(),
+  ].contains(tasks?.status);
   final currentCycle = projectType?.cycles?.firstWhereOrNull(
     (e) =>
         (e.startDate!) < DateTime.now().millisecondsSinceEpoch &&
@@ -393,7 +398,11 @@ bool checkEligibilityForAgeAndSideEffects(
               : false
           : false;
     } else {
-      return true;
+      return skipAge ||
+              (totalAgeMonths >= projectType!.validMinAge! &&
+                  totalAgeMonths <= projectType.validMaxAge!)
+          ? true
+          : false;
     }
   }
   return false;
