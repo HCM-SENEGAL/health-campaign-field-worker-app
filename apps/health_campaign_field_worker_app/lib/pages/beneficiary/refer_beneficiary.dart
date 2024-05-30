@@ -400,8 +400,14 @@ class _ReferBeneficiaryPageState extends LocalizedState<ReferBeneficiaryPage> {
                               return state.maybeWhen(
                                 orElse: () => const Offstage(),
                                 initialized: (appConfiguration, _) {
-                                  final List<KeyValue> reasons =
-                                      (appConfiguration.referralReasons ?? [])
+                                  final List<KeyValue> reasons = context
+                                              .projectTypeCode ==
+                                          ProjectTypes.lf.toValue()
+                                      ? (appConfiguration.referralReasons ?? [])
+                                          .map((e) => KeyValue(e.code, e.code))
+                                          .toList()
+                                      : (appConfiguration.referralReasonsSmc ??
+                                              [])
                                           .map((e) => KeyValue(e.code, e.code))
                                           .toList();
 

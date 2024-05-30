@@ -12,6 +12,7 @@ import '../../blocs/household_overview/household_overview.dart';
 import '../../blocs/product_variant/product_variant.dart';
 import '../../data/local_store/no_sql/schema/app_configuration.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
 import '../../router/app_router.dart';
 import '../../utils/environment_config.dart';
 import '../../utils/i18_key_constants.dart' as i18;
@@ -319,9 +320,15 @@ class _IneligibilityReasonsPageState
                                               orElse: () => const Offstage(),
                                               initialized:
                                                   (appConfiguration, _) {
-                                                final ineleigibilityReasonOptions =
-                                                    appConfiguration
+                                                final ineleigibilityReasonOptions = context
+                                                            .projectTypeCode ==
+                                                        ProjectTypes.lf
+                                                            .toValue()
+                                                    ? appConfiguration
                                                             .ineligibilityReasons ??
+                                                        <IneligibilityReasons>[]
+                                                    : appConfiguration
+                                                            .ineligibilityReasonsSmc ??
                                                         <IneligibilityReasons>[];
                                                 ineleigibilityReasons =
                                                     ineleigibilityReasonOptions
