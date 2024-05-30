@@ -286,6 +286,16 @@ class MdmsRepository {
       return symptomTypes;
     }).toList();
 
+    appConfiguration.symptomsTypesSmc =
+        result.symptomsTypesSmc?.symptomsTypeList?.map((e) {
+      final symptomTypes = SymptomsTypes()
+        ..name = e.name
+        ..code = e.code
+        ..active = e.active;
+
+      return symptomTypes;
+    }).toList();
+
     appConfiguration.referralReasons =
         result.referralReasons?.referralReasonList?.map((e) {
       final reasonTypes = ReferralReasons()
@@ -296,8 +306,28 @@ class MdmsRepository {
       return reasonTypes;
     }).toList();
 
+    appConfiguration.referralReasonsSmc =
+        result.referralReasonsSmc?.referralReasonList?.map((e) {
+      final reasonTypes = ReferralReasons()
+        ..name = e.name
+        ..code = e.code
+        ..active = e.active;
+
+      return reasonTypes;
+    }).toList();
+
     appConfiguration.ineligibilityReasons =
         result.ineligibilityReasons?.ineligibilityReasonsList?.map((e) {
+      final reasonTypes = IneligibilityReasons()
+        ..name = e.name
+        ..code = e.code
+        ..active = e.active;
+
+      return reasonTypes;
+    }).toList();
+
+    appConfiguration.ineligibilityReasonsSmc =
+        result.ineligibilityReasonsSmc?.ineligibilityReasonsList?.map((e) {
       final reasonTypes = IneligibilityReasons()
         ..name = e.name
         ..code = e.code

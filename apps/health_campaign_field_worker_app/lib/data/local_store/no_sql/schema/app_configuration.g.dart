@@ -143,15 +143,33 @@ const AppConfigurationSchema = CollectionSchema(
       type: IsarType.objectList,
       target: r'IneligibilityReasons',
     ),
-    r'referralReasons': PropertySchema(
+    r'ineligibilityReasonsSmc': PropertySchema(
       id: 22,
+      name: r'ineligibilityReasonsSmc',
+      type: IsarType.objectList,
+      target: r'IneligibilityReasons',
+    ),
+    r'referralReasons': PropertySchema(
+      id: 23,
       name: r'referralReasons',
       type: IsarType.objectList,
       target: r'ReferralReasons',
     ),
+    r'referralReasonsSmc': PropertySchema(
+      id: 24,
+      name: r'referralReasonsSmc',
+      type: IsarType.objectList,
+      target: r'ReferralReasons',
+    ),
     r'symptomsTypes': PropertySchema(
-      id: 23,
+      id: 25,
       name: r'symptomsTypes',
+      type: IsarType.objectList,
+      target: r'SymptomsTypes',
+    ),
+    r'symptomsTypesSmc': PropertySchema(
+      id: 26,
+      name: r'symptomsTypesSmc',
       type: IsarType.objectList,
       target: r'SymptomsTypes',
     )
@@ -435,6 +453,20 @@ int _appConfigurationEstimateSize(
     }
   }
   {
+    final list = object.ineligibilityReasonsSmc;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        final offsets = allOffsets[IneligibilityReasons]!;
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount += IneligibilityReasonsSchema.estimateSize(
+              value, offsets, allOffsets);
+        }
+      }
+    }
+  }
+  {
     final list = object.referralReasons;
     if (list != null) {
       bytesCount += 3 + list.length * 3;
@@ -449,7 +481,35 @@ int _appConfigurationEstimateSize(
     }
   }
   {
+    final list = object.referralReasonsSmc;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        final offsets = allOffsets[ReferralReasons]!;
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount +=
+              ReferralReasonsSchema.estimateSize(value, offsets, allOffsets);
+        }
+      }
+    }
+  }
+  {
     final list = object.symptomsTypes;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        final offsets = allOffsets[SymptomsTypes]!;
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount +=
+              SymptomsTypesSchema.estimateSize(value, offsets, allOffsets);
+        }
+      }
+    }
+  }
+  {
+    final list = object.symptomsTypesSmc;
     if (list != null) {
       bytesCount += 3 + list.length * 3;
       {
@@ -573,17 +633,35 @@ void _appConfigurationSerialize(
     IneligibilityReasonsSchema.serialize,
     object.ineligibilityReasons,
   );
-  writer.writeObjectList<ReferralReasons>(
+  writer.writeObjectList<IneligibilityReasons>(
     offsets[22],
+    allOffsets,
+    IneligibilityReasonsSchema.serialize,
+    object.ineligibilityReasonsSmc,
+  );
+  writer.writeObjectList<ReferralReasons>(
+    offsets[23],
     allOffsets,
     ReferralReasonsSchema.serialize,
     object.referralReasons,
   );
+  writer.writeObjectList<ReferralReasons>(
+    offsets[24],
+    allOffsets,
+    ReferralReasonsSchema.serialize,
+    object.referralReasonsSmc,
+  );
   writer.writeObjectList<SymptomsTypes>(
-    offsets[23],
+    offsets[25],
     allOffsets,
     SymptomsTypesSchema.serialize,
     object.symptomsTypes,
+  );
+  writer.writeObjectList<SymptomsTypes>(
+    offsets[26],
+    allOffsets,
+    SymptomsTypesSchema.serialize,
+    object.symptomsTypesSmc,
   );
 }
 
@@ -697,14 +775,32 @@ AppConfiguration _appConfigurationDeserialize(
     allOffsets,
     IneligibilityReasons(),
   );
-  object.referralReasons = reader.readObjectList<ReferralReasons>(
+  object.ineligibilityReasonsSmc = reader.readObjectList<IneligibilityReasons>(
     offsets[22],
+    IneligibilityReasonsSchema.deserialize,
+    allOffsets,
+    IneligibilityReasons(),
+  );
+  object.referralReasons = reader.readObjectList<ReferralReasons>(
+    offsets[23],
+    ReferralReasonsSchema.deserialize,
+    allOffsets,
+    ReferralReasons(),
+  );
+  object.referralReasonsSmc = reader.readObjectList<ReferralReasons>(
+    offsets[24],
     ReferralReasonsSchema.deserialize,
     allOffsets,
     ReferralReasons(),
   );
   object.symptomsTypes = reader.readObjectList<SymptomsTypes>(
-    offsets[23],
+    offsets[25],
+    SymptomsTypesSchema.deserialize,
+    allOffsets,
+    SymptomsTypes(),
+  );
+  object.symptomsTypesSmc = reader.readObjectList<SymptomsTypes>(
+    offsets[26],
     SymptomsTypesSchema.deserialize,
     allOffsets,
     SymptomsTypes(),
@@ -841,13 +937,34 @@ P _appConfigurationDeserializeProp<P>(
         IneligibilityReasons(),
       )) as P;
     case 22:
+      return (reader.readObjectList<IneligibilityReasons>(
+        offset,
+        IneligibilityReasonsSchema.deserialize,
+        allOffsets,
+        IneligibilityReasons(),
+      )) as P;
+    case 23:
       return (reader.readObjectList<ReferralReasons>(
         offset,
         ReferralReasonsSchema.deserialize,
         allOffsets,
         ReferralReasons(),
       )) as P;
-    case 23:
+    case 24:
+      return (reader.readObjectList<ReferralReasons>(
+        offset,
+        ReferralReasonsSchema.deserialize,
+        allOffsets,
+        ReferralReasons(),
+      )) as P;
+    case 25:
+      return (reader.readObjectList<SymptomsTypes>(
+        offset,
+        SymptomsTypesSchema.deserialize,
+        allOffsets,
+        SymptomsTypes(),
+      )) as P;
+    case 26:
       return (reader.readObjectList<SymptomsTypes>(
         offset,
         SymptomsTypesSchema.deserialize,
@@ -3309,6 +3426,113 @@ extension AppConfigurationQueryFilter
   }
 
   QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'ineligibilityReasonsSmc',
+      ));
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'ineligibilityReasonsSmc',
+      ));
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'ineligibilityReasonsSmc',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'ineligibilityReasonsSmc',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'ineligibilityReasonsSmc',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'ineligibilityReasonsSmc',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'ineligibilityReasonsSmc',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'ineligibilityReasonsSmc',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
       referralReasonsIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3416,6 +3640,113 @@ extension AppConfigurationQueryFilter
   }
 
   QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'referralReasonsSmc',
+      ));
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'referralReasonsSmc',
+      ));
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'referralReasonsSmc',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'referralReasonsSmc',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'referralReasonsSmc',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'referralReasonsSmc',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'referralReasonsSmc',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'referralReasonsSmc',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
       symptomsTypesIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3514,6 +3845,113 @@ extension AppConfigurationQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'symptomsTypes',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'symptomsTypesSmc',
+      ));
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'symptomsTypesSmc',
+      ));
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'symptomsTypesSmc',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'symptomsTypesSmc',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'symptomsTypesSmc',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'symptomsTypesSmc',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'symptomsTypesSmc',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'symptomsTypesSmc',
         lower,
         includeLower,
         upper,
@@ -3640,6 +4078,13 @@ extension AppConfigurationQueryObject
   }
 
   QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      ineligibilityReasonsSmcElement(FilterQuery<IneligibilityReasons> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'ineligibilityReasonsSmc');
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
       referralReasonsElement(FilterQuery<ReferralReasons> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'referralReasons');
@@ -3647,9 +4092,23 @@ extension AppConfigurationQueryObject
   }
 
   QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      referralReasonsSmcElement(FilterQuery<ReferralReasons> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'referralReasonsSmc');
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
       symptomsTypesElement(FilterQuery<SymptomsTypes> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'symptomsTypes');
+    });
+  }
+
+  QueryBuilder<AppConfiguration, AppConfiguration, QAfterFilterCondition>
+      symptomsTypesSmcElement(FilterQuery<SymptomsTypes> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'symptomsTypesSmc');
     });
   }
 }
@@ -4052,6 +4511,13 @@ extension AppConfigurationQueryProperty
     });
   }
 
+  QueryBuilder<AppConfiguration, List<IneligibilityReasons>?, QQueryOperations>
+      ineligibilityReasonsSmcProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'ineligibilityReasonsSmc');
+    });
+  }
+
   QueryBuilder<AppConfiguration, List<ReferralReasons>?, QQueryOperations>
       referralReasonsProperty() {
     return QueryBuilder.apply(this, (query) {
@@ -4059,10 +4525,24 @@ extension AppConfigurationQueryProperty
     });
   }
 
+  QueryBuilder<AppConfiguration, List<ReferralReasons>?, QQueryOperations>
+      referralReasonsSmcProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'referralReasonsSmc');
+    });
+  }
+
   QueryBuilder<AppConfiguration, List<SymptomsTypes>?, QQueryOperations>
       symptomsTypesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'symptomsTypes');
+    });
+  }
+
+  QueryBuilder<AppConfiguration, List<SymptomsTypes>?, QQueryOperations>
+      symptomsTypesSmcProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'symptomsTypesSmc');
     });
   }
 }
