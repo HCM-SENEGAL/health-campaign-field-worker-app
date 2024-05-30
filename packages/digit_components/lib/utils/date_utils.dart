@@ -84,7 +84,7 @@ class DigitDateUtils {
     }
 
     if (monthVsDaysMap.containsKey(birthMonth.toString())) {
-      birthDay = (isLeapYear(currentDate.year)
+      birthDay = (isLeapYear(birthYear)
           ? min(birthDay, monthVsDaysMapLeap[birthMonth.toString()]!)
           : min(birthDay, monthVsDaysMap[birthMonth.toString()]!));
     }
