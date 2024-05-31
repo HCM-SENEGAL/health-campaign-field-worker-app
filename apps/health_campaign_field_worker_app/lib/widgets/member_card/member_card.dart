@@ -60,6 +60,7 @@ class MemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final beneficiaryType = context.beneficiaryType;
+    final doseStatus = checkStatus(tasks, context.selectedCycle);
 
     return Container(
       decoration: BoxDecoration(
@@ -223,9 +224,10 @@ class MemberCard extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Column(
                 children: [
-                  isNotEligible ||
-                          isBeneficiaryReferred ||
-                          isBeneficiaryIneligible
+                  (isNotEligible ||
+                              isBeneficiaryReferred ||
+                              isBeneficiaryIneligible) &&
+                          !doseStatus
                       ? const Offstage()
                       : !isNotEligible
                           ? DigitElevatedButton(
@@ -273,10 +275,7 @@ class MemberCard extends StatelessWidget {
                                             sideEffects,
                                             individual,
                                           ) &&
-                                          !checkStatus(
-                                            tasks,
-                                            context.selectedCycle,
-                                          )
+                                          !doseStatus
                                       ? localizations.translate(
                                           i18.householdOverView
                                               .viewDeliveryLabel,
@@ -301,7 +300,7 @@ class MemberCard extends StatelessWidget {
                                 sideEffects,
                                 individual,
                               ) &&
-                              !checkStatus(tasks, context.selectedCycle)))
+                              !doseStatus))
                       ? const Offstage()
                       : DigitOutLineButton(
                           label: localizations.translate(
@@ -353,10 +352,7 @@ class MemberCard extends StatelessWidget {
                                                         .toValue())
                                                 .toList()
                                                 .isNotEmpty &&
-                                            !checkStatus(
-                                              tasks,
-                                              context.selectedCycle,
-                                            )
+                                            !doseStatus
                                         ? null
                                         : () {
                                             Navigator.of(
@@ -504,10 +500,7 @@ class MemberCard extends StatelessWidget {
                                                         .toValue())
                                                 .toList()
                                                 .isNotEmpty &&
-                                            !checkStatus(
-                                              tasks,
-                                              context.selectedCycle,
-                                            )
+                                            !doseStatus
                                         ? null
                                         : () async {
                                             Navigator.of(
