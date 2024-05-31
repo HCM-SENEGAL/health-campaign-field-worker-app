@@ -119,6 +119,8 @@ class _IndividualDetailsPageState
                                     theme,
                                   ),
                                 );
+
+                                return;
                               }
                               final userId = context.loggedInUserUuid;
                               final projectId = context.projectId;
@@ -502,6 +504,11 @@ class _IndividualDetailsPageState
                                         age.years < 18) {
                                       isHeadAgeValid = false;
                                     } else {
+                                      if (context.projectTypeCode ==
+                                              ProjectTypes.smc.toValue() &&
+                                          widget.isHeadOfHousehold) {
+                                        isHeadAgeValid = true;
+                                      }
                                       formControl.removeError('');
                                     }
                                   }
