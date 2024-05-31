@@ -460,7 +460,7 @@ bool checkStatus(
         // value here in status is coming as UpperCase
 
         return isLastCycleRunning
-            ? lastTask.status == Status.delivered.toValue()
+            ? lastTask.status == Status.delivered.name
                 ? true
                 : false
             : true;
