@@ -267,8 +267,9 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                       ),
                     ),
                     TableData(
-                      tasks?.status == Status.administeredFailed.toValue() ||
-                              (tasks?.additionalFields?.fields
+                      tasks?.status == Status.administeredFailed.toValue()
+                          ? '--'
+                          : (tasks?.additionalFields?.fields
                                       .where((e) =>
                                           e.key ==
                                           AdditionalFieldsType.deliveryStrategy
@@ -276,10 +277,22 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                                       .firstOrNull
                                       ?.value ==
                                   DeliverStrategyType.indirect.toValue())
-                          ? ' -- '
-                          : tasks?.clientAuditDetails?.createdTime.toDateTime
-                                  .getFormattedDate() ??
-                              ' -- ',
+                              ? (int.parse(tasks?.additionalFields?.fields
+                                              .where((e) =>
+                                                  e.key ==
+                                                  AdditionalFieldsType
+                                                      .dateOfAdministration
+                                                      .toValue())
+                                              .firstOrNull
+                                              ?.value) +
+                                          (item.id - 1) * 24 * 60 * 60 * 1000)
+                                      .toDateTime
+                                      .getFormattedDate() ??
+                                  '--'
+                              : tasks?.clientAuditDetails?.createdTime
+                                      .toDateTime
+                                      .getFormattedDate() ??
+                                  ' -- ',
                       cellKey: 'completedOn',
                     ),
                   ]);
