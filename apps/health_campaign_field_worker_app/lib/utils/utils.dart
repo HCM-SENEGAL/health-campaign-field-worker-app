@@ -322,16 +322,7 @@ bool checkEligibilityForAgeAndSideEffect(
     ).months;
     Cycle? currentCycle = getCurrentCycle(projectType);
 
-    // todo : implement check so that it works for both LF and SMC
-    if (projectType!.code == ProjectTypes.lf.toValue()) {
-      return currentCycle == null || currentCycle.deliveries == null
-          ? false
-          : fetchProductVariant(currentCycle.deliveries!.first, individual,
-                      projectType!.code) ==
-                  null
-              ? false
-              : true;
-    } else if (projectType!.code == ProjectTypes.smc.toValue()) {
+    if (projectType!.code == ProjectTypes.smc.toValue()) {
       return checkEligibilityForAgeAndSideEffects(
         DigitDOBAge(
           years: ageInYears,
@@ -342,6 +333,17 @@ bool checkEligibilityForAgeAndSideEffect(
         sideEffects,
       );
     }
+
+    return currentCycle == null || currentCycle.deliveries == null
+        ? false
+        : fetchProductVariant(
+                  currentCycle.deliveries!.first,
+                  individual,
+                  projectType.code,
+                ) ==
+                null
+            ? false
+            : true;
   }
 
   return false;
@@ -879,9 +881,9 @@ getAgeMessageBasedOnProjectType(
   String message1,
   String message2,
 ) {
-  if (projectTypeCode == ProjectTypes.lf.toValue()) {
-    return message1;
-  } else if (projectTypeCode == ProjectTypes.smc.toValue()) {
+  if (projectTypeCode == ProjectTypes.smc.toValue()) {
     return message2;
   }
+
+  return message1;
 }
