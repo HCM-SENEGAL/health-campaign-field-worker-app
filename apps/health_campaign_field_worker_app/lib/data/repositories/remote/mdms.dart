@@ -327,7 +327,7 @@ class MdmsRepository {
     }).toList();
 
     appConfiguration.ineligibilityReasonsSmc =
-        result.ineligibilityReasonsSmc?.ineligibilityReasonsList?.map((e) {
+        result.ineligibilityReasonsSmc?.ineligibilityReasonsSmcList?.map((e) {
       final reasonTypes = IneligibilityReasons()
         ..name = e.name
         ..code = e.code
