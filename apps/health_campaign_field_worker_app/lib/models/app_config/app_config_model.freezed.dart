@@ -669,19 +669,19 @@ mixin _$AppConfigPrimaryWrapperModel {
   SymptomsTypesSecondaryWrapperModel? get symptomsTypes =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
-  SymptomsTypesSecondaryWrapperModel? get symptomsTypesSmc =>
+  SymptomsTypesSecondaryWrapperModelSMC? get symptomsTypesSmc =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'HCM-REFERRAL-REASONS')
   ReferralReasonsWrapperModel? get referralReasons =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'HCM-REFERRAL-REASONS-SMC')
-  ReferralReasonsWrapperModel? get referralReasonsSmc =>
+  ReferralReasonsWrapperModelSMC? get referralReasonsSmc =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'HCM-INELIGIBILITY-REASONS')
   IneligibilityReasonsWrapperModel? get ineligibilityReasons =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'HCM-INELIGIBILITY-REASONS-SMC')
-  IneligibilityReasonsWrapperModel? get ineligibilityReasonsSmc =>
+  IneligibilityReasonsWrapperModelSMC? get ineligibilityReasonsSmc =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'HCM-DISABILITY-TYPES')
   DisabilityTypesWrapperModel? get disabilityTypes =>
@@ -708,26 +708,27 @@ abstract class $AppConfigPrimaryWrapperModelCopyWith<$Res> {
       @JsonKey(name: 'HCM-SYMPTOMS-TYPES')
       SymptomsTypesSecondaryWrapperModel? symptomsTypes,
       @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
-      SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc,
+      SymptomsTypesSecondaryWrapperModelSMC? symptomsTypesSmc,
       @JsonKey(name: 'HCM-REFERRAL-REASONS')
       ReferralReasonsWrapperModel? referralReasons,
       @JsonKey(name: 'HCM-REFERRAL-REASONS-SMC')
-      ReferralReasonsWrapperModel? referralReasonsSmc,
+      ReferralReasonsWrapperModelSMC? referralReasonsSmc,
       @JsonKey(name: 'HCM-INELIGIBILITY-REASONS')
       IneligibilityReasonsWrapperModel? ineligibilityReasons,
       @JsonKey(name: 'HCM-INELIGIBILITY-REASONS-SMC')
-      IneligibilityReasonsWrapperModel? ineligibilityReasonsSmc,
+      IneligibilityReasonsWrapperModelSMC? ineligibilityReasonsSmc,
       @JsonKey(name: 'HCM-DISABILITY-TYPES')
       DisabilityTypesWrapperModel? disabilityTypes});
 
   $AppConfigSecondaryWrapperModelCopyWith<$Res>? get appConfig;
   $RowVersionWrapperModelCopyWith<$Res>? get rowVersions;
   $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>? get symptomsTypes;
-  $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>? get symptomsTypesSmc;
+  $SymptomsTypesSecondaryWrapperModelSMCCopyWith<$Res>? get symptomsTypesSmc;
   $ReferralReasonsWrapperModelCopyWith<$Res>? get referralReasons;
-  $ReferralReasonsWrapperModelCopyWith<$Res>? get referralReasonsSmc;
+  $ReferralReasonsWrapperModelSMCCopyWith<$Res>? get referralReasonsSmc;
   $IneligibilityReasonsWrapperModelCopyWith<$Res>? get ineligibilityReasons;
-  $IneligibilityReasonsWrapperModelCopyWith<$Res>? get ineligibilityReasonsSmc;
+  $IneligibilityReasonsWrapperModelSMCCopyWith<$Res>?
+      get ineligibilityReasonsSmc;
   $DisabilityTypesWrapperModelCopyWith<$Res>? get disabilityTypes;
 }
 
@@ -771,7 +772,7 @@ class _$AppConfigPrimaryWrapperModelCopyWithImpl<$Res,
       symptomsTypesSmc: freezed == symptomsTypesSmc
           ? _value.symptomsTypesSmc
           : symptomsTypesSmc // ignore: cast_nullable_to_non_nullable
-              as SymptomsTypesSecondaryWrapperModel?,
+              as SymptomsTypesSecondaryWrapperModelSMC?,
       referralReasons: freezed == referralReasons
           ? _value.referralReasons
           : referralReasons // ignore: cast_nullable_to_non_nullable
@@ -779,7 +780,7 @@ class _$AppConfigPrimaryWrapperModelCopyWithImpl<$Res,
       referralReasonsSmc: freezed == referralReasonsSmc
           ? _value.referralReasonsSmc
           : referralReasonsSmc // ignore: cast_nullable_to_non_nullable
-              as ReferralReasonsWrapperModel?,
+              as ReferralReasonsWrapperModelSMC?,
       ineligibilityReasons: freezed == ineligibilityReasons
           ? _value.ineligibilityReasons
           : ineligibilityReasons // ignore: cast_nullable_to_non_nullable
@@ -787,7 +788,7 @@ class _$AppConfigPrimaryWrapperModelCopyWithImpl<$Res,
       ineligibilityReasonsSmc: freezed == ineligibilityReasonsSmc
           ? _value.ineligibilityReasonsSmc
           : ineligibilityReasonsSmc // ignore: cast_nullable_to_non_nullable
-              as IneligibilityReasonsWrapperModel?,
+              as IneligibilityReasonsWrapperModelSMC?,
       disabilityTypes: freezed == disabilityTypes
           ? _value.disabilityTypes
           : disabilityTypes // ignore: cast_nullable_to_non_nullable
@@ -835,12 +836,12 @@ class _$AppConfigPrimaryWrapperModelCopyWithImpl<$Res,
 
   @override
   @pragma('vm:prefer-inline')
-  $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>? get symptomsTypesSmc {
+  $SymptomsTypesSecondaryWrapperModelSMCCopyWith<$Res>? get symptomsTypesSmc {
     if (_value.symptomsTypesSmc == null) {
       return null;
     }
 
-    return $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>(
+    return $SymptomsTypesSecondaryWrapperModelSMCCopyWith<$Res>(
         _value.symptomsTypesSmc!, (value) {
       return _then(_value.copyWith(symptomsTypesSmc: value) as $Val);
     });
@@ -861,12 +862,12 @@ class _$AppConfigPrimaryWrapperModelCopyWithImpl<$Res,
 
   @override
   @pragma('vm:prefer-inline')
-  $ReferralReasonsWrapperModelCopyWith<$Res>? get referralReasonsSmc {
+  $ReferralReasonsWrapperModelSMCCopyWith<$Res>? get referralReasonsSmc {
     if (_value.referralReasonsSmc == null) {
       return null;
     }
 
-    return $ReferralReasonsWrapperModelCopyWith<$Res>(
+    return $ReferralReasonsWrapperModelSMCCopyWith<$Res>(
         _value.referralReasonsSmc!, (value) {
       return _then(_value.copyWith(referralReasonsSmc: value) as $Val);
     });
@@ -887,12 +888,13 @@ class _$AppConfigPrimaryWrapperModelCopyWithImpl<$Res,
 
   @override
   @pragma('vm:prefer-inline')
-  $IneligibilityReasonsWrapperModelCopyWith<$Res>? get ineligibilityReasonsSmc {
+  $IneligibilityReasonsWrapperModelSMCCopyWith<$Res>?
+      get ineligibilityReasonsSmc {
     if (_value.ineligibilityReasonsSmc == null) {
       return null;
     }
 
-    return $IneligibilityReasonsWrapperModelCopyWith<$Res>(
+    return $IneligibilityReasonsWrapperModelSMCCopyWith<$Res>(
         _value.ineligibilityReasonsSmc!, (value) {
       return _then(_value.copyWith(ineligibilityReasonsSmc: value) as $Val);
     });
@@ -928,15 +930,15 @@ abstract class _$$AppConfigPrimaryWrapperModelImplCopyWith<$Res>
       @JsonKey(name: 'HCM-SYMPTOMS-TYPES')
       SymptomsTypesSecondaryWrapperModel? symptomsTypes,
       @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
-      SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc,
+      SymptomsTypesSecondaryWrapperModelSMC? symptomsTypesSmc,
       @JsonKey(name: 'HCM-REFERRAL-REASONS')
       ReferralReasonsWrapperModel? referralReasons,
       @JsonKey(name: 'HCM-REFERRAL-REASONS-SMC')
-      ReferralReasonsWrapperModel? referralReasonsSmc,
+      ReferralReasonsWrapperModelSMC? referralReasonsSmc,
       @JsonKey(name: 'HCM-INELIGIBILITY-REASONS')
       IneligibilityReasonsWrapperModel? ineligibilityReasons,
       @JsonKey(name: 'HCM-INELIGIBILITY-REASONS-SMC')
-      IneligibilityReasonsWrapperModel? ineligibilityReasonsSmc,
+      IneligibilityReasonsWrapperModelSMC? ineligibilityReasonsSmc,
       @JsonKey(name: 'HCM-DISABILITY-TYPES')
       DisabilityTypesWrapperModel? disabilityTypes});
 
@@ -947,15 +949,16 @@ abstract class _$$AppConfigPrimaryWrapperModelImplCopyWith<$Res>
   @override
   $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>? get symptomsTypes;
   @override
-  $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>? get symptomsTypesSmc;
+  $SymptomsTypesSecondaryWrapperModelSMCCopyWith<$Res>? get symptomsTypesSmc;
   @override
   $ReferralReasonsWrapperModelCopyWith<$Res>? get referralReasons;
   @override
-  $ReferralReasonsWrapperModelCopyWith<$Res>? get referralReasonsSmc;
+  $ReferralReasonsWrapperModelSMCCopyWith<$Res>? get referralReasonsSmc;
   @override
   $IneligibilityReasonsWrapperModelCopyWith<$Res>? get ineligibilityReasons;
   @override
-  $IneligibilityReasonsWrapperModelCopyWith<$Res>? get ineligibilityReasonsSmc;
+  $IneligibilityReasonsWrapperModelSMCCopyWith<$Res>?
+      get ineligibilityReasonsSmc;
   @override
   $DisabilityTypesWrapperModelCopyWith<$Res>? get disabilityTypes;
 }
@@ -999,7 +1002,7 @@ class __$$AppConfigPrimaryWrapperModelImplCopyWithImpl<$Res>
       symptomsTypesSmc: freezed == symptomsTypesSmc
           ? _value.symptomsTypesSmc
           : symptomsTypesSmc // ignore: cast_nullable_to_non_nullable
-              as SymptomsTypesSecondaryWrapperModel?,
+              as SymptomsTypesSecondaryWrapperModelSMC?,
       referralReasons: freezed == referralReasons
           ? _value.referralReasons
           : referralReasons // ignore: cast_nullable_to_non_nullable
@@ -1007,7 +1010,7 @@ class __$$AppConfigPrimaryWrapperModelImplCopyWithImpl<$Res>
       referralReasonsSmc: freezed == referralReasonsSmc
           ? _value.referralReasonsSmc
           : referralReasonsSmc // ignore: cast_nullable_to_non_nullable
-              as ReferralReasonsWrapperModel?,
+              as ReferralReasonsWrapperModelSMC?,
       ineligibilityReasons: freezed == ineligibilityReasons
           ? _value.ineligibilityReasons
           : ineligibilityReasons // ignore: cast_nullable_to_non_nullable
@@ -1015,7 +1018,7 @@ class __$$AppConfigPrimaryWrapperModelImplCopyWithImpl<$Res>
       ineligibilityReasonsSmc: freezed == ineligibilityReasonsSmc
           ? _value.ineligibilityReasonsSmc
           : ineligibilityReasonsSmc // ignore: cast_nullable_to_non_nullable
-              as IneligibilityReasonsWrapperModel?,
+              as IneligibilityReasonsWrapperModelSMC?,
       disabilityTypes: freezed == disabilityTypes
           ? _value.disabilityTypes
           : disabilityTypes // ignore: cast_nullable_to_non_nullable
@@ -1055,19 +1058,19 @@ class _$AppConfigPrimaryWrapperModelImpl
   final SymptomsTypesSecondaryWrapperModel? symptomsTypes;
   @override
   @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
-  final SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc;
+  final SymptomsTypesSecondaryWrapperModelSMC? symptomsTypesSmc;
   @override
   @JsonKey(name: 'HCM-REFERRAL-REASONS')
   final ReferralReasonsWrapperModel? referralReasons;
   @override
   @JsonKey(name: 'HCM-REFERRAL-REASONS-SMC')
-  final ReferralReasonsWrapperModel? referralReasonsSmc;
+  final ReferralReasonsWrapperModelSMC? referralReasonsSmc;
   @override
   @JsonKey(name: 'HCM-INELIGIBILITY-REASONS')
   final IneligibilityReasonsWrapperModel? ineligibilityReasons;
   @override
   @JsonKey(name: 'HCM-INELIGIBILITY-REASONS-SMC')
-  final IneligibilityReasonsWrapperModel? ineligibilityReasonsSmc;
+  final IneligibilityReasonsWrapperModelSMC? ineligibilityReasonsSmc;
   @override
   @JsonKey(name: 'HCM-DISABILITY-TYPES')
   final DisabilityTypesWrapperModel? disabilityTypes;
@@ -1143,15 +1146,15 @@ abstract class _AppConfigPrimaryWrapperModel
           @JsonKey(name: 'HCM-SYMPTOMS-TYPES')
           final SymptomsTypesSecondaryWrapperModel? symptomsTypes,
           @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
-          final SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc,
+          final SymptomsTypesSecondaryWrapperModelSMC? symptomsTypesSmc,
           @JsonKey(name: 'HCM-REFERRAL-REASONS')
           final ReferralReasonsWrapperModel? referralReasons,
           @JsonKey(name: 'HCM-REFERRAL-REASONS-SMC')
-          final ReferralReasonsWrapperModel? referralReasonsSmc,
+          final ReferralReasonsWrapperModelSMC? referralReasonsSmc,
           @JsonKey(name: 'HCM-INELIGIBILITY-REASONS')
           final IneligibilityReasonsWrapperModel? ineligibilityReasons,
           @JsonKey(name: 'HCM-INELIGIBILITY-REASONS-SMC')
-          final IneligibilityReasonsWrapperModel? ineligibilityReasonsSmc,
+          final IneligibilityReasonsWrapperModelSMC? ineligibilityReasonsSmc,
           @JsonKey(name: 'HCM-DISABILITY-TYPES')
           final DisabilityTypesWrapperModel? disabilityTypes}) =
       _$AppConfigPrimaryWrapperModelImpl;
@@ -1170,19 +1173,19 @@ abstract class _AppConfigPrimaryWrapperModel
   SymptomsTypesSecondaryWrapperModel? get symptomsTypes;
   @override
   @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
-  SymptomsTypesSecondaryWrapperModel? get symptomsTypesSmc;
+  SymptomsTypesSecondaryWrapperModelSMC? get symptomsTypesSmc;
   @override
   @JsonKey(name: 'HCM-REFERRAL-REASONS')
   ReferralReasonsWrapperModel? get referralReasons;
   @override
   @JsonKey(name: 'HCM-REFERRAL-REASONS-SMC')
-  ReferralReasonsWrapperModel? get referralReasonsSmc;
+  ReferralReasonsWrapperModelSMC? get referralReasonsSmc;
   @override
   @JsonKey(name: 'HCM-INELIGIBILITY-REASONS')
   IneligibilityReasonsWrapperModel? get ineligibilityReasons;
   @override
   @JsonKey(name: 'HCM-INELIGIBILITY-REASONS-SMC')
-  IneligibilityReasonsWrapperModel? get ineligibilityReasonsSmc;
+  IneligibilityReasonsWrapperModelSMC? get ineligibilityReasonsSmc;
   @override
   @JsonKey(name: 'HCM-DISABILITY-TYPES')
   DisabilityTypesWrapperModel? get disabilityTypes;

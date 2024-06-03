@@ -80,7 +80,7 @@ _$AppConfigPrimaryWrapperModelImpl _$$AppConfigPrimaryWrapperModelImplFromJson(
               json['HCM-SYMPTOMS-TYPES'] as Map<String, dynamic>),
       symptomsTypesSmc: json['HCM-SYMPTOMS-TYPES-SMC'] == null
           ? null
-          : SymptomsTypesSecondaryWrapperModel.fromJson(
+          : SymptomsTypesSecondaryWrapperModelSMC.fromJson(
               json['HCM-SYMPTOMS-TYPES-SMC'] as Map<String, dynamic>),
       referralReasons: json['HCM-REFERRAL-REASONS'] == null
           ? null
@@ -88,7 +88,7 @@ _$AppConfigPrimaryWrapperModelImpl _$$AppConfigPrimaryWrapperModelImplFromJson(
               json['HCM-REFERRAL-REASONS'] as Map<String, dynamic>),
       referralReasonsSmc: json['HCM-REFERRAL-REASONS-SMC'] == null
           ? null
-          : ReferralReasonsWrapperModel.fromJson(
+          : ReferralReasonsWrapperModelSMC.fromJson(
               json['HCM-REFERRAL-REASONS-SMC'] as Map<String, dynamic>),
       ineligibilityReasons: json['HCM-INELIGIBILITY-REASONS'] == null
           ? null
@@ -96,7 +96,7 @@ _$AppConfigPrimaryWrapperModelImpl _$$AppConfigPrimaryWrapperModelImplFromJson(
               json['HCM-INELIGIBILITY-REASONS'] as Map<String, dynamic>),
       ineligibilityReasonsSmc: json['HCM-INELIGIBILITY-REASONS-SMC'] == null
           ? null
-          : IneligibilityReasonsWrapperModel.fromJson(
+          : IneligibilityReasonsWrapperModelSMC.fromJson(
               json['HCM-INELIGIBILITY-REASONS-SMC'] as Map<String, dynamic>),
       disabilityTypes: json['HCM-DISABILITY-TYPES'] == null
           ? null

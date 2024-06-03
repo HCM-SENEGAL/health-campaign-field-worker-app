@@ -58,15 +58,15 @@ class AppConfigPrimaryWrapperModel with _$AppConfigPrimaryWrapperModel {
     @JsonKey(name: 'HCM-SYMPTOMS-TYPES')
     final SymptomsTypesSecondaryWrapperModel? symptomsTypes,
     @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
-    final SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc,
+    final SymptomsTypesSecondaryWrapperModelSMC? symptomsTypesSmc,
     @JsonKey(name: 'HCM-REFERRAL-REASONS')
     final ReferralReasonsWrapperModel? referralReasons,
     @JsonKey(name: 'HCM-REFERRAL-REASONS-SMC')
-    final ReferralReasonsWrapperModel? referralReasonsSmc,
+    final ReferralReasonsWrapperModelSMC? referralReasonsSmc,
     @JsonKey(name: 'HCM-INELIGIBILITY-REASONS')
     final IneligibilityReasonsWrapperModel? ineligibilityReasons,
     @JsonKey(name: 'HCM-INELIGIBILITY-REASONS-SMC')
-    final IneligibilityReasonsWrapperModel? ineligibilityReasonsSmc,
+    final IneligibilityReasonsWrapperModelSMC? ineligibilityReasonsSmc,
     @JsonKey(name: 'HCM-DISABILITY-TYPES')
     final DisabilityTypesWrapperModel? disabilityTypes,
   }) = _AppConfigPrimaryWrapperModel;
