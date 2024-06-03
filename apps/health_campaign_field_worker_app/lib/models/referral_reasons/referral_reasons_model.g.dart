@@ -20,6 +20,21 @@ Map<String, dynamic> _$$ReferralReasonsWrapperModelImplToJson(
       'referralReasons': instance.referralReasonList,
     };
 
+_$ReferralReasonsWrapperModelSMCImpl
+    _$$ReferralReasonsWrapperModelSMCImplFromJson(Map<String, dynamic> json) =>
+        _$ReferralReasonsWrapperModelSMCImpl(
+          referralReasonSmcList: (json['referralReasonsSmc'] as List<dynamic>?)
+              ?.map(
+                  (e) => ReferralReasonType.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+
+Map<String, dynamic> _$$ReferralReasonsWrapperModelSMCImplToJson(
+        _$ReferralReasonsWrapperModelSMCImpl instance) =>
+    <String, dynamic>{
+      'referralReasonsSmc': instance.referralReasonSmcList,
+    };
+
 _$ReferralReasonTypeImpl _$$ReferralReasonTypeImplFromJson(
         Map<String, dynamic> json) =>
     _$ReferralReasonTypeImpl(

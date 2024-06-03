@@ -22,6 +22,22 @@ Map<String, dynamic> _$$SymptomsTypesPrimaryWrapperModelImplToJson(
       'HCM-SYMPTOMS-TYPES': instance.symptomsTypes,
     };
 
+_$SymptomsTypesPrimaryWrapperModelSMCImpl
+    _$$SymptomsTypesPrimaryWrapperModelSMCImplFromJson(
+            Map<String, dynamic> json) =>
+        _$SymptomsTypesPrimaryWrapperModelSMCImpl(
+          symptomsTypesSmc: json['HCM-SYMPTOMS-TYPES-SMC'] == null
+              ? null
+              : SymptomsTypesSecondaryWrapperModel.fromJson(
+                  json['HCM-SYMPTOMS-TYPES-SMC'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$$SymptomsTypesPrimaryWrapperModelSMCImplToJson(
+        _$SymptomsTypesPrimaryWrapperModelSMCImpl instance) =>
+    <String, dynamic>{
+      'HCM-SYMPTOMS-TYPES-SMC': instance.symptomsTypesSmc,
+    };
+
 _$SymptomsTypesSecondaryWrapperModelImpl
     _$$SymptomsTypesSecondaryWrapperModelImplFromJson(
             Map<String, dynamic> json) =>
@@ -35,6 +51,21 @@ Map<String, dynamic> _$$SymptomsTypesSecondaryWrapperModelImplToJson(
         _$SymptomsTypesSecondaryWrapperModelImpl instance) =>
     <String, dynamic>{
       'symptomsTypes': instance.symptomsTypeList,
+    };
+
+_$SymptomsTypesSecondaryWrapperModelSMCImpl
+    _$$SymptomsTypesSecondaryWrapperModelSMCImplFromJson(
+            Map<String, dynamic> json) =>
+        _$SymptomsTypesSecondaryWrapperModelSMCImpl(
+          symptomsTypeSmcList: (json['symptomsTypesSmc'] as List<dynamic>?)
+              ?.map((e) => SymptomsType.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+
+Map<String, dynamic> _$$SymptomsTypesSecondaryWrapperModelSMCImplToJson(
+        _$SymptomsTypesSecondaryWrapperModelSMCImpl instance) =>
+    <String, dynamic>{
+      'symptomsTypesSmc': instance.symptomsTypeSmcList,
     };
 
 _$SymptomsTypeImpl _$$SymptomsTypeImplFromJson(Map<String, dynamic> json) =>
