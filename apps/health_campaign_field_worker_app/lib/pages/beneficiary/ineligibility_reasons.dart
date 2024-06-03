@@ -322,13 +322,13 @@ class _IneligibilityReasonsPageState
                                                   (appConfiguration, _) {
                                                 final ineleigibilityReasonOptions = context
                                                             .projectTypeCode ==
-                                                        ProjectTypes.lf
+                                                        ProjectTypes.smc
                                                             .toValue()
                                                     ? appConfiguration
-                                                            .ineligibilityReasons ??
+                                                            .ineligibilityReasonsSmc ??
                                                         <IneligibilityReasons>[]
                                                     : appConfiguration
-                                                            .ineligibilityReasonsSmc ??
+                                                            .ineligibilityReasons ??
                                                         <IneligibilityReasons>[];
                                                 ineleigibilityReasons =
                                                     ineleigibilityReasonOptions

@@ -404,12 +404,12 @@ class _ReferBeneficiaryPageState extends LocalizedState<ReferBeneficiaryPage> {
                                 initialized: (appConfiguration, _) {
                                   final List<KeyValue> reasons = context
                                               .projectTypeCode ==
-                                          ProjectTypes.lf.toValue()
-                                      ? (appConfiguration.referralReasons ?? [])
+                                          ProjectTypes.smc.toValue()
+                                      ? (appConfiguration.referralReasonsSmc ??
+                                              [])
                                           .map((e) => KeyValue(e.code, e.code))
                                           .toList()
-                                      : (appConfiguration.referralReasonsSmc ??
-                                              [])
+                                      : (appConfiguration.referralReasons ?? [])
                                           .map((e) => KeyValue(e.code, e.code))
                                           .toList();
 
