@@ -166,8 +166,7 @@ class SearchByHeadBloc extends SearchHouseholdsBloc {
           .toList();
       final List<ProjectBeneficiaryModel> beneficiaries = projectBeneficiaries
           .where((element) => beneficiaryType == BeneficiaryType.individual
-              ? individualClientReferenceIds
-                  .contains(element.beneficiaryClientReferenceId)
+              ? membersIds.contains(element.beneficiaryClientReferenceId)
               : (househHoldIds).contains(element.beneficiaryClientReferenceId))
           .toList();
       // Find the head of household from the individuals.
@@ -181,7 +180,7 @@ class SearchByHeadBloc extends SearchHouseholdsBloc {
                 ?.individualClientReferenceId,
       );
 
-      if (head == null) continue;
+      if (head == null || beneficiaries.isEmpty) continue;
 
       // Search for project beneficiaries based on client reference ID and project.
 

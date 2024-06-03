@@ -322,16 +322,7 @@ bool checkEligibilityForAgeAndSideEffect(
     ).months;
     Cycle? currentCycle = getCurrentCycle(projectType);
 
-    // todo : implement check so that it works for both LF and SMC
-    if (projectType!.code == ProjectTypes.lf.toValue()) {
-      return currentCycle == null || currentCycle.deliveries == null
-          ? false
-          : fetchProductVariant(currentCycle.deliveries!.first, individual,
-                      projectType!.code) ==
-                  null
-              ? false
-              : true;
-    } else if (projectType!.code == ProjectTypes.smc.toValue()) {
+    if (projectType!.code == ProjectTypes.smc.toValue()) {
       return checkEligibilityForAgeAndSideEffects(
         DigitDOBAge(
           years: ageInYears,
@@ -342,6 +333,17 @@ bool checkEligibilityForAgeAndSideEffect(
         sideEffects,
       );
     }
+
+    return currentCycle == null || currentCycle.deliveries == null
+        ? false
+        : fetchProductVariant(
+                  currentCycle.deliveries!.first,
+                  individual,
+                  projectType.code,
+                ) ==
+                null
+            ? false
+            : true;
   }
 
   return false;
@@ -364,6 +366,11 @@ bool checkEligibilityForAgeAndSideEffects(
   List<SideEffectModel>? sideEffects,
 ) {
   int totalAgeMonths = age.years * 12 + age.months;
+  bool skipAge = [
+    Status.administeredFailed.toValue(),
+    Status.administeredSuccess.toValue(),
+    Status.delivered.toValue(),
+  ].contains(tasks?.status);
   final currentCycle = projectType?.cycles?.firstWhereOrNull(
     (e) =>
         (e.startDate!) < DateTime.now().millisecondsSinceEpoch &&
@@ -393,7 +400,11 @@ bool checkEligibilityForAgeAndSideEffects(
               : false
           : false;
     } else {
-      return true;
+      return skipAge ||
+              (totalAgeMonths >= projectType!.validMinAge! &&
+                  totalAgeMonths <= projectType.validMaxAge!)
+          ? true
+          : false;
     }
   }
   return false;
@@ -446,6 +457,7 @@ bool checkStatus(
         final isLastCycleRunning =
             lastTaskCreatedTime >= currentCycle.startDate! &&
                 lastTaskCreatedTime <= currentCycle.endDate!;
+        // value here in status is coming as UpperCase
 
         return isLastCycleRunning
             ? lastTask.status == Status.delivered.name
@@ -516,10 +528,10 @@ bool allDosesDelivered(
           lastDose == selectedCycle.deliveries?.length &&
           lastCycle != null &&
           lastCycle == selectedCycle.id &&
-          tasks?.last.status != Status.delivered.name) {
+          tasks?.last.status != Status.delivered.toValue()) {
         return true;
       } else if (selectedCycle.id == lastCycle &&
-          tasks?.last.status == Status.delivered.name) {
+          tasks?.last.status == Status.delivered.toValue()) {
         return false;
       } else if ((sideEffects ?? []).isNotEmpty) {
         return recordedSideEffect(selectedCycle, tasks?.last, sideEffects);
@@ -869,9 +881,9 @@ getAgeMessageBasedOnProjectType(
   String message1,
   String message2,
 ) {
-  if (projectTypeCode == ProjectTypes.lf.toValue()) {
-    return message1;
-  } else if (projectTypeCode == ProjectTypes.smc.toValue()) {
+  if (projectTypeCode == ProjectTypes.smc.toValue()) {
     return message2;
   }
+
+  return message1;
 }

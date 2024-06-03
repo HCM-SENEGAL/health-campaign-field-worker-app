@@ -8,6 +8,7 @@ import '../../../blocs/delivery_intervention/deliver_intervention.dart';
 import '../../../blocs/localization/app_localization.dart';
 import '../../../blocs/product_variant/product_variant.dart';
 import '../../../models/data_model.dart';
+import '../../../models/entities/project_types.dart';
 import '../../../models/project_type/project_type_model.dart';
 import '../../../utils/i18_key_constants.dart' as i18;
 import '../../../utils/utils.dart';
@@ -242,6 +243,52 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                               '0${e.id}')
                       .lastOrNull;
 
+                  var smcTableData = TableData(
+                    tasks?.status == Status.administeredFailed.toValue()
+                        ? '--'
+                        : (tasks?.additionalFields?.fields
+                                    .where((e) =>
+                                        e.key ==
+                                        AdditionalFieldsType.deliveryStrategy
+                                            .toValue())
+                                    .firstOrNull
+                                    ?.value ==
+                                DeliverStrategyType.indirect.toValue())
+                            ? (int.parse(tasks?.additionalFields?.fields
+                                            .where((e) =>
+                                                e.key ==
+                                                AdditionalFieldsType
+                                                    .dateOfAdministration
+                                                    .toValue())
+                                            .firstOrNull
+                                            ?.value) +
+                                        (item.id - 1) * 24 * 60 * 60 * 1000)
+                                    .toDateTime
+                                    .getFormattedDate() ??
+                                '--'
+                            : tasks?.clientAuditDetails?.createdTime.toDateTime
+                                    .getFormattedDate() ??
+                                ' -- ',
+                    cellKey: 'completedOn',
+                  );
+
+                  var lfTableData = TableData(
+                    tasks?.status == Status.administeredFailed.toValue() ||
+                            (tasks?.additionalFields?.fields
+                                    .where((e) =>
+                                        e.key ==
+                                        AdditionalFieldsType.deliveryStrategy
+                                            .toValue())
+                                    .firstOrNull
+                                    ?.value ==
+                                DeliverStrategyType.indirect.toValue())
+                        ? ' -- '
+                        : tasks?.clientAuditDetails?.createdTime.toDateTime
+                                .getFormattedDate() ??
+                            ' -- ',
+                    cellKey: 'completedOn',
+                  );
+
                   return TableDataRow([
                     TableData(
                       '${localizations.translate(i18.deliverIntervention.dose)} ${e.deliveries!.indexOf(item) + 1}',
@@ -266,22 +313,9 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                             index == selectedIndex ? FontWeight.w700 : null,
                       ),
                     ),
-                    TableData(
-                      tasks?.status == Status.administeredFailed.toValue() ||
-                              (tasks?.additionalFields?.fields
-                                      .where((e) =>
-                                          e.key ==
-                                          AdditionalFieldsType.deliveryStrategy
-                                              .toValue())
-                                      .firstOrNull
-                                      ?.value ==
-                                  DeliverStrategyType.indirect.toValue())
-                          ? ' -- '
-                          : tasks?.clientAuditDetails?.createdTime.toDateTime
-                                  .getFormattedDate() ??
-                              ' -- ',
-                      cellKey: 'completedOn',
-                    ),
+                    context.projectTypeCode == ProjectTypes.smc.toValue()
+                        ? smcTableData
+                        : lfTableData,
                   ]);
                 },
               ).toList(),

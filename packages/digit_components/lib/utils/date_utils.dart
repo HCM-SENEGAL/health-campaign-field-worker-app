@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
@@ -44,6 +47,34 @@ class DigitDateUtils {
       birthMonth--;
       birthDay += DateTime(currentDate.year, currentDate.month + 1, 0).day;
     }
+    final monthVsDaysMap = {
+      "1": 31,
+      "2": 28,
+      "3": 31,
+      "4": 30,
+      "5": 31,
+      "6": 30,
+      "7": 31,
+      "8": 31,
+      "9": 30,
+      "10": 31,
+      "11": 30,
+      "12": 31
+    };
+    final monthVsDaysMapLeap = {
+      "1": 31,
+      "2": 29,
+      "3": 31,
+      "4": 30,
+      "5": 31,
+      "6": 30,
+      "7": 31,
+      "8": 31,
+      "9": 30,
+      "10": 31,
+      "11": 30,
+      "12": 31
+    };
 
     // If the current month is earlier than the selected month, reduce the year count
     // and adjust the month and day counts accordingly.
@@ -52,6 +83,11 @@ class DigitDateUtils {
       birthMonth += 12;
     }
 
+    if (monthVsDaysMap.containsKey(birthMonth.toString())) {
+      birthDay = (isLeapYear(birthYear)
+          ? min(birthDay, monthVsDaysMapLeap[birthMonth.toString()]!)
+          : min(birthDay, monthVsDaysMap[birthMonth.toString()]!));
+    }
     return DateTime(birthYear, birthMonth, birthDay);
   }
 

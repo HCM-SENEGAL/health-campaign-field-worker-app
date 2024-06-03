@@ -60,6 +60,7 @@ class MemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final beneficiaryType = context.beneficiaryType;
+    final doseStatus = checkStatus(tasks, context.selectedCycle);
 
     return Container(
       decoration: BoxDecoration(
@@ -223,9 +224,10 @@ class MemberCard extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Column(
                 children: [
-                  isNotEligible ||
-                          isBeneficiaryReferred ||
-                          isBeneficiaryIneligible
+                  (isNotEligible ||
+                              isBeneficiaryReferred ||
+                              isBeneficiaryIneligible) &&
+                          !doseStatus
                       ? const Offstage()
                       : !isNotEligible
                           ? DigitElevatedButton(
@@ -273,10 +275,7 @@ class MemberCard extends StatelessWidget {
                                             sideEffects,
                                             individual,
                                           ) &&
-                                          !checkStatus(
-                                            tasks,
-                                            context.selectedCycle,
-                                          )
+                                          !doseStatus
                                       ? localizations.translate(
                                           i18.householdOverView
                                               .viewDeliveryLabel,
@@ -301,7 +300,7 @@ class MemberCard extends StatelessWidget {
                                 sideEffects,
                                 individual,
                               ) &&
-                              !checkStatus(tasks, context.selectedCycle)))
+                              !doseStatus))
                       ? const Offstage()
                       : DigitOutLineButton(
                           label: localizations.translate(
@@ -353,10 +352,7 @@ class MemberCard extends StatelessWidget {
                                                         .toValue())
                                                 .toList()
                                                 .isNotEmpty &&
-                                            !checkStatus(
-                                              tasks,
-                                              context.selectedCycle,
-                                            )
+                                            !doseStatus
                                         ? null
                                         : () {
                                             Navigator.of(
@@ -504,10 +500,7 @@ class MemberCard extends StatelessWidget {
                                                         .toValue())
                                                 .toList()
                                                 .isNotEmpty &&
-                                            !checkStatus(
-                                              tasks,
-                                              context.selectedCycle,
-                                            )
+                                            !doseStatus
                                         ? null
                                         : () async {
                                             Navigator.of(
@@ -524,48 +517,60 @@ class MemberCard extends StatelessWidget {
                                             );
                                           },
                                   ),
+                                  const SizedBox(
+                                    height: kPadding * 2,
+                                  ),
                                   if (context.projectTypeCode ==
                                       ProjectTypes.smc.toValue())
-                                    const SizedBox(
-                                      height: kPadding * 2,
-                                    ),
-                                  DigitOutLineButton(
-                                    label: localizations.translate(
-                                      i18.memberCard.recordAdverseEventsLabel,
-                                    ),
-                                    buttonStyle: OutlinedButton.styleFrom(
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero,
+                                    DigitOutLineButton(
+                                      label: localizations.translate(
+                                        i18.memberCard.recordAdverseEventsLabel,
                                       ),
-                                      backgroundColor: Colors.white,
-                                      side: BorderSide(
-                                        width: 1.0,
-                                        color: tasks != null &&
-                                                (tasks ?? []).isNotEmpty
-                                            ? theme.colorScheme.secondary
-                                            : theme.colorScheme.outline,
+                                      buttonStyle: OutlinedButton.styleFrom(
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.zero,
+                                        ),
+                                        backgroundColor: Colors.white,
+                                        side: BorderSide(
+                                          width: 1.0,
+                                          color: tasks != null &&
+                                                  (tasks ?? []).isNotEmpty
+                                              ? theme.colorScheme.secondary
+                                              : theme.colorScheme.outline,
+                                        ),
+                                        minimumSize: Size(
+                                          MediaQuery.of(context).size.width /
+                                              1.25,
+                                          50,
+                                        ),
                                       ),
-                                      minimumSize: Size(
-                                        MediaQuery.of(context).size.width /
-                                            1.25,
-                                        50,
-                                      ),
+                                      onPressed: tasks != null &&
+                                              (tasks ?? [])
+                                                  .where((element) =>
+                                                      element.status !=
+                                                          Status
+                                                              .beneficiaryRefused
+                                                              .toValue() &&
+                                                      element.status !=
+                                                          Status
+                                                              .beneficiaryReferred
+                                                              .toValue())
+                                                  .toList()
+                                                  .isNotEmpty
+                                          ? () async {
+                                              Navigator.of(
+                                                context,
+                                                rootNavigator: true,
+                                              ).pop();
+                                              await context.router.push(
+                                                SideEffectsRoute(
+                                                  tasks: tasks!,
+                                                  fromSurvey: true,
+                                                ),
+                                              );
+                                            }
+                                          : null,
                                     ),
-                                    onPressed: tasks != null &&
-                                            (tasks ?? []).isNotEmpty
-                                        ? () async {
-                                            Navigator.of(
-                                              context,
-                                              rootNavigator: true,
-                                            ).pop();
-                                            await context.router.push(
-                                              SideEffectsRoute(
-                                                tasks: tasks!,
-                                              ),
-                                            );
-                                          }
-                                        : null,
-                                  ),
                                 ],
                               ),
                             );

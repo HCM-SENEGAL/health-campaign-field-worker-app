@@ -125,7 +125,7 @@ class ProximitySearchBloc extends SearchHouseholdsBloc {
                 )
                 ?.individualClientReferenceId,
       );
-      if (head == null) continue;
+      if (head == null || filteredBeneficiaries.isEmpty) continue;
       // Create a container for household members and associated data.
       if (filteredBeneficiaries.isNotEmpty) {
         containers.add(
