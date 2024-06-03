@@ -21,7 +21,7 @@ class IneligibilityReasonsWrapperModelSMC
     with _$IneligibilityReasonsWrapperModelSMC {
   const factory IneligibilityReasonsWrapperModelSMC({
     @JsonKey(name: 'ineligibilityReasonsSmc')
-    List<IneligibilityReasonType>? ineligibilityReasonsList,
+    List<IneligibilityReasonType>? ineligibilityReasonsSmcList,
   }) = _IneligibilityReasonsWrapperModelSMC;
 
   factory IneligibilityReasonsWrapperModelSMC.fromJson(

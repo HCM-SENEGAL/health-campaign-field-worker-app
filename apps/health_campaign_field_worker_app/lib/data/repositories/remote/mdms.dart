@@ -287,7 +287,7 @@ class MdmsRepository {
     }).toList();
 
     appConfiguration.symptomsTypesSmc =
-        result.symptomsTypesSmc?.symptomsTypeList?.map((e) {
+        result.symptomsTypesSmc?.symptomsTypeSmcList?.map((e) {
       final symptomTypes = SymptomsTypes()
         ..name = e.name
         ..code = e.code
@@ -307,7 +307,7 @@ class MdmsRepository {
     }).toList();
 
     appConfiguration.referralReasonsSmc =
-        result.referralReasonsSmc?.referralReasonList?.map((e) {
+        result.referralReasonsSmc?.referralReasonSmcList?.map((e) {
       final reasonTypes = ReferralReasons()
         ..name = e.name
         ..code = e.code
