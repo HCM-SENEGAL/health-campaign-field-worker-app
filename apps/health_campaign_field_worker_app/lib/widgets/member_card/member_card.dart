@@ -62,6 +62,26 @@ class MemberCard extends StatelessWidget {
     final beneficiaryType = context.beneficiaryType;
     final doseStatus = checkStatus(tasks, context.selectedCycle);
 
+    bool showHideDeliveryButtonsForLf(
+      bool isBeneficiaryIneligible,
+      bool isBeneficiaryReferred,
+      bool isNotEligible,
+    ) {
+      return isNotEligible || isBeneficiaryIneligible || isBeneficiaryReferred;
+    }
+
+    bool showHideDeliveryButtonsForSmc(
+      bool isBeneficiaryIneligible,
+      bool isBeneficiaryReferred,
+      bool isNotEligible,
+      bool doseStatus,
+    ) {
+      return (isNotEligible ||
+              isBeneficiaryReferred ||
+              isBeneficiaryIneligible) &&
+          !doseStatus;
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: DigitTheme.instance.colorScheme.background,
@@ -224,10 +244,18 @@ class MemberCard extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Column(
                 children: [
-                  (isNotEligible ||
-                              isBeneficiaryReferred ||
-                              isBeneficiaryIneligible) &&
-                          !doseStatus
+                  (context.projectTypeCode == ProjectTypes.smc.toValue()
+                          ? showHideDeliveryButtonsForSmc(
+                              isBeneficiaryIneligible,
+                              isBeneficiaryReferred,
+                              isNotEligible,
+                              doseStatus,
+                            )
+                          : showHideDeliveryButtonsForLf(
+                              isBeneficiaryIneligible,
+                              isBeneficiaryReferred,
+                              isNotEligible,
+                            ))
                       ? const Offstage()
                       : !isNotEligible
                           ? DigitElevatedButton(
