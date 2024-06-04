@@ -9,6 +9,7 @@ import '../../data/data_repository.dart';
 import '../../data/repositories/local/project_beneficiary.dart';
 import '../../data/repositories/local/task.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
 import '../../utils/utils.dart';
 import '../progress_indicator/progress_indicator.dart';
 
@@ -81,7 +82,8 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
     //   (element) => element.beneficiaryType == beneficiaryType,
     // );
 
-    final target = 75;
+    final target =
+        context.projectTypeCode == ProjectTypes.smc.toValue() ? 65 : 75;
 
     return DigitCard(
       child: ProgressIndicatorContainer(
