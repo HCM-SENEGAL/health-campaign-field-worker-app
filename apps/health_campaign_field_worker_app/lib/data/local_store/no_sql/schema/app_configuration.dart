@@ -69,9 +69,15 @@ class AppConfiguration {
 
   late List<SymptomsTypes>? symptomsTypes;
 
+  late List<SymptomsTypes>? symptomsTypesSmc;
+
   late List<ReferralReasons>? referralReasons;
 
+  late List<ReferralReasons>? referralReasonsSmc;
+
   late List<IneligibilityReasons>? ineligibilityReasons;
+
+  late List<IneligibilityReasons>? ineligibilityReasonsSmc;
 
   late List<DisabilityTypes>? disabilityTypes;
 }

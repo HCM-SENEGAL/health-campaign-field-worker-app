@@ -201,6 +201,7 @@ class _RecordPastDeliveryDetailsPageState
                             final response = await router.push(
                               SideEffectsRoute(
                                 tasks: [(futureTaskList ?? []).last],
+                                fromSurvey: true,
                               ),
                             );
                             if (response == null) {

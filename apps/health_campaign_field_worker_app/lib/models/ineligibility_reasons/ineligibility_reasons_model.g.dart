@@ -23,6 +23,23 @@ Map<String, dynamic> _$$IneligibilityReasonsWrapperModelImplToJson(
       'ineligibilityReasons': instance.ineligibilityReasonsList,
     };
 
+_$IneligibilityReasonsWrapperModelSMCImpl
+    _$$IneligibilityReasonsWrapperModelSMCImplFromJson(
+            Map<String, dynamic> json) =>
+        _$IneligibilityReasonsWrapperModelSMCImpl(
+          ineligibilityReasonsSmcList: (json['ineligibilityReasonsSmc']
+                  as List<dynamic>?)
+              ?.map((e) =>
+                  IneligibilityReasonType.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+
+Map<String, dynamic> _$$IneligibilityReasonsWrapperModelSMCImplToJson(
+        _$IneligibilityReasonsWrapperModelSMCImpl instance) =>
+    <String, dynamic>{
+      'ineligibilityReasonsSmc': instance.ineligibilityReasonsSmcList,
+    };
+
 _$IneligibilityReasonTypeImpl _$$IneligibilityReasonTypeImplFromJson(
         Map<String, dynamic> json) =>
     _$IneligibilityReasonTypeImpl(

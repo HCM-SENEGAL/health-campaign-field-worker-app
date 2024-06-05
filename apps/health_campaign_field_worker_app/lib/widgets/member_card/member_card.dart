@@ -60,6 +60,27 @@ class MemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final beneficiaryType = context.beneficiaryType;
+    final doseStatus = checkStatus(tasks, context.selectedCycle);
+
+    bool showHideDeliveryButtonsForLf(
+      bool isBeneficiaryIneligible,
+      bool isBeneficiaryReferred,
+      bool isNotEligible,
+    ) {
+      return isNotEligible || isBeneficiaryIneligible || isBeneficiaryReferred;
+    }
+
+    bool showHideDeliveryButtonsForSmc(
+      bool isBeneficiaryIneligible,
+      bool isBeneficiaryReferred,
+      bool isNotEligible,
+      bool doseStatus,
+    ) {
+      return (isNotEligible ||
+              isBeneficiaryReferred ||
+              isBeneficiaryIneligible) &&
+          !doseStatus;
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -223,9 +244,18 @@ class MemberCard extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Column(
                 children: [
-                  isNotEligible ||
-                          isBeneficiaryReferred ||
-                          isBeneficiaryIneligible
+                  (context.projectTypeCode == ProjectTypes.smc.toValue()
+                          ? showHideDeliveryButtonsForSmc(
+                              isBeneficiaryIneligible,
+                              isBeneficiaryReferred,
+                              isNotEligible,
+                              doseStatus,
+                            )
+                          : showHideDeliveryButtonsForLf(
+                              isBeneficiaryIneligible,
+                              isBeneficiaryReferred,
+                              isNotEligible,
+                            ))
                       ? const Offstage()
                       : !isNotEligible
                           ? DigitElevatedButton(
@@ -273,10 +303,7 @@ class MemberCard extends StatelessWidget {
                                             sideEffects,
                                             individual,
                                           ) &&
-                                          !checkStatus(
-                                            tasks,
-                                            context.selectedCycle,
-                                          )
+                                          !doseStatus
                                       ? localizations.translate(
                                           i18.householdOverView
                                               .viewDeliveryLabel,
@@ -301,7 +328,7 @@ class MemberCard extends StatelessWidget {
                                 sideEffects,
                                 individual,
                               ) &&
-                              !checkStatus(tasks, context.selectedCycle)))
+                              !doseStatus))
                       ? const Offstage()
                       : DigitOutLineButton(
                           label: localizations.translate(
@@ -353,10 +380,7 @@ class MemberCard extends StatelessWidget {
                                                         .toValue())
                                                 .toList()
                                                 .isNotEmpty &&
-                                            !checkStatus(
-                                              tasks,
-                                              context.selectedCycle,
-                                            )
+                                            !doseStatus
                                         ? null
                                         : () {
                                             Navigator.of(
@@ -504,10 +528,7 @@ class MemberCard extends StatelessWidget {
                                                         .toValue())
                                                 .toList()
                                                 .isNotEmpty &&
-                                            !checkStatus(
-                                              tasks,
-                                              context.selectedCycle,
-                                            )
+                                            !doseStatus
                                         ? null
                                         : () async {
                                             Navigator.of(
@@ -552,7 +573,18 @@ class MemberCard extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: tasks != null &&
-                                              (tasks ?? []).isNotEmpty
+                                              (tasks ?? [])
+                                                  .where((element) =>
+                                                      element.status !=
+                                                          Status
+                                                              .beneficiaryRefused
+                                                              .toValue() &&
+                                                      element.status !=
+                                                          Status
+                                                              .beneficiaryReferred
+                                                              .toValue())
+                                                  .toList()
+                                                  .isNotEmpty
                                           ? () async {
                                               Navigator.of(
                                                 context,
@@ -561,6 +593,7 @@ class MemberCard extends StatelessWidget {
                                               await context.router.push(
                                                 SideEffectsRoute(
                                                   tasks: tasks!,
+                                                  fromSurvey: true,
                                                 ),
                                               );
                                             }

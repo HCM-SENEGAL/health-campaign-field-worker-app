@@ -7,13 +7,26 @@ part 'referral_reasons_model.g.dart';
 class ReferralReasonsWrapperModel with _$ReferralReasonsWrapperModel {
   const factory ReferralReasonsWrapperModel({
     @JsonKey(name: 'referralReasons')
-        List<ReferralReasonType>? referralReasonList,
+    List<ReferralReasonType>? referralReasonList,
   }) = _ReferralReasonsWrapperModel;
 
   factory ReferralReasonsWrapperModel.fromJson(
     Map<String, dynamic> json,
   ) =>
       _$ReferralReasonsWrapperModelFromJson(json);
+}
+
+@freezed
+class ReferralReasonsWrapperModelSMC with _$ReferralReasonsWrapperModelSMC {
+  const factory ReferralReasonsWrapperModelSMC({
+    @JsonKey(name: 'referralReasonsSmc')
+    List<ReferralReasonType>? referralReasonSmcList,
+  }) = _ReferralReasonsWrapperModelSMC;
+
+  factory ReferralReasonsWrapperModelSMC.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$ReferralReasonsWrapperModelSMCFromJson(json);
 }
 
 @freezed

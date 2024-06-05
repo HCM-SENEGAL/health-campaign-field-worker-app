@@ -17,6 +17,20 @@ class IneligibilityReasonsWrapperModel with _$IneligibilityReasonsWrapperModel {
 }
 
 @freezed
+class IneligibilityReasonsWrapperModelSMC
+    with _$IneligibilityReasonsWrapperModelSMC {
+  const factory IneligibilityReasonsWrapperModelSMC({
+    @JsonKey(name: 'ineligibilityReasonsSmc')
+    List<IneligibilityReasonType>? ineligibilityReasonsSmcList,
+  }) = _IneligibilityReasonsWrapperModelSMC;
+
+  factory IneligibilityReasonsWrapperModelSMC.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$IneligibilityReasonsWrapperModelSMCFromJson(json);
+}
+
+@freezed
 class IneligibilityReasonType with _$IneligibilityReasonType {
   const factory IneligibilityReasonType({
     required String code,

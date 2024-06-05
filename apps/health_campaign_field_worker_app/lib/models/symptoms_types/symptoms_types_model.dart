@@ -7,13 +7,27 @@ part 'symptoms_types_model.g.dart';
 class SymptomsTypesPrimaryWrapperModel with _$SymptomsTypesPrimaryWrapperModel {
   const factory SymptomsTypesPrimaryWrapperModel({
     @JsonKey(name: 'HCM-SYMPTOMS-TYPES')
-        final SymptomsTypesSecondaryWrapperModel? symptomsTypes,
+    final SymptomsTypesSecondaryWrapperModel? symptomsTypes,
   }) = _SymptomsTypesPrimaryWrapperModel;
 
   factory SymptomsTypesPrimaryWrapperModel.fromJson(
     Map<String, dynamic> json,
   ) =>
       _$SymptomsTypesPrimaryWrapperModelFromJson(json);
+}
+
+@freezed
+class SymptomsTypesPrimaryWrapperModelSMC
+    with _$SymptomsTypesPrimaryWrapperModelSMC {
+  const factory SymptomsTypesPrimaryWrapperModelSMC({
+    @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
+    final SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc,
+  }) = _SymptomsTypesPrimaryWrapperModelSMC;
+
+  factory SymptomsTypesPrimaryWrapperModelSMC.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$SymptomsTypesPrimaryWrapperModelSMCFromJson(json);
 }
 
 @freezed
@@ -27,6 +41,19 @@ class SymptomsTypesSecondaryWrapperModel
     Map<String, dynamic> json,
   ) =>
       _$SymptomsTypesSecondaryWrapperModelFromJson(json);
+}
+
+@freezed
+class SymptomsTypesSecondaryWrapperModelSMC
+    with _$SymptomsTypesSecondaryWrapperModelSMC {
+  const factory SymptomsTypesSecondaryWrapperModelSMC({
+    @JsonKey(name: 'symptomsTypesSmc') List<SymptomsType>? symptomsTypeSmcList,
+  }) = _SymptomsTypesSecondaryWrapperModelSMC;
+
+  factory SymptomsTypesSecondaryWrapperModelSMC.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$SymptomsTypesSecondaryWrapperModelSMCFromJson(json);
 }
 
 @freezed

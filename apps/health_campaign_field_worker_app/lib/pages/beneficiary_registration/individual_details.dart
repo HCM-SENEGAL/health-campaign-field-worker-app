@@ -53,6 +53,7 @@ class _IndividualDetailsPageState
   DateTime now = DateTime.now();
   static const _disabilityTypeKey = 'disabilityType';
   static const _heightKey = 'height';
+  bool isHeadAgeValid = true;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +109,18 @@ class _IndividualDetailsPageState
                           : () async {
                               if (form.control(_dobKey).value == null) {
                                 form.control(_dobKey).setErrors({'': true});
+                              } else if (!isHeadAgeValid) {
+                                await DigitToast.show(
+                                  context,
+                                  options: DigitToastOptions(
+                                    localizations.translate(i18
+                                        .individualDetails.headAgeValidError),
+                                    true,
+                                    theme,
+                                  ),
+                                );
+
+                                return;
                               }
                               final userId = context.loggedInUserUuid;
                               final projectId = context.projectId;
@@ -485,7 +498,17 @@ class _IndividualDetailsPageState
                                             (age.years == 150 &&
                                                 age.months > 0))) {
                                       formControl.setErrors({'': true});
+                                    } else if (context.projectTypeCode ==
+                                            ProjectTypes.smc.toValue() &&
+                                        widget.isHeadOfHousehold &&
+                                        age.years < 18) {
+                                      isHeadAgeValid = false;
                                     } else {
+                                      if (context.projectTypeCode ==
+                                              ProjectTypes.smc.toValue() &&
+                                          widget.isHeadOfHousehold) {
+                                        isHeadAgeValid = true;
+                                      }
                                       formControl.removeError('');
                                     }
                                   }

@@ -95,15 +95,33 @@ class AppInitializationBloc
                   ],
                 ),
                 const MdmsModuleDetailModel(
+                  moduleName: 'HCM-SYMPTOMS-TYPES-SMC',
+                  masterDetails: [
+                    MdmsMasterDetailModel('symptomsTypesSmc'),
+                  ],
+                ),
+                const MdmsModuleDetailModel(
                   moduleName: 'HCM-REFERRAL-REASONS',
                   masterDetails: [
                     MdmsMasterDetailModel('referralReasons'),
                   ],
                 ),
                 const MdmsModuleDetailModel(
+                  moduleName: 'HCM-REFERRAL-REASONS-SMC',
+                  masterDetails: [
+                    MdmsMasterDetailModel('referralReasonsSmc'),
+                  ],
+                ),
+                const MdmsModuleDetailModel(
                   moduleName: 'HCM-INELIGIBILITY-REASONS',
                   masterDetails: [
                     MdmsMasterDetailModel('ineligibilityReasons'),
+                  ],
+                ),
+                const MdmsModuleDetailModel(
+                  moduleName: 'HCM-INELIGIBILITY-REASONS-SMC',
+                  masterDetails: [
+                    MdmsMasterDetailModel('ineligibilityReasonsSmc'),
                   ],
                 ),
                 const MdmsModuleDetailModel(

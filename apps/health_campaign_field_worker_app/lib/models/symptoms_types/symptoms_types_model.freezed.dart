@@ -195,6 +195,188 @@ abstract class _SymptomsTypesPrimaryWrapperModel
       get copyWith => throw _privateConstructorUsedError;
 }
 
+SymptomsTypesPrimaryWrapperModelSMC
+    _$SymptomsTypesPrimaryWrapperModelSMCFromJson(Map<String, dynamic> json) {
+  return _SymptomsTypesPrimaryWrapperModelSMC.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SymptomsTypesPrimaryWrapperModelSMC {
+  @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
+  SymptomsTypesSecondaryWrapperModel? get symptomsTypesSmc =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $SymptomsTypesPrimaryWrapperModelSMCCopyWith<
+          SymptomsTypesPrimaryWrapperModelSMC>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SymptomsTypesPrimaryWrapperModelSMCCopyWith<$Res> {
+  factory $SymptomsTypesPrimaryWrapperModelSMCCopyWith(
+          SymptomsTypesPrimaryWrapperModelSMC value,
+          $Res Function(SymptomsTypesPrimaryWrapperModelSMC) then) =
+      _$SymptomsTypesPrimaryWrapperModelSMCCopyWithImpl<$Res,
+          SymptomsTypesPrimaryWrapperModelSMC>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
+      SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc});
+
+  $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>? get symptomsTypesSmc;
+}
+
+/// @nodoc
+class _$SymptomsTypesPrimaryWrapperModelSMCCopyWithImpl<$Res,
+        $Val extends SymptomsTypesPrimaryWrapperModelSMC>
+    implements $SymptomsTypesPrimaryWrapperModelSMCCopyWith<$Res> {
+  _$SymptomsTypesPrimaryWrapperModelSMCCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? symptomsTypesSmc = freezed,
+  }) {
+    return _then(_value.copyWith(
+      symptomsTypesSmc: freezed == symptomsTypesSmc
+          ? _value.symptomsTypesSmc
+          : symptomsTypesSmc // ignore: cast_nullable_to_non_nullable
+              as SymptomsTypesSecondaryWrapperModel?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>? get symptomsTypesSmc {
+    if (_value.symptomsTypesSmc == null) {
+      return null;
+    }
+
+    return $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>(
+        _value.symptomsTypesSmc!, (value) {
+      return _then(_value.copyWith(symptomsTypesSmc: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWith<$Res>
+    implements $SymptomsTypesPrimaryWrapperModelSMCCopyWith<$Res> {
+  factory _$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWith(
+          _$SymptomsTypesPrimaryWrapperModelSMCImpl value,
+          $Res Function(_$SymptomsTypesPrimaryWrapperModelSMCImpl) then) =
+      __$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
+      SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc});
+
+  @override
+  $SymptomsTypesSecondaryWrapperModelCopyWith<$Res>? get symptomsTypesSmc;
+}
+
+/// @nodoc
+class __$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWithImpl<$Res>
+    extends _$SymptomsTypesPrimaryWrapperModelSMCCopyWithImpl<$Res,
+        _$SymptomsTypesPrimaryWrapperModelSMCImpl>
+    implements _$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWith<$Res> {
+  __$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWithImpl(
+      _$SymptomsTypesPrimaryWrapperModelSMCImpl _value,
+      $Res Function(_$SymptomsTypesPrimaryWrapperModelSMCImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? symptomsTypesSmc = freezed,
+  }) {
+    return _then(_$SymptomsTypesPrimaryWrapperModelSMCImpl(
+      symptomsTypesSmc: freezed == symptomsTypesSmc
+          ? _value.symptomsTypesSmc
+          : symptomsTypesSmc // ignore: cast_nullable_to_non_nullable
+              as SymptomsTypesSecondaryWrapperModel?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SymptomsTypesPrimaryWrapperModelSMCImpl
+    implements _SymptomsTypesPrimaryWrapperModelSMC {
+  const _$SymptomsTypesPrimaryWrapperModelSMCImpl(
+      {@JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC') this.symptomsTypesSmc});
+
+  factory _$SymptomsTypesPrimaryWrapperModelSMCImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$SymptomsTypesPrimaryWrapperModelSMCImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
+  final SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc;
+
+  @override
+  String toString() {
+    return 'SymptomsTypesPrimaryWrapperModelSMC(symptomsTypesSmc: $symptomsTypesSmc)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SymptomsTypesPrimaryWrapperModelSMCImpl &&
+            (identical(other.symptomsTypesSmc, symptomsTypesSmc) ||
+                other.symptomsTypesSmc == symptomsTypesSmc));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, symptomsTypesSmc);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWith<
+          _$SymptomsTypesPrimaryWrapperModelSMCImpl>
+      get copyWith => __$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWithImpl<
+          _$SymptomsTypesPrimaryWrapperModelSMCImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SymptomsTypesPrimaryWrapperModelSMCImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SymptomsTypesPrimaryWrapperModelSMC
+    implements SymptomsTypesPrimaryWrapperModelSMC {
+  const factory _SymptomsTypesPrimaryWrapperModelSMC(
+          {@JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
+          final SymptomsTypesSecondaryWrapperModel? symptomsTypesSmc}) =
+      _$SymptomsTypesPrimaryWrapperModelSMCImpl;
+
+  factory _SymptomsTypesPrimaryWrapperModelSMC.fromJson(
+          Map<String, dynamic> json) =
+      _$SymptomsTypesPrimaryWrapperModelSMCImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'HCM-SYMPTOMS-TYPES-SMC')
+  SymptomsTypesSecondaryWrapperModel? get symptomsTypesSmc;
+  @override
+  @JsonKey(ignore: true)
+  _$$SymptomsTypesPrimaryWrapperModelSMCImplCopyWith<
+          _$SymptomsTypesPrimaryWrapperModelSMCImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 SymptomsTypesSecondaryWrapperModel _$SymptomsTypesSecondaryWrapperModelFromJson(
     Map<String, dynamic> json) {
   return _SymptomsTypesSecondaryWrapperModel.fromJson(json);
@@ -365,6 +547,181 @@ abstract class _SymptomsTypesSecondaryWrapperModel
   @JsonKey(ignore: true)
   _$$SymptomsTypesSecondaryWrapperModelImplCopyWith<
           _$SymptomsTypesSecondaryWrapperModelImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+SymptomsTypesSecondaryWrapperModelSMC
+    _$SymptomsTypesSecondaryWrapperModelSMCFromJson(Map<String, dynamic> json) {
+  return _SymptomsTypesSecondaryWrapperModelSMC.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SymptomsTypesSecondaryWrapperModelSMC {
+  @JsonKey(name: 'symptomsTypesSmc')
+  List<SymptomsType>? get symptomsTypeSmcList =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $SymptomsTypesSecondaryWrapperModelSMCCopyWith<
+          SymptomsTypesSecondaryWrapperModelSMC>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SymptomsTypesSecondaryWrapperModelSMCCopyWith<$Res> {
+  factory $SymptomsTypesSecondaryWrapperModelSMCCopyWith(
+          SymptomsTypesSecondaryWrapperModelSMC value,
+          $Res Function(SymptomsTypesSecondaryWrapperModelSMC) then) =
+      _$SymptomsTypesSecondaryWrapperModelSMCCopyWithImpl<$Res,
+          SymptomsTypesSecondaryWrapperModelSMC>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'symptomsTypesSmc')
+      List<SymptomsType>? symptomsTypeSmcList});
+}
+
+/// @nodoc
+class _$SymptomsTypesSecondaryWrapperModelSMCCopyWithImpl<$Res,
+        $Val extends SymptomsTypesSecondaryWrapperModelSMC>
+    implements $SymptomsTypesSecondaryWrapperModelSMCCopyWith<$Res> {
+  _$SymptomsTypesSecondaryWrapperModelSMCCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? symptomsTypeSmcList = freezed,
+  }) {
+    return _then(_value.copyWith(
+      symptomsTypeSmcList: freezed == symptomsTypeSmcList
+          ? _value.symptomsTypeSmcList
+          : symptomsTypeSmcList // ignore: cast_nullable_to_non_nullable
+              as List<SymptomsType>?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWith<$Res>
+    implements $SymptomsTypesSecondaryWrapperModelSMCCopyWith<$Res> {
+  factory _$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWith(
+          _$SymptomsTypesSecondaryWrapperModelSMCImpl value,
+          $Res Function(_$SymptomsTypesSecondaryWrapperModelSMCImpl) then) =
+      __$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'symptomsTypesSmc')
+      List<SymptomsType>? symptomsTypeSmcList});
+}
+
+/// @nodoc
+class __$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWithImpl<$Res>
+    extends _$SymptomsTypesSecondaryWrapperModelSMCCopyWithImpl<$Res,
+        _$SymptomsTypesSecondaryWrapperModelSMCImpl>
+    implements _$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWith<$Res> {
+  __$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWithImpl(
+      _$SymptomsTypesSecondaryWrapperModelSMCImpl _value,
+      $Res Function(_$SymptomsTypesSecondaryWrapperModelSMCImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? symptomsTypeSmcList = freezed,
+  }) {
+    return _then(_$SymptomsTypesSecondaryWrapperModelSMCImpl(
+      symptomsTypeSmcList: freezed == symptomsTypeSmcList
+          ? _value._symptomsTypeSmcList
+          : symptomsTypeSmcList // ignore: cast_nullable_to_non_nullable
+              as List<SymptomsType>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SymptomsTypesSecondaryWrapperModelSMCImpl
+    implements _SymptomsTypesSecondaryWrapperModelSMC {
+  const _$SymptomsTypesSecondaryWrapperModelSMCImpl(
+      {@JsonKey(name: 'symptomsTypesSmc')
+      final List<SymptomsType>? symptomsTypeSmcList})
+      : _symptomsTypeSmcList = symptomsTypeSmcList;
+
+  factory _$SymptomsTypesSecondaryWrapperModelSMCImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$SymptomsTypesSecondaryWrapperModelSMCImplFromJson(json);
+
+  final List<SymptomsType>? _symptomsTypeSmcList;
+  @override
+  @JsonKey(name: 'symptomsTypesSmc')
+  List<SymptomsType>? get symptomsTypeSmcList {
+    final value = _symptomsTypeSmcList;
+    if (value == null) return null;
+    if (_symptomsTypeSmcList is EqualUnmodifiableListView)
+      return _symptomsTypeSmcList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'SymptomsTypesSecondaryWrapperModelSMC(symptomsTypeSmcList: $symptomsTypeSmcList)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SymptomsTypesSecondaryWrapperModelSMCImpl &&
+            const DeepCollectionEquality()
+                .equals(other._symptomsTypeSmcList, _symptomsTypeSmcList));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_symptomsTypeSmcList));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWith<
+          _$SymptomsTypesSecondaryWrapperModelSMCImpl>
+      get copyWith => __$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWithImpl<
+          _$SymptomsTypesSecondaryWrapperModelSMCImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SymptomsTypesSecondaryWrapperModelSMCImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SymptomsTypesSecondaryWrapperModelSMC
+    implements SymptomsTypesSecondaryWrapperModelSMC {
+  const factory _SymptomsTypesSecondaryWrapperModelSMC(
+          {@JsonKey(name: 'symptomsTypesSmc')
+          final List<SymptomsType>? symptomsTypeSmcList}) =
+      _$SymptomsTypesSecondaryWrapperModelSMCImpl;
+
+  factory _SymptomsTypesSecondaryWrapperModelSMC.fromJson(
+          Map<String, dynamic> json) =
+      _$SymptomsTypesSecondaryWrapperModelSMCImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'symptomsTypesSmc')
+  List<SymptomsType>? get symptomsTypeSmcList;
+  @override
+  @JsonKey(ignore: true)
+  _$$SymptomsTypesSecondaryWrapperModelSMCImplCopyWith<
+          _$SymptomsTypesSecondaryWrapperModelSMCImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 

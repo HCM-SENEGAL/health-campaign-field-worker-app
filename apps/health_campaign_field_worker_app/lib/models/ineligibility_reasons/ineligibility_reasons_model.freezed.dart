@@ -188,6 +188,182 @@ abstract class _IneligibilityReasonsWrapperModel
       get copyWith => throw _privateConstructorUsedError;
 }
 
+IneligibilityReasonsWrapperModelSMC
+    _$IneligibilityReasonsWrapperModelSMCFromJson(Map<String, dynamic> json) {
+  return _IneligibilityReasonsWrapperModelSMC.fromJson(json);
+}
+
+/// @nodoc
+mixin _$IneligibilityReasonsWrapperModelSMC {
+  @JsonKey(name: 'ineligibilityReasonsSmc')
+  List<IneligibilityReasonType>? get ineligibilityReasonsSmcList =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $IneligibilityReasonsWrapperModelSMCCopyWith<
+          IneligibilityReasonsWrapperModelSMC>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $IneligibilityReasonsWrapperModelSMCCopyWith<$Res> {
+  factory $IneligibilityReasonsWrapperModelSMCCopyWith(
+          IneligibilityReasonsWrapperModelSMC value,
+          $Res Function(IneligibilityReasonsWrapperModelSMC) then) =
+      _$IneligibilityReasonsWrapperModelSMCCopyWithImpl<$Res,
+          IneligibilityReasonsWrapperModelSMC>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'ineligibilityReasonsSmc')
+      List<IneligibilityReasonType>? ineligibilityReasonsSmcList});
+}
+
+/// @nodoc
+class _$IneligibilityReasonsWrapperModelSMCCopyWithImpl<$Res,
+        $Val extends IneligibilityReasonsWrapperModelSMC>
+    implements $IneligibilityReasonsWrapperModelSMCCopyWith<$Res> {
+  _$IneligibilityReasonsWrapperModelSMCCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? ineligibilityReasonsSmcList = freezed,
+  }) {
+    return _then(_value.copyWith(
+      ineligibilityReasonsSmcList: freezed == ineligibilityReasonsSmcList
+          ? _value.ineligibilityReasonsSmcList
+          : ineligibilityReasonsSmcList // ignore: cast_nullable_to_non_nullable
+              as List<IneligibilityReasonType>?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$IneligibilityReasonsWrapperModelSMCImplCopyWith<$Res>
+    implements $IneligibilityReasonsWrapperModelSMCCopyWith<$Res> {
+  factory _$$IneligibilityReasonsWrapperModelSMCImplCopyWith(
+          _$IneligibilityReasonsWrapperModelSMCImpl value,
+          $Res Function(_$IneligibilityReasonsWrapperModelSMCImpl) then) =
+      __$$IneligibilityReasonsWrapperModelSMCImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'ineligibilityReasonsSmc')
+      List<IneligibilityReasonType>? ineligibilityReasonsSmcList});
+}
+
+/// @nodoc
+class __$$IneligibilityReasonsWrapperModelSMCImplCopyWithImpl<$Res>
+    extends _$IneligibilityReasonsWrapperModelSMCCopyWithImpl<$Res,
+        _$IneligibilityReasonsWrapperModelSMCImpl>
+    implements _$$IneligibilityReasonsWrapperModelSMCImplCopyWith<$Res> {
+  __$$IneligibilityReasonsWrapperModelSMCImplCopyWithImpl(
+      _$IneligibilityReasonsWrapperModelSMCImpl _value,
+      $Res Function(_$IneligibilityReasonsWrapperModelSMCImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? ineligibilityReasonsSmcList = freezed,
+  }) {
+    return _then(_$IneligibilityReasonsWrapperModelSMCImpl(
+      ineligibilityReasonsSmcList: freezed == ineligibilityReasonsSmcList
+          ? _value._ineligibilityReasonsSmcList
+          : ineligibilityReasonsSmcList // ignore: cast_nullable_to_non_nullable
+              as List<IneligibilityReasonType>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$IneligibilityReasonsWrapperModelSMCImpl
+    implements _IneligibilityReasonsWrapperModelSMC {
+  const _$IneligibilityReasonsWrapperModelSMCImpl(
+      {@JsonKey(name: 'ineligibilityReasonsSmc')
+      final List<IneligibilityReasonType>? ineligibilityReasonsSmcList})
+      : _ineligibilityReasonsSmcList = ineligibilityReasonsSmcList;
+
+  factory _$IneligibilityReasonsWrapperModelSMCImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$IneligibilityReasonsWrapperModelSMCImplFromJson(json);
+
+  final List<IneligibilityReasonType>? _ineligibilityReasonsSmcList;
+  @override
+  @JsonKey(name: 'ineligibilityReasonsSmc')
+  List<IneligibilityReasonType>? get ineligibilityReasonsSmcList {
+    final value = _ineligibilityReasonsSmcList;
+    if (value == null) return null;
+    if (_ineligibilityReasonsSmcList is EqualUnmodifiableListView)
+      return _ineligibilityReasonsSmcList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'IneligibilityReasonsWrapperModelSMC(ineligibilityReasonsSmcList: $ineligibilityReasonsSmcList)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$IneligibilityReasonsWrapperModelSMCImpl &&
+            const DeepCollectionEquality().equals(
+                other._ineligibilityReasonsSmcList,
+                _ineligibilityReasonsSmcList));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_ineligibilityReasonsSmcList));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$IneligibilityReasonsWrapperModelSMCImplCopyWith<
+          _$IneligibilityReasonsWrapperModelSMCImpl>
+      get copyWith => __$$IneligibilityReasonsWrapperModelSMCImplCopyWithImpl<
+          _$IneligibilityReasonsWrapperModelSMCImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$IneligibilityReasonsWrapperModelSMCImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _IneligibilityReasonsWrapperModelSMC
+    implements IneligibilityReasonsWrapperModelSMC {
+  const factory _IneligibilityReasonsWrapperModelSMC(
+          {@JsonKey(name: 'ineligibilityReasonsSmc')
+          final List<IneligibilityReasonType>? ineligibilityReasonsSmcList}) =
+      _$IneligibilityReasonsWrapperModelSMCImpl;
+
+  factory _IneligibilityReasonsWrapperModelSMC.fromJson(
+          Map<String, dynamic> json) =
+      _$IneligibilityReasonsWrapperModelSMCImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'ineligibilityReasonsSmc')
+  List<IneligibilityReasonType>? get ineligibilityReasonsSmcList;
+  @override
+  @JsonKey(ignore: true)
+  _$$IneligibilityReasonsWrapperModelSMCImplCopyWith<
+          _$IneligibilityReasonsWrapperModelSMCImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 IneligibilityReasonType _$IneligibilityReasonTypeFromJson(
     Map<String, dynamic> json) {
   return _IneligibilityReasonType.fromJson(json);

@@ -10,6 +10,7 @@ import '../../blocs/product_variant/product_variant.dart';
 import '../../blocs/side_effects/side_effects.dart';
 import '../../data/local_store/no_sql/schema/app_configuration.dart';
 import '../../models/data_model.dart';
+import '../../models/entities/project_types.dart';
 import '../../router/app_router.dart';
 import '../../utils/environment_config.dart';
 import '../../utils/i18_key_constants.dart' as i18;
@@ -322,9 +323,15 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                 initialized:
                                                     (appConfiguration, _) {
                                                   final symptomTypesOptions =
-                                                      appConfiguration
-                                                              .symptomsTypes ??
-                                                          <SymptomsTypes>[];
+                                                      context.projectTypeCode ==
+                                                              ProjectTypes.smc
+                                                                  .toValue()
+                                                          ? appConfiguration
+                                                                  .symptomsTypesSmc ??
+                                                              <SymptomsTypes>[]
+                                                          : appConfiguration
+                                                                  .symptomsTypes ??
+                                                              <SymptomsTypes>[];
                                                   symptomsTypes =
                                                       symptomTypesOptions
                                                           .map((e) => e.code)

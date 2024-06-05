@@ -185,6 +185,179 @@ abstract class _ReferralReasonsWrapperModel
       get copyWith => throw _privateConstructorUsedError;
 }
 
+ReferralReasonsWrapperModelSMC _$ReferralReasonsWrapperModelSMCFromJson(
+    Map<String, dynamic> json) {
+  return _ReferralReasonsWrapperModelSMC.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ReferralReasonsWrapperModelSMC {
+  @JsonKey(name: 'referralReasonsSmc')
+  List<ReferralReasonType>? get referralReasonSmcList =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ReferralReasonsWrapperModelSMCCopyWith<ReferralReasonsWrapperModelSMC>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ReferralReasonsWrapperModelSMCCopyWith<$Res> {
+  factory $ReferralReasonsWrapperModelSMCCopyWith(
+          ReferralReasonsWrapperModelSMC value,
+          $Res Function(ReferralReasonsWrapperModelSMC) then) =
+      _$ReferralReasonsWrapperModelSMCCopyWithImpl<$Res,
+          ReferralReasonsWrapperModelSMC>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'referralReasonsSmc')
+      List<ReferralReasonType>? referralReasonSmcList});
+}
+
+/// @nodoc
+class _$ReferralReasonsWrapperModelSMCCopyWithImpl<$Res,
+        $Val extends ReferralReasonsWrapperModelSMC>
+    implements $ReferralReasonsWrapperModelSMCCopyWith<$Res> {
+  _$ReferralReasonsWrapperModelSMCCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? referralReasonSmcList = freezed,
+  }) {
+    return _then(_value.copyWith(
+      referralReasonSmcList: freezed == referralReasonSmcList
+          ? _value.referralReasonSmcList
+          : referralReasonSmcList // ignore: cast_nullable_to_non_nullable
+              as List<ReferralReasonType>?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ReferralReasonsWrapperModelSMCImplCopyWith<$Res>
+    implements $ReferralReasonsWrapperModelSMCCopyWith<$Res> {
+  factory _$$ReferralReasonsWrapperModelSMCImplCopyWith(
+          _$ReferralReasonsWrapperModelSMCImpl value,
+          $Res Function(_$ReferralReasonsWrapperModelSMCImpl) then) =
+      __$$ReferralReasonsWrapperModelSMCImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'referralReasonsSmc')
+      List<ReferralReasonType>? referralReasonSmcList});
+}
+
+/// @nodoc
+class __$$ReferralReasonsWrapperModelSMCImplCopyWithImpl<$Res>
+    extends _$ReferralReasonsWrapperModelSMCCopyWithImpl<$Res,
+        _$ReferralReasonsWrapperModelSMCImpl>
+    implements _$$ReferralReasonsWrapperModelSMCImplCopyWith<$Res> {
+  __$$ReferralReasonsWrapperModelSMCImplCopyWithImpl(
+      _$ReferralReasonsWrapperModelSMCImpl _value,
+      $Res Function(_$ReferralReasonsWrapperModelSMCImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? referralReasonSmcList = freezed,
+  }) {
+    return _then(_$ReferralReasonsWrapperModelSMCImpl(
+      referralReasonSmcList: freezed == referralReasonSmcList
+          ? _value._referralReasonSmcList
+          : referralReasonSmcList // ignore: cast_nullable_to_non_nullable
+              as List<ReferralReasonType>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ReferralReasonsWrapperModelSMCImpl
+    implements _ReferralReasonsWrapperModelSMC {
+  const _$ReferralReasonsWrapperModelSMCImpl(
+      {@JsonKey(name: 'referralReasonsSmc')
+      final List<ReferralReasonType>? referralReasonSmcList})
+      : _referralReasonSmcList = referralReasonSmcList;
+
+  factory _$ReferralReasonsWrapperModelSMCImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$ReferralReasonsWrapperModelSMCImplFromJson(json);
+
+  final List<ReferralReasonType>? _referralReasonSmcList;
+  @override
+  @JsonKey(name: 'referralReasonsSmc')
+  List<ReferralReasonType>? get referralReasonSmcList {
+    final value = _referralReasonSmcList;
+    if (value == null) return null;
+    if (_referralReasonSmcList is EqualUnmodifiableListView)
+      return _referralReasonSmcList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'ReferralReasonsWrapperModelSMC(referralReasonSmcList: $referralReasonSmcList)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ReferralReasonsWrapperModelSMCImpl &&
+            const DeepCollectionEquality()
+                .equals(other._referralReasonSmcList, _referralReasonSmcList));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_referralReasonSmcList));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ReferralReasonsWrapperModelSMCImplCopyWith<
+          _$ReferralReasonsWrapperModelSMCImpl>
+      get copyWith => __$$ReferralReasonsWrapperModelSMCImplCopyWithImpl<
+          _$ReferralReasonsWrapperModelSMCImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ReferralReasonsWrapperModelSMCImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ReferralReasonsWrapperModelSMC
+    implements ReferralReasonsWrapperModelSMC {
+  const factory _ReferralReasonsWrapperModelSMC(
+          {@JsonKey(name: 'referralReasonsSmc')
+          final List<ReferralReasonType>? referralReasonSmcList}) =
+      _$ReferralReasonsWrapperModelSMCImpl;
+
+  factory _ReferralReasonsWrapperModelSMC.fromJson(Map<String, dynamic> json) =
+      _$ReferralReasonsWrapperModelSMCImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'referralReasonsSmc')
+  List<ReferralReasonType>? get referralReasonSmcList;
+  @override
+  @JsonKey(ignore: true)
+  _$$ReferralReasonsWrapperModelSMCImplCopyWith<
+          _$ReferralReasonsWrapperModelSMCImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 ReferralReasonType _$ReferralReasonTypeFromJson(Map<String, dynamic> json) {
   return _ReferralReasonType.fromJson(json);
 }
