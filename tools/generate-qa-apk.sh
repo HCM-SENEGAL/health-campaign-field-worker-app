@@ -1,6 +1,6 @@
 cd apps/health_campaign_field_worker_app || exit
 
-flutter pub run change_app_package_name:main org.egov.qa.ng
+flutter pub run change_app_package_name:main org.egov.qa.sn
 
 rm -rf release-apk
 mkdir release-apk
