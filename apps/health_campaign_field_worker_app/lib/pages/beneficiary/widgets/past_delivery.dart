@@ -38,7 +38,7 @@ Widget buildTableContent(
     ),
   ];
 
-  // Calculate the height of the container based on the number of items in the table
+    // Calculate the height of the container based on the number of items in the table
 
   final projectState = context.read<ProjectBloc>().state;
   final item = projectState
@@ -55,7 +55,7 @@ Widget buildTableContent(
       left: kPadding,
       bottom: 0,
       right: kPadding,
-      top: 0,
+      top:  0,
     ),
     // [TODO - need to set the height of the card based on the number of items]
     height: containerHeight,
@@ -77,39 +77,13 @@ Widget buildTableContent(
               element: {
                 localizations.translate(
                   i18.beneficiaryDetails.beneficiaryAge,
-                ): localizations.translate(
-                  '${getAgeConditionString('${fetchProductVariant(item, individualModel)?.condition}')}',
-                ),
+                  //[TODO: Condition need to be handled in generic way,]
+                ): '${fetchProductVariant(item, individualModel)?.condition?.split('<=age<').first} - ${fetchProductVariant(item, individualModel)?.condition?.split('<=age<').last} months',
               },
             ),
             const Divider(
-              thickness: 1,
+              thickness: 1.0,
             ),
-            getHeightConditionString(
-                      '${fetchProductVariant(item, individualModel)?.condition}',
-                    ) !=
-                    null
-                ? DigitTableCard(
-                    topPadding: const EdgeInsets.only(top: 0.0),
-                    padding: const EdgeInsets.only(bottom: kPadding / 2),
-                    fraction: 2.5,
-                    element: {
-                      localizations.translate(
-                        i18.beneficiaryDetails.beneficiaryHeight,
-                      ): localizations.translate(
-                        '${getHeightConditionString('${fetchProductVariant(item, individualModel)?.condition}')}',
-                      ),
-                    },
-                  )
-                : const Offstage(),
-            getHeightConditionString(
-                      '${fetchProductVariant(item, individualModel)?.condition}',
-                    ) !=
-                    null
-                ? const Divider(
-                    thickness: 1.0,
-                  )
-                : const Offstage(),
             // Build the DigitTable with the data
             DigitTable(
               headerList: headerListResource,
@@ -141,7 +115,7 @@ Widget buildTableContent(
                           : TableData(''),
                       // Display the SKU value in the second column.
                       TableData(
-                        '$quantity ${localizations.translate(value.toString())}',
+                        '$quantity - ${localizations.translate(value.toString())}',
                         cellKey: 'resources',
                       ),
                     ]);

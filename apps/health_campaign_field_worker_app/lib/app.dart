@@ -127,7 +127,7 @@ class MainApplicationState extends State<MainApplication>
             ],
             child: BlocBuilder<AppInitializationBloc, AppInitializationState>(
               builder: (context, appConfigState) {
-                const defaultLocale = Locale('en', 'NG');
+                const defaultLocale = Locale('en', 'SN');
 
                 return BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, authState) {

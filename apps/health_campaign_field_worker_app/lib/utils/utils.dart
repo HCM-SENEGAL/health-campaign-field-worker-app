@@ -304,62 +304,25 @@ bool checkEligibilityForAgeAndSideEffect(
   List<SideEffectModel>? sideEffects,
   IndividualModel individual,
 ) {
-  if (individual != null) {
-    final ageInYears = DigitDateUtils.calculateAge(
-      DigitDateUtils.getFormattedDateToDateTime(
-            individual.dateOfBirth!,
-          ) ??
-          DateTime.now(),
-    ).years;
-    final ageInMonths = DigitDateUtils.calculateAge(
-      DigitDateUtils.getFormattedDateToDateTime(
-            individual.dateOfBirth!,
-          ) ??
-          DateTime.now(),
-    ).months;
-    Cycle? currentCycle = getCurrentCycle(projectType);
+  final ageInYears = DigitDateUtils.calculateAge(
+    DigitDateUtils.getFormattedDateToDateTime(
+          individual.dateOfBirth!,
+        ) ??
+        DateTime.now(),
+  ).years;
+  final ageInMonths = DigitDateUtils.calculateAge(
+    DigitDateUtils.getFormattedDateToDateTime(
+          individual.dateOfBirth!,
+        ) ??
+        DateTime.now(),
+  ).months;
 
-    // todo : implement check so that it works for both LF and SMC
-    if (true) {
-      return currentCycle == null || currentCycle.deliveries == null
-          ? false
-          : fetchProductVariant(currentCycle.deliveries!.first, individual) ==
-                  null
-              ? false
-              : true;
-    } else {
-      return checkEligibilityForAgeAndSideEffects(
-        DigitDOBAge(
-          years: ageInYears,
-          months: ageInMonths,
-        ),
-        projectType,
-        tasks,
-        sideEffects,
-      );
-    }
-  }
-
-  return false;
-}
-
-Cycle? getCurrentCycle(ProjectType? projectType) {
-  final currentCycle = projectType?.cycles?.firstWhereOrNull(
-    (e) =>
-        (e.startDate!) < DateTime.now().millisecondsSinceEpoch &&
-        (e.endDate!) > DateTime.now().millisecondsSinceEpoch,
-  );
-
-  return currentCycle;
-}
-
-bool checkEligibilityForAgeAndSideEffects(
-  DigitDOBAge age,
-  ProjectType? projectType,
-  TaskModel? tasks,
-  List<SideEffectModel>? sideEffects,
-) {
-  int totalAgeMonths = age.years * 12 + age.months;
+  int totalAgeMonths = ageInYears * 12 + ageInMonths;
+  bool skipAge = [
+    Status.administeredFailed.toValue(),
+    Status.administeredSuccess.toValue(),
+    Status.delivered.toValue(),
+  ].contains(tasks?.status);
   final currentCycle = projectType?.cycles?.firstWhereOrNull(
     (e) =>
         (e.startDate!) < DateTime.now().millisecondsSinceEpoch &&
@@ -381,18 +344,34 @@ bool checkEligibilityForAgeAndSideEffects(
 
       return projectType?.validMinAge != null &&
               projectType?.validMaxAge != null
-          ? totalAgeMonths >= projectType!.validMinAge! &&
-                  totalAgeMonths <= projectType.validMaxAge!
+          ? skipAge ||
+                  (totalAgeMonths >= projectType!.validMinAge! &&
+                      totalAgeMonths <= projectType.validMaxAge!)
               ? recordedSideEffect && !checkStatus([tasks], currentCycle)
                   ? false
                   : true
               : false
           : false;
     } else {
-      return true;
+      return skipAge ||
+              (totalAgeMonths >= projectType!.validMinAge! &&
+                  totalAgeMonths <= projectType.validMaxAge!)
+          ? true
+          : false;
     }
   }
+
   return false;
+}
+
+Cycle? getCurrentCycle(ProjectType? projectType) {
+  final currentCycle = projectType?.cycles?.firstWhereOrNull(
+    (e) =>
+        (e.startDate!) < DateTime.now().millisecondsSinceEpoch &&
+        (e.endDate!) > DateTime.now().millisecondsSinceEpoch,
+  );
+
+  return currentCycle;
 }
 
 bool checkIfBeneficiaryRefused(
@@ -541,38 +520,21 @@ DoseCriteriaModel? fetchProductVariant(
     );
     final individualAgeInMonths =
         individualAge.years * 12 + individualAge.months;
-
-    final height = int.parse(individualModel.additionalFields != null &&
-            individualModel.additionalFields!.fields
-                .where((element) => element.key == "height")
-                .isNotEmpty
-        ? individualModel.additionalFields?.fields
-            .where((element) => element.key == "height")
-            .first
-            .value
-        : 0);
     final filteredCriteria = currentDelivery.doseCriteria?.where((criteria) {
       final condition = criteria.condition;
       if (condition != null) {
-        final conditions = condition.split('and');
+        //{TODO: Expression package need to be parsed
+        final ageRange = condition.split("<=age<");
+        final minAge = int.parse(ageRange.first);
+        final maxAge = int.parse(ageRange.last);
 
-        List expressionParser = [];
-        for (var element in conditions) {
-          final expression = FormulaParser(
-            element,
-            {
-              'height': height,
-              'age': individualAgeInMonths,
-            },
-          );
-          expressionParser.add(expression.parse.toString().split(':').last);
+        // temp change for SMC specific use case
+        if (maxAge == 59 && individualAgeInMonths > 59) {
+          return true;
         }
 
-        return expressionParser
-                .map((e) => e.toString().trim())
-                .where((element) => element == 'true')
-                .length ==
-            expressionParser.length;
+        return individualAgeInMonths >= minAge &&
+            individualAgeInMonths <= maxAge;
       }
 
       return false;

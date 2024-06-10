@@ -323,30 +323,30 @@ class _BeneficiaryDetailsPageState
                                                   ?.mobileNumber ??
                                               '--',
                                         ),
-                                  localizations.translate(i18
-                                      .individualDetails.heightLabelText): () {
-                                    final height = state.selectedIndividual
-                                        ?.additionalFields?.fields
-                                        .firstWhereOrNull((element) =>
-                                            element.key == _heightKey)
-                                        ?.value;
+                                  // localizations.translate(i18
+                                  //     .individualDetails.heightLabelText): () {
+                                  //   final height = state.selectedIndividual
+                                  //       ?.additionalFields?.fields
+                                  //       .firstWhereOrNull((element) =>
+                                  //           element.key == _heightKey)
+                                  //       ?.value;
 
-                                    return height;
-                                  }(),
-                                  localizations.translate(i18
-                                      .deliverIntervention
-                                      .disabilityLabel): () {
-                                    final disabilityType = state
-                                        .selectedIndividual
-                                        ?.additionalFields
-                                        ?.fields
-                                        .firstWhereOrNull((element) =>
-                                            element.key == _disabilityTypeKey)
-                                        ?.value;
+                                  //   return height;
+                                  // }(),
+                                  // localizations.translate(i18
+                                  //     .deliverIntervention
+                                  //     .disabilityLabel): () {
+                                  //   final disabilityType = state
+                                  //       .selectedIndividual
+                                  //       ?.additionalFields
+                                  //       ?.fields
+                                  //       .firstWhereOrNull((element) =>
+                                  //           element.key == _disabilityTypeKey)
+                                  //       ?.value;
 
-                                    return localizations
-                                        .translate(disabilityType);
-                                  }(),
+                                  //   return localizations
+                                  //       .translate(disabilityType);
+                                  // }(),
                                   localizations.translate(i18
                                       .deliverIntervention
                                       .dateOfRegistrationLabel): () {
