@@ -110,7 +110,8 @@ class _IndividualDetailsPageState
                               if (form.control(_dobKey).value == null) {
                                 form.control(_dobKey).setErrors({'': true});
                               }
-                              if (form.control(_idTypeKey).value == null) {
+                              if (!widget.isHeadOfHousehold &&
+                                  form.control(_idTypeKey).value == null) {
                                 form.control(_idTypeKey).setErrors({'': true});
                               }
                               final userId = context.loggedInUserUuid;
@@ -418,7 +419,13 @@ class _IndividualDetailsPageState
                                 label: localizations.translate(
                                   i18.individualDetails.firstNameLabelText,
                                 ),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(RegExp(
+                                    "[a-zA-Z ]",
+                                  )),
+                                ],
                                 isRequired: true,
+                                maxLength: 200,
                                 validationMessages: {
                                   'required': (object) =>
                                       localizations.translate(
@@ -442,6 +449,11 @@ class _IndividualDetailsPageState
                                 label: localizations.translate(
                                   i18.individualDetails.lastNameLabelText,
                                 ),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(RegExp(
+                                    "[a-zA-Z ]",
+                                  )),
+                                ],
                                 maxLength: 200,
                                 isRequired: true,
                                 validationMessages: {
@@ -502,7 +514,7 @@ class _IndividualDetailsPageState
                                             }
                                           });
                                         },
-                                        isRequired: true,
+                                        isRequired: !widget.isHeadOfHousehold,
                                         validationMessage:
                                             localizations.translate(
                                           i18.common.corecommonRequired,
