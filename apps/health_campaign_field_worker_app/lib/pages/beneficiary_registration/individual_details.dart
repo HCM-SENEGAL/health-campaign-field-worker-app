@@ -433,11 +433,6 @@ class _IndividualDetailsPageState
                                       .translate(i18.common.maxCharsRequired)
                                       .replaceAll('{}', maxLength.toString()),
                                 },
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                    RegExp("^[a-zA-Z]"),
-                                  ),
-                                ],
                               ),
                             ),
                             individualDetailsShowcaseData.lastNameOfIndividual
@@ -465,11 +460,6 @@ class _IndividualDetailsPageState
                                             .lastNameLengthError,
                                       ),
                                 },
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                    RegExp("^[a-zA-Z]"),
-                                  ),
-                                ],
                               ),
                             ),
                             Offstage(
