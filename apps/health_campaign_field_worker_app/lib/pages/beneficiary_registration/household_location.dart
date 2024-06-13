@@ -210,7 +210,7 @@ class _HouseholdLocationPageState
                                   i18.householdLocation
                                       .administrationAreaFormLabel,
                                 ),
-                                readOnly: true,
+                                readOnly: false,
                                 isRequired: true,
                                 validationMessages: {
                                   'required': (_) => localizations.translate(
@@ -220,29 +220,30 @@ class _HouseholdLocationPageState
                                 },
                               ),
                             ),
-                            DigitTextFormField(
-                              formControlName: _accuracyKey,
-                              readOnly: true,
-                              label: localizations.translate(
-                                i18.householdLocation.accuracyFormLabel,
-                              ),
-                            ),
-                            householdLocationShowcaseData.landmark.buildWith(
-                              child: DigitTextFormField(
-                                formControlName: _landmarkKey,
-                                label: localizations.translate(
-                                  i18.householdLocation.landmarkFormLabel,
-                                ),
-                                validationMessages: {
-                                  'required': (_) => localizations.translate(
-                                        i18.common.min2CharsRequired,
-                                      ),
-                                  'maxLength': (object) => localizations
-                                      .translate(i18.common.maxCharsRequired)
-                                      .replaceAll('{}', maxLength.toString()),
-                                },
-                              ),
-                            ),
+                            // solution customisation
+                            // DigitTextFormField(
+                            //   formControlName: _accuracyKey,
+                            //   readOnly: true,
+                            //   label: localizations.translate(
+                            //     i18.householdLocation.accuracyFormLabel,
+                            //   ),
+                            // ),
+                            // householdLocationShowcaseData.landmark.buildWith(
+                            //   child: DigitTextFormField(
+                            //     formControlName: _landmarkKey,
+                            //     label: localizations.translate(
+                            //       i18.householdLocation.landmarkFormLabel,
+                            //     ),
+                            //     validationMessages: {
+                            //       'required': (_) => localizations.translate(
+                            //             i18.common.min2CharsRequired,
+                            //           ),
+                            //       'maxLength': (object) => localizations
+                            //           .translate(i18.common.maxCharsRequired)
+                            //           .replaceAll('{}', maxLength.toString()),
+                            //     },
+                            //   ),
+                            // ),
                           ]),
                         ],
                       ),
