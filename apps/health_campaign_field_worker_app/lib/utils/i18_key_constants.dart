@@ -1204,6 +1204,9 @@ class MemberCard {
   String get unableToDeliverLabel => 'MEMBER_CARD_UNABLE_TO_DELIVER_LABEL';
 
   String get beneficiaryRefusedLabel => 'MEMBER_CARD_BENEFICIARY_REFUSED_LABEL';
+  String get beneficiarySickLabel => 'MEMBER_CARD_BENEFICIARY_SICK_LABEL';
+
+  String get beneficiaryAbsentLabel => 'MEMBER_CARD_BENEFICIARY_ABSENT_LABEL';
 
   String get recordAdverseEventsLabel =>
       'MEMBER_CARD_RECORD_ADVERSE_EVENTS_LABEL';

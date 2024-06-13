@@ -444,46 +444,12 @@ class MemberCard extends StatelessWidget {
                                   ),
                                   DigitOutLineButton(
                                     label: localizations.translate(
-                                      i18.memberCard.referBeneficiaryLabel,
+                                      i18.memberCard.beneficiarySickLabel,
                                     ),
                                     buttonStyle: OutlinedButton.styleFrom(
                                       shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.zero,
                                       ),
-                                      backgroundColor: Colors.white,
-                                      side: BorderSide(
-                                        width: 1.0,
-                                        color: theme.colorScheme.secondary,
-                                      ),
-                                      minimumSize: Size(
-                                        MediaQuery.of(context).size.width /
-                                            1.25,
-                                        50,
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      Navigator.of(
-                                        context,
-                                        rootNavigator: true,
-                                      ).pop();
-                                      await context.router.push(
-                                        ReferBeneficiaryRoute(
-                                          projectBeneficiaryClientRefId:
-                                              projectBeneficiaryClientReferenceId ??
-                                                  '',
-                                          individual: individual,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: kPadding * 2,
-                                  ),
-                                  DigitOutLineButton(
-                                    label: localizations.translate(
-                                      i18.memberCard.markIneligibleLabel,
-                                    ),
-                                    buttonStyle: OutlinedButton.styleFrom(
                                       backgroundColor: Colors.white,
                                       side: BorderSide(
                                         width: 1.0,
@@ -508,21 +474,293 @@ class MemberCard extends StatelessWidget {
                                               context.selectedCycle,
                                             )
                                         ? null
-                                        : () async {
+                                        : () {
                                             Navigator.of(
                                               context,
                                               rootNavigator: true,
                                             ).pop();
-                                            await context.router.push(
-                                              IneligibilityReasonsRoute(
-                                                projectBeneficiaryClientRefId:
-                                                    projectBeneficiaryClientReferenceId ??
-                                                        '',
-                                                individual: individual,
+                                            context
+                                                .read<DeliverInterventionBloc>()
+                                                .add(
+                                                  DeliverInterventionSubmitEvent(
+                                                    TaskModel(
+                                                      projectBeneficiaryClientReferenceId:
+                                                          projectBeneficiaryClientReferenceId,
+                                                      clientReferenceId:
+                                                          IdGen.i.identifier,
+                                                      tenantId: envConfig
+                                                          .variables.tenantId,
+                                                      rowVersion: 1,
+                                                      auditDetails:
+                                                          AuditDetails(
+                                                        createdBy: context
+                                                            .loggedInUserUuid,
+                                                        createdTime: context
+                                                            .millisecondsSinceEpoch(),
+                                                      ),
+                                                      projectId:
+                                                          context.projectId,
+                                                      status: Status
+                                                          .beneficiaryRefused
+                                                          .toValue(),
+                                                      clientAuditDetails:
+                                                          ClientAuditDetails(
+                                                        createdBy: context
+                                                            .loggedInUserUuid,
+                                                        createdTime: context
+                                                            .millisecondsSinceEpoch(),
+                                                        lastModifiedBy: context
+                                                            .loggedInUserUuid,
+                                                        lastModifiedTime: context
+                                                            .millisecondsSinceEpoch(),
+                                                      ),
+                                                      additionalFields:
+                                                          TaskAdditionalFields(
+                                                        version: 1,
+                                                        fields: [
+                                                          AdditionalField(
+                                                            'taskStatus',
+                                                            Status
+                                                                .beneficiaryRefused
+                                                                .toValue(),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      address: individual
+                                                          .address?.first,
+                                                    ),
+                                                    false,
+                                                    context.boundary,
+                                                  ),
+                                                );
+                                            final reloadState = context
+                                                .read<HouseholdOverviewBloc>();
+                                            Future.delayed(
+                                              const Duration(milliseconds: 500),
+                                              () {
+                                                reloadState.add(
+                                                  HouseholdOverviewReloadEvent(
+                                                    projectId:
+                                                        context.projectId,
+                                                    projectBeneficiaryType:
+                                                        context.beneficiaryType,
+                                                  ),
+                                                );
+                                              },
+                                            ).then(
+                                              (value) => context.router.push(
+                                                HouseholdAcknowledgementRoute(
+                                                  enableViewHousehold: true,
+                                                ),
                                               ),
                                             );
                                           },
                                   ),
+
+                                  const SizedBox(
+                                    height: kPadding * 2,
+                                  ),
+                                  DigitOutLineButton(
+                                    label: localizations.translate(
+                                      i18.memberCard.beneficiaryAbsentLabel,
+                                    ),
+                                    buttonStyle: OutlinedButton.styleFrom(
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.zero,
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      side: BorderSide(
+                                        width: 1.0,
+                                        color: theme.colorScheme.secondary,
+                                      ),
+                                      minimumSize: Size(
+                                        MediaQuery.of(context).size.width /
+                                            1.25,
+                                        50,
+                                      ),
+                                    ),
+                                    onPressed: tasks != null &&
+                                            (tasks ?? [])
+                                                .where((element) =>
+                                                    element.status !=
+                                                    Status.beneficiaryRefused
+                                                        .toValue())
+                                                .toList()
+                                                .isNotEmpty &&
+                                            !checkStatus(
+                                              tasks,
+                                              context.selectedCycle,
+                                            )
+                                        ? null
+                                        : () {
+                                            Navigator.of(
+                                              context,
+                                              rootNavigator: true,
+                                            ).pop();
+                                            context
+                                                .read<DeliverInterventionBloc>()
+                                                .add(
+                                                  DeliverInterventionSubmitEvent(
+                                                    TaskModel(
+                                                      projectBeneficiaryClientReferenceId:
+                                                          projectBeneficiaryClientReferenceId,
+                                                      clientReferenceId:
+                                                          IdGen.i.identifier,
+                                                      tenantId: envConfig
+                                                          .variables.tenantId,
+                                                      rowVersion: 1,
+                                                      auditDetails:
+                                                          AuditDetails(
+                                                        createdBy: context
+                                                            .loggedInUserUuid,
+                                                        createdTime: context
+                                                            .millisecondsSinceEpoch(),
+                                                      ),
+                                                      projectId:
+                                                          context.projectId,
+                                                      status: Status
+                                                          .beneficiaryRefused
+                                                          .toValue(),
+                                                      clientAuditDetails:
+                                                          ClientAuditDetails(
+                                                        createdBy: context
+                                                            .loggedInUserUuid,
+                                                        createdTime: context
+                                                            .millisecondsSinceEpoch(),
+                                                        lastModifiedBy: context
+                                                            .loggedInUserUuid,
+                                                        lastModifiedTime: context
+                                                            .millisecondsSinceEpoch(),
+                                                      ),
+                                                      additionalFields:
+                                                          TaskAdditionalFields(
+                                                        version: 1,
+                                                        fields: [
+                                                          AdditionalField(
+                                                            'taskStatus',
+                                                            Status
+                                                                .beneficiaryRefused
+                                                                .toValue(),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      address: individual
+                                                          .address?.first,
+                                                    ),
+                                                    false,
+                                                    context.boundary,
+                                                  ),
+                                                );
+                                            final reloadState = context
+                                                .read<HouseholdOverviewBloc>();
+                                            Future.delayed(
+                                              const Duration(milliseconds: 500),
+                                              () {
+                                                reloadState.add(
+                                                  HouseholdOverviewReloadEvent(
+                                                    projectId:
+                                                        context.projectId,
+                                                    projectBeneficiaryType:
+                                                        context.beneficiaryType,
+                                                  ),
+                                                );
+                                              },
+                                            ).then(
+                                              (value) => context.router.push(
+                                                HouseholdAcknowledgementRoute(
+                                                  enableViewHousehold: true,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                  ),
+
+                                  //solution customisation
+                                  // const SizedBox(
+                                  //   height: kPadding * 2,
+                                  // ),
+                                  // DigitOutLineButton(
+                                  //   label: localizations.translate(
+                                  //     i18.memberCard.referBeneficiaryLabel,
+                                  //   ),
+                                  //   buttonStyle: OutlinedButton.styleFrom(
+                                  //     shape: const RoundedRectangleBorder(
+                                  //       borderRadius: BorderRadius.zero,
+                                  //     ),
+                                  //     backgroundColor: Colors.white,
+                                  //     side: BorderSide(
+                                  //       width: 1.0,
+                                  //       color: theme.colorScheme.secondary,
+                                  //     ),
+                                  //     minimumSize: Size(
+                                  //       MediaQuery.of(context).size.width /
+                                  //           1.25,
+                                  //       50,
+                                  //     ),
+                                  //   ),
+                                  //   onPressed: () async {
+                                  //     Navigator.of(
+                                  //       context,
+                                  //       rootNavigator: true,
+                                  //     ).pop();
+                                  //     await context.router.push(
+                                  //       ReferBeneficiaryRoute(
+                                  //         projectBeneficiaryClientRefId:
+                                  //             projectBeneficiaryClientReferenceId ??
+                                  //                 '',
+                                  //         individual: individual,
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // ),
+                                  //solution customisation
+                                  // const SizedBox(
+                                  //   height: kPadding * 2,
+                                  // ),
+                                  // DigitOutLineButton(
+                                  //   label: localizations.translate(
+                                  //     i18.memberCard.markIneligibleLabel,
+                                  //   ),
+                                  //   buttonStyle: OutlinedButton.styleFrom(
+                                  //     backgroundColor: Colors.white,
+                                  //     side: BorderSide(
+                                  //       width: 1.0,
+                                  //       color: theme.colorScheme.secondary,
+                                  //     ),
+                                  //     minimumSize: Size(
+                                  //       MediaQuery.of(context).size.width /
+                                  //           1.25,
+                                  //       50,
+                                  //     ),
+                                  //   ),
+                                  //   onPressed: tasks != null &&
+                                  //           (tasks ?? [])
+                                  //               .where((element) =>
+                                  //                   element.status !=
+                                  //                   Status.beneficiaryRefused
+                                  //                       .toValue())
+                                  //               .toList()
+                                  //               .isNotEmpty &&
+                                  //           !checkStatus(
+                                  //             tasks,
+                                  //             context.selectedCycle,
+                                  //           )
+                                  //       ? null
+                                  //       : () async {
+                                  //           Navigator.of(
+                                  //             context,
+                                  //             rootNavigator: true,
+                                  //           ).pop();
+                                  //           await context.router.push(
+                                  //             IneligibilityReasonsRoute(
+                                  //               projectBeneficiaryClientRefId:
+                                  //                   projectBeneficiaryClientReferenceId ??
+                                  //                       '',
+                                  //               individual: individual,
+                                  //             ),
+                                  //           );
+                                  //         },
+                                  // ),
                                   // Solution customization
                                   // DigitOutLineButton(
                                   //   label: localizations.translate(
