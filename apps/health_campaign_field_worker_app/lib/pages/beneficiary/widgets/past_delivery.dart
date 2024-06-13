@@ -38,7 +38,7 @@ Widget buildTableContent(
     ),
   ];
 
-    // Calculate the height of the container based on the number of items in the table
+  // Calculate the height of the container based on the number of items in the table
 
   final projectState = context.read<ProjectBloc>().state;
   final item = projectState
@@ -55,7 +55,7 @@ Widget buildTableContent(
       left: kPadding,
       bottom: 0,
       right: kPadding,
-      top:  0,
+      top: 0,
     ),
     // [TODO - need to set the height of the card based on the number of items]
     height: containerHeight,
@@ -65,6 +65,22 @@ Widget buildTableContent(
         // BlocBuilder to get project data based on the current cycle and dose
         final item = projectState.projectType!.cycles![currentCycle - 1]
             .deliveries![currentDose - 1];
+        final productVariants =
+            fetchProductVariant(item, individualModel)!.productVariants ?? [];
+
+        String resource = '';
+
+        if (variant != null && productVariants.isNotEmpty) {
+          final skuList = productVariants.map(
+            (e) => variant
+                .firstWhere(
+                  (element) => element.id == e.productVariantId,
+                )
+                .sku,
+          );
+
+          resource = skuList.join('+');
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,48 +103,25 @@ Widget buildTableContent(
             // Build the DigitTable with the data
             DigitTable(
               headerList: headerListResource,
+              columnRowFixedHeight: 78,
               tableData: [
-                ...fetchProductVariant(item, individualModel)!
-                    .productVariants!
-                    .map(
-                  (e) {
-                    // Retrieve the SKU value for the product variant.
-                    final value = variant!
-                        .firstWhere(
-                          (element) => element.id == e.productVariantId,
-                        )
-                        .sku;
-                    final quantity = e.quantity;
+                TableDataRow([
+                  // Display the dose information in the first column if it's the first row,
+                  // otherwise, display an empty cell.
 
-                    return TableDataRow([
-                      // Display the dose information in the first column if it's the first row,
-                      // otherwise, display an empty cell.
-
-                      fetchProductVariant(item, individualModel)!
-                                  .productVariants
-                                  ?.indexOf(e) ==
-                              0
-                          ? TableData(
-                              '${localizations.translate(i18.beneficiaryDetails.beneficiaryDeliveryText)} ${deliverInterventionState.dose}',
-                              cellKey: 'dose',
-                            )
-                          : TableData(''),
-                      // Display the SKU value in the second column.
-                      TableData(
-                        '$quantity - ${localizations.translate(value.toString())}',
-                        cellKey: 'resources',
-                      ),
-                    ]);
-                  },
-                ),
+                  TableData(
+                    '${localizations.translate(i18.beneficiaryDetails.beneficiaryDeliveryText)} ${deliverInterventionState.dose}',
+                    cellKey: 'dose',
+                  ),
+                  // Display the SKU value in the second column.
+                  TableData(
+                    '${localizations.translate(resource.toString())}${deliverInterventionState.dose == 1 ? '(SP + AQ)' : '(AQ)'}',
+                    cellKey: 'resources',
+                  ),
+                ]),
               ],
-              columnWidth: 140,
-              height: ((fetchProductVariant(item, individualModel)!
-                                  .productVariants ??
-                              [])
-                          .length +
-                      1) *
-                  59.5,
+              columnWidth: 152,
+              height: 150,
             ),
           ],
         );
