@@ -31,6 +31,8 @@ class MemberCard extends StatelessWidget {
   final bool isBeneficiaryRefused;
   final bool isBeneficiaryIneligible;
   final bool isBeneficiaryReferred;
+  final bool isBeneficiarySick;
+  final bool isBeneficiaryAbsent;
   final String? projectBeneficiaryClientReferenceId;
 
   const MemberCard({
@@ -53,6 +55,8 @@ class MemberCard extends StatelessWidget {
     this.isBeneficiaryIneligible = false,
     this.isBeneficiaryReferred = false,
     this.sideEffects,
+    this.isBeneficiarySick = false,
+    this.isBeneficiaryAbsent = false,
   });
 
   @override
@@ -173,6 +177,8 @@ class MemberCard extends StatelessWidget {
                       isNotEligible ||
                       isBeneficiaryRefused ||
                       isBeneficiaryIneligible ||
+                      isBeneficiarySick ||
+                      isBeneficiaryAbsent ||
                       isBeneficiaryReferred
                   ? Align(
                       alignment: Alignment.centerLeft,
@@ -189,8 +195,13 @@ class MemberCard extends StatelessWidget {
                                   : isBeneficiaryRefused
                                       ? Status.beneficiaryRefused.toValue()
                                       // [TODO Need to update the localization]
-                                      : i18.householdOverView
-                                          .householdOverViewNotDeliveredIconLabel,
+                                      : isBeneficiarySick
+                                          ? Status.beneficiarySick.toValue()
+                                          : isBeneficiaryAbsent
+                                              ? Status.beneficiaryAbsent
+                                                  .toValue()
+                                              : i18.householdOverView
+                                                  .householdOverViewNotDeliveredIconLabel,
                         ),
                         iconTextColor: theme.colorScheme.error,
                         iconColor: theme.colorScheme.error,
@@ -465,7 +476,7 @@ class MemberCard extends StatelessWidget {
                                             (tasks ?? [])
                                                 .where((element) =>
                                                     element.status !=
-                                                    Status.beneficiaryRefused
+                                                    Status.beneficiarySick
                                                         .toValue())
                                                 .toList()
                                                 .isNotEmpty &&
@@ -501,7 +512,7 @@ class MemberCard extends StatelessWidget {
                                                       projectId:
                                                           context.projectId,
                                                       status: Status
-                                                          .beneficiaryRefused
+                                                          .beneficiarySick
                                                           .toValue(),
                                                       clientAuditDetails:
                                                           ClientAuditDetails(
@@ -521,7 +532,7 @@ class MemberCard extends StatelessWidget {
                                                           AdditionalField(
                                                             'taskStatus',
                                                             Status
-                                                                .beneficiaryRefused
+                                                                .beneficiarySick
                                                                 .toValue(),
                                                           ),
                                                         ],
@@ -583,7 +594,7 @@ class MemberCard extends StatelessWidget {
                                             (tasks ?? [])
                                                 .where((element) =>
                                                     element.status !=
-                                                    Status.beneficiaryRefused
+                                                    Status.beneficiaryAbsent
                                                         .toValue())
                                                 .toList()
                                                 .isNotEmpty &&
@@ -619,7 +630,7 @@ class MemberCard extends StatelessWidget {
                                                       projectId:
                                                           context.projectId,
                                                       status: Status
-                                                          .beneficiaryRefused
+                                                          .beneficiaryAbsent
                                                           .toValue(),
                                                       clientAuditDetails:
                                                           ClientAuditDetails(
@@ -639,7 +650,7 @@ class MemberCard extends StatelessWidget {
                                                           AdditionalField(
                                                             'taskStatus',
                                                             Status
-                                                                .beneficiaryRefused
+                                                                .beneficiaryAbsent
                                                                 .toValue(),
                                                           ),
                                                         ],

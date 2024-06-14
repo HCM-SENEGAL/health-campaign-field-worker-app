@@ -384,6 +384,26 @@ bool checkIfBeneficiaryRefused(
   return isBeneficiaryRefused;
 }
 
+bool checkIfBeneficiarySick(
+  List<TaskModel>? tasks,
+) {
+  final isBeneficiarySick = (tasks != null &&
+      (tasks ?? []).isNotEmpty &&
+      tasks.last.status == Status.beneficiarySick.toValue());
+
+  return isBeneficiarySick;
+}
+
+bool checkIfBeneficiaryAbsent(
+  List<TaskModel>? tasks,
+) {
+  final isBeneficiaryAbsent = (tasks != null &&
+      (tasks ?? []).isNotEmpty &&
+      tasks.last.status == Status.beneficiaryAbsent.toValue());
+
+  return isBeneficiaryAbsent;
+}
+
 bool checkIfBeneficiaryIneligible(
   List<TaskModel>? tasks,
 ) {

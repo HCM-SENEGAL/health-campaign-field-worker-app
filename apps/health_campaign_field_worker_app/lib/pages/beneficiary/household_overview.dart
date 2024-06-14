@@ -500,6 +500,16 @@ class _HouseholdOverviewPageState
                                               taskdata,
                                             );
 
+                                            final isBeneficiarySick =
+                                                checkIfBeneficiarySick(
+                                              taskdata,
+                                            );
+
+                                            final isBeneficiaryAbsent =
+                                                checkIfBeneficiaryAbsent(
+                                              taskdata,
+                                            );
+
                                             final isBeneficiaryIneligible =
                                                 checkIfBeneficiaryIneligible(
                                               taskdata,
@@ -718,6 +728,18 @@ class _HouseholdOverviewPageState
                                               gender: e.gender?.name,
                                               isBeneficiaryRefused:
                                                   isBeneficiaryRefused &&
+                                                      !checkStatus(
+                                                        taskdata,
+                                                        currentCycle,
+                                                      ),
+                                              isBeneficiarySick:
+                                                  isBeneficiarySick &&
+                                                      !checkStatus(
+                                                        taskdata,
+                                                        currentCycle,
+                                                      ),
+                                              isBeneficiaryAbsent:
+                                                  isBeneficiaryAbsent &&
                                                       !checkStatus(
                                                         taskdata,
                                                         currentCycle,
