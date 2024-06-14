@@ -81,33 +81,44 @@ class _ResourceBeneficiaryCardState
           ),
           DigitIntegerFormPicker(
             incrementer: true,
-            decimal: true,
+            formControlName: 'quantityUtilised.${widget.cardIndex}',
+            form: widget.form,
+            label: localizations.translate(
+              i18.deliverIntervention.quantityUtilisedLabel,
+            ),
+            minimum: 1,
+            maximum: 2,
+          ),
+          DigitIntegerFormPicker(
+            incrementer: true,
             formControlName: 'quantityDistributed.${widget.cardIndex}',
             form: widget.form,
             label: localizations.translate(
               i18.deliverIntervention.quantityDistributedLabel,
             ),
             minimum: 0,
+            maximum: 1,
           ),
-          DigitTextFormField(
-            formControlName: 'quantityWasted.${widget.cardIndex}',
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                RegExp(r'^\d*\.?(0|5)?$'),
-              ),
-            ],
-            label: localizations.translate(
-              i18.deliverIntervention.quantityWastedLabel,
-            ),
-            validationMessages: {
-              "required": (control) {
-                return localizations.translate(
-                  i18.common.corecommonRequired,
-                );
-              },
-            },
-          ),
+
+          // DigitTextFormField(
+          //   formControlName: 'quantityWasted.${widget.cardIndex}',
+          //   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          //   inputFormatters: [
+          //     FilteringTextInputFormatter.allow(
+          //       RegExp(r'^\d*\.?(0|5)?$'),
+          //     ),
+          //   ],
+          //   label: localizations.translate(
+          //     i18.deliverIntervention.quantityWastedLabel,
+          //   ),
+          //   validationMessages: {
+          //     "required": (control) {
+          //       return localizations.translate(
+          //         i18.common.corecommonRequired,
+          //       );
+          //     },
+          //   },
+          // ),
 
           // Solution customization
           // SizedBox(
