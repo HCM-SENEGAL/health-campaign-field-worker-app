@@ -287,7 +287,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                   status: context.beneficiaryType == BeneficiaryType.individual
                       ? null
                       : (householdMember.tasks ?? []).isNotEmpty
-                          ? Status.visited.toValue()
+                          ? Status.administered.toValue()
                           : Status.notVisited.toValue(),
                   title: [
                     householdMember.headOfHousehold.name?.givenName,
@@ -361,7 +361,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
       } else if (statusKeys.isStatusReset) {
         return localizations.translate(Status.notVisited.toValue());
       } else {
-        return localizations.translate(Status.visited.toValue());
+        return localizations.translate(Status.administered.toValue());
       }
     } else {
       return localizations.translate(Status.notVisited.toValue());
