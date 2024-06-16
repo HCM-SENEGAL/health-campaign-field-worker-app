@@ -2261,6 +2261,7 @@ class SideEffectsRoute extends PageRouteInfo<SideEffectsRouteArgs> {
     required List<TaskModel> tasks,
     bool isEditing = false,
     bool fromSurvey = false,
+    bool fromRecordDelivery = false,
   }) : super(
           SideEffectsRoute.name,
           path: 'side-effects',

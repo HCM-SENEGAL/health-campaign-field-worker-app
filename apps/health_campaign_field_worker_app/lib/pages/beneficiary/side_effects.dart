@@ -22,6 +22,7 @@ class SideEffectsPage extends LocalizedStatefulWidget {
   final bool isEditing;
   final List<TaskModel> tasks;
   final bool fromSurvey;
+  final bool recordDelivery;
 
   const SideEffectsPage({
     super.key,
@@ -29,6 +30,7 @@ class SideEffectsPage extends LocalizedStatefulWidget {
     required this.tasks,
     this.isEditing = false,
     this.fromSurvey = false,
+    this.recordDelivery = false,
   });
 
   @override
@@ -207,6 +209,11 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                             context,
                                                             rootNavigator: true,
                                                           ).pop(true);
+
+                                                          if (widget
+                                                              .recordDelivery) {
+                                                            // todo flow of naigation to record delivery screen here
+                                                          }
                                                         }
                                                       },
                                                     ),

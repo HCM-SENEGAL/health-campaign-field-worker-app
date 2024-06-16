@@ -263,6 +263,41 @@ class MemberCard extends StatelessWidget {
                                           if (!interventionSubmitted) {
                                             interventionSubmitted = true;
                                             Navigator.pop(ctx);
+                                            final bloc = context
+                                                .read<HouseholdOverviewBloc>();
+
+                                            bloc.add(
+                                              HouseholdOverviewEvent
+                                                  .selectedIndividual(
+                                                individualModel: individual,
+                                              ),
+                                            );
+                                            bloc.add(
+                                              HouseholdOverviewReloadEvent(
+                                                projectId: context.projectId,
+                                                projectBeneficiaryType:
+                                                    context.beneficiaryType,
+                                              ),
+                                            );
+
+                                            final futureTaskList = tasks
+                                                ?.where((task) =>
+                                                    task.status ==
+                                                    Status.delivered.toValue())
+                                                .toList();
+
+                                            if ((futureTaskList ?? [])
+                                                .isNotEmpty) {
+                                              context.router.push(
+                                                RecordPastDeliveryDetailsRoute(
+                                                  tasks: tasks,
+                                                ),
+                                              );
+                                            } else {
+                                              context.router.push(
+                                                BeneficiaryDetailsRoute(),
+                                              );
+                                            }
                                           }
                                         },
                                       ),
@@ -320,36 +355,37 @@ class MemberCard extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                                }
-                                final bloc =
-                                    context.read<HouseholdOverviewBloc>();
+                                } else {
+                                  final bloc =
+                                      context.read<HouseholdOverviewBloc>();
 
-                                bloc.add(
-                                  HouseholdOverviewEvent.selectedIndividual(
-                                    individualModel: individual,
-                                  ),
-                                );
-                                bloc.add(HouseholdOverviewReloadEvent(
-                                  projectId: context.projectId,
-                                  projectBeneficiaryType:
-                                      context.beneficiaryType,
-                                ));
-
-                                final futureTaskList = tasks
-                                    ?.where((task) =>
-                                        task.status ==
-                                        Status.delivered.toValue())
-                                    .toList();
-
-                                if ((futureTaskList ?? []).isNotEmpty) {
-                                  context.router.push(
-                                    RecordPastDeliveryDetailsRoute(
-                                      tasks: tasks,
+                                  bloc.add(
+                                    HouseholdOverviewEvent.selectedIndividual(
+                                      individualModel: individual,
                                     ),
                                   );
-                                } else {
-                                  context.router
-                                      .push(BeneficiaryDetailsRoute());
+                                  bloc.add(HouseholdOverviewReloadEvent(
+                                    projectId: context.projectId,
+                                    projectBeneficiaryType:
+                                        context.beneficiaryType,
+                                  ));
+
+                                  final futureTaskList = tasks
+                                      ?.where((task) =>
+                                          task.status ==
+                                          Status.delivered.toValue())
+                                      .toList();
+
+                                  if ((futureTaskList ?? []).isNotEmpty) {
+                                    context.router.push(
+                                      RecordPastDeliveryDetailsRoute(
+                                        tasks: tasks,
+                                      ),
+                                    );
+                                  } else {
+                                    context.router
+                                        .push(BeneficiaryDetailsRoute());
+                                  }
                                 }
                               },
                               child: Center(
