@@ -262,6 +262,7 @@ class MemberCard extends StatelessWidget {
                                         action: (ctx) {
                                           if (!interventionSubmitted) {
                                             interventionSubmitted = true;
+                                            Navigator.pop(ctx);
                                           }
                                         },
                                       ),
