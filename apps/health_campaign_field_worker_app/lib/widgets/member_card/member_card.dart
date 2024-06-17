@@ -64,6 +64,9 @@ class MemberCard extends StatelessWidget {
     final theme = Theme.of(context);
     final beneficiaryType = context.beneficiaryType;
 
+    bool interventionSubmitted = false;
+    final router = context.router;
+
     return Container(
       decoration: BoxDecoration(
         color: DigitTheme.instance.colorScheme.background,
@@ -244,35 +247,121 @@ class MemberCard extends StatelessWidget {
                               //   right: kPadding / 2,
                               // ),
                               onPressed: () {
-                                final bloc =
-                                    context.read<HouseholdOverviewBloc>();
+                                if (getDoseIndex(
+                                      tasks,
+                                      context.selectedCycle,
+                                    ) !=
+                                    0) {
+                                  DigitDialog.show<bool>(
+                                    context,
+                                    options: DigitDialogOptions(
+                                      titleText: localizations.translate(i18
+                                          .deliverIntervention
+                                          .didYouObservePreviousAdvEventsTitle),
+                                      barrierDismissible: false,
+                                      enableRecordPast: true,
+                                      dialogPadding: const EdgeInsets.fromLTRB(
+                                        kPadding,
+                                        kPadding,
+                                        kPadding,
+                                        0,
+                                      ),
+                                      primaryAction: DigitDialogActions(
+                                        label: localizations.translate(
+                                          i18.common.coreCommonNo,
+                                        ),
+                                        action: (ctx) {
+                                          if (!interventionSubmitted) {
+                                            interventionSubmitted = true;
+                                            Navigator.pop(ctx);
+                                          }
+                                        },
+                                      ),
+                                      secondaryAction: DigitDialogActions(
+                                        label: localizations.translate(
+                                          i18.common.coreCommonYes,
+                                        ),
+                                        action: (ctx) async {
+                                          if (!interventionSubmitted) {
+                                            interventionSubmitted = true;
 
-                                bloc.add(
-                                  HouseholdOverviewEvent.selectedIndividual(
-                                    individualModel: individual,
-                                  ),
-                                );
-                                bloc.add(HouseholdOverviewReloadEvent(
-                                  projectId: context.projectId,
-                                  projectBeneficiaryType:
-                                      context.beneficiaryType,
-                                ));
+                                            Navigator.pop(
+                                              ctx,
+                                            );
+                                            final reloadState = context
+                                                .read<HouseholdOverviewBloc>();
+                                            final response = await router.push(
+                                              SideEffectsRoute(
+                                                tasks: [
+                                                  (tasks)!.last,
+                                                ],
+                                                fromSurvey: true,
+                                              ),
+                                            );
 
-                                final futureTaskList = tasks
-                                    ?.where((task) =>
-                                        task.status ==
-                                        Status.delivered.toValue())
-                                    .toList();
-
-                                if ((futureTaskList ?? []).isNotEmpty) {
-                                  context.router.push(
-                                    RecordPastDeliveryDetailsRoute(
-                                      tasks: tasks,
+                                            if (response == null) {
+                                              Future.delayed(
+                                                const Duration(
+                                                  milliseconds: 1000,
+                                                ),
+                                                () {
+                                                  reloadState.add(
+                                                    HouseholdOverviewReloadEvent(
+                                                      projectId:
+                                                          context.projectId,
+                                                      projectBeneficiaryType:
+                                                          context
+                                                              .beneficiaryType,
+                                                    ),
+                                                  );
+                                                },
+                                              ).then(
+                                                (value) {
+                                                  context.router.popAndPush(
+                                                    HouseholdAcknowledgementRoute(
+                                                      enableViewHousehold: true,
+                                                    ),
+                                                  );
+                                                  Navigator.pop(ctx);
+                                                },
+                                              );
+                                            }
+                                          }
+                                        },
+                                      ),
                                     ),
                                   );
                                 } else {
-                                  context.router
-                                      .push(BeneficiaryDetailsRoute());
+                                  final bloc =
+                                      context.read<HouseholdOverviewBloc>();
+
+                                  bloc.add(
+                                    HouseholdOverviewEvent.selectedIndividual(
+                                      individualModel: individual,
+                                    ),
+                                  );
+                                  bloc.add(HouseholdOverviewReloadEvent(
+                                    projectId: context.projectId,
+                                    projectBeneficiaryType:
+                                        context.beneficiaryType,
+                                  ));
+
+                                  final futureTaskList = tasks
+                                      ?.where((task) =>
+                                          task.status ==
+                                          Status.delivered.toValue())
+                                      .toList();
+
+                                  if ((futureTaskList ?? []).isNotEmpty) {
+                                    context.router.push(
+                                      RecordPastDeliveryDetailsRoute(
+                                        tasks: tasks,
+                                      ),
+                                    );
+                                  } else {
+                                    context.router
+                                        .push(BeneficiaryDetailsRoute());
+                                  }
                                 }
                               },
                               child: Center(
