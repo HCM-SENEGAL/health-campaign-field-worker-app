@@ -288,7 +288,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                       ? null
                       : (householdMember.tasks ?? []).isNotEmpty
                           ? Status.administered.toValue()
-                          : Status.notVisited.toValue(),
+                          : Status.notAdministered.toValue(),
                   title: [
                     householdMember.headOfHousehold.name?.givenName,
                     householdMember.headOfHousehold.name?.familyName,
@@ -355,11 +355,11 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
       return localizations.translate(Status.beneficiaryReferred.toValue());
     } else if (taskData != null) {
       if (taskData.isEmpty) {
-        return localizations.translate(Status.notVisited.toValue());
+        return localizations.translate(Status.notAdministered.toValue());
       } else if (statusKeys.isBeneficiaryRefused && !statusKeys.isStatusReset) {
         return localizations.translate(Status.beneficiaryRefused.toValue());
       } else if (statusKeys.isStatusReset) {
-        return localizations.translate(Status.notVisited.toValue());
+        return localizations.translate(Status.notAdministered.toValue());
       } else if (taskData.last.additionalFields != null &&
           taskData.last.additionalFields!.fields
               .where((element) => element.key == "deliveryComment")
@@ -372,7 +372,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
         return localizations.translate(Status.administered.toValue());
       }
     } else {
-      return localizations.translate(Status.notVisited.toValue());
+      return localizations.translate(Status.notAdministered.toValue());
     }
   }
 

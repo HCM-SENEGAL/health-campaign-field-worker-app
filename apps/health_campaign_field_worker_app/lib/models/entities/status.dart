@@ -29,5 +29,7 @@ enum Status {
   beneficiaryIneligible,
   @MappableValue("ADMINISTERED")
   administered,
+    @MappableValue("NOT_ADMINISTERED")
+  notAdministered,
   ;
 }
