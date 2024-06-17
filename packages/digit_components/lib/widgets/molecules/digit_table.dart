@@ -125,7 +125,7 @@ class DigitTable extends StatelessWidget {
                   child: Text(
                     (input),
                     style: style,
-                    maxLines: 2,
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                 )
