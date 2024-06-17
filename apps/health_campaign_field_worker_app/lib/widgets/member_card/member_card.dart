@@ -263,41 +263,6 @@ class MemberCard extends StatelessWidget {
                                           if (!interventionSubmitted) {
                                             interventionSubmitted = true;
                                             Navigator.pop(ctx);
-                                            final bloc = context
-                                                .read<HouseholdOverviewBloc>();
-
-                                            bloc.add(
-                                              HouseholdOverviewEvent
-                                                  .selectedIndividual(
-                                                individualModel: individual,
-                                              ),
-                                            );
-                                            bloc.add(
-                                              HouseholdOverviewReloadEvent(
-                                                projectId: context.projectId,
-                                                projectBeneficiaryType:
-                                                    context.beneficiaryType,
-                                              ),
-                                            );
-
-                                            final futureTaskList = tasks
-                                                ?.where((task) =>
-                                                    task.status ==
-                                                    Status.delivered.toValue())
-                                                .toList();
-
-                                            if ((futureTaskList ?? [])
-                                                .isNotEmpty) {
-                                              context.router.push(
-                                                RecordPastDeliveryDetailsRoute(
-                                                  tasks: tasks,
-                                                ),
-                                              );
-                                            } else {
-                                              context.router.push(
-                                                BeneficiaryDetailsRoute(),
-                                              );
-                                            }
                                           }
                                         },
                                       ),
