@@ -210,7 +210,7 @@ class _HouseholdLocationPageState
                                   i18.householdLocation
                                       .administrationAreaFormLabel,
                                 ),
-                                readOnly: false,
+                                readOnly: true,
                                 isRequired: true,
                                 validationMessages: {
                                   'required': (_) => localizations.translate(
