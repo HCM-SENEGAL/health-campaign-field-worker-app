@@ -64,7 +64,6 @@ class MemberCard extends StatelessWidget {
     final theme = Theme.of(context);
     final beneficiaryType = context.beneficiaryType;
 
-    bool interventionSubmitted = false;
     final router = context.router;
     const deliveryCommentKey = 'deliveryComment';
     var deliveryComment = "";
@@ -277,10 +276,7 @@ class MemberCard extends StatelessWidget {
                                           i18.common.coreCommonNo,
                                         ),
                                         action: (ctx) {
-                                          if (!interventionSubmitted) {
-                                            interventionSubmitted = true;
-                                            Navigator.pop(ctx);
-                                          }
+                                          Navigator.pop(ctx);
                                         },
                                       ),
                                       secondaryAction: DigitDialogActions(
@@ -288,50 +284,45 @@ class MemberCard extends StatelessWidget {
                                           i18.common.coreCommonYes,
                                         ),
                                         action: (ctx) async {
-                                          if (!interventionSubmitted) {
-                                            interventionSubmitted = true;
+                                          Navigator.pop(
+                                            ctx,
+                                          );
+                                          final reloadState = context
+                                              .read<HouseholdOverviewBloc>();
+                                          final response = await router.push(
+                                            SideEffectsRoute(
+                                              tasks: [
+                                                (tasks)!.last,
+                                              ],
+                                              fromSurvey: true,
+                                            ),
+                                          );
 
-                                            Navigator.pop(
-                                              ctx,
-                                            );
-                                            final reloadState = context
-                                                .read<HouseholdOverviewBloc>();
-                                            final response = await router.push(
-                                              SideEffectsRoute(
-                                                tasks: [
-                                                  (tasks)!.last,
-                                                ],
-                                                fromSurvey: true,
+                                          if (response == null) {
+                                            Future.delayed(
+                                              const Duration(
+                                                milliseconds: 1000,
                                               ),
+                                              () {
+                                                reloadState.add(
+                                                  HouseholdOverviewReloadEvent(
+                                                    projectId:
+                                                        context.projectId,
+                                                    projectBeneficiaryType:
+                                                        context.beneficiaryType,
+                                                  ),
+                                                );
+                                              },
+                                            ).then(
+                                              (value) {
+                                                context.router.popAndPush(
+                                                  HouseholdAcknowledgementRoute(
+                                                    enableViewHousehold: true,
+                                                  ),
+                                                );
+                                                Navigator.pop(ctx);
+                                              },
                                             );
-
-                                            if (response == null) {
-                                              Future.delayed(
-                                                const Duration(
-                                                  milliseconds: 1000,
-                                                ),
-                                                () {
-                                                  reloadState.add(
-                                                    HouseholdOverviewReloadEvent(
-                                                      projectId:
-                                                          context.projectId,
-                                                      projectBeneficiaryType:
-                                                          context
-                                                              .beneficiaryType,
-                                                    ),
-                                                  );
-                                                },
-                                              ).then(
-                                                (value) {
-                                                  context.router.popAndPush(
-                                                    HouseholdAcknowledgementRoute(
-                                                      enableViewHousehold: true,
-                                                    ),
-                                                  );
-                                                  Navigator.pop(ctx);
-                                                },
-                                              );
-                                            }
                                           }
                                         },
                                       ),
