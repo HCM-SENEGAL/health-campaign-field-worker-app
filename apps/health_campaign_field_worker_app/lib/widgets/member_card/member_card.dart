@@ -66,6 +66,10 @@ class MemberCard extends StatelessWidget {
 
     bool interventionSubmitted = false;
     final router = context.router;
+    const deliveryCommentKey = 'deliveryComment';
+    var deliveryComment = "";
+
+    getDeliveryComment(tasks, deliveryCommentKey, deliveryComment);
 
     return Container(
       decoration: BoxDecoration(
@@ -189,22 +193,24 @@ class MemberCard extends StatelessWidget {
                         icon: Icons.info_rounded,
                         iconSize: 20,
                         iconText: localizations.translate(
-                          (isNotEligible || isBeneficiaryIneligible)
-                              ? i18.householdOverView
-                                  .householdOverViewNotEligibleIconLabel
-                              : isBeneficiaryReferred
+                          deliveryComment.isNotEmpty
+                              ? deliveryComment
+                              : (isNotEligible || isBeneficiaryIneligible)
                                   ? i18.householdOverView
-                                      .householdOverViewBeneficiaryReferredLabel
-                                  : isBeneficiaryRefused
-                                      ? Status.beneficiaryRefused.toValue()
-                                      // [TODO Need to update the localization]
-                                      : isBeneficiarySick
-                                          ? Status.beneficiarySick.toValue()
-                                          : isBeneficiaryAbsent
-                                              ? Status.beneficiaryAbsent
-                                                  .toValue()
-                                              : i18.householdOverView
-                                                  .householdOverViewNotDeliveredIconLabel,
+                                      .householdOverViewNotEligibleIconLabel
+                                  : isBeneficiaryReferred
+                                      ? i18.householdOverView
+                                          .householdOverViewBeneficiaryReferredLabel
+                                      : isBeneficiaryRefused
+                                          ? Status.beneficiaryRefused.toValue()
+                                          // [TODO Need to update the localization]
+                                          : isBeneficiarySick
+                                              ? Status.beneficiarySick.toValue()
+                                              : isBeneficiaryAbsent
+                                                  ? Status.beneficiaryAbsent
+                                                      .toValue()
+                                                  : i18.householdOverView
+                                                      .householdOverViewNotDeliveredIconLabel,
                         ),
                         iconTextColor: theme.colorScheme.error,
                         iconColor: theme.colorScheme.error,
@@ -911,5 +917,25 @@ class MemberCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void getDeliveryComment(
+    List<TaskModel>? tasks,
+    String deliveryCommentKey,
+    String deliveryComment,
+  ) {
+    if (tasks == null || tasks.isEmpty) {
+      return;
+    }
+
+    deliveryComment = tasks.last.additionalFields == null ||
+            tasks.last.additionalFields!.fields
+                .where((element) => element.key == deliveryCommentKey)
+                .isEmpty
+        ? deliveryComment
+        : tasks.last.additionalFields!.fields
+            .where((element) => element.key == deliveryCommentKey)
+            .first
+            .value;
   }
 }
