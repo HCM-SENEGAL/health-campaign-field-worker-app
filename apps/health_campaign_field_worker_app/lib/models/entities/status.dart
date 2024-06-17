@@ -27,9 +27,13 @@ enum Status {
   toAdminister,
   @MappableValue("BENEFICIARY_INELIGIBLE")
   beneficiaryIneligible,
+  @MappableValue("BENEFICIARY_SICK")
+  beneficiarySick,
+  @MappableValue("BENEFICIARY_ABSENT")
+  beneficiaryAbsent,
   @MappableValue("ADMINISTERED")
   administered,
-    @MappableValue("NOT_ADMINISTERED")
+  @MappableValue("NOT_ADMINISTERED")
   notAdministered,
   ;
 }

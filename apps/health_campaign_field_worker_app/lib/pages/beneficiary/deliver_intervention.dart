@@ -336,56 +336,6 @@ class _DeliverInterventionPageState
                                                                           long,
                                                                     ),
                                                                   );
-                                                                  if (!interventionSubmitted) {
-                                                                    interventionSubmitted =
-                                                                        true;
-                                                                    context
-                                                                        .read<
-                                                                            DeliverInterventionBloc>()
-                                                                        .add(
-                                                                          DeliverInterventionSubmitEvent(
-                                                                            taskData.first,
-                                                                            false,
-                                                                            context.boundary,
-                                                                          ),
-                                                                        );
-                                                                    final reloadState =
-                                                                        context.read<
-                                                                            HouseholdOverviewBloc>();
-                                                                    Future
-                                                                        .delayed(
-                                                                      const Duration(
-                                                                        milliseconds:
-                                                                            1000,
-                                                                      ),
-                                                                      () {
-                                                                        reloadState
-                                                                            .add(
-                                                                          HouseholdOverviewReloadEvent(
-                                                                            projectId:
-                                                                                context.projectId,
-                                                                            projectBeneficiaryType:
-                                                                                context.beneficiaryType,
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    ).then(
-                                                                      (value) {
-                                                                        context
-                                                                            .router
-                                                                            .popAndPush(
-                                                                          HouseholdAcknowledgementRoute(
-                                                                            enableViewHousehold:
-                                                                                true,
-                                                                          ),
-                                                                        );
-                                                                        Navigator
-                                                                            .pop(
-                                                                          context,
-                                                                        );
-                                                                      },
-                                                                    );
-                                                                  }
                                                                 }
                                                               }
                                                             }
