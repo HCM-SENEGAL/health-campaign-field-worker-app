@@ -1236,6 +1236,9 @@ class DeliverIntervention {
   String get quantityDistributedLabel =>
       'DELIVER_INTERVENTION_QUANTITY_DISTRIBUTED_LABEL';
 
+  String get quantityUtilisedLabel =>
+      'DELIVER_INTERVENTION_QUANTITY_UTILISED_LABEL';
+
   String get quantityWastedLabel =>
       'DELIVER_INTERVENTION_QUANTITY_WASTED_LABEL';
 

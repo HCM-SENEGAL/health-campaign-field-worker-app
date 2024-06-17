@@ -42,7 +42,7 @@ class _DeliverInterventionPageState
   // Constants for form control keys
   static const _resourceDeliveredKey = 'resourceDelivered';
   static const _quantityDistributedKey = 'quantityDistributed';
-  static const _quantityWastedKey = 'quantityWasted';
+  static const _quantityUtilisedKey = 'quantityUtilised';
   static const _deliveryCommentKey = 'deliveryComment';
   static const _doseAdministrationKey = 'doseAdministered';
   static const _dateOfAdministrationKey = 'dateOfAdministration';
@@ -76,45 +76,6 @@ class _DeliverInterventionPageState
         );
       });
     }
-
-    bool isCommentMandatory(
-      bool isCommentRequired,
-      List<ProductVariantsModel>? productVariants,
-      FormGroup form,
-      Map<String?, List<double?>> idVsSuggestedAndDistributedQuantity,
-    ) {
-      final resourcesDelivered =
-          (form.control(_resourceDeliveredKey) as FormArray).value;
-      final quantityDistributed =
-          (form.control(_quantityDistributedKey) as FormArray).value;
-      if (productVariants != null) {
-        for (var element in productVariants) {
-          var indexOfResource = -1;
-          for (int i = 0; i < resourcesDelivered!.length; i++) {
-            if (resourcesDelivered[i].id == element.productVariantId) {
-              indexOfResource = i;
-              break;
-            }
-          }
-          if (indexOfResource >= 0) {
-            List<double?> suggestedAndDistributed = [];
-            suggestedAndDistributed.add(element.quantity);
-            suggestedAndDistributed.add(quantityDistributed![indexOfResource]);
-            idVsSuggestedAndDistributedQuantity[element.productVariantId] =
-                suggestedAndDistributed;
-          }
-        }
-      }
-      for (var quantities in idVsSuggestedAndDistributedQuantity.values) {
-        if (quantities.length >= 2 && quantities[0] != quantities[1]) {
-          isCommentRequired = true;
-        }
-      }
-
-      return isCommentRequired;
-    }
-
-    ;
 
     return BlocBuilder<LocationBloc, LocationState>(
       builder: (context, locationState) {
@@ -244,32 +205,12 @@ class _DeliverInterventionPageState
                                                                   theme,
                                                                 ),
                                                               );
-                                                            } else if ((((form
-                                                                            .control(
-                                                                      _quantityDistributedKey,
-                                                                    ) as FormArray)
-                                                                        .value) ??
-                                                                    [])
-                                                                .any((e) => e == 0)) {
-                                                              await DigitToast
-                                                                  .show(
-                                                                context,
-                                                                options:
-                                                                    DigitToastOptions(
-                                                                  localizations
-                                                                      .translate(i18
-                                                                          .deliverIntervention
-                                                                          .resourceCannotBeZero),
-                                                                  true,
-                                                                  theme,
-                                                                ),
-                                                              );
-                                                            } else if (isCommentMandatory(
-                                                                  isCommentRequired,
-                                                                  productVariants,
-                                                                  form,
-                                                                  idVsSuggestedAndDistributedQuantity,
-                                                                ) &&
+                                                            } else if ((((form.control(
+                                                                          _quantityDistributedKey,
+                                                                        ) as FormArray)
+                                                                            .value) ??
+                                                                        [])
+                                                                    .any((e) => e == 0) &&
                                                                 (form
                                                                             .control(
                                                                               _deliveryCommentKey,
@@ -395,137 +336,56 @@ class _DeliverInterventionPageState
                                                                           long,
                                                                     ),
                                                                   );
-                                                                  DigitDialog
-                                                                      .show<
-                                                                          bool>(
-                                                                    context,
-                                                                    options:
-                                                                        DigitDialogOptions(
-                                                                      titleText: localizations.translate(i18
-                                                                          .deliverIntervention
-                                                                          .didYouObservePreviousAdvEventsTitle),
-                                                                      barrierDismissible:
-                                                                          false,
-                                                                      enableRecordPast:
-                                                                          true,
-                                                                      dialogPadding:
-                                                                          const EdgeInsets
-                                                                              .fromLTRB(
-                                                                        kPadding,
-                                                                        kPadding,
-                                                                        kPadding,
-                                                                        0,
+                                                                  if (!interventionSubmitted) {
+                                                                    interventionSubmitted =
+                                                                        true;
+                                                                    context
+                                                                        .read<
+                                                                            DeliverInterventionBloc>()
+                                                                        .add(
+                                                                          DeliverInterventionSubmitEvent(
+                                                                            taskData.first,
+                                                                            false,
+                                                                            context.boundary,
+                                                                          ),
+                                                                        );
+                                                                    final reloadState =
+                                                                        context.read<
+                                                                            HouseholdOverviewBloc>();
+                                                                    Future
+                                                                        .delayed(
+                                                                      const Duration(
+                                                                        milliseconds:
+                                                                            1000,
                                                                       ),
-                                                                      primaryAction:
-                                                                          DigitDialogActions(
-                                                                        label: localizations
-                                                                            .translate(
-                                                                          i18.common
-                                                                              .coreCommonNo,
-                                                                        ),
-                                                                        action:
-                                                                            (ctx) {
-                                                                          if (!interventionSubmitted) {
-                                                                            interventionSubmitted =
-                                                                                true;
-                                                                            context.read<DeliverInterventionBloc>().add(
-                                                                                  DeliverInterventionSubmitEvent(
-                                                                                    taskData.first,
-                                                                                    false,
-                                                                                    context.boundary,
-                                                                                  ),
-                                                                                );
-                                                                            final reloadState =
-                                                                                context.read<HouseholdOverviewBloc>();
-                                                                            Future.delayed(
-                                                                              const Duration(
-                                                                                milliseconds: 1000,
-                                                                              ),
-                                                                              () {
-                                                                                reloadState.add(
-                                                                                  HouseholdOverviewReloadEvent(
-                                                                                    projectId: context.projectId,
-                                                                                    projectBeneficiaryType: context.beneficiaryType,
-                                                                                  ),
-                                                                                );
-                                                                              },
-                                                                            ).then(
-                                                                              (value) {
-                                                                                context.router.popAndPush(
-                                                                                  HouseholdAcknowledgementRoute(
-                                                                                    enableViewHousehold: true,
-                                                                                  ),
-                                                                                );
-                                                                                Navigator.pop(ctx);
-                                                                              },
-                                                                            );
-                                                                          }
-                                                                        },
-                                                                      ),
-                                                                      secondaryAction:
-                                                                          DigitDialogActions(
-                                                                        label: localizations
-                                                                            .translate(
-                                                                          i18.common
-                                                                              .coreCommonYes,
-                                                                        ),
-                                                                        action:
-                                                                            (ctx) async {
-                                                                          if (!interventionSubmitted) {
-                                                                            interventionSubmitted =
-                                                                                true;
-                                                                            context.read<DeliverInterventionBloc>().add(
-                                                                                  DeliverInterventionSubmitEvent(
-                                                                                    taskData.first,
-                                                                                    false,
-                                                                                    context.boundary,
-                                                                                  ),
-                                                                                );
-                                                                            Navigator.pop(
-                                                                              ctx,
-                                                                            );
-                                                                            final reloadState =
-                                                                                context.read<HouseholdOverviewBloc>();
-                                                                            final response =
-                                                                                await router.push(
-                                                                              SideEffectsRoute(
-                                                                                tasks: [
-                                                                                  (taskData).last,
-                                                                                ],
-                                                                                fromSurvey: true,
-                                                                              ),
-                                                                            );
-
-                                                                            if (response ==
-                                                                                null) {
-                                                                              Future.delayed(
-                                                                                const Duration(
-                                                                                  milliseconds: 1000,
-                                                                                ),
-                                                                                () {
-                                                                                  reloadState.add(
-                                                                                    HouseholdOverviewReloadEvent(
-                                                                                      projectId: context.projectId,
-                                                                                      projectBeneficiaryType: context.beneficiaryType,
-                                                                                    ),
-                                                                                  );
-                                                                                },
-                                                                              ).then(
-                                                                                (value) {
-                                                                                  context.router.popAndPush(
-                                                                                    HouseholdAcknowledgementRoute(
-                                                                                      enableViewHousehold: true,
-                                                                                    ),
-                                                                                  );
-                                                                                  Navigator.pop(ctx);
-                                                                                },
-                                                                              );
-                                                                            }
-                                                                          }
-                                                                        },
-                                                                      ),
-                                                                    ),
-                                                                  );
+                                                                      () {
+                                                                        reloadState
+                                                                            .add(
+                                                                          HouseholdOverviewReloadEvent(
+                                                                            projectId:
+                                                                                context.projectId,
+                                                                            projectBeneficiaryType:
+                                                                                context.beneficiaryType,
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    ).then(
+                                                                      (value) {
+                                                                        context
+                                                                            .router
+                                                                            .popAndPush(
+                                                                          HouseholdAcknowledgementRoute(
+                                                                            enableViewHousehold:
+                                                                                true,
+                                                                          ),
+                                                                        );
+                                                                        Navigator
+                                                                            .pop(
+                                                                          context,
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  }
                                                                 }
                                                               }
                                                             }
@@ -784,7 +644,7 @@ class _DeliverInterventionPageState
         .add(FormControl<ProductVariantModel>());
     (form.control(_quantityDistributedKey) as FormArray)
         .add(FormControl<String>(validators: [Validators.required]));
-    (form.control(_quantityWastedKey) as FormArray)
+    (form.control(_quantityUtilisedKey) as FormArray)
         .add(FormControl<String>(validators: [Validators.required]));
   }
 
@@ -850,8 +710,8 @@ class _DeliverInterventionPageState
                 additionalFields:
                     TaskResourceAdditionalFields(version: 1, fields: [
                   AdditionalField(
-                    _quantityWastedKey,
-                    (((form.control(_quantityWastedKey) as FormArray)
+                    _quantityUtilisedKey,
+                    (((form.control(_quantityUtilisedKey) as FormArray)
                             .value)?[productvariantList.indexOf(e)])
                         .toString(),
                   ),
@@ -956,15 +816,14 @@ class _DeliverInterventionPageState
               )),
         ],
       ),
-      _quantityDistributedKey: FormArray<double>([
+      _quantityDistributedKey: FormArray<int>([
         ..._controllers.map(
-          (e) =>
-              FormControl<double>(value: 0, validators: [Validators.min(.5)]),
+          (e) => FormControl<int>(value: 0),
         ),
       ]),
-      _quantityWastedKey: FormArray<String>([
+      _quantityUtilisedKey: FormArray<int>([
         ..._controllers.map(
-          (e) => FormControl<String>(),
+          (e) => FormControl<int>(value: 1),
         ),
       ]),
     });
