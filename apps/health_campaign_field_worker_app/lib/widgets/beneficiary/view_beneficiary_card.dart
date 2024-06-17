@@ -360,6 +360,14 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
         return localizations.translate(Status.beneficiaryRefused.toValue());
       } else if (statusKeys.isStatusReset) {
         return localizations.translate(Status.notVisited.toValue());
+      } else if (taskData.last.additionalFields != null &&
+          taskData.last.additionalFields!.fields
+              .where((element) => element.key == "deliveryComment")
+              .isNotEmpty) {
+        return localizations.translate(taskData.last.additionalFields!.fields
+            .where((element) => element.key == "deliveryComment")
+            .first
+            .value);
       } else {
         return localizations.translate(Status.administered.toValue());
       }

@@ -59,6 +59,10 @@ class MemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final beneficiaryType = context.beneficiaryType;
+    const deliveryCommentKey = 'deliveryComment';
+    var deliveryComment = "";
+
+    getDeliveryComment(tasks, deliveryCommentKey, deliveryComment);
 
     return Container(
       decoration: BoxDecoration(
@@ -188,9 +192,11 @@ class MemberCard extends StatelessWidget {
                                       .householdOverViewBeneficiaryReferredLabel
                                   : isBeneficiaryRefused
                                       ? Status.beneficiaryRefused.toValue()
-                                      // [TODO Need to update the localization]
-                                      : i18.householdOverView
-                                          .householdOverViewNotDeliveredIconLabel,
+                                      : deliveryComment.isNotEmpty
+                                          ? deliveryComment
+                                          // [TODO Need to update the localization]
+                                          : i18.householdOverView
+                                              .householdOverViewNotDeliveredIconLabel,
                         ),
                         iconTextColor: theme.colorScheme.error,
                         iconColor: theme.colorScheme.error,
@@ -573,5 +579,25 @@ class MemberCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void getDeliveryComment(
+    List<TaskModel>? tasks,
+    String deliveryCommentKey,
+    String deliveryComment,
+  ) {
+    if (tasks == null || tasks.isEmpty) {
+      return;
+    }
+
+    deliveryComment = tasks.last.additionalFields == null ||
+            tasks.last.additionalFields!.fields
+                .where((element) => element.key == deliveryCommentKey)
+                .isEmpty
+        ? deliveryComment
+        : tasks.last.additionalFields!.fields
+            .where((element) => element.key == deliveryCommentKey)
+            .first
+            .value;
   }
 }
