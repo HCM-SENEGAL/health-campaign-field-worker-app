@@ -66,9 +66,7 @@ class MemberCard extends StatelessWidget {
 
     final router = context.router;
     const deliveryCommentKey = 'deliveryComment';
-    var deliveryComment = "";
-
-    getDeliveryComment(tasks, deliveryCommentKey, deliveryComment);
+    var deliveryComment = getDeliveryComment(tasks, deliveryCommentKey);
 
     return Container(
       decoration: BoxDecoration(
@@ -192,24 +190,22 @@ class MemberCard extends StatelessWidget {
                         icon: Icons.info_rounded,
                         iconSize: 20,
                         iconText: localizations.translate(
-                          deliveryComment.isNotEmpty
-                              ? deliveryComment
-                              : (isNotEligible || isBeneficiaryIneligible)
+                          (isNotEligible || isBeneficiaryIneligible)
+                              ? i18.householdOverView
+                                  .householdOverViewNotEligibleIconLabel
+                              : isBeneficiaryReferred
                                   ? i18.householdOverView
-                                      .householdOverViewNotEligibleIconLabel
-                                  : isBeneficiaryReferred
-                                      ? i18.householdOverView
-                                          .householdOverViewBeneficiaryReferredLabel
-                                      : isBeneficiaryRefused
-                                          ? Status.beneficiaryRefused.toValue()
-                                          // [TODO Need to update the localization]
-                                          : isBeneficiarySick
-                                              ? Status.beneficiarySick.toValue()
-                                              : isBeneficiaryAbsent
-                                                  ? Status.beneficiaryAbsent
-                                                      .toValue()
-                                                  : i18.householdOverView
-                                                      .householdOverViewNotDeliveredIconLabel,
+                                      .householdOverViewBeneficiaryReferredLabel
+                                  : isBeneficiaryRefused
+                                      ? Status.beneficiaryRefused.toValue()
+                                      // [TODO Need to update the localization]
+                                      : isBeneficiarySick
+                                          ? Status.beneficiarySick.toValue()
+                                          : isBeneficiaryAbsent
+                                              ? Status.beneficiaryAbsent
+                                                  .toValue()
+                                              : i18.householdOverView
+                                                  .householdOverViewNotDeliveredIconLabel,
                         ),
                         iconTextColor: theme.colorScheme.error,
                         iconColor: theme.colorScheme.error,
@@ -220,8 +216,11 @@ class MemberCard extends StatelessWidget {
                       child: DigitIconButton(
                         icon: Icons.check_circle,
                         iconText: localizations.translate(
-                          i18.householdOverView
-                              .householdOverViewDeliveredIconLabel,
+                          // todo verify this
+                          deliveryComment.isNotEmpty
+                              ? deliveryComment
+                              : i18.householdOverView
+                                  .householdOverViewDeliveredIconLabel,
                         ),
                         iconSize: 20,
                         iconTextColor:
@@ -910,20 +909,19 @@ class MemberCard extends StatelessWidget {
     );
   }
 
-  void getDeliveryComment(
+  String getDeliveryComment(
     List<TaskModel>? tasks,
     String deliveryCommentKey,
-    String deliveryComment,
   ) {
     if (tasks == null || tasks.isEmpty) {
-      return;
+      return "";
     }
 
-    deliveryComment = tasks.last.additionalFields == null ||
+    return tasks.last.additionalFields == null ||
             tasks.last.additionalFields!.fields
                 .where((element) => element.key == deliveryCommentKey)
                 .isEmpty
-        ? deliveryComment
+        ? ""
         : tasks.last.additionalFields!.fields
             .where((element) => element.key == deliveryCommentKey)
             .first
