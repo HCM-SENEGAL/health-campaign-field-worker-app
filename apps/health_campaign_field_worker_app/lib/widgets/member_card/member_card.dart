@@ -276,6 +276,39 @@ class MemberCard extends StatelessWidget {
                                         ),
                                         action: (ctx) {
                                           Navigator.pop(ctx);
+                                          // todo verify this as there was no action on no , and it will be stuck if no selected
+                                          final bloc = context
+                                              .read<HouseholdOverviewBloc>();
+
+                                          bloc.add(
+                                            HouseholdOverviewEvent
+                                                .selectedIndividual(
+                                              individualModel: individual,
+                                            ),
+                                          );
+                                          bloc.add(HouseholdOverviewReloadEvent(
+                                            projectId: context.projectId,
+                                            projectBeneficiaryType:
+                                                context.beneficiaryType,
+                                          ));
+
+                                          final futureTaskList = tasks
+                                              ?.where((task) =>
+                                                  task.status ==
+                                                  Status.delivered.toValue())
+                                              .toList();
+
+                                          if ((futureTaskList ?? [])
+                                              .isNotEmpty) {
+                                            context.router.push(
+                                              RecordPastDeliveryDetailsRoute(
+                                                tasks: tasks,
+                                              ),
+                                            );
+                                          } else {
+                                            context.router.push(
+                                                BeneficiaryDetailsRoute());
+                                          }
                                         },
                                       ),
                                       secondaryAction: DigitDialogActions(
