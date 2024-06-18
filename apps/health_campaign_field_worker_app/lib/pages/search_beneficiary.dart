@@ -2,6 +2,7 @@ import 'package:digit_components/digit_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:provider/provider.dart';
 
 import '../blocs/app_initialization/app_initialization.dart';
 import '../blocs/beneficiary_registration/beneficiary_registration.dart';
@@ -58,11 +59,44 @@ class _SearchBeneficiaryPageState
       }
     });
 
+    // Perform proximity search on page load
+    _performProximitySearch(isProximityEnabled);
+
     setState(() {
       offset = 0;
       limit = 10;
     });
     super.initState();
+  }
+
+  void _performProximitySearch(bool isProximityEnabled) {
+    bool search = false;
+    if (!search) {
+      final appInitializationBloc =
+          BlocProvider.of<AppInitializationBloc>(context);
+      final appConfig =
+          (appInitializationBloc.state as AppInitialized).appConfiguration;
+
+      final locationBloc = BlocProvider.of<LocationBloc>(context);
+      final locationState = locationBloc.state;
+
+      if (locationState.hasPermissions &&
+          locationState.latitude != null &&
+          locationState.longitude != null &&
+          appConfig.maxRadius != null &&
+          isProximityEnabled) {
+        blocWrapper.proximitySearchBloc
+            .add(SearchHouseholdsEvent.searchByProximity(
+          latitude: locationState.latitude!,
+          longititude: locationState.longitude!,
+          projectId: context.projectId,
+          maxRadius: appConfig.maxRadius!,
+          offset: offset,
+          limit: limit,
+        ));
+      }
+      search = true;
+    }
   }
 
   @override

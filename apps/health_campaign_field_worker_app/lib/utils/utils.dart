@@ -595,6 +595,26 @@ bool allDosesDelivered(
   }
 }
 
+int getDoseIndex(
+  List<TaskModel>? tasks,
+  Cycle? currentCycle,
+) {
+  if (tasks == null || tasks.isEmpty) {
+    return 0;
+  }
+
+  var doseIndex = tasks.last.additionalFields!.fields
+      .where(
+        (element) => element.key == AdditionalFieldsType.doseIndex.toValue(),
+      )
+      .first
+      .value;
+
+  return doseIndex is String
+      ? int.parse(doseIndex)
+      : (doseIndex is int ? doseIndex : 0);
+}
+
 DoseCriteriaModel? fetchProductVariant(
   DeliveryModel? currentDelivery,
   IndividualModel? individualModel,

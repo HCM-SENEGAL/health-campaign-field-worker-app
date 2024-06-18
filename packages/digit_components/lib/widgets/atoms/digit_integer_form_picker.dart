@@ -56,9 +56,7 @@ class DigitIntegerFormPicker extends StatelessWidget {
                             form.control(formControlName).value == null
                         ? form.control(formControlName).value -=
                             decimal != null ? .5 : 1
-                        : decimal != null
-                            ? 0.5
-                            : 1
+                        : minimum
                     : form.control(formControlName).value -=
                         decimal != null ? .5 : 1,
               ),
@@ -80,8 +78,14 @@ class DigitIntegerFormPicker extends StatelessWidget {
                     top: _borderSide,
                   ),
                   icon: Icons.add,
-                  onPressed: () => form.control(formControlName).value +=
-                      decimal != null ? .5 : 1),
+                  onPressed: () => maximum != null
+                      ? form.control(formControlName).value < maximum ||
+                              form.control(formControlName).value == null
+                          ? form.control(formControlName).value +=
+                              decimal != null ? .5 : 1
+                          : maximum
+                      : form.control(formControlName).value +=
+                          decimal != null ? .5 : 1),
             ],
           ),
         ));

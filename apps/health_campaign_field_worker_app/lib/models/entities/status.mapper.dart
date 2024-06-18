@@ -51,6 +51,10 @@ class StatusMapper extends EnumMapper<Status> {
         return Status.beneficiarySick;
       case "BENEFICIARY_ABSENT":
         return Status.beneficiaryAbsent;
+      case "ADMINISTERED":
+        return Status.administered;
+      case "NOT_ADMINISTERED":
+        return Status.notAdministered;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -85,6 +89,10 @@ class StatusMapper extends EnumMapper<Status> {
         return "BENEFICIARY_SICK";
       case Status.beneficiaryAbsent:
         return "BENEFICIARY_ABSENT";
+      case Status.administered:
+        return "ADMINISTERED";
+      case Status.notAdministered:
+        return "NOT_ADMINISTERED";
     }
   }
 }

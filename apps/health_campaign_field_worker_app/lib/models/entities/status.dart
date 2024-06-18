@@ -31,5 +31,9 @@ enum Status {
   beneficiarySick,
   @MappableValue("BENEFICIARY_ABSENT")
   beneficiaryAbsent,
+  @MappableValue("ADMINISTERED")
+  administered,
+  @MappableValue("NOT_ADMINISTERED")
+  notAdministered,
   ;
 }
