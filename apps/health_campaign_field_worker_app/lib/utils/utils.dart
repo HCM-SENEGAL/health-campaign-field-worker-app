@@ -458,6 +458,74 @@ bool checkStatus(
   }
 }
 
+int getDoseIndex(
+  List<TaskModel>? tasks,
+  Cycle? currentCycle,
+) {
+  if (tasks == null || tasks.isEmpty) {
+    return 0;
+  }
+
+  var doseIndex = tasks.last.additionalFields!.fields
+      .where(
+        (element) => element.key == AdditionalFieldsType.doseIndex.toValue(),
+      )
+      .first
+      .value;
+
+  return doseIndex is String
+      ? int.parse(doseIndex)
+      : (doseIndex is int ? doseIndex : 0);
+}
+
+bool validDoseDelivery(
+  List<TaskModel>? tasks,
+  Cycle? currentCycle,
+) {
+  var doseIndex = getDoseIndex(tasks, currentCycle);
+
+  if (doseIndex == 0) {
+    return true;
+  }
+
+  return checkIfValidTimeForDose(tasks, currentCycle);
+}
+
+bool checkIfValidTimeForDose(
+  List<TaskModel>? tasks,
+  Cycle? currentCycle,
+) {
+  if (currentCycle != null &&
+      currentCycle.startDate != null &&
+      currentCycle.endDate != null) {
+    var lastTask = tasks!.last;
+    if (lastTask.clientAuditDetails == null) {
+      return false;
+    }
+    final lastTaskCreatedTime = lastTask.clientAuditDetails?.createdTime;
+    if (lastTaskCreatedTime == null) {
+      return false;
+    }
+    final isLastCycleRunning = lastTaskCreatedTime >= currentCycle.startDate! &&
+        lastTaskCreatedTime <= currentCycle.endDate!;
+    var lastDoseDeliveredDate = DateTime.fromMillisecondsSinceEpoch(
+      lastTask.clientAuditDetails!.createdTime,
+    );
+    var currentTime = DateTime.now();
+
+    if (isLastCycleRunning &&
+        (lastDoseDeliveredDate.year != currentTime.year ||
+            lastDoseDeliveredDate.month != currentTime.month ||
+            lastDoseDeliveredDate.day != currentTime.day)) {
+      return true;
+    }
+
+    return false;
+  } else {
+    return false;
+  }
+}
+
 bool recordedSideEffect(
   Cycle? selectedCycle,
   TaskModel? task,

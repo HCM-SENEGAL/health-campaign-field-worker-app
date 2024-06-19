@@ -242,7 +242,18 @@ class MemberCard extends StatelessWidget {
                 children: [
                   isNotEligible ||
                           isBeneficiaryReferred ||
-                          isBeneficiaryIneligible
+                          isBeneficiaryIneligible ||
+                          allDosesDelivered(
+                            tasks,
+                            context.selectedCycle,
+                            sideEffects,
+                            individual,
+                          ) ||
+                          !validDoseDelivery(
+                            tasks,
+                            context.selectedCycle,
+                          )
+                      // todo verify this
                       ? const Offstage()
                       : !isNotEligible
                           ? DigitElevatedButton(
@@ -400,8 +411,8 @@ class MemberCard extends StatelessWidget {
                                             context.selectedCycle,
                                             sideEffects,
                                             individual,
-                                          ) &&
-                                          !checkStatus(
+                                          ) ||
+                                          !validDoseDelivery(
                                             tasks,
                                             context.selectedCycle,
                                           )
@@ -428,8 +439,11 @@ class MemberCard extends StatelessWidget {
                                 context.selectedCycle,
                                 sideEffects,
                                 individual,
-                              ) &&
-                              !checkStatus(tasks, context.selectedCycle)))
+                              ) ||
+                              !validDoseDelivery(
+                                tasks,
+                                context.selectedCycle,
+                              )))
                       ? const Offstage()
                       : DigitOutLineButton(
                           label: localizations.translate(
