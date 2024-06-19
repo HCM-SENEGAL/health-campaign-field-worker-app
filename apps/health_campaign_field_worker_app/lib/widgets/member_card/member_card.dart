@@ -183,7 +183,17 @@ class MemberCard extends StatelessWidget {
                       isBeneficiaryIneligible ||
                       isBeneficiarySick ||
                       isBeneficiaryAbsent ||
-                      isBeneficiaryReferred
+                      isBeneficiaryReferred ||
+                      allDosesDelivered(
+                        tasks,
+                        context.selectedCycle,
+                        sideEffects,
+                        individual,
+                      ) ||
+                      !validDoseDelivery(
+                        tasks,
+                        context.selectedCycle,
+                      )
                   ? Align(
                       alignment: Alignment.centerLeft,
                       child: DigitIconButton(
