@@ -166,7 +166,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
 
 // TODO need to pass the current cycle
 
-        final isStatusReset = !validDoseDelivery(
+        final isStatusReset = validDoseDelivery(
           taskdata,
           context.selectedCycle,
         );
@@ -365,14 +365,6 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     } else if (taskData != null) {
       if (taskData.isEmpty) {
         return localizations.translate(Status.notAdministered.toValue());
-      } else if (statusKeys.isBeneficiaryRefused && !statusKeys.isStatusReset) {
-        return localizations.translate(Status.beneficiaryRefused.toValue());
-      } else if (statusKeys.isBeneficiarySick && !statusKeys.isStatusReset) {
-        return localizations.translate(Status.beneficiarySick.toValue());
-      } else if (statusKeys.isBeneficiaryAbsent && !statusKeys.isStatusReset) {
-        return localizations.translate(Status.beneficiaryAbsent.toValue());
-      } else if (statusKeys.isStatusReset) {
-        return localizations.translate(Status.notAdministered.toValue());
       } else if (taskData.last.additionalFields != null &&
           taskData.last.additionalFields!.fields
               .where((element) => element.key == "deliveryComment")
@@ -381,6 +373,14 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             .where((element) => element.key == "deliveryComment")
             .first
             .value);
+      } else if (statusKeys.isBeneficiaryRefused && !statusKeys.isStatusReset) {
+        return localizations.translate(Status.beneficiaryRefused.toValue());
+      } else if (statusKeys.isBeneficiarySick && !statusKeys.isStatusReset) {
+        return localizations.translate(Status.beneficiarySick.toValue());
+      } else if (statusKeys.isBeneficiaryAbsent && !statusKeys.isStatusReset) {
+        return localizations.translate(Status.beneficiaryAbsent.toValue());
+      } else if (statusKeys.isStatusReset) {
+        return localizations.translate(Status.notAdministered.toValue());
       } else {
         return localizations.translate(Status.administered.toValue());
       }
@@ -407,7 +407,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             !isBeneficiaryAbsent &&
             !isBeneficiaryIneligible &&
             !isNotEligible &&
-            !isStatusReset
+            !isStatusReset &&
+            (taskdata.last.status == Status.administeredSuccess.toValue())
         ? theme.colorScheme.onSurfaceVariant
         : theme.colorScheme.error;
   }

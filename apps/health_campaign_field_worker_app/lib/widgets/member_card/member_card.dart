@@ -177,68 +177,11 @@ class MemberCard extends StatelessWidget {
             ),
             child: Offstage(
               offstage: beneficiaryType != BeneficiaryType.individual,
-              child: !isDelivered ||
-                      isNotEligible ||
-                      isBeneficiaryRefused ||
-                      isBeneficiaryIneligible ||
-                      isBeneficiarySick ||
-                      isBeneficiaryAbsent ||
-                      isBeneficiaryReferred ||
-                      allDosesDelivered(
-                        tasks,
-                        context.selectedCycle,
-                        sideEffects,
-                        individual,
-                      ) ||
-                      !validDoseDelivery(
-                        tasks,
-                        context.selectedCycle,
-                      )
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: DigitIconButton(
-                        icon: Icons.info_rounded,
-                        iconSize: 20,
-                        iconText: localizations.translate(
-                          (isNotEligible || isBeneficiaryIneligible)
-                              ? i18.householdOverView
-                                  .householdOverViewNotEligibleIconLabel
-                              : isBeneficiaryReferred
-                                  ? i18.householdOverView
-                                      .householdOverViewBeneficiaryReferredLabel
-                                  : isBeneficiaryRefused
-                                      ? Status.beneficiaryRefused.toValue()
-                                      // [TODO Need to update the localization]
-                                      : isBeneficiarySick
-                                          ? Status.beneficiarySick.toValue()
-                                          : isBeneficiaryAbsent
-                                              ? Status.beneficiaryAbsent
-                                                  .toValue()
-                                              : i18.householdOverView
-                                                  .householdOverViewNotDeliveredIconLabel,
-                        ),
-                        iconTextColor: theme.colorScheme.error,
-                        iconColor: theme.colorScheme.error,
-                      ),
-                    )
-                  : Align(
-                      alignment: Alignment.centerLeft,
-                      child: DigitIconButton(
-                        icon: Icons.check_circle,
-                        iconText: localizations.translate(
-                          // todo verify this
-                          deliveryComment.isNotEmpty
-                              ? deliveryComment
-                              : i18.householdOverView
-                                  .householdOverViewDeliveredIconLabel,
-                        ),
-                        iconSize: 20,
-                        iconTextColor:
-                            DigitTheme.instance.colorScheme.onSurfaceVariant,
-                        iconColor:
-                            DigitTheme.instance.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
+              child: getStatus(
+                context,
+                theme,
+                deliveryComment,
+              ),
             ),
           ),
           Offstage(
@@ -983,5 +926,86 @@ class MemberCard extends StatelessWidget {
             .where((element) => element.key == deliveryCommentKey)
             .first
             .value;
+  }
+
+  Widget getStatus(
+    BuildContext context,
+    ThemeData theme,
+    String deliveryComment,
+  ) {
+    final bool dosesDelivered = allDosesDelivered(
+      tasks,
+      context.selectedCycle,
+      sideEffects,
+      individual,
+    );
+    final int doseIndex = getDoseIndex(tasks, context.selectedCycle);
+    final bool validDelivery = validDoseDelivery(tasks, context.selectedCycle);
+
+    IconData icon;
+    String iconText;
+    Color iconTextColor = theme.colorScheme.error;
+    Color iconColor = theme.colorScheme.error;
+
+    if (dosesDelivered) {
+      if (!isDelivered ||
+          isNotEligible ||
+          isBeneficiaryRefused ||
+          isBeneficiaryIneligible ||
+          isBeneficiarySick ||
+          isBeneficiaryAbsent ||
+          isBeneficiaryReferred) {
+        icon = Icons.info_rounded;
+        iconText = (isNotEligible || isBeneficiaryIneligible)
+            ? i18.householdOverView.householdOverViewNotEligibleIconLabel
+            : isBeneficiaryReferred
+                ? i18
+                    .householdOverView.householdOverViewBeneficiaryReferredLabel
+                : isBeneficiaryRefused
+                    ? Status.beneficiaryRefused.toValue()
+                    : isBeneficiarySick
+                        ? Status.beneficiarySick.toValue()
+                        : isBeneficiaryAbsent
+                            ? Status.beneficiaryAbsent.toValue()
+                            : i18.householdOverView
+                                .householdOverViewNotDeliveredIconLabel;
+      } else {
+        icon = Icons.check_circle;
+        iconText = i18.householdOverView.householdOverViewDeliveredIconLabel;
+        iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+        iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+      }
+    } else if (doseIndex == 0 || validDelivery) {
+      icon = Icons.info_rounded;
+      iconText = Status.notAdministered.toValue();
+    } else if (deliveryComment.isNotEmpty) {
+      icon = Icons.info_rounded;
+      iconText = localizations.translate(deliveryComment);
+    } else {
+      icon = Icons.info_rounded;
+      iconText = (isNotEligible || isBeneficiaryIneligible)
+          ? i18.householdOverView.householdOverViewNotEligibleIconLabel
+          : isBeneficiaryReferred
+              ? i18.householdOverView.householdOverViewBeneficiaryReferredLabel
+              : isBeneficiaryRefused
+                  ? Status.beneficiaryRefused.toValue()
+                  : isBeneficiarySick
+                      ? Status.beneficiarySick.toValue()
+                      : isBeneficiaryAbsent
+                          ? Status.beneficiaryAbsent.toValue()
+                          : i18.householdOverView
+                              .householdOverViewNotDeliveredIconLabel;
+    }
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: DigitIconButton(
+        icon: icon,
+        iconSize: 20,
+        iconText: iconText,
+        iconTextColor: iconTextColor,
+        iconColor: iconColor,
+      ),
+    );
   }
 }
