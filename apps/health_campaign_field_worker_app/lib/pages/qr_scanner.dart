@@ -57,6 +57,7 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
   bool flashstatus = false;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   final _resourceController = TextEditingController();
+  RegExp pattern = RegExp(r'^TRACPS24-000\d+$');
 
   @override
   void initState() {
@@ -601,6 +602,13 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
             await handleError(
               i18.deliverIntervention.resourceAlreadyScanned,
             );
+
+            return;
+          } else if (!pattern.hasMatch(bloc.state.qrcodes.last)) {
+            await handleError(
+              i18.deliverIntervention.scanValidResource,
+            );
+
             return;
           } else {
             await storeCode(barcodes.first.displayValue.toString());
