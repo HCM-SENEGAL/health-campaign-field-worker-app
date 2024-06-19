@@ -216,10 +216,15 @@ class MemberCard extends StatelessWidget {
                               // ),
                               onPressed: () {
                                 if (getDoseIndex(
-                                      tasks,
-                                      context.selectedCycle,
-                                    ) !=
-                                    0) {
+                                          tasks,
+                                          context.selectedCycle,
+                                        ) !=
+                                        0 &&
+                                    getDoseIndex(
+                                          tasks,
+                                          context.selectedCycle,
+                                        ) >
+                                        0) {
                                   DigitDialog.show<bool>(
                                     context,
                                     options: DigitDialogOptions(
@@ -969,6 +974,9 @@ class MemberCard extends StatelessWidget {
                             ? Status.beneficiaryAbsent.toValue()
                             : i18.householdOverView
                                 .householdOverViewNotDeliveredIconLabel;
+      } else if (deliveryComment.isNotEmpty) {
+        icon = Icons.info_rounded;
+        iconText = deliveryComment;
       } else {
         icon = Icons.check_circle;
         iconText = i18.householdOverView.householdOverViewDeliveredIconLabel;
@@ -980,8 +988,13 @@ class MemberCard extends StatelessWidget {
       iconText = Status.notAdministered.toValue();
     } else if (deliveryComment.isNotEmpty) {
       icon = Icons.info_rounded;
-      iconText = localizations.translate(deliveryComment);
-    } else {
+      iconText = deliveryComment;
+    } else if (isNotEligible ||
+        isBeneficiaryIneligible ||
+        isBeneficiaryReferred ||
+        isBeneficiaryRefused ||
+        isBeneficiarySick ||
+        isBeneficiaryAbsent) {
       icon = Icons.info_rounded;
       iconText = (isNotEligible || isBeneficiaryIneligible)
           ? i18.householdOverView.householdOverViewNotEligibleIconLabel
@@ -995,6 +1008,11 @@ class MemberCard extends StatelessWidget {
                           ? Status.beneficiaryAbsent.toValue()
                           : i18.householdOverView
                               .householdOverViewNotDeliveredIconLabel;
+    } else {
+      icon = Icons.check_circle;
+      iconText = Status.administered.toValue();
+      iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+      iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
     }
 
     return Align(
@@ -1002,7 +1020,7 @@ class MemberCard extends StatelessWidget {
       child: DigitIconButton(
         icon: icon,
         iconSize: 20,
-        iconText: iconText,
+        iconText: localizations.translate(iconText),
         iconTextColor: iconTextColor,
         iconColor: iconColor,
       ),

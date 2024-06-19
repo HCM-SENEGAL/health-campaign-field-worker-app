@@ -462,20 +462,36 @@ int getDoseIndex(
   List<TaskModel>? tasks,
   Cycle? currentCycle,
 ) {
-  if (tasks == null || tasks.isEmpty) {
-    return 0;
+  if (currentCycle != null &&
+      currentCycle.startDate != null &&
+      currentCycle.endDate != null) {
+    if (tasks == null || tasks.isEmpty) {
+      return 0;
+    } else if (tasks.last != null && tasks.last.clientAuditDetails != null) {
+      var lastTask = tasks.last;
+
+      final lastTaskCreatedTime = lastTask.clientAuditDetails!.createdTime;
+
+      final isLastCycleRunning =
+          lastTaskCreatedTime >= currentCycle.startDate! &&
+              lastTaskCreatedTime <= currentCycle.endDate!;
+
+      return isLastCycleRunning ? -1 : 0;
+    }
+
+    var doseIndex = tasks.last.additionalFields!.fields
+        .where(
+          (element) => element.key == AdditionalFieldsType.doseIndex.toValue(),
+        )
+        .first
+        .value;
+
+    return doseIndex is String
+        ? int.parse(doseIndex)
+        : (doseIndex is int ? doseIndex : 0);
   }
 
-  var doseIndex = tasks.last.additionalFields!.fields
-      .where(
-        (element) => element.key == AdditionalFieldsType.doseIndex.toValue(),
-      )
-      .first
-      .value;
-
-  return doseIndex is String
-      ? int.parse(doseIndex)
-      : (doseIndex is int ? doseIndex : 0);
+  return -1;
 }
 
 bool validDoseDelivery(
@@ -502,7 +518,7 @@ bool checkIfValidTimeForDose(
     if (lastTask.clientAuditDetails == null) {
       return false;
     }
-    final lastTaskCreatedTime = lastTask.clientAuditDetails?.createdTime;
+    final lastTaskCreatedTime = lastTask.clientAuditDetails!.createdTime;
     if (lastTaskCreatedTime == null) {
       return false;
     }
@@ -513,7 +529,7 @@ bool checkIfValidTimeForDose(
     );
     var currentTime = DateTime.now();
 
-    if (isLastCycleRunning &&
+    if (!isLastCycleRunning &&
         (lastDoseDeliveredDate.year != currentTime.year ||
             lastDoseDeliveredDate.month != currentTime.month ||
             lastDoseDeliveredDate.day != currentTime.day)) {

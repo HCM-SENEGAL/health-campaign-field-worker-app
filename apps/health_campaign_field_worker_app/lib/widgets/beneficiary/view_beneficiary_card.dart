@@ -166,10 +166,19 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
 
 // TODO need to pass the current cycle
 
-        final isStatusReset = validDoseDelivery(
+        final isStatusReset = allDosesDelivered(
           taskdata,
           context.selectedCycle,
-        );
+          sideEffects,
+          e,
+        )
+            ? false
+            : (getDoseIndex(taskdata, context.selectedCycle) == 0)
+                ? false
+                : validDoseDelivery(
+                    taskdata,
+                    context.selectedCycle,
+                  );
 
         final rowTableData = [
           TableData(
@@ -365,7 +374,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     } else if (taskData != null) {
       if (taskData.isEmpty) {
         return localizations.translate(Status.notAdministered.toValue());
-      } else if (taskData.last.additionalFields != null &&
+      } else if (!statusKeys.isStatusReset &&
+          taskData.last.additionalFields != null &&
           taskData.last.additionalFields!.fields
               .where((element) => element.key == "deliveryComment")
               .isNotEmpty) {
