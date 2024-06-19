@@ -303,12 +303,16 @@ class KeyValue {
 class StatusKeys {
   bool isNotEligible;
   bool isBeneficiaryRefused;
+  bool isBeneficiarySick;
+  bool isBeneficiaryAbsent;
   bool isBeneficiaryIneligible;
   bool isBeneficiaryReferred;
   bool isStatusReset;
   StatusKeys(
     this.isNotEligible,
     this.isBeneficiaryRefused,
+    this.isBeneficiarySick,
+    this.isBeneficiaryAbsent,
     this.isBeneficiaryIneligible,
     this.isBeneficiaryReferred,
     this.isStatusReset,

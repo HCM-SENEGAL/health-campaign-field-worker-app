@@ -154,6 +154,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
           sideEffects,
         );
         final isBeneficiaryRefused = checkIfBeneficiaryRefused(taskdata);
+        final isBeneficiarySick = checkIfBeneficiarySick(taskdata);
+        final isBeneficiaryAbsent = checkIfBeneficiaryAbsent(taskdata);
         final isBeneficiaryReferred = checkIfBeneficiaryReferred(
           taskdata,
         );
@@ -179,6 +181,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
               StatusKeys(
                 isNotEligible,
                 isBeneficiaryRefused,
+                isBeneficiarySick,
+                isBeneficiaryAbsent,
                 isBeneficiaryIneligible,
                 isBeneficiaryReferred,
                 isStatusReset,
@@ -192,6 +196,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                 taskdata: taskdata,
                 isBeneficiaryRefused:
                     isBeneficiaryRefused || isBeneficiaryReferred,
+                isBeneficiarySick: isBeneficiarySick,
+                isBeneficiaryAbsent: isBeneficiaryAbsent,
                 isBeneficiaryIneligible: isBeneficiaryIneligible,
                 isStatusReset: isStatusReset,
                 theme: theme,
@@ -287,8 +293,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                   status: context.beneficiaryType == BeneficiaryType.individual
                       ? null
                       : (householdMember.tasks ?? []).isNotEmpty
-                          ? Status.visited.toValue()
-                          : Status.notVisited.toValue(),
+                          ? Status.administered.toValue()
+                          : Status.notAdministered.toValue(),
                   title: [
                     householdMember.headOfHousehold.name?.givenName,
                     householdMember.headOfHousehold.name?.familyName,
@@ -355,16 +361,28 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
       return localizations.translate(Status.beneficiaryReferred.toValue());
     } else if (taskData != null) {
       if (taskData.isEmpty) {
-        return localizations.translate(Status.notVisited.toValue());
+        return localizations.translate(Status.notAdministered.toValue());
       } else if (statusKeys.isBeneficiaryRefused && !statusKeys.isStatusReset) {
         return localizations.translate(Status.beneficiaryRefused.toValue());
+      } else if (statusKeys.isBeneficiarySick && !statusKeys.isStatusReset) {
+        return localizations.translate(Status.beneficiarySick.toValue());
+      } else if (statusKeys.isBeneficiaryAbsent && !statusKeys.isStatusReset) {
+        return localizations.translate(Status.beneficiaryAbsent.toValue());
       } else if (statusKeys.isStatusReset) {
-        return localizations.translate(Status.notVisited.toValue());
+        return localizations.translate(Status.notAdministered.toValue());
+      } else if (taskData.last.additionalFields != null &&
+          taskData.last.additionalFields!.fields
+              .where((element) => element.key == "deliveryComment")
+              .isNotEmpty) {
+        return localizations.translate(taskData.last.additionalFields!.fields
+            .where((element) => element.key == "deliveryComment")
+            .first
+            .value);
       } else {
-        return localizations.translate(Status.visited.toValue());
+        return localizations.translate(Status.administered.toValue());
       }
     } else {
-      return localizations.translate(Status.notVisited.toValue());
+      return localizations.translate(Status.notAdministered.toValue());
     }
   }
 
@@ -373,6 +391,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     required bool isNotEligible,
     required List<TaskModel>? taskdata,
     required bool isBeneficiaryRefused,
+    required bool isBeneficiarySick,
+    required bool isBeneficiaryAbsent,
     required bool isBeneficiaryIneligible,
     required bool isStatusReset,
     required ThemeData theme,
@@ -380,6 +400,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     return taskdata != null &&
             taskdata.isNotEmpty &&
             !isBeneficiaryRefused &&
+            !isBeneficiarySick &&
+            !isBeneficiaryAbsent &&
             !isBeneficiaryIneligible &&
             !isNotEligible &&
             !isStatusReset
