@@ -166,19 +166,22 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
 
 // TODO need to pass the current cycle
 
-        final isStatusReset = allDosesDelivered(
-          taskdata,
-          context.selectedCycle,
-          sideEffects,
-          e,
-        )
-            ? false
-            : (getDoseIndex(taskdata, context.selectedCycle) == 0)
-                ? false
-                : validDoseDelivery(
+        final isStatusReset =
+            isLastCycleRunning(taskdata, context.selectedCycle)
+                ? allDosesDelivered(
                     taskdata,
                     context.selectedCycle,
-                  );
+                    sideEffects,
+                    e,
+                  )
+                    ? false
+                    : (getDoseIndex(taskdata, context.selectedCycle) == 0)
+                        ? false
+                        : validDoseDelivery(
+                            taskdata,
+                            context.selectedCycle,
+                          )
+                : true;
 
         final rowTableData = [
           TableData(

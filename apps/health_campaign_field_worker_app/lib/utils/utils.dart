@@ -476,22 +476,44 @@ int getDoseIndex(
           lastTaskCreatedTime >= currentCycle.startDate! &&
               lastTaskCreatedTime <= currentCycle.endDate!;
 
-      return isLastCycleRunning ? -1 : 0;
+      var doseIndex = tasks.last.additionalFields!.fields
+          .where(
+            (element) =>
+                element.key == AdditionalFieldsType.doseIndex.toValue(),
+          )
+          .first
+          .value;
+
+      return isLastCycleRunning
+          ? doseIndex is String
+              ? int.parse(doseIndex)
+              : (doseIndex is int ? doseIndex : 0)
+          : 0;
     }
-
-    var doseIndex = tasks.last.additionalFields!.fields
-        .where(
-          (element) => element.key == AdditionalFieldsType.doseIndex.toValue(),
-        )
-        .first
-        .value;
-
-    return doseIndex is String
-        ? int.parse(doseIndex)
-        : (doseIndex is int ? doseIndex : 0);
   }
 
   return -1;
+}
+
+bool isLastCycleRunning(
+  List<TaskModel>? tasks,
+  Cycle? currentCycle,
+) {
+  if (currentCycle != null &&
+      currentCycle.startDate != null &&
+      currentCycle.endDate != null &&
+      tasks != null) {
+    var lastTask = tasks.last;
+
+    final lastTaskCreatedTime = lastTask.clientAuditDetails!.createdTime;
+
+    final isLastCycleRunning = lastTaskCreatedTime >= currentCycle.startDate! &&
+        lastTaskCreatedTime <= currentCycle.endDate!;
+
+    return isLastCycleRunning;
+  }
+
+  return false;
 }
 
 bool validDoseDelivery(
@@ -502,6 +524,8 @@ bool validDoseDelivery(
 
   if (doseIndex == 0) {
     return true;
+  } else if (doseIndex < 0) {
+    return false;
   }
 
   return checkIfValidTimeForDose(tasks, currentCycle);
@@ -529,7 +553,7 @@ bool checkIfValidTimeForDose(
     );
     var currentTime = DateTime.now();
 
-    if (!isLastCycleRunning &&
+    if (isLastCycleRunning &&
         (lastDoseDeliveredDate.year != currentTime.year ||
             lastDoseDeliveredDate.month != currentTime.month ||
             lastDoseDeliveredDate.day != currentTime.day)) {
