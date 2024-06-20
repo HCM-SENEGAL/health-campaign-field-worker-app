@@ -27,7 +27,7 @@
         android:allowBackup="false"
         android:fullBackupOnly="false"
         android:fullBackupContent="false"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_transparent">
         <activity
             android:showWhenLocked="false"
             android:turnScreenOn="true"
