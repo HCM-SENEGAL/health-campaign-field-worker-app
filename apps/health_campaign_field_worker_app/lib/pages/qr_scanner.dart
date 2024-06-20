@@ -458,6 +458,16 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
                                 result.length < widget.quantity) {
                               buildDialog();
                             } else {
+                              String code = _resourceController.value.text
+                                  .replaceAll(' ', '');
+                              if (!patternTraining.hasMatch(code) &&
+                                  !patternProd.hasMatch(code)) {
+                                await handleError(
+                                  i18.deliverIntervention.scanValidResource,
+                                );
+
+                                return;
+                              }
                               final bloc = context.read<SearchBlocWrapper>();
                               final scannerState =
                                   context.read<ScannerBloc>().state;
