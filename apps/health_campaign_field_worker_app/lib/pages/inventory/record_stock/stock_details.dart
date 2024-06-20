@@ -42,6 +42,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
   static const _deliveryTeamKey = 'deliveryTeam';
   static const _batchNumberKey = 'batchNumber';
   static const _dateOfExpiry = 'dateOfExpiry';
+  int maxStockQuantity = 100000;
   bool deliveryTeamSelected = false;
   String? selectedFacilityId;
 
@@ -57,30 +58,31 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
         Validators.number,
         Validators.required,
         Validators.min(0),
+        Validators.max(maxStockQuantity),
       ]),
       _transactionReasonKey: FormControl<TransactionReason>(),
-      _waybillNumberKey: FormControl<String>(
-        validators: [Validators.required],
-      ),
-      _waybillQuantityKey: FormControl<int>(
-        validators: [
-          Validators.number,
-          Validators.required,
-          Validators.min(0),
-        ],
-      ),
-      _vehicleNumberKey: FormControl<String>(),
-      _typeOfTransportKey: FormControl<String>(),
+      // _waybillNumberKey: FormControl<String>(
+      //   validators: [Validators.required],
+      // ),
+      // _waybillQuantityKey: FormControl<int>(
+      //   validators: [
+      //     Validators.number,
+      //     Validators.required,
+      //     Validators.min(0),
+      //   ],
+      // ),
+      // _vehicleNumberKey: FormControl<String>(),
+      // _typeOfTransportKey: FormControl<String>(),
       _commentsKey: FormControl<String>(),
-      _deliveryTeamKey: FormControl<String>(
-        validators: deliveryTeamSelected ? [Validators.required] : [],
-      ),
-      _batchNumberKey: FormControl<String>(
-        validators: [Validators.required],
-      ),
-      _dateOfExpiry: FormControl<DateTime>(
-        validators: [Validators.required],
-      ),
+      // _deliveryTeamKey: FormControl<String>(
+      //   validators: deliveryTeamSelected ? [Validators.required] : [],
+      // ),
+      // _batchNumberKey: FormControl<String>(
+      //   validators: [Validators.required],
+      // ),
+      // _dateOfExpiry: FormControl<DateTime>(
+      //   validators: [Validators.required],
+      // ),
     });
   }
 
@@ -190,10 +192,10 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                   builder: (context, form, child) {
                     return BlocBuilder<ScannerBloc, ScannerState>(
                       builder: (context, scannerState) {
-                        form.control(_deliveryTeamKey).value =
-                            scannerState.qrcodes.isNotEmpty
-                                ? scannerState.qrcodes.last
-                                : '';
+                        // form.control(_deliveryTeamKey).value =
+                        //     scannerState.qrcodes.isNotEmpty
+                        //         ? scannerState.qrcodes.last
+                        //         : '';
 
                         return ScrollableContent(
                           header: Column(children: [
@@ -243,23 +245,11 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                                         .toString(),
                                                   )
                                                 : null;
-                                        final deliveryTeamName = form
-                                            .control(_deliveryTeamKey)
-                                            .value as String?;
+                                        // final deliveryTeamName = form
+                                        //     .control(_deliveryTeamKey)
+                                        //     .value as String?;
 
-                                        if (deliveryTeamSelected &&
-                                            (form
-                                                        .control(
-                                                          _deliveryTeamKey,
-                                                        )
-                                                        .value ==
-                                                    null ||
-                                                form
-                                                    .control(_deliveryTeamKey)
-                                                    .value
-                                                    .toString()
-                                                    .trim()
-                                                    .isEmpty)) {
+                                        if (deliveryTeamSelected) {
                                           DigitToast.show(
                                             context,
                                             options: DigitToastOptions(
@@ -321,25 +311,25 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                               .control(_transactionQuantityKey)
                                               .value;
 
-                                          final waybillNumber = form
-                                              .control(_waybillNumberKey)
-                                              .value as String?;
+                                          // final waybillNumber = form
+                                          //     .control(_waybillNumberKey)
+                                          //     .value as String?;
 
-                                          final waybillQuantity = form
-                                              .control(_waybillQuantityKey)
-                                              .value;
+                                          // final waybillQuantity = form
+                                          //     .control(_waybillQuantityKey)
+                                          //     .value;
 
-                                          final vehicleNumber = form
-                                              .control(_vehicleNumberKey)
-                                              .value as String?;
+                                          // final vehicleNumber = form
+                                          //     .control(_vehicleNumberKey)
+                                          //     .value as String?;
 
-                                          final batchNumber = form
-                                              .control(_batchNumberKey)
-                                              .value as String?;
+                                          // final batchNumber = form
+                                          //     .control(_batchNumberKey)
+                                          //     .value as String?;
 
-                                          final expiryDate = form
-                                              .control(_dateOfExpiry)
-                                              .value as DateTime?;
+                                          // final expiryDate = form
+                                          //     .control(_dateOfExpiry)
+                                          //     .value as DateTime?;
 
                                           final lat = locationState.latitude;
                                           final lng = locationState.longitude;
@@ -351,9 +341,9 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                               .control(_commentsKey)
                                               .value as String?;
 
-                                          final deliveryTeamName = form
-                                              .control(_deliveryTeamKey)
-                                              .value as String?;
+                                          // final deliveryTeamName = form
+                                          //     .control(_deliveryTeamKey)
+                                          //     .value as String?;
 
                                           String? senderId;
                                           String? senderType;
@@ -374,26 +364,16 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                             case StockRecordEntryType.receipt:
                                             case StockRecordEntryType.loss:
                                             case StockRecordEntryType.damaged:
-                                              if (deliveryTeamSelected) {
-                                                senderId = deliveryTeamName;
-                                                senderType = "STAFF";
-                                              } else {
-                                                senderId = secondaryParty?.id;
-                                                senderType = "WAREHOUSE";
-                                              }
+                                              senderId = secondaryParty?.id;
+                                              senderType = "WAREHOUSE";
                                               receiverId = primaryId;
                                               receiverType = primaryType;
 
                                               break;
                                             case StockRecordEntryType.dispatch:
                                             case StockRecordEntryType.returned:
-                                              if (deliveryTeamSelected) {
-                                                receiverId = deliveryTeamName;
-                                                receiverType = "STAFF";
-                                              } else {
-                                                receiverId = secondaryParty?.id;
-                                                receiverType = "WAREHOUSE";
-                                              }
+                                              receiverId = secondaryParty?.id;
+                                              receiverType = "WAREHOUSE";
                                               senderId = primaryId;
                                               senderType = primaryType;
                                               break;
@@ -503,7 +483,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                             referenceId: stockState.projectId,
                                             referenceIdType: 'PROJECT',
                                             quantity: quantity.toString(),
-                                            waybillNumber: waybillNumber,
+                                            // waybillNumber: waybillNumber,
                                             receiverId: receiverId,
                                             receiverType: receiverType,
                                             senderId: senderId,
@@ -530,39 +510,39 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                                   .millisecondsSinceEpoch(),
                                             ),
                                             additionalFields: [
-                                                      waybillQuantity,
+                                                      // waybillQuantity,
                                                       comments,
-                                                      batchNumber,
-                                                      expiryDate,
+                                                      // batchNumber,
+                                                      // expiryDate,
                                                     ].any((element) =>
                                                         element != null) ||
                                                     hasLocationData
                                                 ? StockAdditionalFields(
                                                     version: 1,
                                                     fields: [
-                                                      if (waybillQuantity !=
-                                                          null)
-                                                        AdditionalField(
-                                                          'waybill_quantity',
-                                                          waybillQuantity
-                                                              .toString(),
-                                                        ),
+                                                      // if (waybillQuantity !=
+                                                      //     null)
+                                                      //   AdditionalField(
+                                                      //     'waybill_quantity',
+                                                      //     waybillQuantity
+                                                      //         .toString(),
+                                                      //   ),
                                                       if (comments != null)
                                                         AdditionalField(
                                                           'comments',
                                                           comments,
                                                         ),
-                                                      if (batchNumber != null)
-                                                        AdditionalField(
-                                                          _batchNumberKey,
-                                                          batchNumber,
-                                                        ),
-                                                      if (expiryDate != null)
-                                                        AdditionalField(
-                                                          _dateOfExpiry,
-                                                          expiryDate
-                                                              .millisecondsSinceEpoch,
-                                                        ),
+                                                      // if (batchNumber != null)
+                                                      //   AdditionalField(
+                                                      //     _batchNumberKey,
+                                                      //     batchNumber,
+                                                      //   ),
+                                                      // if (expiryDate != null)
+                                                      //   AdditionalField(
+                                                      //     _dateOfExpiry,
+                                                      //     expiryDate
+                                                      //         .millisecondsSinceEpoch,
+                                                      //   ),
                                                       if (hasLocationData) ...[
                                                         AdditionalField(
                                                           'lat',
@@ -672,93 +652,6 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                                     '${module.selectProductLabel}_IS_REQUIRED',
                                                   ),
                                             },
-                                            onChanged: (control) {
-                                              if (form
-                                                          .control(
-                                                            _productVariantKey,
-                                                          )
-                                                          .value !=
-                                                      null &&
-                                                  (form.control(_productVariantKey).value
-                                                              as ProductVariantModel)
-                                                          .sku ==
-                                                      "Albendazole 400mg") {
-                                                setState(() {
-                                                  form
-                                                      .control(
-                                                    _transactionQuantityKey,
-                                                  )
-                                                      .setValidators(
-                                                    [
-                                                      Validators.number,
-                                                      Validators.required,
-                                                      Validators.min(0),
-                                                      Validators.max(context
-                                                          .maximumQuantityAlbendazole),
-                                                    ],
-                                                    updateParent: true,
-                                                    autoValidate: true,
-                                                  );
-                                                  form
-                                                      .control(
-                                                    _waybillQuantityKey,
-                                                  )
-                                                      .setValidators(
-                                                    [
-                                                      Validators.number,
-                                                      Validators.required,
-                                                      Validators.min(0),
-                                                      Validators.max(context
-                                                          .maximumQuantityAlbendazole),
-                                                    ],
-                                                    updateParent: true,
-                                                    autoValidate: true,
-                                                  );
-                                                });
-                                              } else if (form
-                                                          .control(
-                                                            _productVariantKey,
-                                                          )
-                                                          .value !=
-                                                      null &&
-                                                  (form.control(_productVariantKey).value
-                                                              as ProductVariantModel)
-                                                          .sku ==
-                                                      "Ivermectin 100mg") {
-                                                setState(() {
-                                                  form
-                                                      .control(
-                                                    _transactionQuantityKey,
-                                                  )
-                                                      .setValidators(
-                                                    [
-                                                      Validators.number,
-                                                      Validators.required,
-                                                      Validators.min(0),
-                                                      Validators.max(context
-                                                          .maximumQuantityIvermectin),
-                                                    ],
-                                                    updateParent: true,
-                                                    autoValidate: true,
-                                                  );
-                                                  form
-                                                      .control(
-                                                    _waybillQuantityKey,
-                                                  )
-                                                      .setValidators(
-                                                    [
-                                                      Validators.number,
-                                                      Validators.required,
-                                                      Validators.min(0),
-                                                      Validators.max(context
-                                                          .maximumQuantityIvermectin),
-                                                    ],
-                                                    updateParent: true,
-                                                    autoValidate: true,
-                                                  );
-                                                });
-                                              }
-                                            },
                                           );
                                         },
                                       );
@@ -786,55 +679,17 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                           ) ??
                                           [];
 
-                                      String? boundaryType = context
-                                          .selectedProject
-                                          .address
-                                          ?.boundaryType;
-
-                                      // print(entryType);
-                                      List<FacilityModel> filteredFacility = [];
-                                      if (entryType ==
-                                              StockRecordEntryType.receipt &&
-                                          (boundaryType != null &&
-                                              boundaryType.isNotEmpty)) {
-                                        filteredFacility =
-                                            getFilteredFacilities(
-                                          facilities,
-                                          boundaryType,
-                                          "childBoundaryType",
-                                        );
-                                      } else if ((entryType ==
-                                                  StockRecordEntryType
-                                                      .returned ||
-                                              entryType ==
-                                                  StockRecordEntryType
-                                                      .dispatch) &&
-                                          (boundaryType != null &&
-                                              boundaryType.isNotEmpty)) {
-                                        filteredFacility =
-                                            getFilteredFacilities(
-                                          facilities,
-                                          boundaryType,
-                                          "parentBoundaryType",
-                                        );
-                                      }
-
-                                      //TODO below pseudocode
-                                      // If entryType is received then filter facilities
-                                      // where childBoundaryType in additional fields is boundaryType
-                                      // for returned or issues parentBoundaryType is boundaryType
-
                                       return InkWell(
                                         onTap: () async {
-                                          clearQRCodes();
-                                          form.control(_deliveryTeamKey).value =
-                                              '';
+                                          // clearQRCodes();
+                                          // form.control(_deliveryTeamKey).value =
+                                          //     '';
                                           final parent = context.router.parent()
                                               as StackRouter;
                                           final facility =
                                               await parent.push<FacilityModel>(
                                             FacilitySelectionRoute(
-                                              facilities: filteredFacility,
+                                              facilities: facilities,
                                             ),
                                           );
 
@@ -878,16 +733,16 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                             ),
                                             formControlName: _secondaryPartyKey,
                                             onTap: () async {
-                                              clearQRCodes();
-                                              form
-                                                  .control(_deliveryTeamKey)
-                                                  .value = '';
+                                              // clearQRCodes();
+                                              // form
+                                              //     .control(_deliveryTeamKey)
+                                              //     .value = '';
                                               final parent = context.router
                                                   .parent() as StackRouter;
                                               final facility = await parent
                                                   .push<FacilityModel>(
                                                 FacilitySelectionRoute(
-                                                  facilities: filteredFacility,
+                                                  facilities: facilities,
                                                 ),
                                               );
 
@@ -919,45 +774,45 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                       );
                                     },
                                   ),
-                                  Visibility(
-                                    visible: deliveryTeamSelected,
-                                    child: DigitTextFormField(
-                                      label: localizations.translate(
-                                        i18.stockReconciliationDetails
-                                            .teamCodeLabel,
-                                      ),
-                                      onChanged: (val) {
-                                        String? value = val.value as String?;
-                                        if (value != null &&
-                                            value.trim().isNotEmpty) {
-                                          context.read<ScannerBloc>().add(
-                                                ScannerEvent.handleScanner(
-                                                  [],
-                                                  [value],
-                                                ),
-                                              );
-                                        } else {
-                                          clearQRCodes();
-                                        }
-                                      },
-                                      suffix: IconButton(
-                                        onPressed: () {
-                                          context.router.push(QRScannerRoute(
-                                            quantity: 5,
-                                            isGS1code: false,
-                                            sinlgleValue: false,
-                                          ));
-                                        },
-                                        icon: Icon(
-                                          Icons.qr_code_2,
-                                          color: theme.colorScheme.secondary,
-                                        ),
-                                      ),
-                                      isRequired: deliveryTeamSelected,
-                                      maxLines: 3,
-                                      formControlName: _deliveryTeamKey,
-                                    ),
-                                  ),
+                                  // Visibility(
+                                  //   visible: deliveryTeamSelected,
+                                  //   child: DigitTextFormField(
+                                  //     label: localizations.translate(
+                                  //       i18.stockReconciliationDetails
+                                  //           .teamCodeLabel,
+                                  //     ),
+                                  //     onChanged: (val) {
+                                  //       String? value = val.value as String?;
+                                  //       if (value != null &&
+                                  //           value.trim().isNotEmpty) {
+                                  //         context.read<ScannerBloc>().add(
+                                  //               ScannerEvent.handleScanner(
+                                  //                 [],
+                                  //                 [value],
+                                  //               ),
+                                  //             );
+                                  //       } else {
+                                  //         clearQRCodes();
+                                  //       }
+                                  //     },
+                                  //     suffix: IconButton(
+                                  //       onPressed: () {
+                                  //         context.router.push(QRScannerRoute(
+                                  //           quantity: 5,
+                                  //           isGS1code: false,
+                                  //           sinlgleValue: false,
+                                  //         ));
+                                  //       },
+                                  //       icon: Icon(
+                                  //         Icons.qr_code_2,
+                                  //         color: theme.colorScheme.secondary,
+                                  //       ),
+                                  //     ),
+                                  //     isRequired: deliveryTeamSelected,
+                                  //     maxLines: 3,
+                                  //     formControlName: _deliveryTeamKey,
+                                  //   ),
+                                  // ),
                                   DigitTextFormField(
                                     formControlName: _transactionQuantityKey,
                                     keyboardType:
@@ -973,7 +828,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                       "max": (object) =>
                                           "${localizations.translate(
                                             '${quantityCountLabel}_MAX_ERROR',
-                                          )} ${form.control(_productVariantKey).value != null && (form.control(_productVariantKey).value as ProductVariantModel).sku == "Albendazole 400mg" ? context.maximumQuantityAlbendazole : context.maximumQuantityIvermectin}",
+                                          )} $maxStockQuantity",
                                       "min": (object) =>
                                           localizations.translate(
                                             '${quantityCountLabel}_MIN_ERROR',
@@ -982,214 +837,8 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                     label: localizations.translate(
                                       quantityCountLabel,
                                     ),
-                                    onChanged: (control) {
-                                      if (form
-                                                  .control(_productVariantKey)
-                                                  .value !=
-                                              null &&
-                                          (form.control(_productVariantKey).value
-                                                      as ProductVariantModel)
-                                                  .sku ==
-                                              "Albendazole 400mg") {
-                                        setState(() {
-                                          form
-                                              .control(
-                                            _transactionQuantityKey,
-                                          )
-                                              .setValidators(
-                                            [
-                                              Validators.number,
-                                              Validators.required,
-                                              Validators.min(0),
-                                              Validators.max(context
-                                                  .maximumQuantityAlbendazole),
-                                            ],
-                                            updateParent: true,
-                                            autoValidate: true,
-                                          );
-                                          form
-                                              .control(
-                                                _transactionQuantityKey,
-                                              )
-                                              .touched;
-                                        });
-                                      } else if (form
-                                                  .control(_productVariantKey)
-                                                  .value !=
-                                              null &&
-                                          (form.control(_productVariantKey).value
-                                                      as ProductVariantModel)
-                                                  .sku ==
-                                              "Ivermectin 100mg") {
-                                        setState(() {
-                                          form
-                                              .control(
-                                            _transactionQuantityKey,
-                                          )
-                                              .setValidators(
-                                            [
-                                              Validators.number,
-                                              Validators.required,
-                                              Validators.min(0),
-                                              Validators.max(context
-                                                  .maximumQuantityIvermectin),
-                                            ],
-                                            updateParent: true,
-                                            autoValidate: true,
-                                          );
-                                          form
-                                              .control(
-                                                _transactionQuantityKey,
-                                              )
-                                              .touched;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  if (isWareHouseMgr)
-                                    DigitTextFormField(
-                                      label: localizations.translate(
-                                        i18.stockDetails.waybillNumberLabel,
-                                      ),
-                                      isRequired: true,
-                                      formControlName: _waybillNumberKey,
-                                      validationMessages: {
-                                        'required': (object) =>
-                                            localizations.translate(
-                                              i18.common.corecommonRequired,
-                                            ),
-                                      },
-                                    ),
-                                  if (isWareHouseMgr)
-                                    DigitTextFormField(
-                                      label: localizations.translate(
-                                        i18.stockDetails
-                                            .quantityOfProductIndicatedOnWaybillLabel,
-                                      ),
-                                      keyboardType:
-                                          const TextInputType.numberWithOptions(
-                                        decimal: true,
-                                      ),
-                                      isRequired: true,
-                                      formControlName: _waybillQuantityKey,
-                                      validationMessages: {
-                                        "number": (object) =>
-                                            localizations.translate(
-                                              '${i18.stockDetails.quantityOfProductIndicatedOnWaybillLabel}_ERROR',
-                                            ),
-                                        "max": (object) =>
-                                            "${localizations.translate(
-                                              '${quantityCountLabel}_MAX_ERROR',
-                                            )} ${form.control(_productVariantKey).value != null && (form.control(_productVariantKey).value as ProductVariantModel).sku == "Albendazole 400mg" ? context.maximumQuantityAlbendazole : context.maximumQuantityIvermectin}",
-                                        "min": (object) =>
-                                            localizations.translate(
-                                              '${quantityCountLabel}_MIN_ERROR',
-                                            ),
-                                      },
-                                      onChanged: (control) {
-                                        if (form
-                                                    .control(_productVariantKey)
-                                                    .value !=
-                                                null &&
-                                            (form.control(_productVariantKey).value
-                                                        as ProductVariantModel)
-                                                    .sku ==
-                                                "Albendazole 400mg") {
-                                          setState(() {
-                                            form
-                                                .control(
-                                              _waybillQuantityKey,
-                                            )
-                                                .setValidators(
-                                              [
-                                                Validators.number,
-                                                Validators.required,
-                                                Validators.min(0),
-                                                Validators.max(context
-                                                    .maximumQuantityAlbendazole),
-                                              ],
-                                              updateParent: true,
-                                              autoValidate: true,
-                                            );
-                                            form
-                                                .control(
-                                                  _waybillQuantityKey,
-                                                )
-                                                .touched;
-                                          });
-                                        } else if (form
-                                                    .control(_productVariantKey)
-                                                    .value !=
-                                                null &&
-                                            (form.control(_productVariantKey).value
-                                                        as ProductVariantModel)
-                                                    .sku ==
-                                                "Ivermectin 100mg") {
-                                          setState(() {
-                                            form
-                                                .control(
-                                              _waybillQuantityKey,
-                                            )
-                                                .setValidators(
-                                              [
-                                                Validators.number,
-                                                Validators.required,
-                                                Validators.min(0),
-                                                Validators.max(context
-                                                    .maximumQuantityIvermectin),
-                                              ],
-                                              updateParent: true,
-                                              autoValidate: true,
-                                            );
-                                            form
-                                                .control(
-                                                  _waybillQuantityKey,
-                                                )
-                                                .touched;
-                                          });
-                                        }
-                                      },
-                                    ),
-
-                                  DigitTextFormField(
-                                    label: localizations.translate(
-                                      i18.stockDetails.batchNumberLabel,
-                                    ),
-                                    isRequired: true,
-                                    formControlName: _batchNumberKey,
-                                    validationMessages: {
-                                      'required': (object) =>
-                                          localizations.translate(
-                                            i18.common.corecommonRequired,
-                                          ),
-                                    },
                                   ),
 
-                                  DigitDateFormPicker(
-                                    isEnabled: true,
-                                    formControlName: _dateOfExpiry,
-                                    end: DateTime.now().add(
-                                      const Duration(
-                                        days: 365 * 1000,
-                                      ),
-                                    ),
-                                    label: localizations.translate(
-                                      i18.stockDetails.dateOfExpiryLabel,
-                                    ),
-                                    isRequired: true,
-                                    confirmText: localizations.translate(
-                                      i18.common.coreCommonOk,
-                                    ),
-                                    cancelText: localizations.translate(
-                                      i18.common.coreCommonCancel,
-                                    ),
-                                    validationMessages: {
-                                      'required': (object) =>
-                                          localizations.translate(
-                                            i18.common.corecommonRequired,
-                                          ),
-                                    },
-                                  ),
                                   // Solution Customizations
                                   // if (isWareHouseMgr)
                                   //   BlocBuilder<AppInitializationBloc,
