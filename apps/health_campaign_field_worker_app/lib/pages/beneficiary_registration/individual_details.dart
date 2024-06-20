@@ -527,7 +527,8 @@ class _IndividualDetailsPageState
                                 ),
                               ),
                             ),
-                            if (form.control(_idTypeKey).value != 'DEFAULT')
+                            if (form.control(_idTypeKey).value != 'DEFAULT' &&
+                                form.control(_idTypeKey).value != null)
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -1043,7 +1044,7 @@ class _IndividualDetailsPageState
         value: individual?.identifiers?.firstOrNull?.identifierType,
       ),
       _idNumberKey: FormControl<String>(
-        validators: [Validators.required],
+        validators: widget.isHeadOfHousehold ? [] : [Validators.required],
         value: individual?.identifiers?.firstOrNull?.identifierId,
       ),
       // _disabilityTypeKey:
