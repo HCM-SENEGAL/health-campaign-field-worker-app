@@ -467,7 +467,8 @@ int getDoseIndex(
       currentCycle.endDate != null) {
     if (tasks == null || tasks.isEmpty) {
       return 0;
-    } else if (tasks.last != null && tasks.last.clientAuditDetails != null) {
+    } else if (tasks.last.clientAuditDetails != null &&
+        tasks.last.additionalFields != null) {
       var lastTask = tasks.last;
 
       final lastTaskCreatedTime = lastTask.clientAuditDetails!.createdTime;
@@ -475,7 +476,14 @@ int getDoseIndex(
       final isLastCycleRunning =
           lastTaskCreatedTime >= currentCycle.startDate! &&
               lastTaskCreatedTime <= currentCycle.endDate!;
-
+      if (lastTask.additionalFields != null &&
+          lastTask.additionalFields!.fields
+              .where((element) =>
+                  element.key == AdditionalFieldsType.doseIndex.toValue())
+              .toList()
+              .isEmpty) {
+        return -1;
+      }
       var doseIndex = tasks.last.additionalFields!.fields
           .where(
             (element) =>
