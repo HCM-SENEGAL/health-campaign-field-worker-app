@@ -100,7 +100,7 @@ class CustomValidator {
 
     const pattern = r'[0-9]';
 
-    if (control.value.toString().length != 11) {
+    if (control.value.toString().length != mobileNumberLength) {
       return {'mobileNumber': true};
     }
 
