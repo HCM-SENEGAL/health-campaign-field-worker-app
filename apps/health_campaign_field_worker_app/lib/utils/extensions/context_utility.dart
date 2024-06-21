@@ -80,6 +80,21 @@ extension ContextUtilityExtensions on BuildContext {
     }
   }
 
+  bool get isDownSyncEnabled {
+    try {
+      bool isDownSyncEnabled = loggedInUserRoles
+          .where(
+            (role) => role.code == RolesType.communityDistributor.toValue(),
+          )
+          .toList()
+          .isNotEmpty;
+
+      return isDownSyncEnabled;
+    } catch (_) {
+      return false;
+    }
+  }
+
   BoundaryModel get boundary {
     final boundaryBloc = _get<BoundaryBloc>();
     final boundaryState = boundaryBloc.state;

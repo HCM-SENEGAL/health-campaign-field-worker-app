@@ -683,6 +683,14 @@ class _DeliverInterventionPageState
         ((form.control(_resourceDeliveredKey) as FormArray).value
             as List<ProductVariantModel?>);
     final deliveryComment = form.control(_deliveryCommentKey).value as String?;
+
+    final isDeliveryFailed = (((form.control(
+              _quantityDistributedKey,
+            ) as FormArray)
+                .value) ??
+            [])
+        .any((e) => e == 0);
+
     // Update the task with information from the form and other context
     task = task.copyWith(
       projectId: context.projectId,
@@ -723,7 +731,9 @@ class _DeliverInterventionPageState
         relatedClientReferenceId: clientReferenceId,
         id: null,
       ),
-      status: Status.administeredSuccess.toValue(),
+      status: isDeliveryFailed
+          ? Status.administeredFailed.toValue()
+          : Status.administeredSuccess.toValue(),
       additionalFields: TaskAdditionalFields(
         version: task.additionalFields?.version ?? 1,
         fields: [

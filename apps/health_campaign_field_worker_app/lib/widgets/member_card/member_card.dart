@@ -177,58 +177,11 @@ class MemberCard extends StatelessWidget {
             ),
             child: Offstage(
               offstage: beneficiaryType != BeneficiaryType.individual,
-              child: !isDelivered ||
-                      isNotEligible ||
-                      isBeneficiaryRefused ||
-                      isBeneficiaryIneligible ||
-                      isBeneficiarySick ||
-                      isBeneficiaryAbsent ||
-                      isBeneficiaryReferred
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: DigitIconButton(
-                        icon: Icons.info_rounded,
-                        iconSize: 20,
-                        iconText: localizations.translate(
-                          (isNotEligible || isBeneficiaryIneligible)
-                              ? i18.householdOverView
-                                  .householdOverViewNotEligibleIconLabel
-                              : isBeneficiaryReferred
-                                  ? i18.householdOverView
-                                      .householdOverViewBeneficiaryReferredLabel
-                                  : isBeneficiaryRefused
-                                      ? Status.beneficiaryRefused.toValue()
-                                      // [TODO Need to update the localization]
-                                      : isBeneficiarySick
-                                          ? Status.beneficiarySick.toValue()
-                                          : isBeneficiaryAbsent
-                                              ? Status.beneficiaryAbsent
-                                                  .toValue()
-                                              : i18.householdOverView
-                                                  .householdOverViewNotDeliveredIconLabel,
-                        ),
-                        iconTextColor: theme.colorScheme.error,
-                        iconColor: theme.colorScheme.error,
-                      ),
-                    )
-                  : Align(
-                      alignment: Alignment.centerLeft,
-                      child: DigitIconButton(
-                        icon: Icons.check_circle,
-                        iconText: localizations.translate(
-                          // todo verify this
-                          deliveryComment.isNotEmpty
-                              ? deliveryComment
-                              : i18.householdOverView
-                                  .householdOverViewDeliveredIconLabel,
-                        ),
-                        iconSize: 20,
-                        iconTextColor:
-                            DigitTheme.instance.colorScheme.onSurfaceVariant,
-                        iconColor:
-                            DigitTheme.instance.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
+              child: getStatus(
+                context,
+                theme,
+                deliveryComment,
+              ),
             ),
           ),
           Offstage(
@@ -240,194 +193,7 @@ class MemberCard extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Column(
                 children: [
-                  isNotEligible ||
-                          isBeneficiaryReferred ||
-                          isBeneficiaryIneligible ||
-                          allDosesDelivered(
-                            tasks,
-                            context.selectedCycle,
-                            sideEffects,
-                            individual,
-                          ) ||
-                          !validDoseDelivery(
-                            tasks,
-                            context.selectedCycle,
-                          )
-                      // todo verify this
-                      ? const Offstage()
-                      : !isNotEligible
-                          ? DigitElevatedButton(
-                              // padding: const EdgeInsets.only(
-                              //   left: kPadding / 2,
-                              //   right: kPadding / 2,
-                              // ),
-                              onPressed: () {
-                                if (getDoseIndex(
-                                      tasks,
-                                      context.selectedCycle,
-                                    ) !=
-                                    0) {
-                                  DigitDialog.show<bool>(
-                                    context,
-                                    options: DigitDialogOptions(
-                                      titleText: localizations.translate(i18
-                                          .deliverIntervention
-                                          .didYouObservePreviousAdvEventsTitle),
-                                      barrierDismissible: false,
-                                      enableRecordPast: true,
-                                      dialogPadding: const EdgeInsets.fromLTRB(
-                                        kPadding,
-                                        kPadding,
-                                        kPadding,
-                                        0,
-                                      ),
-                                      primaryAction: DigitDialogActions(
-                                        label: localizations.translate(
-                                          i18.common.coreCommonNo,
-                                        ),
-                                        action: (ctx) {
-                                          Navigator.pop(ctx);
-                                          // todo verify this as there was no action on no , and it will be stuck if no selected
-                                          final bloc = context
-                                              .read<HouseholdOverviewBloc>();
-
-                                          bloc.add(
-                                            HouseholdOverviewEvent
-                                                .selectedIndividual(
-                                              individualModel: individual,
-                                            ),
-                                          );
-                                          bloc.add(HouseholdOverviewReloadEvent(
-                                            projectId: context.projectId,
-                                            projectBeneficiaryType:
-                                                context.beneficiaryType,
-                                          ));
-
-                                          final futureTaskList = tasks
-                                              ?.where((task) =>
-                                                  task.status ==
-                                                  Status.delivered.toValue())
-                                              .toList();
-
-                                          if ((futureTaskList ?? [])
-                                              .isNotEmpty) {
-                                            context.router.push(
-                                              RecordPastDeliveryDetailsRoute(
-                                                tasks: tasks,
-                                              ),
-                                            );
-                                          } else {
-                                            context.router.push(
-                                                BeneficiaryDetailsRoute());
-                                          }
-                                        },
-                                      ),
-                                      secondaryAction: DigitDialogActions(
-                                        label: localizations.translate(
-                                          i18.common.coreCommonYes,
-                                        ),
-                                        action: (ctx) async {
-                                          Navigator.pop(
-                                            ctx,
-                                          );
-                                          final reloadState = context
-                                              .read<HouseholdOverviewBloc>();
-                                          final response = await router.push(
-                                            SideEffectsRoute(
-                                              tasks: [
-                                                (tasks)!.last,
-                                              ],
-                                              fromSurvey: true,
-                                            ),
-                                          );
-
-                                          if (response == null) {
-                                            Future.delayed(
-                                              const Duration(
-                                                milliseconds: 1000,
-                                              ),
-                                              () {
-                                                reloadState.add(
-                                                  HouseholdOverviewReloadEvent(
-                                                    projectId:
-                                                        context.projectId,
-                                                    projectBeneficiaryType:
-                                                        context.beneficiaryType,
-                                                  ),
-                                                );
-                                              },
-                                            ).then(
-                                              (value) {
-                                                context.router.popAndPush(
-                                                  HouseholdAcknowledgementRoute(
-                                                    enableViewHousehold: true,
-                                                  ),
-                                                );
-                                                Navigator.pop(ctx);
-                                              },
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  final bloc =
-                                      context.read<HouseholdOverviewBloc>();
-
-                                  bloc.add(
-                                    HouseholdOverviewEvent.selectedIndividual(
-                                      individualModel: individual,
-                                    ),
-                                  );
-                                  bloc.add(HouseholdOverviewReloadEvent(
-                                    projectId: context.projectId,
-                                    projectBeneficiaryType:
-                                        context.beneficiaryType,
-                                  ));
-
-                                  final futureTaskList = tasks
-                                      ?.where((task) =>
-                                          task.status ==
-                                          Status.delivered.toValue())
-                                      .toList();
-
-                                  if ((futureTaskList ?? []).isNotEmpty) {
-                                    context.router.push(
-                                      RecordPastDeliveryDetailsRoute(
-                                        tasks: tasks,
-                                      ),
-                                    );
-                                  } else {
-                                    context.router
-                                        .push(BeneficiaryDetailsRoute());
-                                  }
-                                }
-                              },
-                              child: Center(
-                                child: Text(
-                                  allDosesDelivered(
-                                            tasks,
-                                            context.selectedCycle,
-                                            sideEffects,
-                                            individual,
-                                          ) ||
-                                          !validDoseDelivery(
-                                            tasks,
-                                            context.selectedCycle,
-                                          )
-                                      ? localizations.translate(
-                                          i18.householdOverView
-                                              .viewDeliveryLabel,
-                                        )
-                                      : localizations.translate(
-                                          i18.householdOverView
-                                              .householdOverViewActionText,
-                                        ),
-                                ),
-                              ),
-                            )
-                          : const Offstage(),
+                  getButtonType(context, theme, deliveryComment, router),
                   const SizedBox(
                     height: 10,
                   ),
@@ -973,5 +739,332 @@ class MemberCard extends StatelessWidget {
             .where((element) => element.key == deliveryCommentKey)
             .first
             .value;
+  }
+
+  dynamic getButtonType(
+    BuildContext context,
+    ThemeData theme,
+    String deliveryComment,
+    StackRouter router,
+  ) {
+    return allDosesDelivered(
+      tasks,
+      context.selectedCycle,
+      sideEffects,
+      individual,
+    )
+        ? DigitElevatedButton(
+            // padding: const EdgeInsets.only(
+            //   left: kPadding / 2,
+            //   right: kPadding / 2,
+            // ),
+            onPressed: () {
+              final bloc = context.read<HouseholdOverviewBloc>();
+
+              bloc.add(
+                HouseholdOverviewEvent.selectedIndividual(
+                  individualModel: individual,
+                ),
+              );
+              bloc.add(HouseholdOverviewReloadEvent(
+                projectId: context.projectId,
+                projectBeneficiaryType: context.beneficiaryType,
+              ));
+
+              final futureTaskList = tasks
+                  ?.where((task) => task.status == Status.delivered.toValue())
+                  .toList();
+
+              if ((futureTaskList ?? []).isNotEmpty) {
+                context.router.push(
+                  RecordPastDeliveryDetailsRoute(
+                    tasks: tasks,
+                  ),
+                );
+              } else {
+                context.router.push(BeneficiaryDetailsRoute());
+              }
+            },
+            child: Center(
+              child: Text(
+                localizations.translate(
+                  i18.householdOverView.viewDeliveryLabel,
+                ),
+              ),
+            ),
+          )
+        : isNotEligible ||
+                isBeneficiaryReferred ||
+                isBeneficiaryIneligible ||
+                (!validDoseDelivery(
+                  tasks,
+                  context.selectedCycle,
+                ))
+            // todo verify this
+            ? const Offstage()
+            : !isNotEligible
+                ? DigitElevatedButton(
+                    // padding: const EdgeInsets.only(
+                    //   left: kPadding / 2,
+                    //   right: kPadding / 2,
+                    // ),
+                    onPressed: () {
+                      if (getDoseIndex(
+                                tasks,
+                                context.selectedCycle,
+                              ) !=
+                              0 &&
+                          getDoseIndex(
+                                tasks,
+                                context.selectedCycle,
+                              ) >
+                              0) {
+                        DigitDialog.show<bool>(
+                          context,
+                          options: DigitDialogOptions(
+                            titleText: localizations.translate(i18
+                                .deliverIntervention
+                                .didYouObservePreviousAdvEventsTitle),
+                            barrierDismissible: false,
+                            enableRecordPast: true,
+                            dialogPadding: const EdgeInsets.fromLTRB(
+                              kPadding,
+                              kPadding,
+                              kPadding,
+                              0,
+                            ),
+                            primaryAction: DigitDialogActions(
+                              label: localizations.translate(
+                                i18.common.coreCommonNo,
+                              ),
+                              action: (ctx) {
+                                Navigator.pop(ctx);
+                                // todo verify this as there was no action on no , and it will be stuck if no selected
+                                final bloc =
+                                    context.read<HouseholdOverviewBloc>();
+
+                                bloc.add(
+                                  HouseholdOverviewEvent.selectedIndividual(
+                                    individualModel: individual,
+                                  ),
+                                );
+                                bloc.add(HouseholdOverviewReloadEvent(
+                                  projectId: context.projectId,
+                                  projectBeneficiaryType:
+                                      context.beneficiaryType,
+                                ));
+
+                                final futureTaskList = tasks
+                                    ?.where((task) =>
+                                        task.status ==
+                                        Status.delivered.toValue())
+                                    .toList();
+
+                                if ((futureTaskList ?? []).isNotEmpty) {
+                                  context.router.push(
+                                    RecordPastDeliveryDetailsRoute(
+                                      tasks: tasks,
+                                    ),
+                                  );
+                                } else {
+                                  context.router
+                                      .push(BeneficiaryDetailsRoute());
+                                }
+                              },
+                            ),
+                            secondaryAction: DigitDialogActions(
+                              label: localizations.translate(
+                                i18.common.coreCommonYes,
+                              ),
+                              action: (ctx) async {
+                                Navigator.pop(
+                                  ctx,
+                                );
+                                final reloadState =
+                                    context.read<HouseholdOverviewBloc>();
+                                final response = await router.push(
+                                  SideEffectsRoute(
+                                    tasks: [
+                                      (tasks)!.last,
+                                    ],
+                                    fromSurvey: true,
+                                  ),
+                                );
+
+                                if (response == null) {
+                                  Future.delayed(
+                                    const Duration(
+                                      milliseconds: 1000,
+                                    ),
+                                    () {
+                                      reloadState.add(
+                                        HouseholdOverviewReloadEvent(
+                                          projectId: context.projectId,
+                                          projectBeneficiaryType:
+                                              context.beneficiaryType,
+                                        ),
+                                      );
+                                    },
+                                  ).then(
+                                    (value) {
+                                      context.router.popAndPush(
+                                        HouseholdAcknowledgementRoute(
+                                          enableViewHousehold: true,
+                                        ),
+                                      );
+                                      Navigator.pop(ctx);
+                                    },
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        );
+                      } else {
+                        final bloc = context.read<HouseholdOverviewBloc>();
+
+                        bloc.add(
+                          HouseholdOverviewEvent.selectedIndividual(
+                            individualModel: individual,
+                          ),
+                        );
+                        bloc.add(HouseholdOverviewReloadEvent(
+                          projectId: context.projectId,
+                          projectBeneficiaryType: context.beneficiaryType,
+                        ));
+
+                        final futureTaskList = tasks
+                            ?.where((task) =>
+                                task.status == Status.delivered.toValue())
+                            .toList();
+
+                        if ((futureTaskList ?? []).isNotEmpty) {
+                          context.router.push(
+                            RecordPastDeliveryDetailsRoute(
+                              tasks: tasks,
+                            ),
+                          );
+                        } else {
+                          context.router.push(BeneficiaryDetailsRoute());
+                        }
+                      }
+                    },
+                    child: Center(
+                      child: Text(
+                        allDosesDelivered(
+                                  tasks,
+                                  context.selectedCycle,
+                                  sideEffects,
+                                  individual,
+                                ) ||
+                                !validDoseDelivery(
+                                  tasks,
+                                  context.selectedCycle,
+                                )
+                            ? localizations.translate(
+                                i18.householdOverView.viewDeliveryLabel,
+                              )
+                            : localizations.translate(
+                                i18.householdOverView
+                                    .householdOverViewActionText,
+                              ),
+                      ),
+                    ),
+                  )
+                : const Offstage();
+  }
+
+  Widget getStatus(
+    BuildContext context,
+    ThemeData theme,
+    String deliveryComment,
+  ) {
+    final bool dosesDelivered = allDosesDelivered(
+      tasks,
+      context.selectedCycle,
+      sideEffects,
+      individual,
+    );
+    final int doseIndex = getDoseIndex(tasks, context.selectedCycle);
+    final bool validDelivery = validDoseDelivery(tasks, context.selectedCycle);
+
+    IconData icon;
+    String iconText;
+    Color iconTextColor = theme.colorScheme.error;
+    Color iconColor = theme.colorScheme.error;
+
+    if (dosesDelivered) {
+      if (!isDelivered ||
+          isNotEligible ||
+          isBeneficiaryRefused ||
+          isBeneficiaryIneligible ||
+          isBeneficiarySick ||
+          isBeneficiaryAbsent ||
+          isBeneficiaryReferred) {
+        icon = Icons.info_rounded;
+        iconText = (isNotEligible || isBeneficiaryIneligible)
+            ? i18.householdOverView.householdOverViewNotEligibleIconLabel
+            : isBeneficiaryReferred
+                ? i18
+                    .householdOverView.householdOverViewBeneficiaryReferredLabel
+                : isBeneficiaryRefused
+                    ? Status.beneficiaryRefused.toValue()
+                    : isBeneficiarySick
+                        ? Status.beneficiarySick.toValue()
+                        : isBeneficiaryAbsent
+                            ? Status.beneficiaryAbsent.toValue()
+                            : i18.householdOverView
+                                .householdOverViewNotDeliveredIconLabel;
+      } else if (deliveryComment.isNotEmpty) {
+        icon = Icons.info_rounded;
+        iconText = deliveryComment;
+      } else {
+        icon = Icons.check_circle;
+        iconText = i18.householdOverView.householdOverViewDeliveredIconLabel;
+        iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+        iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+      }
+    } else if (doseIndex == 0 || validDelivery) {
+      icon = Icons.info_rounded;
+      iconText = Status.notAdministered.toValue();
+    } else if (deliveryComment.isNotEmpty) {
+      icon = Icons.info_rounded;
+      iconText = deliveryComment;
+    } else if (isNotEligible ||
+        isBeneficiaryIneligible ||
+        isBeneficiaryReferred ||
+        isBeneficiaryRefused ||
+        isBeneficiarySick ||
+        isBeneficiaryAbsent) {
+      icon = Icons.info_rounded;
+      iconText = (isNotEligible || isBeneficiaryIneligible)
+          ? i18.householdOverView.householdOverViewNotEligibleIconLabel
+          : isBeneficiaryReferred
+              ? i18.householdOverView.householdOverViewBeneficiaryReferredLabel
+              : isBeneficiaryRefused
+                  ? Status.beneficiaryRefused.toValue()
+                  : isBeneficiarySick
+                      ? Status.beneficiarySick.toValue()
+                      : isBeneficiaryAbsent
+                          ? Status.beneficiaryAbsent.toValue()
+                          : i18.householdOverView
+                              .householdOverViewNotDeliveredIconLabel;
+    } else {
+      icon = Icons.check_circle;
+      iconText = Status.administered.toValue();
+      iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+      iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+    }
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: DigitIconButton(
+        icon: icon,
+        iconSize: 20,
+        iconText: localizations.translate(iconText),
+        iconTextColor: iconTextColor,
+        iconColor: iconColor,
+      ),
+    );
   }
 }

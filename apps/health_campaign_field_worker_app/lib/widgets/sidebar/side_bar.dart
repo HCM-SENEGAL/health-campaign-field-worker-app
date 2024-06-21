@@ -85,6 +85,18 @@ class SideBar extends StatelessWidget {
               context.router.replaceAll([HomeRoute()]);
             },
           ),
+          context.isDownSyncEnabled
+              ? DigitIconTile(
+                  title: AppLocalizations.of(context).translate(
+                    i18.common.coreCommonViewDownloadedData,
+                  ),
+                  icon: Icons.download,
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    context.router.push(const BeneficiariesReportRoute());
+                  },
+                )
+              : const Offstage(),
           // Solution Customization
           // BlocBuilder<AppInitializationBloc, AppInitializationState>(
           //   builder: (context, state) {

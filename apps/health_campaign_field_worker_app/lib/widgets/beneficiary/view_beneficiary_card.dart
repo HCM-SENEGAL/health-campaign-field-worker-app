@@ -166,7 +166,22 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
 
 // TODO need to pass the current cycle
 
-        final isStatusReset = checkStatus(taskdata, currentCycle);
+        final isStatusReset =
+            isLastCycleRunning(taskdata, context.selectedCycle)
+                ? allDosesDelivered(
+                    taskdata,
+                    context.selectedCycle,
+                    sideEffects,
+                    e,
+                  )
+                    ? false
+                    : (getDoseIndex(taskdata, context.selectedCycle) == 0)
+                        ? false
+                        : validDoseDelivery(
+                            taskdata,
+                            context.selectedCycle,
+                          )
+                : true;
 
         final rowTableData = [
           TableData(
@@ -362,6 +377,15 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     } else if (taskData != null) {
       if (taskData.isEmpty) {
         return localizations.translate(Status.notAdministered.toValue());
+      } else if (!statusKeys.isStatusReset &&
+          taskData.last.additionalFields != null &&
+          taskData.last.additionalFields!.fields
+              .where((element) => element.key == "deliveryComment")
+              .isNotEmpty) {
+        return localizations.translate(taskData.last.additionalFields!.fields
+            .where((element) => element.key == "deliveryComment")
+            .first
+            .value);
       } else if (statusKeys.isBeneficiaryRefused && !statusKeys.isStatusReset) {
         return localizations.translate(Status.beneficiaryRefused.toValue());
       } else if (statusKeys.isBeneficiarySick && !statusKeys.isStatusReset) {
@@ -370,14 +394,6 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
         return localizations.translate(Status.beneficiaryAbsent.toValue());
       } else if (statusKeys.isStatusReset) {
         return localizations.translate(Status.notAdministered.toValue());
-      } else if (taskData.last.additionalFields != null &&
-          taskData.last.additionalFields!.fields
-              .where((element) => element.key == "deliveryComment")
-              .isNotEmpty) {
-        return localizations.translate(taskData.last.additionalFields!.fields
-            .where((element) => element.key == "deliveryComment")
-            .first
-            .value);
       } else {
         return localizations.translate(Status.administered.toValue());
       }
@@ -404,7 +420,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             !isBeneficiaryAbsent &&
             !isBeneficiaryIneligible &&
             !isNotEligible &&
-            !isStatusReset
+            !isStatusReset &&
+            (taskdata.last.status == Status.administeredSuccess.toValue())
         ? theme.colorScheme.onSurfaceVariant
         : theme.colorScheme.error;
   }

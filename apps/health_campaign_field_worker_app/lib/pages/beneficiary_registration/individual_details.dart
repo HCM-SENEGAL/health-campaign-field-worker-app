@@ -527,6 +527,47 @@ class _IndividualDetailsPageState
                                 ),
                               ),
                             ),
+                            if (form.control(_idTypeKey).value != 'DEFAULT' &&
+                                form.control(_idTypeKey).value != null)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ReactiveFormConsumer(
+                                    builder: (context, formGroup, child) {
+                                      return DigitTextFormField(
+                                        readOnly:
+                                            form.control(_idTypeKey).value ==
+                                                'DEFAULT',
+                                        isRequired: form
+                                            .control(_idNumberKey)
+                                            .validators
+                                            .isNotEmpty,
+                                        formControlName: _idNumberKey,
+                                        label: localizations.translate(
+                                          i18.individualDetails
+                                              .idNumberLabelText,
+                                        ),
+                                        validationMessages: {
+                                          'required': (object) =>
+                                              localizations.translate(
+                                                '${i18.individualDetails.idNumberLabelText}_IS_REQUIRED',
+                                              ),
+                                        },
+                                        padding: const EdgeInsets.only(
+                                          top: kPadding * 2,
+                                          left: kPadding / 2,
+                                          right: kPadding / 2,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 4),
+                                ],
+                              ),
+                            if (form.control(_idTypeKey).value == 'DEFAULT')
+                              const SizedBox(
+                                height: kPadding,
+                              ),
                             Offstage(
                               offstage: !widget.isHeadOfHousehold,
                               child: DigitCheckbox(
@@ -895,8 +936,8 @@ class _IndividualDetailsPageState
       dateOfBirth: dobString,
       identifiers: [
         identifier.copyWith(
-          identifierId: 'DEFAULT',
-          identifierType: 'DEFAULT',
+          identifierId: form.control(_idNumberKey).value,
+          identifierType: form.control(_idTypeKey).value,
         ),
       ],
       additionalFields: IndividualAdditionalFields(
@@ -1001,6 +1042,10 @@ class _IndividualDetailsPageState
       ]),
       _idTypeKey: FormControl<String>(
         value: individual?.identifiers?.firstOrNull?.identifierType,
+      ),
+      _idNumberKey: FormControl<String>(
+        validators: widget.isHeadOfHousehold ? [] : [Validators.required],
+        value: individual?.identifiers?.firstOrNull?.identifierId,
       ),
       // _disabilityTypeKey:
       //     FormControl<String>(value: disabilityType, validators: [
