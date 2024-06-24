@@ -85,6 +85,8 @@ class _SearchBeneficiaryPageState
           locationState.longitude != null &&
           appConfig.maxRadius != null &&
           isProximityEnabled) {
+        lat = locationState.latitude!;
+        long = locationState.longitude!;
         blocWrapper.proximitySearchBloc
             .add(SearchHouseholdsEvent.searchByProximity(
           latitude: locationState.latitude!,

@@ -75,7 +75,7 @@ class CustomValidator {
     AbstractControl<dynamic> control,
   ) {
     return control.value == null ||
-            control.value.toString().length >= 2 ||
+            control.value.toString().trim().length >= 2 ||
             control.value.toString().trim().isEmpty
         ? null
         : {'required': true};

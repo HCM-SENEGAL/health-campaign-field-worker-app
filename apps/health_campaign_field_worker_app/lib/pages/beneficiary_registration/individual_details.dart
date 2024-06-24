@@ -429,7 +429,7 @@ class _IndividualDetailsPageState
                             individualDetailsShowcaseData.nameOfIndividual
                                 .buildWith(
                               child: DigitTextFormField(
-                                formControlName: 'individualName',
+                                formControlName: _individualNameKey,
                                 label: localizations.translate(
                                   i18.individualDetails.firstNameLabelText,
                                 ),
@@ -944,7 +944,7 @@ class _IndividualDetailsPageState
 
     individual = individual.copyWith(
       name: name.copyWith(
-        givenName: form.control(_individualNameKey).value,
+        givenName: (form.control(_individualNameKey).value as String).trim(),
         familyName:
             (form.control(_individualLastNameKey).value as String).trim(),
       ),
@@ -1015,7 +1015,7 @@ class _IndividualDetailsPageState
       _individualNameKey: FormControl<String>(
         validators: [
           Validators.required,
-          CustomValidator.requiredMin3,
+          CustomValidator.requiredMin,
           Validators.maxLength(200),
         ],
         value: individual?.name?.givenName ?? searchQuery?.trim(),
@@ -1023,7 +1023,7 @@ class _IndividualDetailsPageState
       _individualLastNameKey: FormControl<String>(
         validators: [
           Validators.required,
-          CustomValidator.requiredMin3,
+          CustomValidator.requiredMin,
           Validators.maxLength(200),
         ],
         value: individual?.name?.familyName ?? '',
