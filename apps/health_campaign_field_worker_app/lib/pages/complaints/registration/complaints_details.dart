@@ -336,7 +336,8 @@ class _ComplaintsDetailsPageState
                                               .validationRequiredError),
                                       'maxLength': (object) => localizations
                                           .translate(
-                                              i18.common.maxCharsRequired)
+                                            i18.common.maxCharsRequired,
+                                          )
                                           .replaceAll('{}', '64'),
                                     },
                                   ),
@@ -346,6 +347,7 @@ class _ComplaintsDetailsPageState
                                       i18.complaints.complainantContactNumber,
                                     ),
                                     readOnly: isRaisedForSelf,
+                                    maxLength: 9,
                                     isRequired: true,
                                     keyboardType: TextInputType.number,
                                     validationMessages: {
@@ -361,9 +363,12 @@ class _ComplaintsDetailsPageState
                                               .validationMinLengthError),
                                       'maxLength': (object) => localizations
                                           .translate(
-                                              i18.common.maxCharsRequired)
-                                          .replaceAll('{}',
-                                              mobileNumberLength.toString()),
+                                            i18.common.maxCharsRequired,
+                                          )
+                                          .replaceAll(
+                                            '{}',
+                                            mobileNumberLength.toString(),
+                                          ),
                                     },
                                   ),
                                 ],
@@ -387,6 +392,7 @@ class _ComplaintsDetailsPageState
                               i18.complaints.supervisorContactNumber,
                             ),
                             keyboardType: TextInputType.number,
+                            maxLength: 9,
                             validationMessages: {
                               'mobileNumber': (object) =>
                                   localizations.translate(
@@ -394,10 +400,14 @@ class _ComplaintsDetailsPageState
                                         .mobileNumberInvalidFormatValidationMessage,
                                   ),
                               'minLength': (object) => localizations.translate(
-                                  i18.complaints.validationMinLengthError),
+                                    i18.complaints.validationMinLengthError,
+                                  ),
                               'maxLength': (object) => localizations
                                   .translate(i18.common.maxCharsRequired)
-                                  .replaceAll('{}', '10'),
+                                  .replaceAll(
+                                    '{}',
+                                    mobileNumberLength.toString(),
+                                  ),
                             },
                           ),
                           DigitTextFormField(
@@ -465,7 +475,7 @@ class _ComplaintsDetailsPageState
           Validators.required,
           CustomValidator.validMobileNumber,
           Validators.minLength(mobileNumberLength),
-          Validators.maxLength(mobileNumberLength)
+          Validators.maxLength(mobileNumberLength),
         ],
       ),
       _supervisorName: FormControl<String>(

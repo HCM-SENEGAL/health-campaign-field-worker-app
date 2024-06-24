@@ -131,7 +131,6 @@ abstract class OpLogManager<T extends EntityModel> {
 
   Future<void> put(OpLogEntry<dynamic> entry) async {
     await isar.writeTxn(() async {
-
       await isar.opLogs.put(entry
           .copyWith(
             clientReferenceId: getClientReferenceId(entry.entity),
@@ -154,7 +153,7 @@ abstract class OpLogManager<T extends EntityModel> {
     if (nonRecoverableError == true && id != null && entry != null) {
       final oplog = await isar.opLogs.filter().idEqualTo(id).findFirst();
       if (oplog == null) return;
-      final OpLogEntry<T>  fetchedEntry = OpLogEntry.fromOpLog<T>(oplog);
+      final OpLogEntry<T> fetchedEntry = OpLogEntry.fromOpLog<T>(oplog);
       await isar.writeTxn(() async {
         await isar.opLogs.put(fetchedEntry
             .copyWith(
@@ -180,7 +179,7 @@ abstract class OpLogManager<T extends EntityModel> {
         fetchedEntry.copyWith(
           syncedUp: true,
           syncedUpOn: DateTime.now(),
-        ) as OpLogEntry<T>,
+        ),
       );
     } else if (clientReferenceId != null) {
       final oplog = await isar.opLogs
@@ -196,7 +195,7 @@ abstract class OpLogManager<T extends EntityModel> {
         fetchedEntry.copyWith(
           syncedUp: true,
           syncedUpOn: DateTime.now(),
-        ) as OpLogEntry<T>,
+        ),
       );
     } else {
       throw AppException('Invalid arguments');

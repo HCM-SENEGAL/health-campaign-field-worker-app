@@ -44,6 +44,22 @@
     {
       "name": "Beneficiary Ineligible",
       "value": "BENEFICIARY_INELIGIBLE"
+    },
+    {
+      "name": "Beneficiary Sick",
+      "value": "BENEFICIARY_SICK"
+    },
+    {
+      "name": "Beneficiary Absent",
+      "value": "BENEFICIARY_ABSENT"
+    },
+    {
+      "name": "Administered",
+      "value": "ADMINISTERED"
+    },
+    {
+      "name": "Not Administered",
+      "value": "NOT_ADMINISTERED"
     }
   ],
   "isEnum": true
