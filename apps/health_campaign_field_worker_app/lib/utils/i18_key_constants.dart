@@ -1058,6 +1058,7 @@ class IndividualDetails {
 
   String get lastNameIsRequiredError => 'LAST_NAME_REQUIRED_ERROR_MESSAGE';
   String get linkVoucherToIndividual => 'LINK_VOUCHER_TO_INDIVIDUAL';
+  String get headAgeValidError => 'HEAD_VALID_AGE_ERROR_MESSAGE';
 }
 
 class HouseholdLocation {

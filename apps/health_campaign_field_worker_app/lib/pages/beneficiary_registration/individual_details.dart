@@ -54,6 +54,7 @@ class _IndividualDetailsPageState
   DateTime now = DateTime.now();
   // static const _disabilityTypeKey = 'disabilityType';
   // static const _heightKey = 'height';
+  bool isHeadAgeValid = true;
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +114,19 @@ class _IndividualDetailsPageState
                               if (!widget.isHeadOfHousehold &&
                                   form.control(_idTypeKey).value == null) {
                                 form.control(_idTypeKey).setErrors({'': true});
+                              }
+                              if (!isHeadAgeValid) {
+                                await DigitToast.show(
+                                  context,
+                                  options: DigitToastOptions(
+                                    localizations.translate(i18
+                                        .individualDetails.headAgeValidError),
+                                    true,
+                                    theme,
+                                  ),
+                                );
+
+                                return;
                               }
                               final userId = context.loggedInUserUuid;
                               final projectId = context.projectId;
@@ -613,7 +627,13 @@ class _IndividualDetailsPageState
                                             (age.years == 150 &&
                                                 age.months > 0))) {
                                       formControl.setErrors({'': true});
+                                    } else if (widget.isHeadOfHousehold &&
+                                        age.years < 18) {
+                                      isHeadAgeValid = false;
                                     } else {
+                                      if (widget.isHeadOfHousehold) {
+                                        isHeadAgeValid = true;
+                                      }
                                       formControl.removeError('');
                                     }
                                   }
@@ -672,7 +692,7 @@ class _IndividualDetailsPageState
                                   label: localizations.translate(
                                     i18.individualDetails.mobileNumberLabelText,
                                   ),
-                                  maxLength: 11,
+                                  maxLength: 9,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
                                       RegExp("[0-9]"),
@@ -936,8 +956,8 @@ class _IndividualDetailsPageState
       dateOfBirth: dobString,
       identifiers: [
         identifier.copyWith(
-          identifierId: form.control(_idNumberKey).value,
-          identifierType: form.control(_idTypeKey).value,
+          identifierId: form.control(_idNumberKey).value ?? 'DEFAULT',
+          identifierType: form.control(_idTypeKey).value ?? 'DEFAULT',
         ),
       ],
       additionalFields: IndividualAdditionalFields(

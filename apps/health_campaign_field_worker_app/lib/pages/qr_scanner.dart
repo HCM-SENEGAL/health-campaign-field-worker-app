@@ -445,8 +445,19 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
                             i18.common.coreCommonSubmit,
                           )),
                           onPressed: () async {
+                            String code = _resourceController.value.text
+                                .replaceAll(' ', '');
+                            if (!patternTraining.hasMatch(code) &&
+                                !patternProd.hasMatch(code)) {
+                              await handleError(
+                                i18.deliverIntervention.scanValidResource,
+                              );
+
+                              return;
+                            }
+
                             final bloc = context.read<ScannerBloc>();
-                            codes.add(_resourceController.value.text);
+                            codes.add(code);
                             bloc.add(
                               ScannerEvent.handleScanner(
                                 state.barcodes,
@@ -458,16 +469,6 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
                                 result.length < widget.quantity) {
                               buildDialog();
                             } else {
-                              String code = _resourceController.value.text
-                                  .replaceAll(' ', '');
-                              if (!patternTraining.hasMatch(code) &&
-                                  !patternProd.hasMatch(code)) {
-                                await handleError(
-                                  i18.deliverIntervention.scanValidResource,
-                                );
-
-                                return;
-                              }
                               final bloc = context.read<SearchBlocWrapper>();
                               final scannerState =
                                   context.read<ScannerBloc>().state;

@@ -96,7 +96,7 @@ class Variables {
 
   static const _checkBandwidthApi = EnvEntry(
     'CHECK_BANDWIDTH_API',
-    '/health-project/check/bandwidth',
+    '/project/check/bandwidth',
   );
 
   static const _mdmsApi = EnvEntry(
