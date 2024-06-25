@@ -510,7 +510,8 @@ bool isLastCycleRunning(
   if (currentCycle != null &&
       currentCycle.startDate != null &&
       currentCycle.endDate != null &&
-      tasks != null) {
+      tasks != null &&
+      tasks.isNotEmpty) {
     var lastTask = tasks.last;
 
     final lastTaskCreatedTime = lastTask.clientAuditDetails!.createdTime;

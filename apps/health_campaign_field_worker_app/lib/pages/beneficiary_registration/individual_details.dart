@@ -263,6 +263,13 @@ class _IndividualDetailsPageState
                                                 : null,
                                           ),
                                         );
+
+                                        scannerBloc.add(
+                                          const ScannerEvent.handleScanner(
+                                            [],
+                                            [],
+                                          ),
+                                        );
                                       }
                                     }
                                   }
