@@ -182,6 +182,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                             context.selectedCycle,
                           )
                 : true;
+        final isHead = e.clientReferenceId ==
+            householdMember.headOfHousehold.clientReferenceId;
 
         final rowTableData = [
           TableData(
@@ -192,18 +194,22 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             cellKey: 'beneficiary',
           ),
           TableData(
-            getTableCellText(
-              StatusKeys(
-                isNotEligible,
-                isBeneficiaryRefused,
-                isBeneficiarySick,
-                isBeneficiaryAbsent,
-                isBeneficiaryIneligible,
-                isBeneficiaryReferred,
-                isStatusReset,
-              ),
-              taskdata,
-            ),
+            isHead
+                ? localizations.translate(
+                    i18.householdOverView.householdOverViewHouseholderHeadLabel,
+                  )
+                : getTableCellText(
+                    StatusKeys(
+                      isNotEligible,
+                      isBeneficiaryRefused,
+                      isBeneficiarySick,
+                      isBeneficiaryAbsent,
+                      isBeneficiaryIneligible,
+                      isBeneficiaryReferred,
+                      isStatusReset,
+                    ),
+                    taskdata,
+                  ),
             cellKey: 'delivery',
             style: TextStyle(
               color: getTableCellTextColor(

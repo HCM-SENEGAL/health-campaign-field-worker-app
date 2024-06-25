@@ -181,6 +181,7 @@ class MemberCard extends StatelessWidget {
                 context,
                 theme,
                 deliveryComment,
+                isHead,
               ),
             ),
           ),
@@ -978,6 +979,7 @@ class MemberCard extends StatelessWidget {
     BuildContext context,
     ThemeData theme,
     String deliveryComment,
+    bool isHead,
   ) {
     final bool dosesDelivered = allDosesDelivered(
       tasks,
@@ -994,14 +996,47 @@ class MemberCard extends StatelessWidget {
     Color iconColor = theme.colorScheme.error;
 
     // TODO ceck with amit once
-    if (dosesDelivered) {
-      if (!isDelivered ||
-          isNotEligible ||
-          isBeneficiaryRefused ||
+    if (isHead) {
+      icon = Icons.info_rounded;
+      iconText = i18.householdOverView.householdOverViewHouseholderHeadLabel;
+    } else {
+      if (dosesDelivered) {
+        if (!isDelivered ||
+            isNotEligible ||
+            isBeneficiaryRefused ||
+            isBeneficiaryIneligible ||
+            isBeneficiarySick ||
+            isBeneficiaryAbsent ||
+            isBeneficiaryReferred) {
+          icon = Icons.info_rounded;
+          iconText = (isNotEligible || isBeneficiaryIneligible)
+              ? i18.householdOverView.householdOverViewNotEligibleIconLabel
+              : isBeneficiaryReferred
+                  ? i18.householdOverView
+                      .householdOverViewBeneficiaryReferredLabel
+                  : isBeneficiaryRefused
+                      ? Status.beneficiaryRefused.toValue()
+                      : isBeneficiarySick
+                          ? Status.beneficiarySick.toValue()
+                          : isBeneficiaryAbsent
+                              ? Status.beneficiaryAbsent.toValue()
+                              : i18.householdOverView
+                                  .householdOverViewNotDeliveredIconLabel;
+        } else if (deliveryComment.isNotEmpty) {
+          icon = Icons.info_rounded;
+          iconText = deliveryComment;
+        } else {
+          icon = Icons.check_circle;
+          iconText = i18.householdOverView.householdOverViewDeliveredIconLabel;
+          iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+          iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+        }
+      } else if (isNotEligible ||
           isBeneficiaryIneligible ||
+          isBeneficiaryReferred ||
+          isBeneficiaryRefused ||
           isBeneficiarySick ||
-          isBeneficiaryAbsent ||
-          isBeneficiaryReferred) {
+          isBeneficiaryAbsent) {
         icon = Icons.info_rounded;
         iconText = (isNotEligible || isBeneficiaryIneligible)
             ? i18.householdOverView.householdOverViewNotEligibleIconLabel
@@ -1016,45 +1051,18 @@ class MemberCard extends StatelessWidget {
                             ? Status.beneficiaryAbsent.toValue()
                             : i18.householdOverView
                                 .householdOverViewNotDeliveredIconLabel;
+      } else if (doseIndex == 0 || validDelivery) {
+        icon = Icons.info_rounded;
+        iconText = Status.notAdministered.toValue();
       } else if (deliveryComment.isNotEmpty) {
         icon = Icons.info_rounded;
         iconText = deliveryComment;
       } else {
         icon = Icons.check_circle;
-        iconText = i18.householdOverView.householdOverViewDeliveredIconLabel;
+        iconText = Status.administered.toValue();
         iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
         iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
       }
-    } else if (isNotEligible ||
-        isBeneficiaryIneligible ||
-        isBeneficiaryReferred ||
-        isBeneficiaryRefused ||
-        isBeneficiarySick ||
-        isBeneficiaryAbsent) {
-      icon = Icons.info_rounded;
-      iconText = (isNotEligible || isBeneficiaryIneligible)
-          ? i18.householdOverView.householdOverViewNotEligibleIconLabel
-          : isBeneficiaryReferred
-              ? i18.householdOverView.householdOverViewBeneficiaryReferredLabel
-              : isBeneficiaryRefused
-                  ? Status.beneficiaryRefused.toValue()
-                  : isBeneficiarySick
-                      ? Status.beneficiarySick.toValue()
-                      : isBeneficiaryAbsent
-                          ? Status.beneficiaryAbsent.toValue()
-                          : i18.householdOverView
-                              .householdOverViewNotDeliveredIconLabel;
-    } else if (doseIndex == 0 || validDelivery) {
-      icon = Icons.info_rounded;
-      iconText = Status.notAdministered.toValue();
-    } else if (deliveryComment.isNotEmpty) {
-      icon = Icons.info_rounded;
-      iconText = deliveryComment;
-    } else {
-      icon = Icons.check_circle;
-      iconText = Status.administered.toValue();
-      iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
-      iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
     }
 
     return Align(
