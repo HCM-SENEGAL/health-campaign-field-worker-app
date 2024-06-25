@@ -379,9 +379,9 @@ class _SearchBeneficiaryPageState
                       DigitElevatedButton(
                         onPressed: () {
                           FocusManager.instance.primaryFocus?.unfocus();
-                          // context.read<ScannerBloc>().add(
-                          //       const ScannerEvent.handleScanner([], []),
-                          //     );
+                          context.read<ScannerBloc>().add(
+                                const ScannerEvent.handleScanner([], []),
+                              );
                           context.router
                               .push(BeneficiaryRegistrationWrapperRoute(
                             initialState: BeneficiaryRegistrationCreateState(
