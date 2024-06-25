@@ -1022,7 +1022,7 @@ class _IndividualDetailsPageState
       _individualNameKey: FormControl<String>(
         validators: [
           Validators.required,
-          CustomValidator.requiredMin,
+          CustomValidator.requiredMin3,
           Validators.maxLength(200),
         ],
         value: individual?.name?.givenName ?? searchQuery?.trim(),
@@ -1030,7 +1030,7 @@ class _IndividualDetailsPageState
       _individualLastNameKey: FormControl<String>(
         validators: [
           Validators.required,
-          CustomValidator.requiredMin,
+          CustomValidator.requiredMin3,
           Validators.maxLength(200),
         ],
         value: individual?.name?.familyName ?? '',
