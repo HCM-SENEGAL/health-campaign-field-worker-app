@@ -369,7 +369,7 @@ class _SearchBeneficiaryPageState
               ),
             ),
             bottomNavigationBar: SizedBox(
-              height: 75,
+              height: 150,
               child: Card(
                 margin: const EdgeInsets.all(0),
                 child: Container(
@@ -398,25 +398,25 @@ class _SearchBeneficiaryPageState
                         ),
                       ),
                       // Solution Customization
-                      // DigitOutlineIconButton(
-                      //   buttonStyle: OutlinedButton.styleFrom(
-                      //     shape: const RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.zero,
-                      //     ),
-                      //   ),
-                      //   onPressed: () {
-                      //     blocWrapper.clearEvent();
-                      //     context.router.push(QRScannerRoute(
-                      //       quantity: 1,
-                      //       isGS1code: false,
-                      //       sinlgleValue: true,
-                      //     ));
-                      //   },
-                      //   icon: Icons.qr_code,
-                      //   label: localizations.translate(
-                      //     i18.deliverIntervention.scannerLabel,
-                      //   ),
-                      // ),
+                      DigitOutlineIconButton(
+                        buttonStyle: OutlinedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        onPressed: () {
+                          blocWrapper.clearEvent();
+                          context.router.push(QRScannerRoute(
+                            quantity: 1,
+                            isGS1code: false,
+                            sinlgleValue: true,
+                          ));
+                        },
+                        icon: Icons.qr_code,
+                        label: localizations.translate(
+                          i18.deliverIntervention.scannerLabel,
+                        ),
+                      ),
                     ],
                   ),
                 ),
