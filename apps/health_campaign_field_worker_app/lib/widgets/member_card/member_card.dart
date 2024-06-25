@@ -993,6 +993,7 @@ class MemberCard extends StatelessWidget {
     Color iconTextColor = theme.colorScheme.error;
     Color iconColor = theme.colorScheme.error;
 
+    // TODO ceck with amit once
     if (dosesDelivered) {
       if (!isDelivered ||
           isNotEligible ||
@@ -1024,12 +1025,6 @@ class MemberCard extends StatelessWidget {
         iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
         iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
       }
-    } else if (doseIndex == 0 || validDelivery) {
-      icon = Icons.info_rounded;
-      iconText = Status.notAdministered.toValue();
-    } else if (deliveryComment.isNotEmpty) {
-      icon = Icons.info_rounded;
-      iconText = deliveryComment;
     } else if (isNotEligible ||
         isBeneficiaryIneligible ||
         isBeneficiaryReferred ||
@@ -1049,6 +1044,12 @@ class MemberCard extends StatelessWidget {
                           ? Status.beneficiaryAbsent.toValue()
                           : i18.householdOverView
                               .householdOverViewNotDeliveredIconLabel;
+    } else if (doseIndex == 0 || validDelivery) {
+      icon = Icons.info_rounded;
+      iconText = Status.notAdministered.toValue();
+    } else if (deliveryComment.isNotEmpty) {
+      icon = Icons.info_rounded;
+      iconText = deliveryComment;
     } else {
       icon = Icons.check_circle;
       iconText = Status.administered.toValue();

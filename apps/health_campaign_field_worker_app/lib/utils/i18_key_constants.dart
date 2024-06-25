@@ -1056,6 +1056,8 @@ class IndividualDetails {
 
   String get lastNameLengthError => 'LAST_NAME_LENGTH_ERROR_MESSAGE';
 
+  String get idNumberLengthError => 'ID_NUMBER_LENGTH_ERROR_MESSAGE';
+
   String get lastNameIsRequiredError => 'LAST_NAME_REQUIRED_ERROR_MESSAGE';
   String get linkVoucherToIndividual => 'LINK_VOUCHER_TO_INDIVIDUAL';
   String get headAgeValidError => 'HEAD_VALID_AGE_ERROR_MESSAGE';

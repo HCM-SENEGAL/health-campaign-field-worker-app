@@ -516,13 +516,12 @@ class _IndividualDetailsPageState
                                         form: form,
                                         menuItems: idTypeOptions.map(
                                           (e) {
-                                            return localizations
-                                                .translate(e.name);
+                                            return e.code;
                                           },
                                         ).toList(),
                                         formControlName: _idTypeKey,
                                         valueMapper: (value) {
-                                          return value;
+                                          return localizations.translate(value);
                                         },
                                         onSelected: (value) {
                                           setState(() {
@@ -572,6 +571,16 @@ class _IndividualDetailsPageState
                                           'required': (object) =>
                                               localizations.translate(
                                                 '${i18.individualDetails.idNumberLabelText}_IS_REQUIRED',
+                                              ),
+                                          'min2': (object) =>
+                                              localizations.translate(
+                                                i18.individualDetails
+                                                    .idNumberLengthError,
+                                              ),
+                                          'maxLength': (object) =>
+                                              localizations.translate(
+                                                i18.individualDetails
+                                                    .idNumberLengthError,
                                               ),
                                         },
                                         padding: const EdgeInsets.only(
@@ -1071,7 +1080,13 @@ class _IndividualDetailsPageState
         value: individual?.identifiers?.firstOrNull?.identifierType,
       ),
       _idNumberKey: FormControl<String>(
-        validators: widget.isHeadOfHousehold ? [] : [Validators.required],
+        validators: widget.isHeadOfHousehold
+            ? []
+            : [
+                Validators.required,
+                CustomValidator.requiredMin2,
+                Validators.maxLength(64),
+              ],
         value: individual?.identifiers?.firstOrNull?.identifierId,
       ),
       // _disabilityTypeKey:
