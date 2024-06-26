@@ -210,6 +210,7 @@ class MemberCard extends StatelessWidget {
                               !validDoseDelivery(
                                 tasks,
                                 context.selectedCycle,
+                                context.selectedProjectType,
                               )))
                       ? const Offstage()
                       : DigitOutLineButton(
@@ -800,6 +801,7 @@ class MemberCard extends StatelessWidget {
                 (!validDoseDelivery(
                   tasks,
                   context.selectedCycle,
+                  context.selectedProjectType,
                 ))
             // todo verify this
             ? const Offstage()
@@ -826,7 +828,7 @@ class MemberCard extends StatelessWidget {
                             titleText: localizations.translate(i18
                                 .deliverIntervention
                                 .didYouObservePreviousAdvEventsTitle),
-                            barrierDismissible: false,
+                            barrierDismissible: true,
                             enableRecordPast: true,
                             dialogPadding: const EdgeInsets.fromLTRB(
                               kPadding,
@@ -961,6 +963,7 @@ class MemberCard extends StatelessWidget {
                                 !validDoseDelivery(
                                   tasks,
                                   context.selectedCycle,
+                                  context.selectedProjectType,
                                 )
                             ? localizations.translate(
                                 i18.householdOverView.viewDeliveryLabel,
@@ -988,7 +991,11 @@ class MemberCard extends StatelessWidget {
       individual,
     );
     final int doseIndex = getDoseIndex(tasks, context.selectedCycle);
-    final bool validDelivery = validDoseDelivery(tasks, context.selectedCycle);
+    final bool validDelivery = validDoseDelivery(
+      tasks,
+      context.selectedCycle,
+      context.selectedProjectType,
+    );
 
     IconData icon;
     String iconText;

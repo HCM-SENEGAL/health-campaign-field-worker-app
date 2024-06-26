@@ -384,6 +384,16 @@ Cycle? getCurrentCycle(ProjectType? projectType) {
   return currentCycle;
 }
 
+bool isFirstCycle(ProjectType? projectType) {
+  Cycle? cycle = getCurrentCycle(projectType);
+
+  return cycle == null
+      ? false
+      : cycle.id != 1
+          ? false
+          : true;
+}
+
 bool checkIfBeneficiaryRefused(
   List<TaskModel>? tasks,
 ) {
@@ -538,7 +548,11 @@ bool isLastCycleRunning(
 bool validDoseDelivery(
   List<TaskModel>? tasks,
   Cycle? currentCycle,
+  ProjectType? projectType,
 ) {
+  if (isFirstCycle(projectType)) {
+    return true;
+  }
   var doseIndex = getDoseIndex(tasks, currentCycle);
 
   if (doseIndex == 0) {

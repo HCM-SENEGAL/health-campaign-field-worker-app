@@ -180,6 +180,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                         : validDoseDelivery(
                             taskdata,
                             context.selectedCycle,
+                            context.selectedProjectType,
                           )
                 : true;
         final isHead = e.clientReferenceId ==
