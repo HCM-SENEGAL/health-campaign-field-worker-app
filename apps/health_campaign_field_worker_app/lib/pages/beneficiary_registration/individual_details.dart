@@ -180,8 +180,9 @@ class _IndividualDetailsPageState
                                   final scannerBloc =
                                       context.read<ScannerBloc>();
 
-                                  if (scannerBloc.state.duplicate ||
-                                      scannerBloc.state.qrcodes.isEmpty) {
+                                  if (!widget.isHeadOfHousehold &&
+                                      (scannerBloc.state.duplicate ||
+                                          scannerBloc.state.qrcodes.isEmpty)) {
                                     DigitToast.show(
                                       context,
                                       options: DigitToastOptions(
@@ -273,9 +274,10 @@ class _IndividualDetailsPageState
                                           : null;
 
                                   if (tag != null &&
-                                          tag != projectBeneficiaryModel?.tag &&
-                                          scannerBloc.state.duplicate ||
-                                      scannerBloc.state.qrcodes.isEmpty) {
+                                      tag != projectBeneficiaryModel?.tag &&
+                                      !widget.isHeadOfHousehold &&
+                                      (scannerBloc.state.duplicate ||
+                                          scannerBloc.state.qrcodes.isEmpty)) {
                                     DigitToast.show(
                                       context,
                                       options: DigitToastOptions(
@@ -341,8 +343,10 @@ class _IndividualDetailsPageState
                                     final scannerBloc =
                                         context.read<ScannerBloc>();
 
-                                    if (scannerBloc.state.duplicate ||
-                                        scannerBloc.state.qrcodes.isEmpty) {
+                                    if (!widget.isHeadOfHousehold &&
+                                        (scannerBloc.state.duplicate ||
+                                            scannerBloc
+                                                .state.qrcodes.isEmpty)) {
                                       DigitToast.show(
                                         context,
                                         options: DigitToastOptions(
@@ -688,80 +692,83 @@ class _IndividualDetailsPageState
                               ),
                             ),
                             const SizedBox(height: 16),
-                            BlocBuilder<ScannerBloc, ScannerState>(
-                              builder: (context, state) => state
-                                      .qrcodes.isNotEmpty
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              3,
-                                          child: Text(
-                                            localizations.translate(
-                                              i18.deliverIntervention
-                                                  .voucherCode,
-                                            ),
-                                            style:
-                                                theme.textTheme.headlineSmall,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                            overflow: TextOverflow.ellipsis,
-                                            localizations
-                                                .translate(state.qrcodes.last),
-                                          ),
-                                        ),
-                                        IconButton(
-                                          color: theme.colorScheme.secondary,
-                                          icon: const Icon(Icons.qr_code),
-                                          onPressed: () {
-                                            context.read<ScannerBloc>().add(
-                                                  const ScannerEvent
-                                                      .handleScanner(
-                                                    [],
-                                                    [],
-                                                  ),
-                                                );
-                                            // TODO : [Need to handle the Scanner event];
-                                            // context.read<ScannerBloc>().add(ScannerScanEvent())
-                                            context.router.push(QRScannerRoute(
-                                              quantity: 1,
-                                              isGS1code: false,
-                                              sinlgleValue: true,
-                                              isEditEnabled: true,
-                                            ));
-                                          },
-                                        ),
-                                      ],
-
-                                      // ignore: no-empty-block
-                                    )
-                                  : DigitOutlineIconButton(
-                                      onPressed: () {
-                                        context.read<ScannerBloc>().add(
-                                              const ScannerEvent.handleScanner(
-                                                [],
-                                                [],
+                            if (!widget.isHeadOfHousehold)
+                              BlocBuilder<ScannerBloc, ScannerState>(
+                                builder: (context, state) => state
+                                        .qrcodes.isNotEmpty
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                3,
+                                            child: Text(
+                                              localizations.translate(
+                                                i18.deliverIntervention
+                                                    .voucherCode,
                                               ),
-                                            );
-                                        context.router.push(QRScannerRoute(
-                                          quantity: 1,
-                                          isGS1code: false,
-                                          sinlgleValue: true,
-                                        ));
-                                      },
-                                      icon: Icons.qr_code,
-                                      label: localizations.translate(
-                                        i18.individualDetails
-                                            .linkVoucherToIndividual,
+                                              style:
+                                                  theme.textTheme.headlineSmall,
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              overflow: TextOverflow.ellipsis,
+                                              localizations.translate(
+                                                  state.qrcodes.last),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            color: theme.colorScheme.secondary,
+                                            icon: const Icon(Icons.qr_code),
+                                            onPressed: () {
+                                              context.read<ScannerBloc>().add(
+                                                    const ScannerEvent
+                                                        .handleScanner(
+                                                      [],
+                                                      [],
+                                                    ),
+                                                  );
+                                              // TODO : [Need to handle the Scanner event];
+                                              // context.read<ScannerBloc>().add(ScannerScanEvent())
+                                              context.router
+                                                  .push(QRScannerRoute(
+                                                quantity: 1,
+                                                isGS1code: false,
+                                                sinlgleValue: true,
+                                                isEditEnabled: true,
+                                              ));
+                                            },
+                                          ),
+                                        ],
+
+                                        // ignore: no-empty-block
+                                      )
+                                    : DigitOutlineIconButton(
+                                        onPressed: () {
+                                          context.read<ScannerBloc>().add(
+                                                const ScannerEvent
+                                                    .handleScanner(
+                                                  [],
+                                                  [],
+                                                ),
+                                              );
+                                          context.router.push(QRScannerRoute(
+                                            quantity: 1,
+                                            isGS1code: false,
+                                            sinlgleValue: true,
+                                          ));
+                                        },
+                                        icon: Icons.qr_code,
+                                        label: localizations.translate(
+                                          i18.individualDetails
+                                              .linkVoucherToIndividual,
+                                        ),
                                       ),
-                                    ),
-                            ),
+                              ),
                           ],
                         ),
                         // Padding(
