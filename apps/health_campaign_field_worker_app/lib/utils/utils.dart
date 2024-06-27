@@ -564,12 +564,16 @@ bool validDoseDelivery(
   Cycle? currentCycle,
   ProjectType? projectType,
 ) {
+  final refused = checkIfBeneficiaryRefused(tasks);
+  final absent = checkIfBeneficiaryAbsent(tasks);
   if (isFirstCycle(projectType)) {
     return true;
   }
   var doseIndex = getDoseIndex(tasks, currentCycle);
 
-  if (doseIndex == 0) {
+  if (doseIndex == 0 && (refused || absent)) {
+    return false;
+  } else if (doseIndex == 0) {
     return true;
   } else if (doseIndex < 0) {
     return false;
