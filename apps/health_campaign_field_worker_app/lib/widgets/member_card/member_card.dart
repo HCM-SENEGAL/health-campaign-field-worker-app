@@ -103,48 +103,49 @@ class MemberCard extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-              Positioned(
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: DigitIconButton(
-                    onPressed: () => DigitActionDialog.show(
-                      context,
-                      widget: ActionCard(
-                        items: [
-                          // Solution customization
-                          // ActionCardModel(
-                          //   icon: Icons.person,
-                          //   label: localizations.translate(
-                          //     i18.memberCard.assignAsHouseholdhead,
-                          //   ),
-                          //   action: isHead ? null : setAsHeadAction,
-                          // ),
-                          ActionCardModel(
-                            icon: Icons.edit,
-                            label: localizations.translate(
-                              i18.memberCard.editIndividualDetails,
-                            ),
-                            action: editMemberAction,
-                          ),
-                          // Solution customization
-                          // ActionCardModel(
-                          //   icon: Icons.delete,
-                          //   label: localizations.translate(
-                          //     i18.memberCard.deleteIndividualActionText,
-                          //   ),
-                          //   action: isHead ? null : deleteMemberAction,
-                          // ),
-                        ],
-                      ),
-                    ),
-                    iconText: localizations.translate(
-                      i18.memberCard.editDetails,
-                    ),
-                    icon: Icons.edit,
-                  ),
-                ),
-              ),
+              ), //solution customisation
+              // Positioned(
+              //   child: Align(
+              //     alignment: Alignment.topRight,
+              //     child: DigitIconButton(
+              //       onPressed: () => DigitActionDialog.show(
+              //         context,
+              //         widget: const ActionCard(
+              //           items: [
+              //             // Solution customization
+              //             // ActionCardModel(
+              //             //   icon: Icons.person,
+              //             //   label: localizations.translate(
+              //             //     i18.memberCard.assignAsHouseholdhead,
+              //             //   ),
+              //             //   action: isHead ? null : setAsHeadAction,
+              //             // ),
+              //             // solution customisation
+              //             // ActionCardModel(
+              //             //   icon: Icons.edit,
+              //             //   label: localizations.translate(
+              //             //     i18.memberCard.editIndividualDetails,
+              //             //   ),
+              //             //   action: editMemberAction,
+              //             // ),
+              //             // Solution customization
+              //             // ActionCardModel(
+              //             //   icon: Icons.delete,
+              //             //   label: localizations.translate(
+              //             //     i18.memberCard.deleteIndividualActionText,
+              //             //   ),
+              //             //   action: isHead ? null : deleteMemberAction,
+              //             // ),
+              //           ],
+              //         ),
+              //       ),
+              //       iconText: localizations.translate(
+              //         i18.memberCard.editDetails,
+              //       ),
+              //       icon: Icons.edit,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           SizedBox(
