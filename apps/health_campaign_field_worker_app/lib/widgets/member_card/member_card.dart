@@ -192,6 +192,7 @@ class MemberCard extends StatelessWidget {
                 isNotEligible ||
                 isBeneficiaryIneligible ||
                 isBeneficiaryReferred ||
+                isBeneficiarySick ||
                 (!successfulDelivery && deliveryComment.isNotEmpty),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
@@ -204,6 +205,7 @@ class MemberCard extends StatelessWidget {
                   (isNotEligible ||
                           isBeneficiaryReferred ||
                           isBeneficiaryIneligible ||
+                          isBeneficiarySick ||
                           (!successfulDelivery && deliveryComment.isNotEmpty) ||
                           (allDosesDelivered(
                                 tasks,
@@ -805,6 +807,7 @@ class MemberCard extends StatelessWidget {
         : isNotEligible ||
                 isBeneficiaryReferred ||
                 isBeneficiaryIneligible ||
+                isBeneficiarySick ||
                 (!successfulDelivery && deliveryComment.isNotEmpty) ||
                 (!validDoseDelivery(
                   tasks,

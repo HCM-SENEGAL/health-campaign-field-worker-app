@@ -395,7 +395,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             .value);
       } else if (statusKeys.isBeneficiaryRefused && !statusKeys.isStatusReset) {
         return localizations.translate(Status.beneficiaryRefused.toValue());
-      } else if (statusKeys.isBeneficiarySick && !statusKeys.isStatusReset) {
+      } else if (statusKeys.isBeneficiarySick) {
         return localizations.translate(Status.beneficiarySick.toValue());
       } else if (statusKeys.isBeneficiaryAbsent && !statusKeys.isStatusReset) {
         return localizations.translate(Status.beneficiaryAbsent.toValue());
