@@ -261,17 +261,23 @@ class MemberCard extends StatelessWidget {
                                         50,
                                       ),
                                     ),
-                                    onPressed: tasks != null &&
-                                            (tasks ?? [])
-                                                .where((element) =>
-                                                    element.status !=
-                                                    Status.beneficiaryRefused
-                                                        .toValue())
-                                                .toList()
-                                                .isNotEmpty &&
-                                            !checkStatus(
+                                    onPressed: (tasks != null &&
+                                                (tasks ?? [])
+                                                    .where((element) =>
+                                                        element.status !=
+                                                        Status
+                                                            .beneficiaryRefused
+                                                            .toValue())
+                                                    .toList()
+                                                    .isNotEmpty &&
+                                                !checkStatus(
+                                                  tasks,
+                                                  context.selectedCycle,
+                                                )) ||
+                                            !validDoseDelivery(
                                               tasks,
                                               context.selectedCycle,
+                                              context.selectedProjectType,
                                             )
                                         ? null
                                         : () {
@@ -378,17 +384,22 @@ class MemberCard extends StatelessWidget {
                                         50,
                                       ),
                                     ),
-                                    onPressed: tasks != null &&
-                                            (tasks ?? [])
-                                                .where((element) =>
-                                                    element.status !=
-                                                    Status.beneficiarySick
-                                                        .toValue())
-                                                .toList()
-                                                .isNotEmpty &&
-                                            !checkStatus(
+                                    onPressed: (tasks != null &&
+                                                (tasks ?? [])
+                                                    .where((element) =>
+                                                        element.status !=
+                                                        Status.beneficiarySick
+                                                            .toValue())
+                                                    .toList()
+                                                    .isNotEmpty &&
+                                                !checkStatus(
+                                                  tasks,
+                                                  context.selectedCycle,
+                                                )) ||
+                                            !validDoseDelivery(
                                               tasks,
                                               context.selectedCycle,
+                                              context.selectedProjectType,
                                             )
                                         ? null
                                         : () {
@@ -496,17 +507,22 @@ class MemberCard extends StatelessWidget {
                                         50,
                                       ),
                                     ),
-                                    onPressed: tasks != null &&
-                                            (tasks ?? [])
-                                                .where((element) =>
-                                                    element.status !=
-                                                    Status.beneficiaryAbsent
-                                                        .toValue())
-                                                .toList()
-                                                .isNotEmpty &&
-                                            !checkStatus(
+                                    onPressed: (tasks != null &&
+                                                (tasks ?? [])
+                                                    .where((element) =>
+                                                        element.status !=
+                                                        Status.beneficiaryAbsent
+                                                            .toValue())
+                                                    .toList()
+                                                    .isNotEmpty &&
+                                                !checkStatus(
+                                                  tasks,
+                                                  context.selectedCycle,
+                                                )) ||
+                                            !validDoseDelivery(
                                               tasks,
                                               context.selectedCycle,
+                                              context.selectedProjectType,
                                             )
                                         ? null
                                         : () {
@@ -816,7 +832,13 @@ class MemberCard extends StatelessWidget {
                 ))
             // todo verify this
             ? const Offstage()
-            : !isNotEligible || (!successfulDelivery && deliveryComment.isEmpty)
+            : (!successfulDelivery && deliveryComment.isEmpty) ||
+                    ((!isBeneficiaryAbsent || !isBeneficiaryRefused) &&
+                        validDoseDelivery(
+                          tasks,
+                          context.selectedCycle,
+                          context.selectedProjectType,
+                        ))
                 ? DigitElevatedButton(
                     // padding: const EdgeInsets.only(
                     //   left: kPadding / 2,
