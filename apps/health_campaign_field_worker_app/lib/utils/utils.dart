@@ -523,6 +523,20 @@ int getDoseIndex(
   return -1;
 }
 
+bool isSuccessfulDelivery(
+  List<TaskModel>? tasks,
+  Cycle? currentCycle,
+) {
+  if (tasks == null || tasks.isEmpty) {
+    return false;
+  }
+  final unsuccessfulTask = tasks
+      .where((element) => element.status == Status.administeredFailed.toValue())
+      .firstOrNull;
+
+  return unsuccessfulTask == null ? true : false;
+}
+
 bool isLastCycleRunning(
   List<TaskModel>? tasks,
   Cycle? currentCycle,

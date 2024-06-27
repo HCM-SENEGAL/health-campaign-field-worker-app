@@ -384,7 +384,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     } else if (taskData != null) {
       if (taskData.isEmpty) {
         return localizations.translate(Status.notAdministered.toValue());
-      } else if (!statusKeys.isStatusReset &&
+      } else if (statusKeys.isStatusReset &&
           taskData.last.additionalFields != null &&
           taskData.last.additionalFields!.fields
               .where((element) => element.key == "deliveryComment")
