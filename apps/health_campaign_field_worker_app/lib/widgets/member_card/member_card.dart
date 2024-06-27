@@ -67,6 +67,8 @@ class MemberCard extends StatelessWidget {
     final router = context.router;
     const deliveryCommentKey = 'deliveryComment';
     var deliveryComment = getDeliveryComment(tasks, deliveryCommentKey);
+    final successfulDelivery =
+        isSuccessfulDelivery(tasks, context.selectedCycle);
 
     return Container(
       decoration: BoxDecoration(
@@ -190,7 +192,9 @@ class MemberCard extends StatelessWidget {
             offstage: beneficiaryType != BeneficiaryType.individual ||
                 isNotEligible ||
                 isBeneficiaryIneligible ||
-                isBeneficiaryReferred,
+                isBeneficiaryReferred ||
+                isBeneficiarySick ||
+                (!successfulDelivery && deliveryComment.isNotEmpty),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Column(
@@ -202,6 +206,8 @@ class MemberCard extends StatelessWidget {
                   (isNotEligible ||
                           isBeneficiaryReferred ||
                           isBeneficiaryIneligible ||
+                          isBeneficiarySick ||
+                          (!successfulDelivery && deliveryComment.isNotEmpty) ||
                           (allDosesDelivered(
                                 tasks,
                                 context.selectedCycle,
@@ -256,17 +262,23 @@ class MemberCard extends StatelessWidget {
                                         50,
                                       ),
                                     ),
-                                    onPressed: tasks != null &&
-                                            (tasks ?? [])
-                                                .where((element) =>
-                                                    element.status !=
-                                                    Status.beneficiaryRefused
-                                                        .toValue())
-                                                .toList()
-                                                .isNotEmpty &&
-                                            !checkStatus(
+                                    onPressed: (tasks != null &&
+                                                (tasks ?? [])
+                                                    .where((element) =>
+                                                        element.status !=
+                                                        Status
+                                                            .beneficiaryRefused
+                                                            .toValue())
+                                                    .toList()
+                                                    .isNotEmpty &&
+                                                !checkStatus(
+                                                  tasks,
+                                                  context.selectedCycle,
+                                                )) ||
+                                            !validDoseDelivery(
                                               tasks,
                                               context.selectedCycle,
+                                              context.selectedProjectType,
                                             )
                                         ? null
                                         : () {
@@ -373,17 +385,22 @@ class MemberCard extends StatelessWidget {
                                         50,
                                       ),
                                     ),
-                                    onPressed: tasks != null &&
-                                            (tasks ?? [])
-                                                .where((element) =>
-                                                    element.status !=
-                                                    Status.beneficiarySick
-                                                        .toValue())
-                                                .toList()
-                                                .isNotEmpty &&
-                                            !checkStatus(
+                                    onPressed: (tasks != null &&
+                                                (tasks ?? [])
+                                                    .where((element) =>
+                                                        element.status !=
+                                                        Status.beneficiarySick
+                                                            .toValue())
+                                                    .toList()
+                                                    .isNotEmpty &&
+                                                !checkStatus(
+                                                  tasks,
+                                                  context.selectedCycle,
+                                                )) ||
+                                            !validDoseDelivery(
                                               tasks,
                                               context.selectedCycle,
+                                              context.selectedProjectType,
                                             )
                                         ? null
                                         : () {
@@ -491,17 +508,22 @@ class MemberCard extends StatelessWidget {
                                         50,
                                       ),
                                     ),
-                                    onPressed: tasks != null &&
-                                            (tasks ?? [])
-                                                .where((element) =>
-                                                    element.status !=
-                                                    Status.beneficiaryAbsent
-                                                        .toValue())
-                                                .toList()
-                                                .isNotEmpty &&
-                                            !checkStatus(
+                                    onPressed: (tasks != null &&
+                                                (tasks ?? [])
+                                                    .where((element) =>
+                                                        element.status !=
+                                                        Status.beneficiaryAbsent
+                                                            .toValue())
+                                                    .toList()
+                                                    .isNotEmpty &&
+                                                !checkStatus(
+                                                  tasks,
+                                                  context.selectedCycle,
+                                                )) ||
+                                            !validDoseDelivery(
                                               tasks,
                                               context.selectedCycle,
+                                              context.selectedProjectType,
                                             )
                                         ? null
                                         : () {
@@ -750,6 +772,9 @@ class MemberCard extends StatelessWidget {
     String deliveryComment,
     StackRouter router,
   ) {
+    final bool successfulDelivery =
+        isSuccessfulDelivery(tasks, context.selectedCycle);
+
     return allDosesDelivered(
       tasks,
       context.selectedCycle,
@@ -799,6 +824,8 @@ class MemberCard extends StatelessWidget {
         : isNotEligible ||
                 isBeneficiaryReferred ||
                 isBeneficiaryIneligible ||
+                isBeneficiarySick ||
+                (!successfulDelivery && deliveryComment.isNotEmpty) ||
                 (!validDoseDelivery(
                   tasks,
                   context.selectedCycle,
@@ -806,7 +833,13 @@ class MemberCard extends StatelessWidget {
                 ))
             // todo verify this
             ? const Offstage()
-            : !isNotEligible
+            : (!successfulDelivery && deliveryComment.isEmpty) ||
+                    ((!isBeneficiaryAbsent || !isBeneficiaryRefused) &&
+                        validDoseDelivery(
+                          tasks,
+                          context.selectedCycle,
+                          context.selectedProjectType,
+                        ))
                 ? DigitElevatedButton(
                     // padding: const EdgeInsets.only(
                     //   left: kPadding / 2,
@@ -998,6 +1031,9 @@ class MemberCard extends StatelessWidget {
       context.selectedProjectType,
     );
 
+    final bool successfulDelivery =
+        isSuccessfulDelivery(tasks, context.selectedCycle);
+
     IconData icon;
     String iconText;
     Color iconTextColor = theme.colorScheme.error;
@@ -1030,7 +1066,7 @@ class MemberCard extends StatelessWidget {
                               ? Status.beneficiaryAbsent.toValue()
                               : i18.householdOverView
                                   .householdOverViewNotDeliveredIconLabel;
-        } else if (deliveryComment.isNotEmpty) {
+        } else if (!successfulDelivery && deliveryComment.isNotEmpty) {
           icon = Icons.info_rounded;
           iconText = deliveryComment;
         } else {
@@ -1044,27 +1080,27 @@ class MemberCard extends StatelessWidget {
           isBeneficiaryReferred ||
           isBeneficiaryRefused ||
           isBeneficiarySick ||
-          isBeneficiaryAbsent) {
+          isBeneficiaryAbsent ||
+          !successfulDelivery) {
         icon = Icons.info_rounded;
         iconText = (isNotEligible || isBeneficiaryIneligible)
             ? i18.householdOverView.householdOverViewNotEligibleIconLabel
-            : isBeneficiaryReferred
-                ? i18
-                    .householdOverView.householdOverViewBeneficiaryReferredLabel
-                : isBeneficiaryRefused
-                    ? Status.beneficiaryRefused.toValue()
-                    : isBeneficiarySick
-                        ? Status.beneficiarySick.toValue()
-                        : isBeneficiaryAbsent
-                            ? Status.beneficiaryAbsent.toValue()
-                            : i18.householdOverView
-                                .householdOverViewNotDeliveredIconLabel;
+            : !successfulDelivery && deliveryComment.isNotEmpty
+                ? deliveryComment
+                : isBeneficiaryReferred
+                    ? i18.householdOverView
+                        .householdOverViewBeneficiaryReferredLabel
+                    : isBeneficiaryRefused
+                        ? Status.beneficiaryRefused.toValue()
+                        : isBeneficiarySick
+                            ? Status.beneficiarySick.toValue()
+                            : isBeneficiaryAbsent
+                                ? Status.beneficiaryAbsent.toValue()
+                                : i18.householdOverView
+                                    .householdOverViewNotDeliveredIconLabel;
       } else if (doseIndex == 0 || validDelivery) {
         icon = Icons.info_rounded;
         iconText = Status.notAdministered.toValue();
-      } else if (deliveryComment.isNotEmpty) {
-        icon = Icons.info_rounded;
-        iconText = deliveryComment;
       } else {
         icon = Icons.check_circle;
         iconText = Status.administered.toValue();
