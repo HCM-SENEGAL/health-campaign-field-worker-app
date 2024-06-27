@@ -384,6 +384,16 @@ Cycle? getCurrentCycle(ProjectType? projectType) {
   return currentCycle;
 }
 
+bool isFirstCycle(ProjectType? projectType) {
+  Cycle? cycle = getCurrentCycle(projectType);
+
+  return cycle == null
+      ? false
+      : cycle.id != 1
+          ? false
+          : true;
+}
+
 bool checkIfBeneficiaryRefused(
   List<TaskModel>? tasks,
 ) {
@@ -513,6 +523,20 @@ int getDoseIndex(
   return -1;
 }
 
+bool isSuccessfulDelivery(
+  List<TaskModel>? tasks,
+  Cycle? currentCycle,
+) {
+  if (tasks == null || tasks.isEmpty) {
+    return false;
+  }
+  final unsuccessfulTask = tasks
+      .where((element) => element.status == Status.administeredFailed.toValue())
+      .firstOrNull;
+
+  return unsuccessfulTask == null ? true : false;
+}
+
 bool isLastCycleRunning(
   List<TaskModel>? tasks,
   Cycle? currentCycle,
@@ -538,10 +562,18 @@ bool isLastCycleRunning(
 bool validDoseDelivery(
   List<TaskModel>? tasks,
   Cycle? currentCycle,
+  ProjectType? projectType,
 ) {
+  final refused = checkIfBeneficiaryRefused(tasks);
+  final absent = checkIfBeneficiaryAbsent(tasks);
+  if (isFirstCycle(projectType)) {
+    return true;
+  }
   var doseIndex = getDoseIndex(tasks, currentCycle);
 
-  if (doseIndex == 0) {
+  if (doseIndex == 0 && (refused || absent)) {
+    return false;
+  } else if (doseIndex == 0) {
     return true;
   } else if (doseIndex < 0) {
     return false;

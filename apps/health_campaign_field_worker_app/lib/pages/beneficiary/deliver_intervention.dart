@@ -206,11 +206,12 @@ class _DeliverInterventionPageState
                                                                 ),
                                                               );
                                                             } else if ((((form.control(
-                                                                          _quantityDistributedKey,
-                                                                        ) as FormArray)
-                                                                            .value) ??
-                                                                        [])
-                                                                    .any((e) => e == 0) &&
+                                                                              _quantityDistributedKey,
+                                                                            ) as FormArray)
+                                                                                .value) ??
+                                                                            [])
+                                                                        .first ==
+                                                                    0 &&
                                                                 (form
                                                                             .control(
                                                                               _deliveryCommentKey,
@@ -510,41 +511,35 @@ class _DeliverInterventionPageState
                                                       style: theme.textTheme
                                                           .headlineLarge,
                                                     ),
-                                                    ..._controllers
-                                                        .map((e) =>
-                                                            ResourceBeneficiaryCard(
-                                                              form: form,
-                                                              cardIndex:
-                                                                  _controllers
-                                                                      .indexOf(
-                                                                          e),
-                                                              totalItems:
-                                                                  _controllers
-                                                                      .length,
-                                                              onDelete:
-                                                                  (index) {
-                                                                (form.control(
-                                                                  _resourceDeliveredKey,
-                                                                ) as FormArray)
-                                                                    .removeAt(
-                                                                  index,
-                                                                );
-                                                                (form.control(
-                                                                  _quantityDistributedKey,
-                                                                ) as FormArray)
-                                                                    .removeAt(
-                                                                  index,
-                                                                );
-                                                                _controllers
-                                                                    .removeAt(
-                                                                  index,
-                                                                );
-                                                                setState(() {
-                                                                  _controllers;
-                                                                });
-                                                              },
-                                                            ))
-                                                        .toList(),
+                                                    ResourceBeneficiaryCard(
+                                                      form: form,
+                                                      cardIndex: 0,
+                                                      doseIndex:
+                                                          deliveryInterventionstate
+                                                              .dose,
+                                                      totalItems:
+                                                          _controllers.length,
+                                                      onDelete: (index) {
+                                                        (form.control(
+                                                          _resourceDeliveredKey,
+                                                        ) as FormArray)
+                                                            .removeAt(
+                                                          index,
+                                                        );
+                                                        (form.control(
+                                                          _quantityDistributedKey,
+                                                        ) as FormArray)
+                                                            .removeAt(
+                                                          index,
+                                                        );
+                                                        _controllers.removeAt(
+                                                          index,
+                                                        );
+                                                        setState(() {
+                                                          _controllers;
+                                                        });
+                                                      },
+                                                    ),
                                                     // Solution customization
                                                     // Center(
                                                     //   child: DigitIconButton(
@@ -697,11 +692,12 @@ class _DeliverInterventionPageState
     final deliveryComment = form.control(_deliveryCommentKey).value as String?;
 
     final isDeliveryFailed = (((form.control(
-              _quantityDistributedKey,
-            ) as FormArray)
-                .value) ??
-            [])
-        .any((e) => e == 0);
+                  _quantityDistributedKey,
+                ) as FormArray)
+                    .value) ??
+                [])
+            .first ==
+        0;
 
     // Update the task with information from the form and other context
     task = task.copyWith(
@@ -716,7 +712,7 @@ class _DeliverInterventionPageState
                 tenantId: envConfig.variables.tenantId,
                 rowVersion: oldTask?.rowVersion ?? 1,
                 quantity: (((form.control(_quantityDistributedKey) as FormArray)
-                        .value)?[productvariantList.indexOf(e)])
+                        .value)?[0])
                     .toString(),
                 clientAuditDetails: ClientAuditDetails(
                   createdBy: context.loggedInUserUuid,
@@ -731,7 +727,7 @@ class _DeliverInterventionPageState
                   AdditionalField(
                     _quantityUtilisedKey,
                     (((form.control(_quantityUtilisedKey) as FormArray)
-                            .value)?[productvariantList.indexOf(e)])
+                            .value)?[0])
                         .toString(),
                   ),
                 ]),
@@ -783,7 +779,7 @@ class _DeliverInterventionPageState
               AdditionalFieldsType.longitude.toValue(),
               longitude,
             ),
-          if (deliveryComment != null)
+          if (deliveryComment != null && isDeliveryFailed)
             AdditionalField(
               AdditionalFieldsType.deliveryComment.toValue(),
               deliveryComment,

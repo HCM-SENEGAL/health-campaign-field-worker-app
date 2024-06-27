@@ -14,6 +14,7 @@ class ResourceBeneficiaryCard extends LocalizedStatefulWidget {
   final int cardIndex;
   final FormGroup form;
   final int totalItems;
+  final doseIndex;
 
   const ResourceBeneficiaryCard({
     Key? key,
@@ -22,6 +23,7 @@ class ResourceBeneficiaryCard extends LocalizedStatefulWidget {
     required this.cardIndex,
     required this.form,
     required this.totalItems,
+    required this.doseIndex,
   }) : super(key: key);
 
   @override
@@ -65,8 +67,18 @@ class _ResourceBeneficiaryCardState
                     menuItems: productVariants,
                     formControlName: 'resourceDelivered.${widget.cardIndex}',
                     valueMapper: (value) {
+                      final doseString =
+                          widget.doseIndex == 1 ? '(SP + AQ)' : '(AQ)';
+                      if (widget.totalItems > 1) {
+                        final skuList = productVariants.map(
+                          (e) => e.sku,
+                        );
+
+                        return skuList.join(' + ') + doseString;
+                      }
+
                       return localizations.translate(
-                        value.sku ?? value.id,
+                        (value.sku ?? value.id) + doseString,
                       );
                     },
                     isRequired: true,
