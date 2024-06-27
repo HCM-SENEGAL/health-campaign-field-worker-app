@@ -15,6 +15,7 @@ import '../../utils/i18_key_constants.dart' as i18;
 import '../../utils/utils.dart';
 import '../../widgets/header/back_navigation_help_header.dart';
 import '../../widgets/localized.dart';
+import 'package:collection/collection.dart';
 
 class ChecklistViewPage extends LocalizedStatefulWidget {
   final String? referralClientRefId;
@@ -191,7 +192,7 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                     tenantId: attribute?[i].tenantId,
                                     additionalDetails: ((attribute?[i]
                                                         .values
-                                                        ?.firstWhere(
+                                                        ?.firstWhereOrNull(
                                                           (element) =>
                                                               element ==
                                                               yesText,
@@ -201,7 +202,9 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                                     attribute?[i]
                                                         .values?[1]
                                                         .trim()) ||
-                                            (attribute?[i].values?.firstWhere(
+                                            (attribute?[i]
+                                                    .values
+                                                    ?.firstWhereOrNull(
                                                       (element) =>
                                                           localizations
                                                               .translate(
@@ -310,10 +313,10 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Text(
-                              '${localizations.translate(
+                              localizations.translate(
                                 value.selectedServiceDefinition!.code
                                     .toString(),
-                              )} ${localizations.translate(i18.checklist.checklist)}',
+                              ),
                               style: theme.textTheme.displayMedium,
                               textAlign: TextAlign.left,
                             ),
@@ -327,9 +330,8 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                               if (e.dataType == 'String' &&
                                   !(e.code ?? '').contains('.')) ...[
                                 DigitTextField(
-                                  onChange: (value) {
-                                    checklistFormKey.currentState?.validate();
-                                  },
+                                  autoValidation:
+                                      AutovalidateMode.onUserInteraction,
                                   isRequired: false,
                                   controller: controller[index],
                                   // inputFormatter: [
@@ -359,9 +361,8 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                               ] else if (e.dataType == 'Number' &&
                                   !(e.code ?? '').contains('.')) ...[
                                 DigitTextField(
-                                  onChange: (value) {
-                                    checklistFormKey.currentState?.validate();
-                                  },
+                                  autoValidation:
+                                      AutovalidateMode.onUserInteraction,
                                   textStyle: theme.textTheme.headlineMedium,
                                   textInputType: TextInputType.number,
                                   inputFormatter: [
@@ -464,7 +465,7 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                 ),
                                 BlocBuilder<ServiceBloc, ServiceState>(
                                   builder: (context, state) {
-                                    return (e.values?.firstWhere(
+                                    return (e.values?.firstWhereOrNull(
                                                   (element) =>
                                                       localizations
                                                           .translate(
@@ -474,12 +475,21 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                                       othersText,
                                                 ) !=
                                                 null &&
-                                            localizations
-                                                .translate(
-                                                  'CORE_COMMON_${controller[index].text}',
-                                                )
-                                                .toUpperCase()
-                                                .contains(othersText))
+                                            controller[index]
+                                                    .text
+                                                    .split(
+                                                      multiSelectionSeparator,
+                                                    )
+                                                    .firstWhereOrNull(
+                                                      (element) =>
+                                                          localizations
+                                                              .translate(
+                                                                'CORE_COMMON_$element',
+                                                              )
+                                                              .toUpperCase() ==
+                                                          othersText,
+                                                    ) !=
+                                                null)
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                               left: 4.0,
@@ -672,17 +682,18 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
               ),
               BlocBuilder<ServiceBloc, ServiceState>(
                 builder: (context, state) {
-                  return ((item.values?.firstWhere(
+                  return ((item.values?.firstWhereOrNull(
                                     (element) => element == yesText,
                                   ) !=
                                   null &&
                               controller[index].text ==
                                   item.values?[1].trim()) ||
-                          (item.values?.firstWhere(
+                          (item.values?.firstWhereOrNull(
                                         (element) =>
                                             localizations
                                                 .translate(
-                                                    'CORE_COMMON_$element')
+                                                  'CORE_COMMON_$element',
+                                                )
                                                 .toUpperCase() ==
                                             othersText,
                                       ) !=
@@ -705,9 +716,9 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                             maxLength: 1000,
                             isRequired: true,
                             controller: additionalController[index],
-                            label: '${localizations.translate(
+                            label: localizations.translate(
                               '${selectedServiceDefinition?.code}.${item.code}.ADDITIONAL_FIELD',
-                            )}*',
+                            ),
                             validator: (value1) {
                               if (value1 == null || value1 == '') {
                                 return localizations.translate(
@@ -761,9 +772,7 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: DigitTextField(
-          onChange: (value) {
-            checklistFormKey.currentState?.validate();
-          },
+          autoValidation: AutovalidateMode.onUserInteraction,
           isRequired: item.required ?? true,
           controller: controller[index],
           // inputFormatter: [
@@ -792,9 +801,7 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
       );
     } else if (item.dataType == 'Number') {
       return DigitTextField(
-        onChange: (value) {
-          checklistFormKey.currentState?.validate();
-        },
+        autoValidation: AutovalidateMode.onUserInteraction,
         textStyle: theme.textTheme.headlineMedium,
         textInputType: TextInputType.number,
         inputFormatter: [
@@ -884,14 +891,25 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
           ),
           BlocBuilder<ServiceBloc, ServiceState>(
             builder: (context, state) {
-              return (item.values?.firstWhere(
-                        (element) =>
-                            localizations
-                                .translate('CORE_COMMON_$element')
-                                .toUpperCase() ==
-                            othersText,
-                      ) !=
-                      null)
+              return (item.values?.firstWhereOrNull(
+                            (element) =>
+                                localizations
+                                    .translate('CORE_COMMON_$element')
+                                    .toUpperCase() ==
+                                othersText,
+                          ) !=
+                          null &&
+                      controller[index]
+                              .text
+                              .split(multiSelectionSeparator)
+                              .firstWhereOrNull(
+                                (element) =>
+                                    localizations
+                                        .translate('CORE_COMMON_$element')
+                                        .toUpperCase() ==
+                                    othersText,
+                              ) !=
+                          null)
                   ? Padding(
                       padding: const EdgeInsets.only(
                         left: 4.0,
