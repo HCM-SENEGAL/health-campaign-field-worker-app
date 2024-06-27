@@ -203,6 +203,76 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                                   false,
                                                                 ),
                                                               );
+                                                          // todo verify this once , ids and all,address model is also pending here
+                                                          final clientReferenceIdReferral =
+                                                              IdGen
+                                                                  .i.identifier;
+                                                          context
+                                                              .read<
+                                                                  DeliverInterventionBloc>()
+                                                              .add(
+                                                                DeliverInterventionSubmitEvent(
+                                                                  TaskModel(
+                                                                    projectBeneficiaryClientReferenceId: widget
+                                                                        .tasks
+                                                                        .last
+                                                                        .projectBeneficiaryClientReferenceId,
+                                                                    clientReferenceId:
+                                                                        clientReferenceIdReferral,
+                                                                    tenantId: envConfig
+                                                                        .variables
+                                                                        .tenantId,
+                                                                    rowVersion:
+                                                                        1,
+                                                                    auditDetails:
+                                                                        AuditDetails(
+                                                                      createdBy:
+                                                                          context
+                                                                              .loggedInUserUuid,
+                                                                      createdTime:
+                                                                          context
+                                                                              .millisecondsSinceEpoch(),
+                                                                    ),
+                                                                    projectId:
+                                                                        context
+                                                                            .projectId,
+                                                                    status: Status
+                                                                        .beneficiaryReferred
+                                                                        .toValue(),
+                                                                    clientAuditDetails:
+                                                                        ClientAuditDetails(
+                                                                      createdBy:
+                                                                          context
+                                                                              .loggedInUserUuid,
+                                                                      createdTime:
+                                                                          context
+                                                                              .millisecondsSinceEpoch(),
+                                                                      lastModifiedBy:
+                                                                          context
+                                                                              .loggedInUserUuid,
+                                                                      lastModifiedTime:
+                                                                          context
+                                                                              .millisecondsSinceEpoch(),
+                                                                    ),
+                                                                    additionalFields:
+                                                                        TaskAdditionalFields(
+                                                                      version:
+                                                                          1,
+                                                                      fields: [
+                                                                        AdditionalField(
+                                                                          'taskStatus',
+                                                                          Status
+                                                                              .beneficiaryReferred
+                                                                              .toValue(),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  false,
+                                                                  context
+                                                                      .boundary,
+                                                                ),
+                                                              );
                                                           Navigator.of(
                                                             context,
                                                             rootNavigator: true,
@@ -262,7 +332,8 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                       child: Center(
                                         child: Text(
                                           localizations.translate(
-                                            i18.common.coreCommonNext,
+                                            i18.memberCard
+                                                .referBeneficiaryLabel,
                                           ),
                                         ),
                                       ),

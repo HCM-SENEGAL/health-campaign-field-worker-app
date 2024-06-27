@@ -779,7 +779,7 @@ class _DeliverInterventionPageState
               AdditionalFieldsType.longitude.toValue(),
               longitude,
             ),
-          if (deliveryComment != null)
+          if (deliveryComment != null && isDeliveryFailed)
             AdditionalField(
               AdditionalFieldsType.deliveryComment.toValue(),
               deliveryComment,
