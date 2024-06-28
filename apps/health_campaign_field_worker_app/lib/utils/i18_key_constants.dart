@@ -53,6 +53,8 @@ class Common {
 
   String get coreCommonContinue => 'CORE_COMMON_CONTINUE';
 
+  String get coreCommonLoading => 'CORE_COMMON_LOADING';
+
   String get coreCommonSyncInProgress => 'CORE_COMMON_SYNC_IN_PROGRESS';
 
   String get coreCommonAge => 'CORE_COMMON_AGE';
@@ -133,7 +135,6 @@ class Common {
 
   String get coreCommonWarning => 'CORE_COMMON_WARNING';
   String get coreCommonWarningText => 'CORE_COMMON_WARNING_TEXT';
-
 
   String get coreQuantityWasted => 'CORE_QUANTITY_WASTED';
   String get facilitySearchHeaderLabel => 'FACILITY_SEARCH_HEADER_LABEL';
