@@ -846,22 +846,18 @@ class MemberCard extends StatelessWidget {
                     //   right: kPadding / 2,
                     // ),
                     onPressed: () {
-                      if (getDoseIndex(
-                                tasks,
-                                context.selectedCycle,
-                              ) !=
-                              0 &&
-                          getDoseIndex(
-                                tasks,
-                                context.selectedCycle,
-                              ) >
-                              0) {
+                      final currentDoseIndex = getDoseIndex(
+                        tasks,
+                        context.selectedCycle,
+                      );
+                      if (currentDoseIndex != 0 && currentDoseIndex > 0) {
                         DigitDialog.show<bool>(
                           context,
                           options: DigitDialogOptions(
-                            titleText: localizations.translate(i18
-                                .deliverIntervention
-                                .didYouObservePreviousAdvEventsTitle),
+                            titleText: localizations
+                                .translate(i18.deliverIntervention
+                                    .didYouObservePreviousAdvEventsTitle)
+                                .replaceAll('{}', currentDoseIndex.toString()),
                             barrierDismissible: true,
                             enableRecordPast: true,
                             dialogPadding: const EdgeInsets.fromLTRB(
