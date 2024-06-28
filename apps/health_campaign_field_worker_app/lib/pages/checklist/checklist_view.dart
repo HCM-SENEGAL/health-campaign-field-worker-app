@@ -366,9 +366,10 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                   textStyle: theme.textTheme.headlineMedium,
                                   textInputType: TextInputType.number,
                                   inputFormatter: [
-                                    FilteringTextInputFormatter.allow(RegExp(
-                                      "[0-9]",
-                                    )),
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]'),
+                                    ),
+                                    LengthLimitingTextInputFormatter(9),
                                   ],
                                   validator: (value) {
                                     if (((value == null || value == '') &&
@@ -396,14 +397,15 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                 Align(
                                   alignment: Alignment.topLeft,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                     child: Column(
                                       children: [
                                         Text(
                                           '${localizations.translate(
                                             '${value.selectedServiceDefinition?.code}.${e.code}',
                                           )} ${e.required == true ? '*' : ''}',
-                                          style: theme.textTheme.headlineSmall,
+                                          style: theme.textTheme.bodyLarge,
                                         ),
                                       ],
                                     ),
@@ -805,9 +807,8 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
         textStyle: theme.textTheme.headlineMedium,
         textInputType: TextInputType.number,
         inputFormatter: [
-          FilteringTextInputFormatter.allow(RegExp(
-            "[0-9]",
-          )),
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          LengthLimitingTextInputFormatter(9),
         ],
         validator: (value) {
           if (((value == null || value == '') && item.required == true)) {
@@ -834,14 +835,14 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
               child: Column(
                 children: [
                   Text(
                     '${localizations.translate(
                       '${selectedServiceDefinition?.code}.${item.code}',
                     )} ${item.required == true ? '*' : ''}',
-                    style: theme.textTheme.headlineSmall,
+                    style: theme.textTheme.bodyLarge,
                   ),
                 ],
               ),
