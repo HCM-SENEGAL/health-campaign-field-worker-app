@@ -1696,7 +1696,7 @@ class MemberCard extends StatelessWidget {
             isBeneficiaryRefused ||
             isBeneficiarySick ||
             isBeneficiaryAbsent ||
-            !successfulDelivery) {
+            (!successfulDelivery && deliveryComment.isNotEmpty)) {
           icon = Icons.info_rounded;
           iconText = (isNotEligible || isBeneficiaryIneligible)
               ? i18.householdOverView.householdOverViewNotEligibleIconLabel
