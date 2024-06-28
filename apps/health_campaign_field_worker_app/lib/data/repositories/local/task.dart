@@ -49,6 +49,7 @@ class TaskLocalRepository extends LocalRepository<TaskModel, TaskSearchModel> {
               isDeleted: task.isDeleted,
               projectId: task.projectId,
               projectBeneficiaryId: task.projectBeneficiaryId,
+              projectBeneficiaryClientReferenceId: task.projectBeneficiaryClientReferenceId,
               createdDate: task.createdDate,
               status: task.status,
               resources: null,
