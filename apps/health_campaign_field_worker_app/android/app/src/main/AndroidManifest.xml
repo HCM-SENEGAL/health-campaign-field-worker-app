@@ -22,7 +22,7 @@
   </queries>
   <!--#enddocregion android-queries-->
    <application
-        android:label="Senegal-SMC"
+        android:label="DIGIT Senegal"
         android:name="${applicationName}"
         android:allowBackup="false"
         android:fullBackupOnly="false"
