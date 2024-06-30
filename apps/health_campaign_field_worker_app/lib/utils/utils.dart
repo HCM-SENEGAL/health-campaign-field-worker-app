@@ -573,6 +573,8 @@ bool validDoseDelivery(
 
   if (doseIndex == 0 && (refused || absent)) {
     return false;
+  } else if (doseIndex < 0 && (refused || absent)) {
+    return checkIfValidTimeForDose(tasks, currentCycle);
   } else if (doseIndex == 0) {
     return true;
   } else if (doseIndex < 0) {

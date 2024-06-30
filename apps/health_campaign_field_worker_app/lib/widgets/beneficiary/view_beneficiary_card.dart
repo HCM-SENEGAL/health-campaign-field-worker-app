@@ -166,23 +166,29 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
 
 // TODO need to pass the current cycle
 
-        final isStatusReset =
-            isLastCycleRunning(taskdata, context.selectedCycle)
-                ? allDosesDelivered(
-                    taskdata,
-                    context.selectedCycle,
-                    sideEffects,
-                    e,
-                  )
+        final bool lastCycle =
+            isLastCycleRunning(taskdata, context.selectedCycle);
+        final bool allDoseDelivered = allDosesDelivered(
+          taskdata,
+          context.selectedCycle,
+          sideEffects,
+          e,
+        );
+
+        final bool validDelivery = validDoseDelivery(
+          taskdata,
+          context.selectedCycle,
+          context.selectedProjectType,
+        );
+
+        final doseIndex = getDoseIndex(taskdata, context.selectedCycle);
+        final isStatusReset = lastCycle
+            ? allDoseDelivered
+                ? false
+                : (doseIndex == 0)
                     ? false
-                    : (getDoseIndex(taskdata, context.selectedCycle) == 0)
-                        ? false
-                        : validDoseDelivery(
-                            taskdata,
-                            context.selectedCycle,
-                            context.selectedProjectType,
-                          )
-                : true;
+                    : validDelivery
+            : true;
         final isHead = e.clientReferenceId ==
             householdMember.headOfHousehold.clientReferenceId;
 
@@ -395,11 +401,11 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             .where((element) => element.key == "deliveryComment")
             .first
             .value);
-      } else if (statusKeys.isBeneficiaryRefused && !statusKeys.isStatusReset) {
+      } else if (statusKeys.isBeneficiaryRefused && statusKeys.isStatusReset) {
         return localizations.translate(Status.beneficiaryRefused.toValue());
       } else if (statusKeys.isBeneficiarySick) {
         return localizations.translate(Status.beneficiarySick.toValue());
-      } else if (statusKeys.isBeneficiaryAbsent && !statusKeys.isStatusReset) {
+      } else if (statusKeys.isBeneficiaryAbsent && statusKeys.isStatusReset) {
         return localizations.translate(Status.beneficiaryAbsent.toValue());
       } else if (statusKeys.isStatusReset) {
         return localizations.translate(Status.notAdministered.toValue());
