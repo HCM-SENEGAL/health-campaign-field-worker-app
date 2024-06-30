@@ -103,7 +103,9 @@ class BeneficiariesReportState extends LocalizedState<BeneficiariesReportPage> {
                           DigitSyncDialog.show(
                             context,
                             type: DigitSyncDialogType.inProgress,
-                            label: 'Loading',
+                            label: localizations.translate(
+                              i18.common.coreCommonLoading,
+                            ),
                             barrierDismissible: false,
                           ),
                         },

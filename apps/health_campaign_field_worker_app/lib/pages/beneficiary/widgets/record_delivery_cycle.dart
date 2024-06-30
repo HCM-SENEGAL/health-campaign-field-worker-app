@@ -246,6 +246,10 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                     TableData(
                       '${localizations.translate(i18.deliverIntervention.dose)} ${e.deliveries!.indexOf(item) + 1}',
                       cellKey: 'dose',
+                      style: TextStyle(
+                        fontWeight:
+                            index == selectedIndex ? FontWeight.w700 : null,
+                      ),
                     ),
                     TableData(
                       localizations.translate(
