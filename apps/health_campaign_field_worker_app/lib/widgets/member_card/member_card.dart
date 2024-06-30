@@ -193,13 +193,12 @@ class MemberCard extends StatelessWidget {
           ),
           Offstage(
             offstage: beneficiaryType != BeneficiaryType.individual ||
-                isNotEligible ||
-                isBeneficiaryIneligible ||
-                isBeneficiaryReferred ||
-                isBeneficiarySick ||
-                (!successfulDelivery &&
-                    deliveryComment.isNotEmpty &&
-                    lastCycleRunning),
+                (isNotEligible ||
+                        isBeneficiaryIneligible ||
+                        isBeneficiaryReferred ||
+                        isBeneficiarySick ||
+                        (!successfulDelivery && deliveryComment.isNotEmpty)) &&
+                    lastCycleRunning,
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Column(
@@ -285,25 +284,18 @@ class MemberCard extends StatelessWidget {
                                               ),
                                             ),
                                             onPressed: (tasks != null &&
-                                                        (tasks ?? [])
-                                                            .where((element) =>
-                                                                element
-                                                                    .status !=
-                                                                Status
-                                                                    .beneficiaryRefused
-                                                                    .toValue())
-                                                            .toList()
-                                                            .isNotEmpty &&
-                                                        !checkStatus(
-                                                          tasks,
-                                                          context.selectedCycle,
-                                                        )) ||
-                                                    !validDoseDelivery(
+                                                    (tasks ?? [])
+                                                        .where((element) =>
+                                                            element.status !=
+                                                            Status
+                                                                .beneficiaryRefused
+                                                                .toValue())
+                                                        .toList()
+                                                        .isNotEmpty &&
+                                                    !checkStatus(
                                                       tasks,
                                                       context.selectedCycle,
-                                                      context
-                                                          .selectedProjectType,
-                                                    )
+                                                    ))
                                                 ? null
                                                 : () {
                                                     Navigator.of(
@@ -429,25 +421,18 @@ class MemberCard extends StatelessWidget {
                                               ),
                                             ),
                                             onPressed: (tasks != null &&
-                                                        (tasks ?? [])
-                                                            .where((element) =>
-                                                                element
-                                                                    .status !=
-                                                                Status
-                                                                    .beneficiarySick
-                                                                    .toValue())
-                                                            .toList()
-                                                            .isNotEmpty &&
-                                                        !checkStatus(
-                                                          tasks,
-                                                          context.selectedCycle,
-                                                        )) ||
-                                                    !validDoseDelivery(
+                                                    (tasks ?? [])
+                                                        .where((element) =>
+                                                            element.status !=
+                                                            Status
+                                                                .beneficiarySick
+                                                                .toValue())
+                                                        .toList()
+                                                        .isNotEmpty &&
+                                                    !checkStatus(
                                                       tasks,
                                                       context.selectedCycle,
-                                                      context
-                                                          .selectedProjectType,
-                                                    )
+                                                    ))
                                                 ? null
                                                 : () {
                                                     Navigator.of(
@@ -574,25 +559,18 @@ class MemberCard extends StatelessWidget {
                                               ),
                                             ),
                                             onPressed: (tasks != null &&
-                                                        (tasks ?? [])
-                                                            .where((element) =>
-                                                                element
-                                                                    .status !=
-                                                                Status
-                                                                    .beneficiaryAbsent
-                                                                    .toValue())
-                                                            .toList()
-                                                            .isNotEmpty &&
-                                                        !checkStatus(
-                                                          tasks,
-                                                          context.selectedCycle,
-                                                        )) ||
-                                                    !validDoseDelivery(
+                                                    (tasks ?? [])
+                                                        .where((element) =>
+                                                            element.status !=
+                                                            Status
+                                                                .beneficiaryAbsent
+                                                                .toValue())
+                                                        .toList()
+                                                        .isNotEmpty &&
+                                                    !checkStatus(
                                                       tasks,
                                                       context.selectedCycle,
-                                                      context
-                                                          .selectedProjectType,
-                                                    )
+                                                    ))
                                                 ? null
                                                 : () {
                                                     Navigator.of(
