@@ -402,12 +402,12 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             .first
             .value);
       } else if (statusKeys.isBeneficiaryRefused &&
-          checkIfValidTimeForDose(taskData, context.selectedCycle)) {
+          !checkIfValidTimeForDose(taskData, context.selectedCycle)) {
         return localizations.translate(Status.beneficiaryRefused.toValue());
       } else if (statusKeys.isBeneficiarySick) {
         return localizations.translate(Status.beneficiarySick.toValue());
       } else if (statusKeys.isBeneficiaryAbsent &&
-          checkIfValidTimeForDose(taskData, context.selectedCycle)) {
+          !checkIfValidTimeForDose(taskData, context.selectedCycle)) {
         return localizations.translate(Status.beneficiaryAbsent.toValue());
       } else if (statusKeys.isStatusReset) {
         return localizations.translate(Status.notAdministered.toValue());

@@ -1686,11 +1686,19 @@ class MemberCard extends StatelessWidget {
                   : isBeneficiaryReferred
                       ? i18.householdOverView
                           .householdOverViewBeneficiaryReferredLabel
-                      : isBeneficiaryRefused
+                      : isBeneficiaryRefused &&
+                              !checkIfValidTimeForDose(
+                                tasks,
+                                context.selectedCycle,
+                              )
                           ? Status.beneficiaryRefused.toValue()
                           : isBeneficiarySick
                               ? Status.beneficiarySick.toValue()
-                              : isBeneficiaryAbsent
+                              : isBeneficiaryAbsent &&
+                                      !checkIfValidTimeForDose(
+                                        tasks,
+                                        context.selectedCycle,
+                                      )
                                   ? Status.beneficiaryAbsent.toValue()
                                   : i18.householdOverView
                                       .householdOverViewNotDeliveredIconLabel;
