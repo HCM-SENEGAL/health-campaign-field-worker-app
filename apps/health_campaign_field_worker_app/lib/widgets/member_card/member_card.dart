@@ -284,26 +284,10 @@ class MemberCard extends StatelessWidget {
                                                 50,
                                               ),
                                             ),
-                                            onPressed: (tasks != null &&
-                                                        (tasks ?? [])
-                                                            .where((element) =>
-                                                                element
-                                                                    .status !=
-                                                                Status
-                                                                    .beneficiaryRefused
-                                                                    .toValue())
-                                                            .toList()
-                                                            .isNotEmpty &&
-                                                        !checkStatus(
-                                                          tasks,
-                                                          context.selectedCycle,
-                                                        )) ||
-                                                    !validDoseDelivery(
-                                                      tasks,
-                                                      context.selectedCycle,
-                                                      context
-                                                          .selectedProjectType,
-                                                    )
+                                            onPressed: !checkStatus(
+                                              tasks,
+                                              context.selectedCycle,
+                                            )
                                                 ? null
                                                 : () {
                                                     Navigator.of(
@@ -573,26 +557,10 @@ class MemberCard extends StatelessWidget {
                                                 50,
                                               ),
                                             ),
-                                            onPressed: (tasks != null &&
-                                                        (tasks ?? [])
-                                                            .where((element) =>
-                                                                element
-                                                                    .status !=
-                                                                Status
-                                                                    .beneficiaryAbsent
-                                                                    .toValue())
-                                                            .toList()
-                                                            .isNotEmpty &&
-                                                        !checkStatus(
-                                                          tasks,
-                                                          context.selectedCycle,
-                                                        )) ||
-                                                    !validDoseDelivery(
-                                                      tasks,
-                                                      context.selectedCycle,
-                                                      context
-                                                          .selectedProjectType,
-                                                    )
+                                            onPressed: !checkStatus(
+                                              tasks,
+                                              context.selectedCycle,
+                                            )
                                                 ? null
                                                 : () {
                                                     Navigator.of(
