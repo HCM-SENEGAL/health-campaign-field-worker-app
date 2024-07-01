@@ -1468,9 +1468,7 @@ class MemberCard extends StatelessWidget {
                   .replaceAll(
                     '{}',
                     // todo verify this condition
-                    doseIndex > 1
-                        ? (doseIndex - 1).toString()
-                        : doseIndex.toString(),
+                    getDoseIndex(tasks, context.selectedCycle).toString(),
                   ),
               barrierDismissible: true,
               enableRecordPast: true,

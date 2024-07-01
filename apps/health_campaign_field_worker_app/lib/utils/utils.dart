@@ -487,36 +487,47 @@ int getDoseIndex(
       currentCycle.endDate != null) {
     if (tasks == null || tasks.isEmpty) {
       return 0;
-    } else if (tasks.last.clientAuditDetails != null &&
-        tasks.last.additionalFields != null) {
-      var lastTask = tasks.last;
+    } else {
+      final filteredTasks = tasks
+          .where((element) =>
+              element.status == Status.administeredSuccess.toValue() ||
+              element.status == Status.administeredFailed.toValue())
+          .toList();
+      if (filteredTasks.isEmpty) {
+        return 0;
+      } else {
+        if (filteredTasks.last.clientAuditDetails != null &&
+            filteredTasks.last.additionalFields != null) {
+          var lastTask = filteredTasks.last;
 
-      final lastTaskCreatedTime = lastTask.clientAuditDetails!.createdTime;
+          final lastTaskCreatedTime = lastTask.clientAuditDetails!.createdTime;
 
-      final isLastCycleRunning =
-          lastTaskCreatedTime >= currentCycle.startDate! &&
-              lastTaskCreatedTime <= currentCycle.endDate!;
-      if (lastTask.additionalFields != null &&
-          lastTask.additionalFields!.fields
-              .where((element) =>
-                  element.key == AdditionalFieldsType.doseIndex.toValue())
-              .toList()
-              .isEmpty) {
-        return -1;
+          final isLastCycleRunning =
+              lastTaskCreatedTime >= currentCycle.startDate! &&
+                  lastTaskCreatedTime <= currentCycle.endDate!;
+          if (lastTask.additionalFields != null &&
+              lastTask.additionalFields!.fields
+                  .where((element) =>
+                      element.key == AdditionalFieldsType.doseIndex.toValue())
+                  .toList()
+                  .isEmpty) {
+            return -1;
+          }
+          var doseIndex = filteredTasks.last.additionalFields!.fields
+              .where(
+                (element) =>
+                    element.key == AdditionalFieldsType.doseIndex.toValue(),
+              )
+              .first
+              .value;
+
+          return isLastCycleRunning
+              ? doseIndex is String
+                  ? int.parse(doseIndex)
+                  : (doseIndex is int ? doseIndex : 0)
+              : 0;
+        }
       }
-      var doseIndex = tasks.last.additionalFields!.fields
-          .where(
-            (element) =>
-                element.key == AdditionalFieldsType.doseIndex.toValue(),
-          )
-          .first
-          .value;
-
-      return isLastCycleRunning
-          ? doseIndex is String
-              ? int.parse(doseIndex)
-              : (doseIndex is int ? doseIndex : 0)
-          : 0;
     }
   }
 
