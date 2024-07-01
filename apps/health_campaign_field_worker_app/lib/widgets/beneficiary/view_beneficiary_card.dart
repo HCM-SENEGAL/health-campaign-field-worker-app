@@ -383,11 +383,11 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     StatusKeys statusKeys,
     List<TaskModel>? taskData,
   ) {
-    if (statusKeys.isStatusReset &&
+    if (statusKeys.isNotEligible || statusKeys.isBeneficiaryIneligible) {
+      return 'Not Eligible';
+    } else if (statusKeys.isStatusReset &&
         !isLastCycleRunning(taskData, context.selectedCycle)) {
       return localizations.translate(Status.notAdministered.toValue());
-    } else if (statusKeys.isNotEligible || statusKeys.isBeneficiaryIneligible) {
-      return 'Not Eligible';
     } else if (statusKeys.isBeneficiaryReferred) {
       return localizations.translate(Status.beneficiaryReferred.toValue());
     } else if (taskData != null) {

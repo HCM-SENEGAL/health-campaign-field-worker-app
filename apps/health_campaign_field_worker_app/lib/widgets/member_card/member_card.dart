@@ -203,7 +203,7 @@ class MemberCard extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Column(
                 children: [
-                  isHead
+                  isHead || isNotEligible
                       ? const Offstage()
                       : getButtonType(
                           context,
@@ -214,7 +214,7 @@ class MemberCard extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  isHead
+                  isHead || isNotEligible
                       ? const Offstage()
                       : lastCycleRunning
                           ? (isNotEligible ||
@@ -1712,8 +1712,14 @@ class MemberCard extends StatelessWidget {
           iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
         }
       } else {
-        icon = Icons.info_rounded;
-        iconText = Status.notAdministered.toValue();
+        if (isNotEligible || isBeneficiaryIneligible) {
+          icon = Icons.info_rounded;
+          iconText =
+              i18.householdOverView.householdOverViewNotEligibleIconLabel;
+        } else {
+          icon = Icons.info_rounded;
+          iconText = Status.notAdministered.toValue();
+        }
       }
     }
 
