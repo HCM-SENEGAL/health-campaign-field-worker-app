@@ -489,7 +489,6 @@ class _ComplaintsDetailsPageState
         validators: [
           CustomValidator.validMobileNumber,
           Validators.maxLength(mobileNumberLength),
-          Validators.minLength(mobileNumberLength),
         ],
       ),
       _complaintDescription: FormControl<String>(

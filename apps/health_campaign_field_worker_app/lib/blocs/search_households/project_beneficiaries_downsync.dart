@@ -86,7 +86,7 @@ class BeneficiaryDownSyncBloc
         event.appConfiguration,
       );
       emit(BeneficiaryDownSyncState.getBatchSize(
-        configuredBatchSize,
+        configuredBatchSize * 10 > 100 ? 100 : configuredBatchSize * 10,
         event.projectId,
         event.boundaryCode,
         event.pendingSyncCount,
@@ -97,8 +97,6 @@ class BeneficiaryDownSyncBloc
       emit(const BeneficiaryDownSyncState.totalCountCheckFailed());
     }
   }
-
-
 
   FutureOr<void> _handleCheckTotalCount(
     DownSyncCheckTotalCountEvent event,

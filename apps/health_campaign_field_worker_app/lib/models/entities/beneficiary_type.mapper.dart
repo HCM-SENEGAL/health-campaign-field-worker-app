@@ -33,10 +33,14 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return BeneficiaryType.product;
       case "3-11MONTH":
         return BeneficiaryType.individual1;
-      case "12-60MONTH":
+      case "12-59MONTH":
         return BeneficiaryType.individual2;
       case "60-120MONTH":
         return BeneficiaryType.individual3;
+      case "COB1":
+        return BeneficiaryType.coblister1;
+      case "COB2":
+        return BeneficiaryType.coblister2;
       case "IVERMECTIN":
         return BeneficiaryType.ivermectin;
       case "ALBENDAZOLE":
@@ -58,9 +62,13 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
       case BeneficiaryType.individual1:
         return "3-11MONTH";
       case BeneficiaryType.individual2:
-        return "12-60MONTH";
+        return "12-59MONTH";
       case BeneficiaryType.individual3:
         return "60-120MONTH";
+      case BeneficiaryType.coblister1:
+        return "COB1";
+      case BeneficiaryType.coblister2:
+        return "COB2";
       case BeneficiaryType.ivermectin:
         return "IVERMECTIN";
       case BeneficiaryType.albendazole:

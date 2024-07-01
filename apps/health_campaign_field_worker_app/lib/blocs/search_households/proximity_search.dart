@@ -108,13 +108,37 @@ class ProximitySearchBloc extends SearchHouseholdsBloc {
                   .contains(element.beneficiaryClientReferenceId)
               : entry.key == element.beneficiaryClientReferenceId)
           .toList();
-      filteredTasks = taskList
-          .where((element) => filteredBeneficiaries
-              .where((e) =>
-                  e.clientReferenceId ==
-                  element.projectBeneficiaryClientReferenceId)
-              .isNotEmpty)
+
+      final beneficiaryClientReferenceIds = filteredBeneficiaries
+          .map((e) => e.beneficiaryClientReferenceId)
           .toList();
+
+      final List<IndividualModel> beneficiaryIndividuals = filteredIndividuals
+          .where((element) =>
+              beneficiaryClientReferenceIds.contains(element.clientReferenceId))
+          .toList();
+
+      final projectBeneficiaryClientReferenceIds =
+          filteredBeneficiaries.map((e) => e.clientReferenceId).toList();
+
+      filteredTasks = taskList
+          .where((element) => projectBeneficiaryClientReferenceIds
+              .contains(element.projectBeneficiaryClientReferenceId))
+          .toList();
+
+      final List<ReferralModel> filteredReferrals = referralsList
+          .where((element) => projectBeneficiaryClientReferenceIds
+              .contains(element.projectBeneficiaryClientReferenceId))
+          .toList();
+
+      final taskClientReferenceIds =
+          filteredTasks.map((e) => e.clientReferenceId).toList();
+
+      final List<SideEffectModel> filteredSideEffects = sideEffectsList
+          .where((element) =>
+              taskClientReferenceIds.contains(element.taskClientReferenceId))
+          .toList();
+
       // Find the head of household from the individuals.
       final head = filteredIndividuals.firstWhereOrNull(
         (element) =>
@@ -132,13 +156,14 @@ class ProximitySearchBloc extends SearchHouseholdsBloc {
           HouseholdMemberWrapper(
             household: filteredHousehold,
             headOfHousehold: head,
-            members: filteredIndividuals,
+            members: beneficiaryType == BeneficiaryType.individual
+                ? beneficiaryIndividuals
+                : filteredIndividuals,
             projectBeneficiaries: filteredBeneficiaries,
             tasks: filteredTasks.isEmpty ? null : filteredTasks,
-            sideEffects: sideEffectsList.isEmpty ? null : sideEffectsList,
-            //TODO Need to added the side effects
-            referrals: referralsList.isEmpty ? null : referralsList,
-            //TODO Need to addevid the referrals
+            sideEffects:
+                filteredSideEffects.isEmpty ? null : filteredSideEffects,
+            referrals: filteredReferrals.isEmpty ? null : filteredReferrals,
           ),
         );
       }

@@ -803,6 +803,8 @@ class Checklist {
 
   String get checklistCreateActionLabel => 'CHECKLIST_CREATE_ACTION_LABEL';
 
+  String get checklistFillActionLabel => 'CHECKLIST_FILL_ACTION_LABEL';
+
   String get checklistViewActionLabel => 'CHECKLIST_VIEW_ACTION_LABEL';
 
   String get checklistDetailLabel => 'CHECKLIST_DETAILS_LABEL';

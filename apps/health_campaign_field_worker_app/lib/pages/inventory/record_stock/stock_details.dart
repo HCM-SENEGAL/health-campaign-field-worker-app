@@ -473,6 +473,18 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                             }
                                           }
 
+                                          final cycleIndex = context
+                                                      .selectedCycle.id ==
+                                                  0
+                                              ? ""
+                                              : "0${context.selectedCycle.id}";
+
+                                          final projectTypeId = context
+                                                      .selectedProjectType ==
+                                                  null
+                                              ? ""
+                                              : context.selectedProjectType!.id;
+
                                           final stockModel = StockModel(
                                             clientReferenceId:
                                                 IdGen.i.identifier,
@@ -553,6 +565,17 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                                           lng,
                                                         ),
                                                       ],
+                                                      if (cycleIndex.isNotEmpty)
+                                                        AdditionalField(
+                                                          "cycleIndex",
+                                                          cycleIndex,
+                                                        ),
+                                                      if (projectTypeId
+                                                          .isNotEmpty)
+                                                        AdditionalField(
+                                                          "projectTypeId",
+                                                          projectTypeId,
+                                                        ),
                                                     ],
                                                   )
                                                 : null,

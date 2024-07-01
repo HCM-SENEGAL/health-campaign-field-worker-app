@@ -8,8 +8,10 @@ enum BeneficiaryType {
   @MappableValue("HOUSEHOLD") household,
   @MappableValue("PRODUCT") product,
   @MappableValue("3-11MONTH") individual1,
-  @MappableValue("12-60MONTH") individual2,
+  @MappableValue("12-59MONTH") individual2,
   @MappableValue("60-120MONTH") individual3,
+  @MappableValue("COB1") coblister1,
+  @MappableValue("COB2") coblister2,
   @MappableValue("IVERMECTIN") ivermectin,
   @MappableValue("ALBENDAZOLE") albendazole,
   ;

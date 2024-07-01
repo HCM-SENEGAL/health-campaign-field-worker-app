@@ -225,7 +225,19 @@ class _StockReconciliationPageState
                                               );
                                               return;
                                             }
+                                            final cycleIndex = context
+                                                        .selectedCycle.id ==
+                                                    0
+                                                ? ""
+                                                : "0${context.selectedCycle.id}";
 
+                                            final projectTypeId =
+                                                context.selectedProjectType ==
+                                                        null
+                                                    ? ""
+                                                    : context
+                                                        .selectedProjectType!
+                                                        .id;
                                             final model =
                                                 StockReconciliationModel(
                                               clientReferenceId:
@@ -258,6 +270,46 @@ class _StockReconciliationPageState
                                                     context.loggedInUserUuid,
                                                 lastModifiedTime: context
                                                     .millisecondsSinceEpoch(),
+                                              ),
+                                              additionalFields:
+                                                  StockReconciliationAdditionalFields(
+                                                version: 1,
+                                                fields: [
+                                                  AdditionalField(
+                                                    'received',
+                                                    stockState.stockReceived,
+                                                  ),
+                                                  AdditionalField(
+                                                    'issued',
+                                                    stockState.stockIssued,
+                                                  ),
+                                                  AdditionalField(
+                                                    'returned',
+                                                    stockState.stockReturned,
+                                                  ),
+                                                  AdditionalField(
+                                                    'lost',
+                                                    stockState.stockLost,
+                                                  ),
+                                                  AdditionalField(
+                                                    'damaged',
+                                                    stockState.stockDamaged,
+                                                  ),
+                                                  AdditionalField(
+                                                    'inHand',
+                                                    stockState.stockInHand,
+                                                  ),
+                                                  if (cycleIndex.isNotEmpty)
+                                                    AdditionalField(
+                                                      "cycleIndex",
+                                                      cycleIndex,
+                                                    ),
+                                                  if (projectTypeId.isNotEmpty)
+                                                    AdditionalField(
+                                                      "projectTypeId",
+                                                      projectTypeId,
+                                                    ),
+                                                ],
                                               ),
                                             );
 

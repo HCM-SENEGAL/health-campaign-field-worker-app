@@ -113,7 +113,7 @@ class _ChecklistPageState extends LocalizedState<ChecklistPage> {
                                                   icon: Icons.edit_calendar,
                                                   label: localizations.translate(i18
                                                       .checklist
-                                                      .checklistCreateActionLabel),
+                                                      .checklistFillActionLabel),
                                                   action: () {
                                                     context.router.push(
                                                       ChecklistBoundaryViewRoute(),

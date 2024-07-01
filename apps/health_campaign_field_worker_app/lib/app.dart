@@ -127,7 +127,7 @@ class MainApplicationState extends State<MainApplication>
             ],
             child: BlocBuilder<AppInitializationBloc, AppInitializationState>(
               builder: (context, appConfigState) {
-                const defaultLocale = Locale('en', 'SN');
+                const defaultLocale = Locale('fr', 'SN');
 
                 return BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, authState) {
@@ -135,7 +135,7 @@ class MainApplicationState extends State<MainApplication>
                       return const MaterialApp(
                         home: Scaffold(
                           body: Center(
-                            child: Text('Loading'),
+                            child: Text('Chargement'),
                           ),
                         ),
                       );
@@ -144,7 +144,8 @@ class MainApplicationState extends State<MainApplication>
                     final appConfig = appConfigState.appConfiguration;
 
                     final localizationModulesList = appConfig.backendInterface;
-                    final firstLanguage = appConfig.languages?.first.value;
+                    // final firstLanguage = appConfig.languages?.first.value;
+                    const firstLanguage = 'fr_SN';
                     final languages = appConfig.languages;
 
                     return MultiBlocProvider(

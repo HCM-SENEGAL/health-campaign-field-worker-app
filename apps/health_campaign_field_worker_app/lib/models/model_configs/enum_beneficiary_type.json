@@ -19,11 +19,19 @@
     },
     {
       "name": "individual2",
-      "value": "12-60MONTH"
+      "value": "12-59MONTH"
     },
     {
       "name": "individual3",
       "value": "60-120MONTH"
+    },
+    {
+      "name": "coblister1",
+      "value": "COB1"
+    },
+    {
+      "name": "coblister2",
+      "value": "COB2"
     },
     {
       "name": "ivermectin",

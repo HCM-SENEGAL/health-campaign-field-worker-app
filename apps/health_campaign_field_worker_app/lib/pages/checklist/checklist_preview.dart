@@ -88,7 +88,7 @@ class _ChecklistPreviewPageState extends LocalizedState<ChecklistPreviewPage> {
                                               SizedBox(
                                                 child: Text(
                                                   localizations.translate(
-                                                    '${e.tenantId}',
+                                                    '',
                                                   ),
                                                 ),
                                               ),

@@ -158,6 +158,10 @@ class SearchByHeadBloc extends SearchHouseholdsBloc {
     for (final entry in groupedHouseholds.entries) {
       final householdId = entry.key;
 
+      final exisitingHousehold = state.householdMembers.firstWhereOrNull(
+        (element) => element.household.clientReferenceId == householdId,
+      );
+      if (exisitingHousehold != null) continue;
       if (householdId == null) continue;
       // Retrieve the first household result.
       final householdresult =
@@ -172,6 +176,35 @@ class SearchByHeadBloc extends SearchHouseholdsBloc {
           .where((element) => beneficiaryType == BeneficiaryType.individual
               ? membersIds.contains(element.beneficiaryClientReferenceId)
               : (househHoldIds).contains(element.beneficiaryClientReferenceId))
+          .toList();
+
+      final beneficiaryClientReferenceIds =
+          beneficiaries.map((e) => e.beneficiaryClientReferenceId).toList();
+
+      final List<IndividualModel> beneficiaryIndividuals = individualMembersList
+          .where((element) =>
+              beneficiaryClientReferenceIds.contains(element.clientReferenceId))
+          .toList();
+
+      final projectBeneficiaryClientReferenceIds =
+          beneficiaries.map((e) => e.clientReferenceId).toList();
+
+      final List<TaskModel> filteredTasks = tasks
+          .where((element) => projectBeneficiaryClientReferenceIds
+              .contains(element.projectBeneficiaryClientReferenceId))
+          .toList();
+
+      final List<ReferralModel> filteredReferrals = referrals
+          .where((element) => projectBeneficiaryClientReferenceIds
+              .contains(element.projectBeneficiaryClientReferenceId))
+          .toList();
+
+      final taskClientReferenceIds =
+          filteredTasks.map((e) => e.clientReferenceId).toList();
+
+      final List<SideEffectModel> filteredSideEffects = sideEffects
+          .where((element) =>
+              taskClientReferenceIds.contains(element.taskClientReferenceId))
           .toList();
       // Find the head of household from the individuals.
       final head = individualMembersList.firstWhereOrNull(
@@ -194,11 +227,14 @@ class SearchByHeadBloc extends SearchHouseholdsBloc {
           HouseholdMemberWrapper(
             household: householdresult,
             headOfHousehold: head,
-            members: individualMembersList,
+            members: beneficiaryType == BeneficiaryType.individual
+                ? beneficiaryIndividuals
+                : individualMembersList,
             projectBeneficiaries: beneficiaries,
-            tasks: tasks.isEmpty ? null : tasks,
-            sideEffects: sideEffects.isEmpty ? null : sideEffects,
-            referrals: referrals.isEmpty ? null : referrals,
+            tasks: filteredTasks.isEmpty ? null : filteredTasks,
+            sideEffects:
+                filteredSideEffects.isEmpty ? null : filteredSideEffects,
+            referrals: filteredReferrals.isEmpty ? null : filteredReferrals,
           ),
         );
       }
