@@ -1450,28 +1450,28 @@ class MemberCard extends StatelessWidget {
       individual,
     );
 
+    final doseIndex = getDoseIndex(tasks, context.selectedCycle);
+
     return DigitElevatedButton(
       // padding: const EdgeInsets.only(
       //   left: kPadding / 2,
       //   right: kPadding / 2,
       // ),
       onPressed: () {
-        if (getDoseIndex(
-                  tasks,
-                  context.selectedCycle,
-                ) !=
-                0 &&
-            getDoseIndex(
-                  tasks,
-                  context.selectedCycle,
-                ) >
-                0) {
+        if (doseIndex != 0 && doseIndex > 0) {
           DigitDialog.show<bool>(
             context,
             options: DigitDialogOptions(
-              titleText: localizations.translate(
-                i18.deliverIntervention.didYouObservePreviousAdvEventsTitle,
-              ),
+              titleText: localizations
+                  .translate(i18
+                      .deliverIntervention.didYouObservePreviousAdvEventsTitle)
+                  .replaceAll(
+                    '{}',
+                    // todo verify this condition
+                    doseIndex > 1
+                        ? (doseIndex - 1).toString()
+                        : doseIndex.toString(),
+                  ),
               barrierDismissible: true,
               enableRecordPast: true,
               dialogPadding: const EdgeInsets.fromLTRB(
@@ -1486,7 +1486,7 @@ class MemberCard extends StatelessWidget {
                 ),
                 action: (ctx) {
                   Navigator.pop(ctx);
-                  // todo verify this as there was no action on no , and it will be stuck if no selected
+
                   final bloc = context.read<HouseholdOverviewBloc>();
 
                   bloc.add(
