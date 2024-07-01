@@ -64,7 +64,6 @@ class SearchByHeadBloc extends SearchHouseholdsBloc {
     List<IndividualModel> individuals = [];
     List<IndividualModel> proximityBasedIndividualResults = [];
     List<SideEffectModel> sideEffects = [];
-    final containers = <HouseholdMemberWrapper>[];
     List<ReferralModel> referrals = [];
     List<TaskModel> tasks = [];
 
@@ -149,6 +148,9 @@ class SearchByHeadBloc extends SearchHouseholdsBloc {
             projectBeneficiaries.map((e) => e.clientReferenceId).toList(),
       ));
     }
+
+    // Initialize a list to store household member wrappers.
+    final containers = <HouseholdMemberWrapper>[...state.householdMembers];
 
     // Initialize a list to store household members.
     final groupedHouseholds = allhouseholdMembers

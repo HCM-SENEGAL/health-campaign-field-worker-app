@@ -287,7 +287,7 @@ class MemberCard extends StatelessWidget {
                                                         (tasks ?? [])
                                                             .where((element) =>
                                                                 element
-                                                                    .status !=
+                                                                    .status ==
                                                                 Status
                                                                     .beneficiaryRefused
                                                                     .toValue())
@@ -425,7 +425,7 @@ class MemberCard extends StatelessWidget {
                                                         (tasks ?? [])
                                                             .where((element) =>
                                                                 element
-                                                                    .status !=
+                                                                    .status ==
                                                                 Status
                                                                     .beneficiarySick
                                                                     .toValue())
@@ -564,7 +564,7 @@ class MemberCard extends StatelessWidget {
                                                         (tasks ?? [])
                                                             .where((element) =>
                                                                 element
-                                                                    .status !=
+                                                                    .status ==
                                                                 Status
                                                                     .beneficiaryAbsent
                                                                     .toValue())
@@ -1450,7 +1450,7 @@ class MemberCard extends StatelessWidget {
       individual,
     );
 
-    final doseIndex = getDoseIndex(tasks, context.selectedCycle);
+    final validDoseIndex = getValidDoseIndex(tasks, context.selectedCycle);
 
     return DigitElevatedButton(
       // padding: const EdgeInsets.only(
@@ -1458,7 +1458,7 @@ class MemberCard extends StatelessWidget {
       //   right: kPadding / 2,
       // ),
       onPressed: () {
-        if (doseIndex != 0 && doseIndex > 0) {
+        if (validDoseIndex > 0) {
           DigitDialog.show<bool>(
             context,
             options: DigitDialogOptions(
@@ -1468,7 +1468,7 @@ class MemberCard extends StatelessWidget {
                   .replaceAll(
                     '{}',
                     // todo verify this condition
-                    getDoseIndex(tasks, context.selectedCycle).toString(),
+                    validDoseIndex.toString(),
                   ),
               barrierDismissible: true,
               enableRecordPast: true,

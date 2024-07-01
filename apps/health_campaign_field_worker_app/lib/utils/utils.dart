@@ -487,6 +487,51 @@ int getDoseIndex(
       currentCycle.endDate != null) {
     if (tasks == null || tasks.isEmpty) {
       return 0;
+    } else if (tasks.last.clientAuditDetails != null &&
+        tasks.last.additionalFields != null) {
+      var lastTask = tasks.last;
+
+      final lastTaskCreatedTime = lastTask.clientAuditDetails!.createdTime;
+
+      final isLastCycleRunning =
+          lastTaskCreatedTime >= currentCycle.startDate! &&
+              lastTaskCreatedTime <= currentCycle.endDate!;
+      if (lastTask.additionalFields != null &&
+          lastTask.additionalFields!.fields
+              .where((element) =>
+                  element.key == AdditionalFieldsType.doseIndex.toValue())
+              .toList()
+              .isEmpty) {
+        return -1;
+      }
+      var doseIndex = tasks.last.additionalFields!.fields
+          .where(
+            (element) =>
+                element.key == AdditionalFieldsType.doseIndex.toValue(),
+          )
+          .first
+          .value;
+
+      return isLastCycleRunning
+          ? doseIndex is String
+              ? int.parse(doseIndex)
+              : (doseIndex is int ? doseIndex : 0)
+          : 0;
+    }
+  }
+
+  return -1;
+}
+
+int getValidDoseIndex(
+  List<TaskModel>? tasks,
+  Cycle? currentCycle,
+) {
+  if (currentCycle != null &&
+      currentCycle.startDate != null &&
+      currentCycle.endDate != null) {
+    if (tasks == null || tasks.isEmpty) {
+      return 0;
     } else {
       final filteredTasks = tasks
           .where((element) =>
