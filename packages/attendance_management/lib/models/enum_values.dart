@@ -33,4 +33,8 @@ enum EnumValues {
   latitude,
   @MappableValue("longitude")
   longitude,
+  @MappableValue("boundary")
+  boundary,
+  @MappableValue("description")
+  description,
 }
