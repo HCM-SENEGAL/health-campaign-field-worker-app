@@ -482,11 +482,11 @@ class _IndividualDetailsPageState
                                 label: localizations.translate(
                                   i18.individualDetails.firstNameLabelText,
                                 ),
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(
-                                    "[a-zA-Z ]",
-                                  )),
-                                ],
+                                // inputFormatters: [
+                                //   FilteringTextInputFormatter.allow(RegExp(
+                                //     "[a-zA-Z ]",
+                                //   )),
+                                // ],
                                 isRequired: true,
                                 maxLength: 200,
                                 validationMessages: {
@@ -512,11 +512,11 @@ class _IndividualDetailsPageState
                                 label: localizations.translate(
                                   i18.individualDetails.lastNameLabelText,
                                 ),
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(
-                                    "[a-zA-Z ]",
-                                  )),
-                                ],
+                                // inputFormatters: [
+                                //   FilteringTextInputFormatter.allow(RegExp(
+                                //     "[a-zA-Z ]",
+                                //   )),
+                                // ],
                                 maxLength: 200,
                                 isRequired: true,
                                 validationMessages: {
