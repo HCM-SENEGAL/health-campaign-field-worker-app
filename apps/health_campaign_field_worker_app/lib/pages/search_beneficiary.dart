@@ -377,20 +377,24 @@ class _SearchBeneficiaryPageState
                   child: Column(
                     children: [
                       DigitElevatedButton(
-                        onPressed: () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          context.read<ScannerBloc>().add(
-                                const ScannerEvent.handleScanner([], []),
-                              );
-                          context.router
-                              .push(BeneficiaryRegistrationWrapperRoute(
-                            initialState: BeneficiaryRegistrationCreateState(
-                              searchQuery: searchHouseholdsState.searchQuery,
-                            ),
-                          ));
-                          searchController.clear();
-                          blocWrapper.clearEvent();
-                        },
+                        onPressed: searchController.text.length > 200
+                            ? null
+                            : () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                context.read<ScannerBloc>().add(
+                                      const ScannerEvent.handleScanner([], []),
+                                    );
+                                context.router
+                                    .push(BeneficiaryRegistrationWrapperRoute(
+                                  initialState:
+                                      BeneficiaryRegistrationCreateState(
+                                    searchQuery:
+                                        searchHouseholdsState.searchQuery,
+                                  ),
+                                ));
+                                searchController.clear();
+                                blocWrapper.clearEvent();
+                              },
                         child: Center(
                           child: Text(localizations.translate(
                             i18.searchBeneficiary.beneficiaryAddActionLabel,
@@ -404,15 +408,17 @@ class _SearchBeneficiaryPageState
                             borderRadius: BorderRadius.zero,
                           ),
                         ),
-                        onPressed: () {
-                          blocWrapper.clearEvent();
-                          isProximityEnabled = false;
-                          context.router.push(QRScannerRoute(
-                            quantity: 1,
-                            isGS1code: false,
-                            sinlgleValue: true,
-                          ));
-                        },
+                        onPressed: searchController.text.length > 200
+                            ? null
+                            : () {
+                                blocWrapper.clearEvent();
+                                isProximityEnabled = false;
+                                context.router.push(QRScannerRoute(
+                                  quantity: 1,
+                                  isGS1code: false,
+                                  sinlgleValue: true,
+                                ));
+                              },
                         icon: Icons.qr_code,
                         label: localizations.translate(
                           i18.deliverIntervention.scannerLabel,
