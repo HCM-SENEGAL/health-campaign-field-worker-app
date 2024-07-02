@@ -1522,12 +1522,18 @@ class MemberCard extends StatelessWidget {
                     ctx,
                   );
                   final reloadState = context.read<HouseholdOverviewBloc>();
+                  final address = individual.address == null
+                      ? tasks!.first.address
+                      : individual.address!.first;
                   final response = await router.push(
                     SideEffectsRoute(
                       tasks: [
                         (tasks)!.last,
                       ],
                       fromSurvey: true,
+                      address: address,
+                      projectBeneficiaryClientRefId:
+                          projectBeneficiaryClientReferenceId ?? "",
                     ),
                   );
 

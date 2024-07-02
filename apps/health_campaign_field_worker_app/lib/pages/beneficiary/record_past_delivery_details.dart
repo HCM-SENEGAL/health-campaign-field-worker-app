@@ -234,9 +234,17 @@ class _RecordPastDeliveryDetailsPageState
                                   HouseholdOverviewRoute.name,
                                 );
                                 Navigator.of(ctx).pop();
+                                // todo not passing other parameters like address and projectbeneficiaryclientReferenceid here
                                 final response = await router.push(
                                   SideEffectsRoute(
                                     tasks: [(futureTaskList ?? []).last],
+                                    projectBeneficiaryClientRefId:
+                                        (futureTaskList ?? [])
+                                                .last
+                                                .projectBeneficiaryClientReferenceId ??
+                                            "",
+                                    address:
+                                        (futureTaskList ?? []).last.address,
                                   ),
                                 );
                                 if (response == null) {

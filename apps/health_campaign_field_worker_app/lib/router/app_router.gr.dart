@@ -395,6 +395,8 @@ class _$AppRouter extends RootStackRouter {
           tasks: args.tasks,
           isEditing: args.isEditing,
           fromSurvey: args.fromSurvey,
+          projectBeneficiaryClientRefId: args.projectBeneficiaryClientRefId,
+          address: args.address,
         ),
       );
     },
@@ -2261,6 +2263,8 @@ class SideEffectsRoute extends PageRouteInfo<SideEffectsRouteArgs> {
     required List<TaskModel> tasks,
     bool isEditing = false,
     bool fromSurvey = false,
+    required String projectBeneficiaryClientRefId,
+    required AddressModel? address,
   }) : super(
           SideEffectsRoute.name,
           path: 'side-effects',
@@ -2270,6 +2274,8 @@ class SideEffectsRoute extends PageRouteInfo<SideEffectsRouteArgs> {
             tasks: tasks,
             isEditing: isEditing,
             fromSurvey: fromSurvey,
+            projectBeneficiaryClientRefId: projectBeneficiaryClientRefId,
+            address: address,
           ),
         );
 
@@ -2283,6 +2289,8 @@ class SideEffectsRouteArgs {
     required this.tasks,
     this.isEditing = false,
     this.fromSurvey = false,
+    required this.projectBeneficiaryClientRefId,
+    required this.address,
   });
 
   final Key? key;
@@ -2295,9 +2303,13 @@ class SideEffectsRouteArgs {
 
   final bool fromSurvey;
 
+  final String projectBeneficiaryClientRefId;
+
+  final AddressModel? address;
+
   @override
   String toString() {
-    return 'SideEffectsRouteArgs{key: $key, appLocalizations: $appLocalizations, tasks: $tasks, isEditing: $isEditing, fromSurvey: $fromSurvey}';
+    return 'SideEffectsRouteArgs{key: $key, appLocalizations: $appLocalizations, tasks: $tasks, isEditing: $isEditing, fromSurvey: $fromSurvey, projectBeneficiaryClientRefId: $projectBeneficiaryClientRefId, address: $address}';
   }
 }
 

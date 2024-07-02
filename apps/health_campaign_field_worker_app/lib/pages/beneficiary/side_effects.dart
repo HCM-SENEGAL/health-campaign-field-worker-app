@@ -23,6 +23,8 @@ class SideEffectsPage extends LocalizedStatefulWidget {
   final bool isEditing;
   final List<TaskModel> tasks;
   final bool fromSurvey;
+  final String projectBeneficiaryClientRefId;
+  final AddressModel? address;
 
   const SideEffectsPage({
     super.key,
@@ -30,6 +32,8 @@ class SideEffectsPage extends LocalizedStatefulWidget {
     required this.tasks,
     this.isEditing = false,
     this.fromSurvey = false,
+    required this.projectBeneficiaryClientRefId,
+    required this.address,
   });
 
   @override
@@ -228,7 +232,6 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                                   false,
                                                                 ),
                                                               );
-                                                          // todo verify this once , ids and all,address model is also pending here
                                                           final clientReferenceIdReferral =
                                                               IdGen
                                                                   .i.identifier;
@@ -238,10 +241,9 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                               .add(
                                                                 DeliverInterventionSubmitEvent(
                                                                   TaskModel(
-                                                                    projectBeneficiaryClientReferenceId: widget
-                                                                        .tasks
-                                                                        .last
-                                                                        .projectBeneficiaryClientReferenceId,
+                                                                    projectBeneficiaryClientReferenceId:
+                                                                        widget
+                                                                            .projectBeneficiaryClientRefId,
                                                                     clientReferenceId:
                                                                         clientReferenceIdReferral,
                                                                     tenantId: envConfig
@@ -279,6 +281,8 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                                           context
                                                                               .millisecondsSinceEpoch(),
                                                                     ),
+                                                                    address: widget
+                                                                        .address,
                                                                     additionalFields:
                                                                         TaskAdditionalFields(
                                                                       version:
