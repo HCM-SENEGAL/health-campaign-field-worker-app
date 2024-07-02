@@ -271,7 +271,7 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                       ),
                     ),
                     TableData(
-                      tasks?.status == Status.administeredFailed.toValue() ||
+                      tasks?.status == Status.inComplete.toValue() ||
                               (tasks?.additionalFields?.fields
                                       .where((e) =>
                                           e.key ==
