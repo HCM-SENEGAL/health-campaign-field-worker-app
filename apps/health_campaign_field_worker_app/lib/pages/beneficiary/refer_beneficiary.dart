@@ -204,7 +204,11 @@ class _ReferBeneficiaryPageState extends LocalizedState<ReferBeneficiaryPage> {
                                           rowVersion: 1,
                                           auditDetails: AuditDetails(
                                             createdBy: context.loggedInUserUuid,
+                                            lastModifiedBy:
+                                                context.loggedInUserUuid,
                                             createdTime: context
+                                                .millisecondsSinceEpoch(),
+                                            lastModifiedTime: context
                                                 .millisecondsSinceEpoch(),
                                           ),
                                           projectId: context.projectId,

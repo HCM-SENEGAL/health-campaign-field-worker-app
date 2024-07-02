@@ -256,7 +256,13 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                                       createdBy:
                                                                           context
                                                                               .loggedInUserUuid,
+                                                                      lastModifiedBy:
+                                                                          context
+                                                                              .loggedInUserUuid,
                                                                       createdTime:
+                                                                          context
+                                                                              .millisecondsSinceEpoch(),
+                                                                      lastModifiedTime:
                                                                           context
                                                                               .millisecondsSinceEpoch(),
                                                                     ),

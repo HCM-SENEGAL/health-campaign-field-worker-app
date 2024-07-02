@@ -68,6 +68,8 @@ class DeliverInterventionBloc
         await taskRepository.create(event.task.copyWith(
           address: event.task.address?.copyWith(
             locality: localityModel,
+            auditDetails: event.task.auditDetails,
+            clientAuditDetails: event.task.clientAuditDetails,
           ),
         ));
         emit(state.copyWith(
