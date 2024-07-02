@@ -232,7 +232,6 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                                   false,
                                                                 ),
                                                               );
-                                                          // todo verify this once , ids and all,address model is also pending here
                                                           final clientReferenceIdReferral =
                                                               IdGen
                                                                   .i.identifier;
