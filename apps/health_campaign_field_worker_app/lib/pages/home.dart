@@ -455,6 +455,7 @@ class _HomePageState extends LocalizedState<HomePage> {
                   projectId: context.projectId,
                   userId: context.loggedInUserUuid,
                   appVersion: Constants().version,
+                  boundaryName: context.boundary.name!,
                 ),
                 settings: const RouteSettings(name: '/manage-attendance'),
               ),
