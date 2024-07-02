@@ -406,6 +406,7 @@ class _SearchBeneficiaryPageState
                         ),
                         onPressed: () {
                           blocWrapper.clearEvent();
+                          isProximityEnabled = false;
                           context.router.push(QRScannerRoute(
                             quantity: 1,
                             isGS1code: false,
