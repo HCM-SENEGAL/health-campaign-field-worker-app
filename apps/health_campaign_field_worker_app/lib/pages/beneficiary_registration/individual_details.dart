@@ -609,6 +609,7 @@ class _IndividualDetailsPageState
                                           i18.individualDetails
                                               .idNumberLabelText,
                                         ),
+                                        maxLength: 24,
                                         validationMessages: {
                                           'required': (object) =>
                                               localizations.translate(
