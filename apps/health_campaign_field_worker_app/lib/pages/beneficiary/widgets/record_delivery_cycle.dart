@@ -244,12 +244,14 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                               '0${e.id}')
                       .lastOrNull;
 
-                  final String deliveryComment = tasks?.additionalFields?.fields
-                          .firstWhereOrNull(
-                            (element) => element.key == deliveryCommentKey,
-                          )
-                          ?.value ??
-                      "";
+                  final String deliveryComment =
+                      tasks?.status == Status.administeredFailed.toValue()
+                          ? tasks?.additionalFields?.fields
+                                  .firstWhereOrNull((element) =>
+                                      element.key == deliveryCommentKey)
+                                  ?.value ??
+                              ""
+                          : "";
 
                   return TableDataRow([
                     TableData(
