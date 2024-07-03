@@ -1495,6 +1495,7 @@ class StockDetails {
   String get returnedSpaqDetails => 'RETURNED_SPAQ_DETAILS';
   String get damagedSpaqDetails => 'DAMAGED_SPAQ_DETAILS';
   String get quantityDamagedCountLabel => 'STOCK_DAMAGED_QUANTITY_LABEL';
+  String get transactionIdsCheckLabel => 'STOCK_CHECK_TRANSACTION_IDS_LABEL';
 }
 
 class StockReconciliationDetails {

@@ -249,6 +249,21 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                         //     .control(_deliveryTeamKey)
                                         //     .value as String?;
 
+                                        if (primaryId == secondaryParty?.id) {
+                                          DigitToast.show(
+                                            context,
+                                            options: DigitToastOptions(
+                                              localizations.translate(
+                                                i18.stockDetails
+                                                    .transactionIdsCheckLabel,
+                                              ),
+                                              true,
+                                              theme,
+                                            ),
+                                          );
+
+                                          return;
+                                        }
                                         if (deliveryTeamSelected) {
                                           DigitToast.show(
                                             context,
