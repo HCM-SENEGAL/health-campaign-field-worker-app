@@ -43,6 +43,7 @@ class RecordStockBloc extends Bloc<RecordStockEvent, RecordStockState> {
 
         emit(
           value.copyWith(
+            primaryId: facilityId,
             dateOfRecord: event.dateOfRecord,
             facilityModel: event.facilityModel,
             existingStocks: existingStocks,
