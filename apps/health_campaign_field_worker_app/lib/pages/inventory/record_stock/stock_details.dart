@@ -255,7 +255,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                             options: DigitToastOptions(
                                               localizations.translate(
                                                 i18.stockDetails
-                                                    .transactionIdsCheckLabel,
+                                                    .senderReceiverValidation,
                                               ),
                                               true,
                                               theme,
