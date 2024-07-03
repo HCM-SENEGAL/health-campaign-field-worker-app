@@ -1530,7 +1530,7 @@ class MemberCard extends StatelessWidget {
                       tasks: [
                         (tasks)!.last,
                       ],
-                      fromSurvey: true,
+                      fromSurvey: false,
                       address: address,
                       projectBeneficiaryClientRefId:
                           projectBeneficiaryClientReferenceId ?? "",
