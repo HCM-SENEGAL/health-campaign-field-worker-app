@@ -96,7 +96,13 @@ class IndividualLocalRepository
                   userId,
                 ),
             ]),
-          ))
+          )
+          ..orderBy([
+            OrderingTerm(
+              expression: sql.individual.clientCreatedTime,
+              mode: OrderingMode.asc,
+            ),
+          ]))
         .get();
 
     return results
