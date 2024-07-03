@@ -219,17 +219,19 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                   ),
             cellKey: 'delivery',
             style: TextStyle(
-              color: getTableCellTextColor(
-                isNotEligible: isNotEligible,
-                taskdata: taskdata,
-                isBeneficiaryRefused:
-                    isBeneficiaryRefused || isBeneficiaryReferred,
-                isBeneficiarySick: isBeneficiarySick,
-                isBeneficiaryAbsent: isBeneficiaryAbsent,
-                isBeneficiaryIneligible: isBeneficiaryIneligible,
-                isStatusReset: isStatusReset,
-                theme: theme,
-              ),
+              color: isHead
+                  ? theme.colorScheme.onSecondary
+                  : getTableCellTextColor(
+                      isNotEligible: isNotEligible,
+                      taskdata: taskdata,
+                      isBeneficiaryRefused:
+                          isBeneficiaryRefused || isBeneficiaryReferred,
+                      isBeneficiarySick: isBeneficiarySick,
+                      isBeneficiaryAbsent: isBeneficiaryAbsent,
+                      isBeneficiaryIneligible: isBeneficiaryIneligible,
+                      isStatusReset: isStatusReset,
+                      theme: theme,
+                    ),
             ),
           ),
           TableData(
@@ -316,8 +318,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                     householdMember.household.address?.pincode,
                   ].whereNotNull().take(2).join(' '),
                   subtitle: widget.distance != null
-                      ? '${householdMember.members.length ?? 1} ${householdMember.members.length == 1 ? 'Household Member' : 'Household Members'}\n${((widget.distance!) * 1000).round() > 999 ? '(${((widget.distance!).round())} km)' : '(${((widget.distance!) * 1000).round()} mts) ${localizations.translate(i18.beneficiaryDetails.fromCurrentLocation)}'}'
-                      : '${householdMember.members.length ?? 1} ${householdMember.members.length == 1 ? 'Household Member' : 'Household Members'}',
+                      ? '${householdMember.members.length ?? 1} ${householdMember.members.length == 1 ? localizations.translate(i18.householdDetails.householdMemberLabel) : localizations.translate(i18.householdDetails.householdMembersLabel)}\n${((widget.distance!) * 1000).round() > 999 ? '(${((widget.distance!).round())} km)' : '(${((widget.distance!) * 1000).round()} mts) ${localizations.translate(i18.beneficiaryDetails.fromCurrentLocation)}'}'
+                      : '${householdMember.members.length ?? 1} ${householdMember.members.length == 1 ? localizations.translate(i18.householdDetails.householdMemberLabel) : localizations.translate(i18.householdDetails.householdMembersLabel)}',
                   status: context.beneficiaryType == BeneficiaryType.individual
                       ? null
                       : (householdMember.tasks ?? []).isNotEmpty

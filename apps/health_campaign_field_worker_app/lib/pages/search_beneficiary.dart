@@ -377,20 +377,24 @@ class _SearchBeneficiaryPageState
                   child: Column(
                     children: [
                       DigitElevatedButton(
-                        onPressed: () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          context.read<ScannerBloc>().add(
-                                const ScannerEvent.handleScanner([], []),
-                              );
-                          context.router
-                              .push(BeneficiaryRegistrationWrapperRoute(
-                            initialState: BeneficiaryRegistrationCreateState(
-                              searchQuery: searchHouseholdsState.searchQuery,
-                            ),
-                          ));
-                          searchController.clear();
-                          blocWrapper.clearEvent();
-                        },
+                        onPressed: searchController.text.trim().length > 200
+                            ? null
+                            : () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                context.read<ScannerBloc>().add(
+                                      const ScannerEvent.handleScanner([], []),
+                                    );
+                                context.router
+                                    .push(BeneficiaryRegistrationWrapperRoute(
+                                  initialState:
+                                      BeneficiaryRegistrationCreateState(
+                                    searchQuery:
+                                        searchHouseholdsState.searchQuery,
+                                  ),
+                                ));
+                                searchController.clear();
+                                blocWrapper.clearEvent();
+                              },
                         child: Center(
                           child: Text(localizations.translate(
                             i18.searchBeneficiary.beneficiaryAddActionLabel,

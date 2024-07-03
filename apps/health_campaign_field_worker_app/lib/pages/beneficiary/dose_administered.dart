@@ -405,7 +405,7 @@ class _DoseAdministeredPageState extends LocalizedState<DoseAdministeredPage> {
                                             deliveryState
                                                 .futureDeliveries?.first,
                                             overViewBloc.selectedIndividual,
-                                          )?.condition?.split('<=age<').last} months',
+                                          )?.condition?.split('<=age<').last} ${localizations.translate(i18.common.monthsLabel)}',
                                         },
                                         //[TODO:: Need to parse <=age< as an Expression
                                       ),

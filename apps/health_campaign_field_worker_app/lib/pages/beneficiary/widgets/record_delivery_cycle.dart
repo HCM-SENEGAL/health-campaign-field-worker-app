@@ -190,6 +190,8 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
 
     final widgetList = <Widget>[];
 
+    const deliveryCommentKey = 'deliveryComment';
+
     // Iterate over the cycles list in reverse order
     for (int i = cycles.length - 1; i >= 0; i--) {
       final e = cycles[i];
@@ -242,6 +244,15 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                               '0${e.id}')
                       .lastOrNull;
 
+                  final String deliveryComment =
+                      tasks?.status == Status.administeredFailed.toValue()
+                          ? tasks?.additionalFields?.fields
+                                  .firstWhereOrNull((element) =>
+                                      element.key == deliveryCommentKey)
+                                  ?.value ??
+                              ""
+                          : "";
+
                   return TableDataRow([
                     TableData(
                       '${localizations.translate(i18.deliverIntervention.dose)} ${e.deliveries!.indexOf(item) + 1}',
@@ -255,7 +266,9 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                       localizations.translate(
                         index == selectedIndex
                             ? Status.toAdminister.toValue()
-                            : tasks?.status ?? Status.inComplete.toValue(),
+                            : deliveryComment.isEmpty
+                                ? tasks?.status ?? Status.inComplete.toValue()
+                                : deliveryComment,
                       ),
                       cellKey: 'status',
                       style: TextStyle(
@@ -271,7 +284,7 @@ class _RecordDeliveryCycleState extends LocalizedState<RecordDeliveryCycle> {
                       ),
                     ),
                     TableData(
-                      tasks?.status == Status.administeredFailed.toValue() ||
+                      tasks?.status == Status.inComplete.toValue() ||
                               (tasks?.additionalFields?.fields
                                       .where((e) =>
                                           e.key ==

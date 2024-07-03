@@ -272,7 +272,7 @@ class _ChecklistPreviewPageState extends LocalizedState<ChecklistPreviewPage> {
 
     for (var i = 0; i < list.length; i++) {
       multiValueText =
-          '$multiValueText${localizations.translate('CORE_COMMON_${list[i].toUpperCase()}')};';
+          '$multiValueText${localizations.translate('CORE_COMMON_${list[i].toUpperCase()}')},';
     }
 
     return multiValueText;

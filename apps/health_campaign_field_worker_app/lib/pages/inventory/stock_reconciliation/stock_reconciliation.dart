@@ -56,7 +56,9 @@ class _StockReconciliationPageState
           CustomValidator.validStockCount,
         ],
       ),
-      _reconciliationCommentsKey: FormControl<String>(),
+      _reconciliationCommentsKey: FormControl<String>(validators: [
+        CustomValidator.requiredMin3,
+      ]),
     });
   }
 
@@ -710,49 +712,49 @@ class _StockReconciliationPageState
                                                 .stockReconciliationDetails
                                                 .manualCountMaxError),
                                       },
-                                      onChanged: (control) {
-                                        final manualStockCount = control.value;
+                                      // onChanged: (control) {
+                                      //   final manualStockCount = control.value;
 
-                                        final stockCount =
-                                            stockState.stockInHand.toInt();
+                                      //   final stockCount =
+                                      //       stockState.stockInHand.toInt();
 
-                                        if (manualStockCount !=
-                                            stockCount.toString()) {
-                                          setState(() {
-                                            form
-                                                .control(
-                                              _reconciliationCommentsKey,
-                                            )
-                                                .setValidators(
-                                              [
-                                                Validators.required,
-                                                CustomValidator.requiredMin3,
-                                              ],
-                                              updateParent: true,
-                                              autoValidate: true,
-                                            );
-                                            form
-                                                .control(
-                                                  _reconciliationCommentsKey,
-                                                )
-                                                .touched;
-                                          });
-                                        } else {
-                                          setState(() {
-                                            form
-                                                .control(
-                                              _reconciliationCommentsKey,
-                                            )
-                                                .setValidators(
-                                              [
-                                                CustomValidator.requiredMin3,
-                                              ],
-                                              updateParent: true,
-                                              autoValidate: true,
-                                            );
-                                          });
-                                        }
-                                      },
+                                      //   if (manualStockCount !=
+                                      //       stockCount.toString()) {
+                                      //     setState(() {
+                                      //       form
+                                      //           .control(
+                                      //         _reconciliationCommentsKey,
+                                      //       )
+                                      //           .setValidators(
+                                      //         [
+                                      //           Validators.required,
+                                      //           CustomValidator.requiredMin3,
+                                      //         ],
+                                      //         updateParent: true,
+                                      //         autoValidate: true,
+                                      //       );
+                                      //       form
+                                      //           .control(
+                                      //             _reconciliationCommentsKey,
+                                      //           )
+                                      //           .touched;
+                                      //     });
+                                      //   } else {
+                                      //     setState(() {
+                                      //       form
+                                      //           .control(
+                                      //         _reconciliationCommentsKey,
+                                      //       )
+                                      //           .setValidators(
+                                      //         [
+                                      //           CustomValidator.requiredMin3,
+                                      //         ],
+                                      //         updateParent: true,
+                                      //         autoValidate: true,
+                                      //       );
+                                      //     });
+                                      //   }
+                                      // },
                                     ),
                                     DigitTextFormField(
                                       label: localizations.translate(

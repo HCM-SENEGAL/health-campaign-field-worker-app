@@ -417,12 +417,12 @@ class _InventoryReportDetailsPageState
                                                 DigitGridColumn(
                                                   label: quantityLabel,
                                                   key: quantityKey,
-                                                  width: 100,
+                                                  width: 120,
                                                 ),
                                                 DigitGridColumn(
                                                   label: transactingPartyLabel,
                                                   key: transactingPartyKey,
-                                                  width: 200,
+                                                  width: 180,
                                                 ),
                                               ],
                                               rows: [

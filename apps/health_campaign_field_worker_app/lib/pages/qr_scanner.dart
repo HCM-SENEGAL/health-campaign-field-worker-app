@@ -186,30 +186,26 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
                         Positioned(
                           top: MediaQuery.of(context).size.height / 2.2,
                           left: MediaQuery.of(context).size.width / 5,
-                          width: 250,
-                          height: 50,
-                          child: SizedBox(
-                            width: 150,
-                            height: 50,
-                            child: TextButton(
-                              onPressed: () {
-                                context.read<ScannerBloc>().add(
-                                    const ScannerEvent.handleScanner([], []));
-                                setState(() {
-                                  manualcode = true;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: kPadding),
-                                child: Text(
-                                  localizations.translate(
-                                    i18.deliverIntervention.manualEnterCode,
-                                  ),
-                                  style: TextStyle(
-                                    color: theme.colorScheme.secondary,
-                                    fontSize: 20,
-                                    decoration: TextDecoration.underline,
-                                  ),
+                          // width: 250,
+                          // height: 50,
+                          child: TextButton(
+                            onPressed: () {
+                              context.read<ScannerBloc>().add(
+                                  const ScannerEvent.handleScanner([], []));
+                              setState(() {
+                                manualcode = true;
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: kPadding),
+                              child: Text(
+                                localizations.translate(
+                                  i18.deliverIntervention.manualEnterCode,
+                                ),
+                                style: TextStyle(
+                                  color: theme.colorScheme.secondary,
+                                  fontSize: 20,
+                                  decoration: TextDecoration.underline,
                                 ),
                               ),
                             ),

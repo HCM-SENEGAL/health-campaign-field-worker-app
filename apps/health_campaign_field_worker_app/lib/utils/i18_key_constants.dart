@@ -149,6 +149,7 @@ class Common {
 
   String get scanBales => 'CORE_COMMON_SCAN_BALES';
   String get ageInMonths => 'AGE_IN_MONTHS_LABEL';
+  String get monthsLabel => 'MONTHS_LABEL';
 }
 
 class HomeShowcase {
@@ -1128,6 +1129,9 @@ class HouseholdDetails {
       'HOUSEHOLD_DETAILS_DATE_OF_REGISTRATION_LABEL';
 
   String get noOfMembersCountLabel => 'NO_OF_MEMBERS_COUNT_LABEL';
+
+  String get householdMemberLabel => 'HOUSEHOLD_MEMBER_LABEL';
+  String get householdMembersLabel => 'HOUSEHOLD_MEMBERS_LABEL';
   String get viewHouseHoldDetailsAction =>
       'VIEW_HOUSEHOLD_DETAILS_ACTION_LABEL';
 }
