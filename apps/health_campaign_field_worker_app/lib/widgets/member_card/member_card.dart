@@ -1680,7 +1680,7 @@ class MemberCard extends StatelessWidget {
     if (isHead) {
       icon = Icons.info_rounded;
       iconText = i18.householdOverView.householdOverViewHouseholderHeadLabel;
-      iconTextColor = DigitTheme.instance.colorScheme.onSecondary;
+      iconTextColor = DigitTheme.instance.colorScheme.secondary;
     } else {
       if (lastCycleRunning) {
         if (dosesDelivered) {
