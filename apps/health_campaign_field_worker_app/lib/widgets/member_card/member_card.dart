@@ -73,6 +73,9 @@ class MemberCard extends StatelessWidget {
     final bool lastCycleRunning =
         isLastCycleRunning(tasks, context.selectedCycle);
 
+    final cycleIndex =
+        context.selectedCycle.id == 0 ? "" : "0${context.selectedCycle.id}";
+
     return Container(
       decoration: BoxDecoration(
         color: DigitTheme.instance.colorScheme.background,
@@ -354,6 +357,12 @@ class MemberCard extends StatelessWidget {
                                                                         .beneficiaryRefused
                                                                         .toValue(),
                                                                   ),
+                                                                  if (cycleIndex
+                                                                      .isNotEmpty)
+                                                                    AdditionalField(
+                                                                      'cycleIndex',
+                                                                      cycleIndex,
+                                                                    ),
                                                                 ],
                                                               ),
                                                               address:
@@ -492,6 +501,12 @@ class MemberCard extends StatelessWidget {
                                                                         .beneficiarySick
                                                                         .toValue(),
                                                                   ),
+                                                                  if (cycleIndex
+                                                                      .isNotEmpty)
+                                                                    AdditionalField(
+                                                                      'cycleIndex',
+                                                                      cycleIndex,
+                                                                    ),
                                                                 ],
                                                               ),
                                                               address:
@@ -631,6 +646,12 @@ class MemberCard extends StatelessWidget {
                                                                         .beneficiaryAbsent
                                                                         .toValue(),
                                                                   ),
+                                                                  if (cycleIndex
+                                                                      .isNotEmpty)
+                                                                    AdditionalField(
+                                                                      'cycleIndex',
+                                                                      cycleIndex,
+                                                                    ),
                                                                 ],
                                                               ),
                                                               address:
@@ -911,6 +932,12 @@ class MemberCard extends StatelessWidget {
                                                                     .beneficiaryRefused
                                                                     .toValue(),
                                                               ),
+                                                              if (cycleIndex
+                                                                  .isNotEmpty)
+                                                                AdditionalField(
+                                                                  'cycleIndex',
+                                                                  cycleIndex,
+                                                                ),
                                                             ],
                                                           ),
                                                           address: individual
@@ -1035,6 +1062,12 @@ class MemberCard extends StatelessWidget {
                                                                     .beneficiarySick
                                                                     .toValue(),
                                                               ),
+                                                              if (cycleIndex
+                                                                  .isNotEmpty)
+                                                                AdditionalField(
+                                                                  'cycleIndex',
+                                                                  cycleIndex,
+                                                                ),
                                                             ],
                                                           ),
                                                           address: individual
@@ -1160,6 +1193,12 @@ class MemberCard extends StatelessWidget {
                                                                     .beneficiaryAbsent
                                                                     .toValue(),
                                                               ),
+                                                              if (cycleIndex
+                                                                  .isNotEmpty)
+                                                                AdditionalField(
+                                                                  'cycleIndex',
+                                                                  cycleIndex,
+                                                                ),
                                                             ],
                                                           ),
                                                           address: individual

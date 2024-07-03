@@ -56,6 +56,8 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cycleIndex =
+        context.selectedCycle.id == 0 ? "" : "0${context.selectedCycle.id}";
 
     return ProductVariantBlocWrapper(
       child: BlocBuilder<ProductVariantBloc, ProductVariantState>(
@@ -300,6 +302,12 @@ class _SideEffectsPageState extends LocalizedState<SideEffectsPage> {
                                                                               .beneficiaryReferred
                                                                               .toValue(),
                                                                         ),
+                                                                        if (cycleIndex
+                                                                            .isNotEmpty)
+                                                                          AdditionalField(
+                                                                            'cycleIndex',
+                                                                            cycleIndex,
+                                                                          ),
                                                                       ],
                                                                     ),
                                                                   ),
