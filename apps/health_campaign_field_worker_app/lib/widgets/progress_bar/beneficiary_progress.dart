@@ -35,6 +35,11 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
         context.read<LocalRepository<TaskModel, TaskSearchModel>>()
             as TaskLocalRepository;
 
+    final projectBeneficiaryRepository = context.read<
+            LocalRepository<ProjectBeneficiaryModel,
+                ProjectBeneficiarySearchModel>>()
+        as ProjectBeneficiaryLocalRepository;
+
     final now = DateTime.now();
     final gte = DateTime(
       now.year,
@@ -56,19 +61,85 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
       query: TaskSearchModel(
         projectId: context.projectId,
         createdBy: context.loggedInUserUuid,
-        status: Status.administeredSuccess.toValue(),
         plannedEndDate: lte.millisecondsSinceEpoch,
         plannedStartDate: gte.millisecondsSinceEpoch,
       ),
-      listener: (data) {
+      listener: (data) async {
         if (mounted) {
           final groupedEntries = data.groupListsBy(
             (element) => element.projectBeneficiaryClientReferenceId,
           );
+          Set<String?> projectBeneficiaryClientReferenceIdsTask = {};
+
+          final projectBeneficiaries =
+              await projectBeneficiaryRepository.search(
+            ProjectBeneficiarySearchModel(
+              beneficiaryRegistrationDateLte:
+                  DateTime.fromMillisecondsSinceEpoch(
+                lte.millisecondsSinceEpoch,
+              ),
+              beneficiaryRegistrationDateGte:
+                  DateTime.fromMillisecondsSinceEpoch(
+                gte.millisecondsSinceEpoch,
+              ),
+            ),
+            context.loggedInUserUuid,
+          );
+
+          projectBeneficiaryClientReferenceIdsTask.addAll(projectBeneficiaries
+              .map(
+                (e) => e.clientReferenceId,
+              )
+              .toSet());
+
+          projectBeneficiaryClientReferenceIdsTask
+              .addAll(groupedEntries.keys.toSet());
 
           setState(() {
             if (mounted) {
-              current = groupedEntries.entries.length;
+              current = projectBeneficiaryClientReferenceIdsTask.length;
+            }
+          });
+        }
+      },
+    );
+
+    projectBeneficiaryRepository.listenToChanges(
+      query: ProjectBeneficiarySearchModel(
+        projectId: context.projectId,
+        beneficiaryRegistrationDateLte:
+            DateTime.fromMillisecondsSinceEpoch(lte.millisecondsSinceEpoch),
+        beneficiaryRegistrationDateGte:
+            DateTime.fromMillisecondsSinceEpoch(gte.millisecondsSinceEpoch),
+      ),
+      userId: context.loggedInUserUuid,
+      listener: (data) async {
+        if (mounted) {
+          final entries = data
+              .map(
+                (element) => element.clientReferenceId,
+              )
+              .toSet();
+          Set<String?> projectBeneficiaryClientReferenceIds = {};
+          projectBeneficiaryClientReferenceIds.addAll(entries);
+
+          final tasks = await taskRepository.search(TaskSearchModel(
+            projectId: context.projectId,
+            createdBy: context.loggedInUserUuid,
+            plannedEndDate: lte.millisecondsSinceEpoch,
+            plannedStartDate: gte.millisecondsSinceEpoch,
+          ));
+
+          final groupedTasks = tasks.groupListsBy(
+            (element) => element.projectBeneficiaryClientReferenceId,
+          );
+
+          projectBeneficiaryClientReferenceIds
+              .addAll(groupedTasks.keys.toSet());
+
+          setState(() {
+            if (mounted) {
+              current = projectBeneficiaryClientReferenceIds.length;
             }
           });
         }
@@ -87,7 +158,7 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
     //   (element) => element.beneficiaryType == beneficiaryType,
     // );
 
-    final target = 75;
+    final target = 70;
 
     return DigitCard(
       child: ProgressIndicatorContainer(

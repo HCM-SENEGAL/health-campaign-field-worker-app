@@ -13,6 +13,7 @@ class ProjectBeneficiaryLocalRepository extends LocalRepository<
   void listenToChanges({
     required ProjectBeneficiarySearchModel query,
     required void Function(List<ProjectBeneficiaryModel> data) listener,
+    required String userId,
   }) {
     final select = sql.select(sql.projectBeneficiary)
       ..where(
@@ -102,8 +103,20 @@ class ProjectBeneficiaryLocalRepository extends LocalRepository<
                   sql.projectBeneficiary.dateOfRegistration.equals(
                     query.dateOfRegistration!,
                   ),
+                if (query.beneficiaryRegistrationDateGte != null)
+                  sql.projectBeneficiary.dateOfRegistration
+                      .isBiggerOrEqualValue(
+                    query
+                        .beneficiaryRegistrationDateGte!.millisecondsSinceEpoch,
+                  ),
+                if (query.beneficiaryRegistrationDateLte != null)
+                  sql.projectBeneficiary.dateOfRegistration
+                      .isSmallerOrEqualValue(
+                    query
+                        .beneficiaryRegistrationDateLte!.millisecondsSinceEpoch,
+                  ),
                 if (userId != null)
-                  sql.projectBeneficiary.auditCreatedBy.equals(
+                  sql.projectBeneficiary.clientCreatedBy.equals(
                     userId,
                   ),
               ],
