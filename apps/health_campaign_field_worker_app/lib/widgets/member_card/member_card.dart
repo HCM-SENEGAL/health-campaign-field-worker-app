@@ -1497,7 +1497,7 @@ class MemberCard extends StatelessWidget {
       //   right: kPadding / 2,
       // ),
       onPressed: () {
-        if (validDoseIndex > 0) {
+        if (validDoseIndex > 0 && tasks != null && tasks!.isNotEmpty) {
           DigitDialog.show<bool>(
             context,
             options: DigitDialogOptions(
@@ -1576,30 +1576,30 @@ class MemberCard extends StatelessWidget {
                     ),
                   );
 
-                  if (response == null) {
-                    Future.delayed(
-                      const Duration(
-                        milliseconds: 1000,
-                      ),
-                      () {
-                        reloadState.add(
-                          HouseholdOverviewReloadEvent(
-                            projectId: context.projectId,
-                            projectBeneficiaryType: context.beneficiaryType,
-                          ),
-                        );
-                      },
-                    ).then(
-                      (value) {
-                        context.router.popAndPush(
-                          HouseholdAcknowledgementRoute(
-                            enableViewHousehold: true,
-                          ),
-                        );
-                        Navigator.pop(ctx);
-                      },
-                    );
-                  }
+                  // if (response == null) {
+                  //   Future.delayed(
+                  //     const Duration(
+                  //       milliseconds: 1000,
+                  //     ),
+                  //     () {
+                  //       reloadState.add(
+                  //         HouseholdOverviewReloadEvent(
+                  //           projectId: context.projectId,
+                  //           projectBeneficiaryType: context.beneficiaryType,
+                  //         ),
+                  //       );
+                  //     },
+                  //   ).then(
+                  //     (value) {
+                  //       context.router.popAndPush(
+                  //         HouseholdAcknowledgementRoute(
+                  //           enableViewHousehold: true,
+                  //         ),
+                  //       );
+                  //       Navigator.pop(ctx);
+                  //     },
+                  //   );
+                  // }
                 },
               ),
             ),
