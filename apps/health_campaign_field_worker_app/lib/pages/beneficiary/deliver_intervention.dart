@@ -496,6 +496,24 @@ class _DeliverInterventionPageState
                                                   ),
                                                 ),
                                               ),
+                                              DigitInfoCard(
+                                                icon: Icons.info,
+                                                backgroundColor: theme
+                                                    .colorScheme
+                                                    .tertiaryContainer,
+                                                iconColor: theme
+                                                    .colorScheme.surfaceTint,
+                                                description: '''
+  • ${localizations.translate(i18.deliverIntervention.quantityUtilisedLabel)} : 1, ${localizations.translate(i18.deliverIntervention.quantityDistributedLabel)} : 0 - ${localizations.translate(i18.deliverIntervention.childrenVomited)}.
+  • ${localizations.translate(i18.deliverIntervention.quantityUtilisedLabel)} : 2, ${localizations.translate(i18.deliverIntervention.quantityDistributedLabel)} : 0 - ${localizations.translate(i18.deliverIntervention.childrenVomitedTwice)}.
+  • ${localizations.translate(i18.deliverIntervention.quantityUtilisedLabel)} : 1, ${localizations.translate(i18.deliverIntervention.quantityDistributedLabel)} : 1 - ${localizations.translate(i18.deliverIntervention.successfulAdministration)}.
+  • ${localizations.translate(i18.deliverIntervention.quantityUtilisedLabel)} : 2, ${localizations.translate(i18.deliverIntervention.quantityDistributedLabel)} : 1 - ${localizations.translate(i18.deliverIntervention.successfulReadministration)}.
+  ''',
+                                                title: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .deliverInterventionInfoHeadingLabel,
+                                                ),
+                                              ),
                                               DigitCard(
                                                 child: Column(
                                                   crossAxisAlignment:
@@ -789,6 +807,14 @@ class _DeliverInterventionPageState
     );
 
     return task;
+  }
+
+// get bold text
+  Widget _boldText(String text) {
+    return Text(
+      text,
+      style: const TextStyle(fontWeight: FontWeight.bold),
+    );
   }
 
 // This method builds a form used for delivering interventions.
