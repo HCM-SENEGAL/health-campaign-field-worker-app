@@ -1354,6 +1354,13 @@ class DeliverIntervention {
       'CHECK_FOR_PRODUCT_VARIANTS_CONFIG';
 
   String get resourceScanningMandatory => 'RESOURCE_SCANNING_MANDATORY';
+
+  String get deliverInterventionInfoHeadingLabel => "INFO_HEADING_LABEL";
+
+  String get successfulAdministration => "SUCCESSFUL_ADMINISTRATION";
+  String get successfulReadministration => "SUCCESSFUL_READMINISTRATION";
+  String get childrenVomited => "CHILD_VOMITED";
+  String get childrenVomitedTwice => "CHILD_VOMITED_TWICE";
 }
 
 class ProjectSelection {
