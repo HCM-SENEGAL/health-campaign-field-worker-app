@@ -139,8 +139,8 @@ class BeneficiariesReportState extends LocalizedState<BeneficiariesReportPage> {
                             projectId: context.projectId,
                             appConfiguartion: appConfiguration,
                             boundary: selectedBoundary!.code.toString(),
-                            batchSize: 5,
-                            totalCount: 0,
+                            // batchSize: 5,
+                            // totalCount: 0,
                             content: localizations.translate(
                               i18.syncDialog.pendingSyncContent,
                             ),
@@ -164,7 +164,7 @@ class BeneficiariesReportState extends LocalizedState<BeneficiariesReportPage> {
                             projectId: context.projectId,
                             appConfiguartion: appConfiguration,
                             boundary: selectedBoundary!.code.toString(),
-                            batchSize: 5,
+                            batchSize: batchSize,
                             totalCount: initialServerCount,
                             content: localizations.translate(
                               initialServerCount > 0
