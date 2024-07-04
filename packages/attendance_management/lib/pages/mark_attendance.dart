@@ -214,7 +214,7 @@ class _MarkAttendancePageState extends State<MarkAttendancePage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             header: BackNavigationHelpHeaderWidget(
-                              showHelp: true,
+                              showHelp: false,
                               handleBack: () {
                                 AttendanceSingleton().callSync();
                               },
