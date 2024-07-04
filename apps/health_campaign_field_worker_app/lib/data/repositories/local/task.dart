@@ -49,7 +49,8 @@ class TaskLocalRepository extends LocalRepository<TaskModel, TaskSearchModel> {
               isDeleted: task.isDeleted,
               projectId: task.projectId,
               projectBeneficiaryId: task.projectBeneficiaryId,
-              projectBeneficiaryClientReferenceId: task.projectBeneficiaryClientReferenceId,
+              projectBeneficiaryClientReferenceId:
+                  task.projectBeneficiaryClientReferenceId,
               createdDate: task.createdDate,
               status: task.status,
               resources: null,
@@ -97,6 +98,11 @@ class TaskLocalRepository extends LocalRepository<TaskModel, TaskSearchModel> {
             if (userId != null)
               sql.task.auditCreatedBy.equals(
                 userId,
+              ),
+            if (query.plannedEndDate != null && query.plannedStartDate != null)
+              sql.task.clientCreatedTime.isBetweenValues(
+                query.plannedStartDate!,
+                query.plannedEndDate!,
               ),
           ])))
         .get();
