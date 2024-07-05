@@ -161,7 +161,7 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
                           ),
                         ),
                         Positioned(
-                          top: MediaQuery.of(context).size.height / 2.4,
+                          top: MediaQuery.of(context).size.height / 2.2,
                           left: MediaQuery.of(context).size.width / 5,
                           width: 300,
                           height: 250,
@@ -184,7 +184,7 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
                         ),
 
                         Positioned(
-                          top: MediaQuery.of(context).size.height / 2.2,
+                          top: MediaQuery.of(context).size.height / 1.95,
                           left: MediaQuery.of(context).size.width / 5,
                           width: 250,
                           height: 50,
