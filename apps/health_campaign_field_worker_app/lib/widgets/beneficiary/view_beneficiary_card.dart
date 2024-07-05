@@ -220,7 +220,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             cellKey: 'delivery',
             style: TextStyle(
               color: isHead
-                  ? theme.colorScheme.onSecondary
+                  ? theme.colorScheme.secondary
                   : getTableCellTextColor(
                       isNotEligible: isNotEligible,
                       taskdata: taskdata,

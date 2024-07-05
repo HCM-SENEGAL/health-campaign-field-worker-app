@@ -13,17 +13,20 @@ class ProjectBeneficiaryLocalRepository extends LocalRepository<
   void listenToChanges({
     required ProjectBeneficiarySearchModel query,
     required void Function(List<ProjectBeneficiaryModel> data) listener,
+    required String userId,
   }) {
     final select = sql.select(sql.projectBeneficiary)
       ..where(
-        (tbl) => buildOr([
+        (tbl) => buildAnd([
           if (query.projectId != null) tbl.projectId.equals(query.projectId!),
-          if (query.beneficiaryRegistrationDateGte != null)
-            tbl.dateOfRegistration.isBiggerOrEqualValue(
-              query.beneficiaryRegistrationDateGte!.millisecondsSinceEpoch,
+          if (userId != null)
+            tbl.clientCreatedBy.equals(
+              userId,
             ),
-          if (query.beneficiaryRegistrationDateLte != null)
-            tbl.dateOfRegistration.isSmallerOrEqualValue(
+          if (query.beneficiaryRegistrationDateGte != null &&
+              query.beneficiaryRegistrationDateLte != null)
+            tbl.dateOfRegistration.isBetweenValues(
+              query.beneficiaryRegistrationDateGte!.millisecondsSinceEpoch,
               query.beneficiaryRegistrationDateLte!.millisecondsSinceEpoch,
             ),
         ]),
@@ -102,8 +105,16 @@ class ProjectBeneficiaryLocalRepository extends LocalRepository<
                   sql.projectBeneficiary.dateOfRegistration.equals(
                     query.dateOfRegistration!,
                   ),
+                if (query.beneficiaryRegistrationDateGte != null &&
+                    query.beneficiaryRegistrationDateLte != null)
+                  sql.projectBeneficiary.dateOfRegistration.isBetweenValues(
+                    query
+                        .beneficiaryRegistrationDateGte!.millisecondsSinceEpoch,
+                    query
+                        .beneficiaryRegistrationDateLte!.millisecondsSinceEpoch,
+                  ),
                 if (userId != null)
-                  sql.projectBeneficiary.auditCreatedBy.equals(
+                  sql.projectBeneficiary.clientCreatedBy.equals(
                     userId,
                   ),
               ],

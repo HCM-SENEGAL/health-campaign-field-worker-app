@@ -82,7 +82,7 @@ class _CameraViewState extends State<CameraView> {
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Expanded(
+          Center(
             child: _changingCameraLens
                 ? Center(
                     child: const Text('Changing camera lens'),

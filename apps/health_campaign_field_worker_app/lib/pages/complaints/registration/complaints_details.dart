@@ -1,5 +1,6 @@
 import 'package:digit_components/digit_components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -350,6 +351,11 @@ class _ComplaintsDetailsPageState
                                     maxLength: 9,
                                     isRequired: true,
                                     keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                        RegExp("[0-9]"),
+                                      ),
+                                    ],
                                     validationMessages: {
                                       'mobileNumber': (object) =>
                                           localizations.translate(i18
