@@ -40,33 +40,40 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
                 ProjectBeneficiarySearchModel>>()
         as ProjectBeneficiaryLocalRepository;
 
-    final now = DateTime.now();
-    final gte = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    );
-
-    final lte = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      23,
-      59,
-      59,
-      999,
-    );
-
     taskRepository.listenToChanges(
       query: TaskSearchModel(
         projectId: context.projectId,
         createdBy: context.loggedInUserUuid,
-        plannedEndDate: lte.millisecondsSinceEpoch,
-        plannedStartDate: gte.millisecondsSinceEpoch,
+        plannedEndDate: 0,
+        plannedStartDate: 0,
       ),
       listener: (data) async {
         if (mounted) {
-          final groupedEntries = data.groupListsBy(
+          final now = DateTime.now();
+          final gte = DateTime(
+            now.year,
+            now.month,
+            now.day,
+          );
+
+          final lte = DateTime(
+            now.year,
+            now.month,
+            now.day,
+            23,
+            59,
+            59,
+            999,
+          );
+
+          final tasks = await taskRepository.search(TaskSearchModel(
+            projectId: context.projectId,
+            createdBy: context.loggedInUserUuid,
+            plannedEndDate: lte.millisecondsSinceEpoch,
+            plannedStartDate: gte.millisecondsSinceEpoch,
+          ));
+
+          final groupedEntries = tasks.groupListsBy(
             (element) => element.projectBeneficiaryClientReferenceId,
           );
           Set<String?> projectBeneficiaryClientReferenceIdsTask = {};
@@ -108,15 +115,45 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
     projectBeneficiaryRepository.listenToChanges(
       query: ProjectBeneficiarySearchModel(
         projectId: context.projectId,
-        beneficiaryRegistrationDateLte:
-            DateTime.fromMillisecondsSinceEpoch(lte.millisecondsSinceEpoch),
-        beneficiaryRegistrationDateGte:
-            DateTime.fromMillisecondsSinceEpoch(gte.millisecondsSinceEpoch),
+        beneficiaryRegistrationDateLte: DateTime.now(),
+        beneficiaryRegistrationDateGte: DateTime.now(),
       ),
       userId: context.loggedInUserUuid,
       listener: (data) async {
         if (mounted) {
-          final entries = data
+          final now = DateTime.now();
+          final gte = DateTime(
+            now.year,
+            now.month,
+            now.day,
+          );
+
+          final lte = DateTime(
+            now.year,
+            now.month,
+            now.day,
+            23,
+            59,
+            59,
+            999,
+          );
+
+          final projectBeneficiaries =
+              await projectBeneficiaryRepository.search(
+            ProjectBeneficiarySearchModel(
+              beneficiaryRegistrationDateLte:
+                  DateTime.fromMillisecondsSinceEpoch(
+                lte.millisecondsSinceEpoch,
+              ),
+              beneficiaryRegistrationDateGte:
+                  DateTime.fromMillisecondsSinceEpoch(
+                gte.millisecondsSinceEpoch,
+              ),
+            ),
+            context.loggedInUserUuid,
+          );
+
+          final entries = projectBeneficiaries
               .where((element) => element.tag != null)
               .map(
                 (element) => element.clientReferenceId,
