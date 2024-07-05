@@ -53,24 +53,25 @@ class BackNavigationHelpHeaderWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: showHelp ? 16 : 0),
-          if (showHelp)
-            TextButton(
-              style: TextButton.styleFrom(padding: EdgeInsets.zero),
-              onPressed: helpClicked,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    AttendanceLocalization.of(context)
-                        .translate(i18.common.coreCommonHelp),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const Icon(
-                    Icons.help_outline_outlined,
-                  ), // Add the icon to the right
-                ],
-              ),
-            ),
+          //solution customisation
+          // SizedBox(width: showHelp ? 16 : 0),
+          // if (showHelp)
+          //   TextButton(
+          //     style: TextButton.styleFrom(padding: EdgeInsets.zero),
+          //     onPressed: helpClicked,
+          //     child: Row(
+          //       children: <Widget>[
+          //         Text(
+          //           AttendanceLocalization.of(context)
+          //               .translate(i18.common.coreCommonHelp),
+          //           overflow: TextOverflow.ellipsis,
+          //         ),
+          //         const Icon(
+          //           Icons.help_outline_outlined,
+          //         ), // Add the icon to the right
+          //       ],
+          //     ),
+          //   ),
         ],
       ),
     );
