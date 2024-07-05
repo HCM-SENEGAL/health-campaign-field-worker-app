@@ -386,7 +386,9 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     List<TaskModel>? taskData,
   ) {
     if (statusKeys.isNotEligible || statusKeys.isBeneficiaryIneligible) {
-      return 'Not Eligible';
+      return localizations.translate(
+        i18.householdOverView.householdOverViewNotEligibleIconLabel,
+      );
     } else if (statusKeys.isStatusReset &&
         !isLastCycleRunning(taskData, context.selectedCycle)) {
       return localizations.translate(Status.notAdministered.toValue());
