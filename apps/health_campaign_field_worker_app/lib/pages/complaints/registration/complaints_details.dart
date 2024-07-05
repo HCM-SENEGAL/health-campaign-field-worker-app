@@ -399,6 +399,11 @@ class _ComplaintsDetailsPageState
                             ),
                             keyboardType: TextInputType.number,
                             maxLength: 9,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]"),
+                              ),
+                            ],
                             validationMessages: {
                               'mobileNumber': (object) =>
                                   localizations.translate(
