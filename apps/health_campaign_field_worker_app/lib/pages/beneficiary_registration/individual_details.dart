@@ -714,8 +714,8 @@ class _IndividualDetailsPageState
                                       label: localizations.translate(
                                         i18.individualDetails.genderLabelText,
                                       ),
-                                      valueMapper: (value) =>
-                                          localizations.translate(value),
+                                      valueMapper: (value) => localizations
+                                          .translate("CORE_COMMON_$value"),
                                       initialValue:
                                           genderOptions.firstOrNull?.name,
                                       menuItems: genderOptions
