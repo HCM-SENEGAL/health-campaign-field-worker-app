@@ -401,6 +401,7 @@ class _SearchBeneficiaryPageState
                                 ));
                                 searchController.clear();
                                 blocWrapper.clearEvent();
+                                isProximityEnabled = false;
                               },
                         child: Center(
                           child: Text(localizations.translate(
