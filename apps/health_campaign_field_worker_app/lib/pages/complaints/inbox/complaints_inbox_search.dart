@@ -1,5 +1,6 @@
 import 'package:digit_components/digit_components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -77,7 +78,8 @@ class _ComplaintsInboxSearchPageState
                 footer: SizedBox(
                   child: DigitCard(
                     margin: const EdgeInsets.fromLTRB(0, kPadding, 0, 0),
-                    padding: const EdgeInsets.fromLTRB(kPadding, 0, kPadding, 0),
+                    padding:
+                        const EdgeInsets.fromLTRB(kPadding, 0, kPadding, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,7 +144,12 @@ class _ComplaintsInboxSearchPageState
                                   label: localizations.translate(
                                     i18.common.coreCommonMobileNumber,
                                   ),
-                                  maxLength: 10,
+                                  maxLength: mobileNumberLength,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9]"),
+                                    ),
+                                  ],
                                   keyboardType: TextInputType.number,
                                   validationMessages: {
                                     'mobileNumber': (object) =>
