@@ -87,6 +87,7 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
           );
 
           projectBeneficiaryClientReferenceIdsTask.addAll(projectBeneficiaries
+              .where((element) => element.tag != null)
               .map(
                 (e) => e.clientReferenceId,
               )
@@ -116,6 +117,7 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
       listener: (data) async {
         if (mounted) {
           final entries = data
+              .where((element) => element.tag != null)
               .map(
                 (element) => element.clientReferenceId,
               )
