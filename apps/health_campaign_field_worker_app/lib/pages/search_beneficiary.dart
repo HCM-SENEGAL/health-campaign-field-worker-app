@@ -48,8 +48,14 @@ class _SearchBeneficiaryPageState
   void initState() {
     // Initialize the BlocWrapper with instances of SearchHouseholdsBloc, SearchMemberBloc, and ProximitySearchBloc
     blocWrapper = context.read<SearchBlocWrapper>();
-    isProximityEnabled = true;
 
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    final locationState = locationBloc.state;
+    if (locationState.hasPermissions &&
+        locationState.latitude != null &&
+        locationState.longitude != null) {
+      isProximityEnabled = true;
+    }
     // Listen to state changes
     blocWrapper.stateChanges.listen((state) {
       if (mounted) {
@@ -85,6 +91,7 @@ class _SearchBeneficiaryPageState
           locationState.longitude != null &&
           appConfig.maxRadius != null &&
           isProximityEnabled) {
+        isProximityEnabled = true;
         lat = locationState.latitude!;
         long = locationState.longitude!;
         blocWrapper.proximitySearchBloc
