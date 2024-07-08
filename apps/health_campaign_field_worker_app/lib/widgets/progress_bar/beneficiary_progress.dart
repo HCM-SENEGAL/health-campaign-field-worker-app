@@ -66,12 +66,15 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
             999,
           );
 
-          final tasks = await taskRepository.search(TaskSearchModel(
-            projectId: context.projectId,
-            createdBy: context.loggedInUserUuid,
-            plannedEndDate: lte.millisecondsSinceEpoch,
-            plannedStartDate: gte.millisecondsSinceEpoch,
-          ));
+          final tasks = await taskRepository.search(
+            TaskSearchModel(
+              projectId: context.projectId,
+              createdBy: context.loggedInUserUuid,
+              plannedEndDate: lte.millisecondsSinceEpoch,
+              plannedStartDate: gte.millisecondsSinceEpoch,
+            ),
+            context.loggedInUserUuid,
+          );
 
           final groupedEntries = tasks.groupListsBy(
             (element) => element.projectBeneficiaryClientReferenceId,
@@ -162,12 +165,15 @@ class _BeneficiaryProgressBarState extends State<BeneficiaryProgressBar> {
           Set<String?> projectBeneficiaryClientReferenceIds = {};
           projectBeneficiaryClientReferenceIds.addAll(entries);
 
-          final tasks = await taskRepository.search(TaskSearchModel(
-            projectId: context.projectId,
-            createdBy: context.loggedInUserUuid,
-            plannedEndDate: lte.millisecondsSinceEpoch,
-            plannedStartDate: gte.millisecondsSinceEpoch,
-          ));
+          final tasks = await taskRepository.search(
+            TaskSearchModel(
+              projectId: context.projectId,
+              createdBy: context.loggedInUserUuid,
+              plannedEndDate: lte.millisecondsSinceEpoch,
+              plannedStartDate: gte.millisecondsSinceEpoch,
+            ),
+            context.loggedInUserUuid,
+          );
 
           final groupedTasks = tasks.groupListsBy(
             (element) => element.projectBeneficiaryClientReferenceId,
