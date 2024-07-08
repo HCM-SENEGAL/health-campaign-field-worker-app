@@ -134,7 +134,9 @@ class _BoundarySelectionPageState
                                     ),
                                     child: DigitReactiveSearchDropdown<
                                         BoundaryModel>(
-                                      label: localizations.translate(label),
+                                      label: capitalizeFirstWord(
+                                        localizations.translate(label),
+                                      ),
                                       form: form,
                                       menuItems: filteredItems,
                                       formControlName: label,

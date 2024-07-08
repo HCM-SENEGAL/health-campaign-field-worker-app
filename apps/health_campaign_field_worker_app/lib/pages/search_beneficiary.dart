@@ -110,6 +110,7 @@ class _SearchBeneficiaryPageState
 
   @override
   void dispose() {
+    isProximityEnabled = false;
     blocWrapper.clearEvent();
     super.dispose();
   }
@@ -194,10 +195,12 @@ class _SearchBeneficiaryPageState
                                         TextCapitalization.words,
                                     onChanged: (value) {
                                       if (value.isEmpty) {
+                                        isProximityEnabled = false;
                                         blocWrapper.clearEvent();
                                       }
                                       if (value.trim().length < 3 &&
                                           !isProximityEnabled) {
+                                        isProximityEnabled = false;
                                         blocWrapper.clearEvent();
 
                                         return;
@@ -278,6 +281,7 @@ class _SearchBeneficiaryPageState
                                                     ),
                                                   );
                                                 } else {
+                                                  isProximityEnabled = false;
                                                   blocWrapper.clearEvent();
                                                 }
                                               },

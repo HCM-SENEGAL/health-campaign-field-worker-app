@@ -137,6 +137,25 @@ class CustomValidator {
   }
 }
 
+String capitalizeFirstWord(String input) {
+  if (input.isEmpty) return input;
+
+  List<String> words = input.toLowerCase().split(' ');
+
+  if (words.isEmpty) return input;
+
+  String capitalizedFirst = capitalize(words.first);
+  String restOfWords = words.skip(1).join(' ');
+
+  return '$capitalizedFirst $restOfWords';
+}
+
+String capitalize(String word) {
+  if (word.isEmpty) return word;
+
+  return '${word[0].toUpperCase()}${word.substring(1)}';
+}
+
 setBgRunning(bool isBgRunning) async {
   final localSecureStore = LocalSecureStore.instance;
   await localSecureStore.setBackgroundService(isBgRunning);

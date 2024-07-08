@@ -305,10 +305,9 @@ class _BeneficiaryDetailsPageState
                                                   .toUpperCase() ??
                                               '--',
                                         )
-                                      : localizations.translate(state
-                                              .selectedIndividual?.gender?.name
-                                              .toUpperCase() ??
-                                          '--'),
+                                      : localizations.translate(
+                                          "CORE_COMMON_${state.selectedIndividual?.gender?.name.toUpperCase()}" ??
+                                              '--'),
 
                                   localizations.translate(
                                     i18.individualDetails.idTypeLabelText,
