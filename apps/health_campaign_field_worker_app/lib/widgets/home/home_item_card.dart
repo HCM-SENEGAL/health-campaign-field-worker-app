@@ -27,7 +27,7 @@ class HomeItemCard extends StatelessWidget {
     return DigitCard(
       onPressed: onPressed,
       padding: const EdgeInsets.all(kPadding / 2).copyWith(top: kPadding / 2),
-      margin: const EdgeInsets.all(kPadding),
+      margin: const EdgeInsets.all(kPadding / 2),
       child: Align(
         alignment: Alignment.center,
         child: Column(

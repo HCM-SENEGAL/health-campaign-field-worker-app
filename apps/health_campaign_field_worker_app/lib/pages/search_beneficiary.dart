@@ -195,12 +195,10 @@ class _SearchBeneficiaryPageState
                                         TextCapitalization.words,
                                     onChanged: (value) {
                                       if (value.isEmpty) {
-                                        isProximityEnabled = false;
                                         blocWrapper.clearEvent();
                                       }
                                       if (value.trim().length < 3 &&
                                           !isProximityEnabled) {
-                                        isProximityEnabled = false;
                                         blocWrapper.clearEvent();
 
                                         return;
