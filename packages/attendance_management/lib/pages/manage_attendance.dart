@@ -76,10 +76,6 @@ class _ManageAttendancePageState extends State<ManageAttendancePage> {
                     data: {
                       t.translate(i18.attendance.registerNameLabel):
                           register.name,
-                      t.translate(i18.attendance.eventTypeLabel):
-                          register.additionalDetails?[
-                                  EnumValues.eventType.toValue()] ??
-                              t.translate(i18.common.coreCommonNA),
                       t.translate(i18.attendance.staffCountLabel):
                           register.attendees?.length ?? 0,
                       t.translate(i18.attendance.startDateLabel):
