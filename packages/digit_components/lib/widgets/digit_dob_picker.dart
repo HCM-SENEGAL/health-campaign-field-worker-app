@@ -32,8 +32,8 @@ class DigitDobPicker extends StatelessWidget {
     required this.separatorLabel,
     required this.yearsAndMonthsErrMsg,
     this.initialDate,
-    this.confirmText = 'OK',
-    this.cancelText = 'Cancel',
+    required this.confirmText,
+    required this.cancelText,
     this.onChangeOfFormControl,
   });
 

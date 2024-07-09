@@ -672,6 +672,12 @@ class _IndividualDetailsPageState
                                   i18.individualDetails.yearsAndMonthsErrorText,
                                 ),
                                 initialDate: before150Years,
+                                confirmText: localizations.translate(
+                                  i18.common.coreCommonOk,
+                                ),
+                                cancelText: localizations.translate(
+                                  i18.common.coreCommonCancel,
+                                ),
                                 onChangeOfFormControl: (formControl) {
                                   // Handle changes to the control's value here
                                   final value = formControl.value;
