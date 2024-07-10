@@ -468,7 +468,11 @@ class _IndividualDetailsPageState
                           padding: const EdgeInsets.only(bottom: kPadding),
                           child: Text(
                             localizations.translate(
-                              i18.individualDetails.individualsDetailsLabelText,
+                              widget.isHeadOfHousehold
+                                  ? i18.individualDetails
+                                      .householdHeadDetailsLabelText
+                                  : i18.individualDetails
+                                      .individualsDetailsLabelText,
                             ),
                             style: theme.textTheme.displayMedium,
                           ),

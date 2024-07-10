@@ -1006,6 +1006,7 @@ class IndividualDetails {
   const IndividualDetails();
 
   String get individualsDetailsLabelText => 'INDIVIDUAL_LABEL_TEXT';
+  String get householdHeadDetailsLabelText => 'HOUSEHOLD_HEAD_LABEL_TEXT';
 
   String get childIndividualsDetailsLabelText => 'CHILD_INDIVIDUAL_LABEL_TEXT';
 
