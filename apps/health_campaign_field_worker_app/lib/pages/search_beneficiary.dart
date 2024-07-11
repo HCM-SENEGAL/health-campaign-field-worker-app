@@ -197,13 +197,13 @@ class _SearchBeneficiaryPageState
                                       if (value.isEmpty) {
                                         blocWrapper.clearEvent();
                                       }
-                                      if (value.trim().length < 3 &&
+                                      if (value.trim().length < 2 &&
                                           !isProximityEnabled) {
                                         blocWrapper.clearEvent();
 
                                         return;
                                       } else if (isProximityEnabled &&
-                                          value.trim().length < 3) {
+                                          value.trim().length < 2) {
                                         blocWrapper.proximitySearchBloc.add(
                                           SearchHouseholdsEvent
                                               .searchByProximity(

@@ -468,7 +468,11 @@ class _IndividualDetailsPageState
                           padding: const EdgeInsets.only(bottom: kPadding),
                           child: Text(
                             localizations.translate(
-                              i18.individualDetails.individualsDetailsLabelText,
+                              widget.isHeadOfHousehold
+                                  ? i18.individualDetails
+                                      .householdHeadDetailsLabelText
+                                  : i18.individualDetails
+                                      .individualsDetailsLabelText,
                             ),
                             style: theme.textTheme.displayMedium,
                           ),
@@ -495,7 +499,7 @@ class _IndividualDetailsPageState
                                         i18.individualDetails
                                             .firstNameIsRequiredError,
                                       ),
-                                  'min3': (object) => localizations.translate(
+                                  'min2': (object) => localizations.translate(
                                         i18.individualDetails
                                             .firstNameLengthError,
                                       ),
@@ -525,7 +529,7 @@ class _IndividualDetailsPageState
                                         i18.individualDetails
                                             .lastNameIsRequiredError,
                                       ),
-                                  'min3': (object) => localizations.translate(
+                                  'min2': (object) => localizations.translate(
                                         i18.individualDetails
                                             .lastNameLengthError,
                                       ),
@@ -1083,7 +1087,7 @@ class _IndividualDetailsPageState
       _individualNameKey: FormControl<String>(
         validators: [
           Validators.required,
-          CustomValidator.requiredMin3,
+          CustomValidator.requiredMin2,
           Validators.maxLength(200),
         ],
         value: individual?.name?.givenName ?? searchQuery?.trim(),
@@ -1091,7 +1095,7 @@ class _IndividualDetailsPageState
       _individualLastNameKey: FormControl<String>(
         validators: [
           Validators.required,
-          CustomValidator.requiredMin3,
+          CustomValidator.requiredMin2,
           Validators.maxLength(200),
         ],
         value: individual?.name?.familyName ?? '',
