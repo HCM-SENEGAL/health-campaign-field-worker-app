@@ -73,12 +73,30 @@ class _ChecklistPageState extends LocalizedState<ChecklistPage> {
                               List<String> roles = res.userModel.roles
                                   .map((e) => e.code.snakeCase.toUpperCase())
                                   .toList();
-                              final values = value.serviceDefinitionList
-                                  .where((item) => !roles
-                                      .indexOf(
-                                        item.code!.split('.').last,
-                                      )
-                                      .isNegative);
+                              var serviceDefinitionList = [
+                                ...value.serviceDefinitionList,
+                              ];
+
+                              final checklistArray = [
+                                "SPC_ADMINISTRATION",
+                                "SURVEY_FORM",
+                                "CAMPAIGN_PREPARATION",
+                                "TREATMENT_EVALUATION",
+                                "SUMMARY_FULL_TREATMENT",
+                                "SUPERVISION_GRID"
+                              ];
+
+                              serviceDefinitionList.sort((a, b) =>
+                                  checklistArray
+                                      .indexOf(a.code!.split('.')[1])
+                                      .compareTo(checklistArray
+                                          .indexOf(b.code!.split('.')[1])));
+
+                              final values = serviceDefinitionList.where(
+                                (item) => !roles
+                                    .indexOf(item.code!.split('.').last)
+                                    .isNegative,
+                              );
 
                               if (values.isEmpty) {
                                 return Column(
