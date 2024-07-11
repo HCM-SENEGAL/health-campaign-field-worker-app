@@ -198,7 +198,6 @@ class MemberCard extends StatelessWidget {
             offstage: beneficiaryType != BeneficiaryType.individual ||
                 (isNotEligible ||
                         isBeneficiaryIneligible ||
-                        isBeneficiaryReferred ||
                         isBeneficiarySick ||
                         (!successfulDelivery && deliveryComment.isNotEmpty)) &&
                     lastCycleRunning,
@@ -221,7 +220,6 @@ class MemberCard extends StatelessWidget {
                       ? const Offstage()
                       : lastCycleRunning
                           ? (isNotEligible ||
-                                  isBeneficiaryReferred ||
                                   isBeneficiaryIneligible ||
                                   isBeneficiarySick ||
                                   (!successfulDelivery &&
@@ -1459,7 +1457,6 @@ class MemberCard extends StatelessWidget {
                 ),
               )
             : isNotEligible ||
-                    isBeneficiaryReferred ||
                     isBeneficiaryIneligible ||
                     isBeneficiarySick ||
                     (!successfulDelivery &&
