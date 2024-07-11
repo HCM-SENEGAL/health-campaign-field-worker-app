@@ -641,6 +641,8 @@ bool validDoseDelivery(
 ) {
   final refused = checkIfBeneficiaryRefused(tasks);
   final absent = checkIfBeneficiaryAbsent(tasks);
+  final referred = checkIfBeneficiaryReferred(tasks);
+
   if (isFirstCycle(projectType)) {
     return true;
   }
@@ -649,6 +651,8 @@ bool validDoseDelivery(
   if (doseIndex == 0 && (refused || absent)) {
     return false;
   } else if (doseIndex < 0 && (refused || absent)) {
+    return checkIfValidTimeForDose(tasks, currentCycle);
+  } else if (doseIndex < 0 && referred) {
     return checkIfValidTimeForDose(tasks, currentCycle);
   } else if (doseIndex == 0) {
     return true;
