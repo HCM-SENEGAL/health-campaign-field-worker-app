@@ -157,7 +157,7 @@ extension ContextUtilityExtensions on BuildContext {
           .toList()
           .isNotEmpty;
 
-      return isCommunityDistributor;
+      return false;
     } catch (_) {
       return false;
     }
