@@ -251,7 +251,10 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
             cellKey: 'age',
           ),
           TableData(
-            e.gender?.name ?? '--',
+            e.gender == null || e.gender?.name == null
+                ? '--'
+                : localizations
+                    .translate('CORE_COMMON_${e.gender?.name.toUpperCase()}'),
             cellKey: 'gender',
           ),
         ];
