@@ -77,26 +77,42 @@ class TagSearchBloc extends SearchHouseholdsBloc {
           householdClientReferenceId: member.householdClientReferenceId,
         ),
       );
-      final headMember = members.where((element) => element.isHeadOfHousehold).first;
+      final headMember =
+          members.where((element) => element.isHeadOfHousehold).first;
 
       final individualList = await individual.search(
-              IndividualSearchModel(
-                clientReferenceId: members
-                    .map((e) => e.individualClientReferenceId!)
-                    .toList(),
-              ),
-            );
+        IndividualSearchModel(
+          clientReferenceId:
+              members.map((e) => e.individualClientReferenceId!).toList(),
+        ),
+      );
 
       final householdList = await household.search(HouseholdSearchModel(
         clientReferenceId: [members.first.householdClientReferenceId!],
       ));
 
+      final projectBeneficiaries = await fetchProjectBeneficiary(
+        beneficiaryType != BeneficiaryType.individual
+            ? [householdList.first.clientReferenceId]
+            : individualList
+                .map((e) => e.clientReferenceId.toString())
+                .toList(),
+      );
+      final beneficiaryClientReferenceIds = projectBeneficiaries
+          .map((e) => e.beneficiaryClientReferenceId)
+          .toList();
+
+      final List<IndividualModel> beneficiaryIndividuals = individualList
+          .where((element) =>
+              beneficiaryClientReferenceIds.contains(element.clientReferenceId))
+          .toList();
+
       // Search for tasks and side effects based on project beneficiaries.
-      final tasks = await fetchTaskbyProjectBeneficiary(beneficiaries);
+      final tasks = await fetchTaskbyProjectBeneficiary(projectBeneficiaries);
 
       final referrals = await referralDataRepository.search(ReferralSearchModel(
         projectBeneficiaryClientReferenceId:
-            beneficiaries.map((e) => e.clientReferenceId).toList(),
+            projectBeneficiaries.map((e) => e.clientReferenceId).toList(),
       ));
       final sideEffects =
           await sideEffectDataRepository.search(SideEffectSearchModel(
@@ -107,10 +123,15 @@ class TagSearchBloc extends SearchHouseholdsBloc {
 
       containers.add(
         HouseholdMemberWrapper(
-          household: householdList.firstWhere((element) => element.clientReferenceId == member.householdClientReferenceId) ,
-          headOfHousehold: individualList.firstWhere((element) => headMember.individualClientReferenceId == element.clientReferenceId),
-          members: individualList,
-          projectBeneficiaries: beneficiaries,
+          household: householdList.firstWhere((element) =>
+              element.clientReferenceId == member.householdClientReferenceId),
+          headOfHousehold: individualList.firstWhere((element) =>
+              headMember.individualClientReferenceId ==
+              element.clientReferenceId),
+          members: beneficiaryType == BeneficiaryType.individual
+              ? beneficiaryIndividuals
+              : individualList,
+          projectBeneficiaries: projectBeneficiaries,
           tasks: tasks.isEmpty ? null : tasks,
           sideEffects: sideEffects.isEmpty ? null : sideEffects,
           referrals: referrals.isEmpty ? null : referrals,
