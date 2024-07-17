@@ -1487,6 +1487,7 @@ class MemberCard extends StatelessWidget {
     );
 
     final validDoseIndex = getValidDoseIndex(tasks, context.selectedCycle);
+    final isReferred = checkIfBeneficiaryReferred(tasks);
 
     return DigitElevatedButton(
       // padding: const EdgeInsets.only(
@@ -1494,7 +1495,10 @@ class MemberCard extends StatelessWidget {
       //   right: kPadding / 2,
       // ),
       onPressed: () {
-        if (validDoseIndex > 0 && tasks != null && tasks!.isNotEmpty) {
+        if (validDoseIndex > 0 &&
+            tasks != null &&
+            tasks!.isNotEmpty &&
+            !isReferred) {
           DigitDialog.show<bool>(
             context,
             options: DigitDialogOptions(
