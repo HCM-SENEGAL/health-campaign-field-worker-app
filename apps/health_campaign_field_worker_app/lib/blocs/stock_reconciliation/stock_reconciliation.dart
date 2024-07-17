@@ -79,11 +79,11 @@ class StockReconciliationBloc
         .where(
           (e) =>
               e.dateOfEntryTime!.year < dateOfReconciliation.year ||
-              e.dateOfEntryTime!.year == dateOfReconciliation.year &&
-                  e.dateOfEntryTime!.month < dateOfReconciliation.month ||
-              e.dateOfEntryTime!.year == dateOfReconciliation.year &&
+              (e.dateOfEntryTime!.year == dateOfReconciliation.year &&
+                  e.dateOfEntryTime!.month < dateOfReconciliation.month) ||
+              (e.dateOfEntryTime!.year == dateOfReconciliation.year &&
                   e.dateOfEntryTime!.month == dateOfReconciliation.month &&
-                  e.dateOfEntryTime!.day <= dateOfReconciliation.day,
+                  e.dateOfEntryTime!.day <= dateOfReconciliation.day),
         )
         .toList();
 
