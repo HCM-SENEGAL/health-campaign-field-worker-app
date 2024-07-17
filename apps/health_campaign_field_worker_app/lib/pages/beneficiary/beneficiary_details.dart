@@ -72,7 +72,8 @@ class _BeneficiaryDetailsPageState
                       projectBeneficiary.first.clientReferenceId &&
                   element.status != Status.beneficiaryRefused.toValue() &&
                   element.status != Status.beneficiarySick.toValue() &&
-                  element.status != Status.beneficiaryAbsent.toValue())
+                  element.status != Status.beneficiaryAbsent.toValue() &&
+                  element.status != Status.beneficiaryReferred.toValue())
               .toList();
           final projectState = context.read<ProjectBloc>().state;
           final bloc = context.read<DeliverInterventionBloc>();
