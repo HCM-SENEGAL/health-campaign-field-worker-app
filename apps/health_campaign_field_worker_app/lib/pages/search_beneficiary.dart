@@ -218,7 +218,6 @@ class _SearchBeneficiaryPageState
                                           ),
                                         );
                                       } else {
-                                        blocWrapper.clearEvent();
                                         blocWrapper.searchByHeadBloc.add(
                                           SearchHouseholdsEvent
                                               .searchByHouseholdHead(
