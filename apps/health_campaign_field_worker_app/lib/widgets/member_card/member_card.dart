@@ -230,11 +230,12 @@ class MemberCard extends StatelessWidget {
                                         sideEffects,
                                         individual,
                                       ) ||
-                                      !validDoseDelivery(
-                                        tasks,
-                                        context.selectedCycle,
-                                        context.selectedProjectType,
-                                      )))
+                                      (!validDoseDelivery(
+                                            tasks,
+                                            context.selectedCycle,
+                                            context.selectedProjectType,
+                                          ) &&
+                                          !isBeneficiaryReferred)))
                               ? const Offstage()
                               : DigitOutLineButton(
                                   label: localizations.translate(
@@ -294,10 +295,11 @@ class MemberCard extends StatelessWidget {
                                                                     .toValue())
                                                             .toList()
                                                             .isNotEmpty) &&
-                                                    !checkIfValidTimeForDose(
-                                                      tasks,
-                                                      context.selectedCycle,
-                                                    )
+                                                    (!checkIfValidTimeForDose(
+                                                          tasks,
+                                                          context.selectedCycle,
+                                                        ) &&
+                                                        !isBeneficiaryReferred)
                                                 ? null
                                                 : () {
                                                     Navigator.of(
@@ -438,10 +440,11 @@ class MemberCard extends StatelessWidget {
                                                                     .toValue())
                                                             .toList()
                                                             .isNotEmpty) &&
-                                                    !checkIfValidTimeForDose(
-                                                      tasks,
-                                                      context.selectedCycle,
-                                                    )
+                                                    (!checkIfValidTimeForDose(
+                                                          tasks,
+                                                          context.selectedCycle,
+                                                        ) &&
+                                                        !isBeneficiaryReferred)
                                                 ? null
                                                 : () {
                                                     Navigator.of(
@@ -583,10 +586,11 @@ class MemberCard extends StatelessWidget {
                                                                     .toValue())
                                                             .toList()
                                                             .isNotEmpty) &&
-                                                    !checkIfValidTimeForDose(
-                                                      tasks,
-                                                      context.selectedCycle,
-                                                    )
+                                                    (!checkIfValidTimeForDose(
+                                                          tasks,
+                                                          context.selectedCycle,
+                                                        ) &&
+                                                        !isBeneficiaryReferred)
                                                 ? null
                                                 : () {
                                                     Navigator.of(
@@ -1462,12 +1466,12 @@ class MemberCard extends StatelessWidget {
                     (!successfulDelivery &&
                         deliveryComment.isNotEmpty &&
                         lastCycleRunning) ||
-                    (!validDelivery)
+                    (!validDelivery && !isBeneficiaryReferred)
                 // todo verify this
                 ? const Offstage()
                 : (!successfulDelivery && deliveryComment.isEmpty) ||
                         ((!isBeneficiaryAbsent || !isBeneficiaryRefused) &&
-                            validDelivery)
+                            (validDelivery || isBeneficiaryReferred))
                     ? getElevatedButton(context, theme, deliveryComment, router)
                     : const Offstage()
         : getElevatedButton(context, theme, deliveryComment, router);
