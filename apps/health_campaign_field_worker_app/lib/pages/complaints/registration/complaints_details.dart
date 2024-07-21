@@ -477,7 +477,7 @@ class _ComplaintsDetailsPageState
       _complainantName: FormControl<String>(
         value: complaintDetails?.complainantName,
         disabled: shouldDisableForm,
-        validators: [Validators.required, Validators.maxLength(64)],
+        validators: [Validators.required, Validators.maxLength(50)],
       ),
       _complainantContactNumber: FormControl<String>(
         value: complaintDetails?.complainantContactNumber,
@@ -492,7 +492,7 @@ class _ComplaintsDetailsPageState
       _supervisorName: FormControl<String>(
         value: complaintDetails?.supervisorName,
         disabled: shouldDisableForm,
-        validators: [Validators.maxLength(64)],
+        validators: [Validators.maxLength(50)],
       ),
       _supervisorContactNumber: FormControl<String>(
         value: complaintDetails?.supervisorContactNumber,
