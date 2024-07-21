@@ -339,7 +339,7 @@ class _ComplaintsDetailsPageState
                                           .translate(
                                             i18.common.maxCharsRequired,
                                           )
-                                          .replaceAll('{}', '64'),
+                                          .replaceAll('{}', '50'),
                                     },
                                   ),
                                   DigitTextFormField(
@@ -389,7 +389,7 @@ class _ComplaintsDetailsPageState
                             validationMessages: {
                               'maxLength': (object) => localizations
                                   .translate(i18.common.maxCharsRequired)
-                                  .replaceAll('{}', '64'),
+                                  .replaceAll('{}', '50'),
                             },
                           ),
                           DigitTextFormField(
