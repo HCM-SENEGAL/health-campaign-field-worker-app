@@ -134,7 +134,8 @@ class _SearchBeneficiaryPageState
                   final metrics = scrollNotification.metrics;
                   if (metrics.atEdge &&
                       isProximityEnabled &&
-                      searchController.text == '') {
+                      searchController.text == '' &&
+                      metrics.pixels != 0) {
                     blocWrapper.proximitySearchBloc
                         .add(SearchHouseholdsEvent.searchByProximity(
                       latitude: lat,
@@ -147,7 +148,55 @@ class _SearchBeneficiaryPageState
                     setState(() {
                       offset = (offset + limit);
                     });
+                  } else if (metrics.atEdge &&
+                      searchController.text != '' &&
+                      metrics.pixels != 0) {
+                    blocWrapper.searchByHeadBloc
+                        .add(SearchHouseholdsEvent.searchByHouseholdHead(
+                      searchText: searchController.text,
+                      projectId: context.projectId,
+                      isProximityEnabled: isProximityEnabled,
+                      offset: offset + limit,
+                      limit: limit,
+                    ));
+
+                    setState(() {
+                      offset = (offset + limit);
+                    });
                   }
+
+                  // if (metrics.atEdge &&
+                  //     isProximityEnabled &&
+                  //     searchController.text == '' &&
+                  //     metrics.pixels != 0) {
+                  //   final bloc = context.read<SearchHouseholdsBloc>();
+                  //   bloc.add(
+                  //     const SearchHouseholdsLoadingEvent(),
+                  //   );
+
+                  //   bloc.add(SearchHouseholdsEvent.searchByProximity(
+                  //     latitude: lat,
+                  //     longititude: long,
+                  //     projectId: context.projectId,
+                  //     maxRadius: appConfig.maxRadius!,
+                  //     offset: bloc.state.offset,
+                  //     limit: bloc.state.limit,
+                  //   ));
+                  // } else if (metrics.atEdge &&
+                  //     searchController.text != '' &&
+                  //     metrics.pixels != 0) {
+                  //   final bloc = context.read<SearchHouseholdsBloc>();
+                  //   bloc.add(
+                  //     const SearchHouseholdsLoadingEvent(),
+                  //   );
+                  //   bloc.add(SearchHouseholdsEvent.searchByHouseholdHead(
+                  //     searchText: searchController.text,
+                  //     projectId: context.projectId,
+                  //     isProximityEnabled: isProximityEnabled,
+                  //     offset: bloc.state.offset,
+                  //     limit: bloc.state.limit,
+                  //   ));
+                  // }
                 }
                 // Return true to allow the notification to continue to be dispatched to further ancestors.
 
