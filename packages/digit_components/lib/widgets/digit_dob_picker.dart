@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:digit_components/digit_components.dart';
 import 'package:digit_components/utils/date_utils.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,9 @@ import 'package:reactive_forms/reactive_forms.dart';
 class DigitDobPicker extends StatelessWidget {
   // Properties to hold the form control name, labels, and error messages for the components
   final String datePickerFormControl;
+  final String monthsFormControl;
+  final String yearsFormControl;
+  final FormGroup form;
   final bool isVerified;
   final ControlValueAccessor? valueAccessor;
   final String datePickerLabel;
@@ -26,6 +31,9 @@ class DigitDobPicker extends StatelessWidget {
     this.isVerified = false,
     this.valueAccessor,
     required this.datePickerLabel,
+    required this.monthsFormControl,
+    required this.form,
+    required this.yearsFormControl,
     required this.ageFieldLabel,
     required this.yearsHintLabel,
     required this.monthsHintLabel,
@@ -68,7 +76,24 @@ class DigitDobPicker extends StatelessWidget {
               formControlName: datePickerFormControl,
               cancelText: cancelText,
               confirmText: confirmText,
-              onChangeOfFormControl: onChangeOfFormControl,
+              // onChangeOfFormControl: onChangeOfFormControl,
+              onChanged: (value) {
+                // print('datechanged');
+                // print(control.value);
+                DigitDOBAge? digitDOB = modelToViewValue(value);
+                if (digitDOB != null) {
+                  if (digitDOB.months != 0) {
+                    form.control(monthsFormControl).value =
+                        digitDOB.months.toString();
+                  }
+                  if (digitDOB.years != 0) {
+                    form.control(yearsFormControl).value =
+                        digitDOB.years.toString();
+                  }
+                }
+                onChangeOfFormControl?.call(form.control(datePickerFormControl)
+                    as FormControl<dynamic>);
+              },
               end: DateTime.now(),
             ),
             const SizedBox(height: 16),
@@ -82,26 +107,47 @@ class DigitDobPicker extends StatelessWidget {
                 Expanded(
                   // Text form field for entering the age in years
                   child: DigitTextFormField(
-                      padding: EdgeInsets.zero,
-                      maxLength: 3,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      valueAccessor:
-                          DobValueAccessorYearsString(DobValueAccessor()),
-                      formControlName: datePickerFormControl,
-                      label: ageFieldLabel,
-                      isRequired: true,
-                      keyboardType: TextInputType.number,
-                      suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          yearsHintLabel,
-                          textAlign: TextAlign.center,
-                        ),
+                    padding: EdgeInsets.zero,
+                    maxLength: 3,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    // valueAccessor:
+                    //     DobValueAccessorYearsString(DobValueAccessor()),
+                    formControlName: yearsFormControl,
+                    label: ageFieldLabel,
+                    isRequired: true,
+                    keyboardType: TextInputType.number,
+                    suffix: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        yearsHintLabel,
+                        textAlign: TextAlign.center,
                       ),
-                      readOnly: isVerified,
-                      onChanged: onChangeOfFormControl),
+                    ),
+                    readOnly: isVerified,
+                    onChanged: (control) {
+                      final monthsValue =
+                          form.control(monthsFormControl).value as String?;
+                      final yearsValue =
+                          form.control(yearsFormControl).value as String?;
+
+                      DigitDOBAge digitDob = DigitDOBAge(
+                        years: yearsValue != null && yearsValue.isNotEmpty
+                            ? int.parse(yearsValue)
+                            : 0,
+                        months: monthsValue != null && monthsValue.isNotEmpty
+                            ? int.parse(monthsValue)
+                            : 0,
+                      );
+                      DateTime? dob = viewToModelValue(digitDob);
+
+                      form.control(datePickerFormControl).value = dob;
+                      onChangeOfFormControl?.call(
+                          form.control(datePickerFormControl)
+                              as FormControl<dynamic>);
+                    },
+                  ),
                 ),
                 const SizedBox(
                   width: 8,
@@ -109,25 +155,46 @@ class DigitDobPicker extends StatelessWidget {
                 Expanded(
                   // Text form field for entering the age in months
                   child: DigitTextFormField(
-                      padding: EdgeInsets.zero,
-                      maxLength: 2,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      valueAccessor:
-                          DobValueAccessorMonthString(DobValueAccessor()),
-                      formControlName: datePickerFormControl,
-                      label: '',
-                      keyboardType: TextInputType.number,
-                      suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          monthsHintLabel,
-                          textAlign: TextAlign.center,
-                        ),
+                    padding: EdgeInsets.zero,
+                    maxLength: 3,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    // valueAccessor:
+                    //     DobValueAccessorMonthString(DobValueAccessor()),
+                    formControlName: monthsFormControl,
+                    label: '',
+                    keyboardType: TextInputType.number,
+                    suffix: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        monthsHintLabel,
+                        textAlign: TextAlign.center,
                       ),
-                      readOnly: isVerified,
-                      onChanged: onChangeOfFormControl),
+                    ),
+                    readOnly: isVerified,
+                    onChanged: (control) {
+                      final monthsValue =
+                          form.control(monthsFormControl).value as String?;
+                      final yearsValue =
+                          form.control(yearsFormControl).value as String?;
+
+                      DigitDOBAge digitDob = DigitDOBAge(
+                        years: yearsValue != null && yearsValue.isNotEmpty
+                            ? int.parse(yearsValue)
+                            : 0,
+                        months: monthsValue != null && monthsValue.isNotEmpty
+                            ? int.parse(monthsValue)
+                            : 0,
+                      );
+                      DateTime? dob = viewToModelValue(digitDob);
+
+                      form.control(datePickerFormControl).value = dob;
+                      onChangeOfFormControl?.call(
+                          form.control(datePickerFormControl)
+                              as FormControl<dynamic>);
+                    },
+                  ),
                 ),
               ],
             ),
@@ -153,6 +220,24 @@ class DigitDobPicker extends StatelessWidget {
   }
 }
 
+DigitDOBAge? modelToViewValue(DateTime? modelValue) {
+  if (modelValue == null) {
+    return null;
+  } else {
+    return DigitDateUtils.calculateAge(modelValue);
+  }
+}
+
+DateTime? viewToModelValue(DigitDOBAge? viewValue) {
+  if (viewValue == null || (viewValue.years == 0 && viewValue.months == 0)) {
+    return null;
+  } else {
+    return (viewValue.years == 0 && viewValue.months == 0)
+        ? null
+        : DigitDateUtils.calculateDob(viewValue);
+  }
+}
+
 // A custom ControlValueAccessor to convert the model value (DateTime) to the view value (DigitDOBAge) and vice versa.
 class DobValueAccessor extends ControlValueAccessor<DateTime, DigitDOBAge> {
   @override
@@ -169,8 +254,7 @@ class DobValueAccessor extends ControlValueAccessor<DateTime, DigitDOBAge> {
     if (viewValue == null || (viewValue.years == 0 && viewValue.months == 0)) {
       return null;
     } else {
-      return (viewValue.years == 0 && viewValue.months == 0) ||
-              viewValue.months > 11
+      return (viewValue.years == 0 && viewValue.months == 0)
           ? null
           : DigitDateUtils.calculateDob(viewValue);
     }
@@ -194,7 +278,10 @@ class DobValueAccessorYearsString
     }
 
     existingMonth = dobAge.months.toString();
-    existingDays = dobAge.days.toString();
+    existingDays =
+        DobValueAccessorMonthString(accessor).modelToViewValue(modelValue) ??
+            '';
+
     return dobAge.years.toString();
   }
 

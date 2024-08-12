@@ -46,6 +46,8 @@ class _IndividualDetailsPageState
   static const _idTypeKey = 'idType';
   static const _idNumberKey = 'idNumber';
   static const _dobKey = 'dob';
+  static const _monthsKey = 'months';
+  static const _yearsKey = 'years';
   static const _genderKey = 'gender';
   static const _mobileNumberKey = 'mobileNumber';
   bool isDuplicateTag = false;
@@ -657,6 +659,9 @@ class _IndividualDetailsPageState
                             individualDetailsShowcaseData.dateOfBirth.buildWith(
                               child: DigitDobPicker(
                                 datePickerFormControl: _dobKey,
+                                monthsFormControl: _monthsKey,
+                                yearsFormControl: _yearsKey,
+                                form: form,
                                 datePickerLabel: localizations.translate(
                                   i18.individualDetails.dobLabelText,
                                 ),
@@ -1107,6 +1112,8 @@ class _IndividualDetailsPageState
               )
             : null,
       ),
+      _monthsKey: FormControl<String>(),
+      _yearsKey: FormControl<String>(),
       _genderKey: FormControl<String>(
         validators: [
           Validators.required,
