@@ -711,11 +711,31 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                     ),
                                   BlocBuilder<FacilityBloc, FacilityState>(
                                     builder: (context, state) {
-                                      final facilities = state.whenOrNull(
-                                            fetched: (_, facilities, __) =>
-                                                facilities,
-                                          ) ??
-                                          [];
+                                      final unfilteredFacilities =
+                                          state.whenOrNull(
+                                                fetched: (_, facilities, __) =>
+                                                    facilities,
+                                              ) ??
+                                              [];
+
+                                      final projectMappedFacilities =
+                                          state.whenOrNull(
+                                                fetched: (facilities, _, __) =>
+                                                    facilities,
+                                              ) ??
+                                              [];
+
+                                      List<FacilityModel> facilities =
+                                          unfilteredFacilities.where((element) {
+                                        return element.usage == 'CSCD'
+                                            ? projectMappedFacilities
+                                                    .firstWhereOrNull(
+                                                  (element1) =>
+                                                      element1.id == element.id,
+                                                ) !=
+                                                null
+                                            : true;
+                                      }).toList();
 
                                       return InkWell(
                                         onTap: () async {

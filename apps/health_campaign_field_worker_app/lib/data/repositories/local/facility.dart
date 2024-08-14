@@ -71,6 +71,13 @@ class FacilityLocalRepository
                 pincode: address.pincode,
                 type: address.type,
                 rowVersion: address.rowVersion,
+                boundary: address.localityBoundaryCode,
+                locality: address.localityBoundaryCode != null
+                    ? LocalityModel(
+                        code: address.localityBoundaryCode!,
+                        name: address.localityBoundaryName,
+                      )
+                    : null,
               ),
         additionalFields: facility.additionalFields == null
             ? null

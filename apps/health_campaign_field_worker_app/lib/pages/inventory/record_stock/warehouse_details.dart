@@ -37,7 +37,6 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
   String? selectedFacilityId;
   FacilityModel? prevFacility;
   String? entryType;
-  bool isCommunityDistributor = false;
   FacilityModel? filteredFacility;
 
   @override
@@ -85,7 +84,12 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
         .toList()
         .isNotEmpty;
 
-    isCommunityDistributor = context.isCommunityDistributor;
+    bool isSupervisor = context.loggedInUserRoles
+        .where(
+          (role) => role.code == RolesType.fieldSupervisor.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
 
     return BlocBuilder<ProjectBloc, ProjectState>(
       builder: (ctx, projectState) {
@@ -119,7 +123,7 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                 [];
             // get distribution facilities for communityDistributor , solution customisation
             List<FacilityModel> filteredFacilities = [];
-            if (isCommunityDistributor) {
+            if (isSupervisor) {
               filteredFacilities = facilities
                   .where(
                     (element) => element.name == context.loggedInUser.userName,
@@ -128,6 +132,12 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
               if (filteredFacilities.isNotEmpty) {
                 filteredFacility = filteredFacilities.first;
               }
+            } else {
+              filteredFacilities = facilities
+                  .where(
+                    (element) => element.usage != 'CSCD',
+                  )
+                  .toList();
             }
 
             // prevFacility = facilityState.whenOrNull(
@@ -327,10 +337,7 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                       final facility =
                                           await parent.push<FacilityModel>(
                                         FacilitySelectionRoute(
-                                          facilities: isCommunityDistributor &&
-                                                  filteredFacility != null
-                                              ? filteredFacilities
-                                              : facilities,
+                                          facilities: filteredFacilities,
                                         ),
                                       );
 
