@@ -337,7 +337,9 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                       final facility =
                                           await parent.push<FacilityModel>(
                                         FacilitySelectionRoute(
-                                          facilities: filteredFacilities,
+                                          facilities: filteredFacilities.isEmpty
+                                              ? facilities
+                                              : filteredFacilities,
                                         ),
                                       );
 

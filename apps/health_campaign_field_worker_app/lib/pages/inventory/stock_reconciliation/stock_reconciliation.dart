@@ -81,6 +81,13 @@ class _StockReconciliationPageState
         .toList()
         .isNotEmpty;
 
+    bool isSupervisor = context.loggedInUserRoles
+        .where(
+          (role) => role.code == RolesType.fieldSupervisor.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
+
     bool isCommunityDistributor = context.isCommunityDistributor;
 
     return BlocListener<BoundaryBloc, BoundaryState>(
@@ -409,15 +416,20 @@ class _StockReconciliationPageState
                                             ) ??
                                             [];
 
-                                        List<FacilityModel> filteredFacility =
+                                        List<FacilityModel> filteredFacilities =
                                             [];
-                                        if (isCommunityDistributor) {
-                                          filteredFacility = facilities
-                                              .where((element) =>
-                                                  element.name ==
-                                                  context.loggedInUser.userName)
-                                              .toList();
-                                        }
+                                        filteredFacilities = isSupervisor
+                                            ? facilities
+                                                .where((element) =>
+                                                    element.name ==
+                                                    context
+                                                        .loggedInUser.userName)
+                                                .toList()
+                                            : facilities
+                                                .where((element) =>
+                                                    element.usage != 'CD' &&
+                                                    element.usage != 'CS')
+                                                .toList();
 
                                         return InkWell(
                                           onTap: () async {
@@ -430,11 +442,9 @@ class _StockReconciliationPageState
                                                 .push<FacilityModel>(
                                               FacilitySelectionRoute(
                                                 facilities:
-                                                    isCommunityDistributor &&
-                                                            filteredFacility
-                                                                .isNotEmpty
-                                                        ? filteredFacility
-                                                        : facilities,
+                                                    filteredFacilities.isEmpty
+                                                        ? facilities
+                                                        : filteredFacilities,
                                               ),
                                             );
 
@@ -475,11 +485,9 @@ class _StockReconciliationPageState
                                                   .push<FacilityModel>(
                                                 FacilitySelectionRoute(
                                                   facilities:
-                                                      isCommunityDistributor &&
-                                                              filteredFacility
-                                                                  .isNotEmpty
-                                                          ? filteredFacility
-                                                          : facilities,
+                                                      filteredFacilities.isEmpty
+                                                          ? facilities
+                                                          : filteredFacilities,
                                                 ),
                                               );
 

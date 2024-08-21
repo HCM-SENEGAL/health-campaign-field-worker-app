@@ -48,6 +48,7 @@ class DigitDobPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    bool _isDatePickerProgrammaticallyChanging = false;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -78,21 +79,23 @@ class DigitDobPicker extends StatelessWidget {
               confirmText: confirmText,
               // onChangeOfFormControl: onChangeOfFormControl,
               onChanged: (value) {
-                // print('datechanged');
-                // print(control.value);
-                DigitDOBAge? digitDOB = modelToViewValue(value);
-                if (digitDOB != null) {
-                  // if (digitDOB.months != 0) {
-                  form.control(monthsFormControl).value =
-                      digitDOB.months.toString();
-                  // }
-                  // if (digitDOB.years != 0) {
-                  form.control(yearsFormControl).value =
-                      digitDOB.years.toString();
-                  // }
+                if (!_isDatePickerProgrammaticallyChanging) {
+                  // User-triggered change
+                  DigitDOBAge? digitDOB = modelToViewValue(value);
+                  if (digitDOB != null) {
+                    _isDatePickerProgrammaticallyChanging = true;
+                    form.control(monthsFormControl).value =
+                        digitDOB.months.toString();
+                    form.control(yearsFormControl).value =
+                        digitDOB.years.toString();
+                  }
+                } else {
+                  // Programmatically triggered change
+                  // Handle accordingly if needed
                 }
                 onChangeOfFormControl?.call(form.control(datePickerFormControl)
                     as FormControl<dynamic>);
+                _isDatePickerProgrammaticallyChanging = false;
               },
               end: DateTime.now(),
             ),
@@ -131,7 +134,6 @@ class DigitDobPicker extends StatelessWidget {
                           form.control(monthsFormControl).value as String?;
                       final yearsValue =
                           form.control(yearsFormControl).value as String?;
-
                       DigitDOBAge digitDob = DigitDOBAge(
                         years: yearsValue != null && yearsValue.isNotEmpty
                             ? int.parse(yearsValue)
@@ -140,12 +142,15 @@ class DigitDobPicker extends StatelessWidget {
                             ? int.parse(monthsValue)
                             : 0,
                       );
-                      DateTime? dob = viewToModelValue(digitDob);
 
-                      form.control(datePickerFormControl).value = dob;
+                      _isDatePickerProgrammaticallyChanging = true;
+                      form.control(datePickerFormControl).value =
+                          viewToModelValue(digitDob);
+
                       onChangeOfFormControl?.call(
                           form.control(datePickerFormControl)
                               as FormControl<dynamic>);
+                      // _isDatePickerProgrammaticallyChanging = false;
                     },
                   ),
                 ),
@@ -178,7 +183,6 @@ class DigitDobPicker extends StatelessWidget {
                           form.control(monthsFormControl).value as String?;
                       final yearsValue =
                           form.control(yearsFormControl).value as String?;
-
                       DigitDOBAge digitDob = DigitDOBAge(
                         years: yearsValue != null && yearsValue.isNotEmpty
                             ? int.parse(yearsValue)
@@ -187,12 +191,15 @@ class DigitDobPicker extends StatelessWidget {
                             ? int.parse(monthsValue)
                             : 0,
                       );
-                      DateTime? dob = viewToModelValue(digitDob);
 
-                      form.control(datePickerFormControl).value = dob;
+                      _isDatePickerProgrammaticallyChanging = true;
+                      form.control(datePickerFormControl).value =
+                          viewToModelValue(digitDob);
+
                       onChangeOfFormControl?.call(
                           form.control(datePickerFormControl)
                               as FormControl<dynamic>);
+                      // _isDatePickerProgrammaticallyChanging = false;
                     },
                   ),
                 ),
