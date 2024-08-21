@@ -135,7 +135,7 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
             } else {
               filteredFacilities = facilities
                   .where(
-                    (element) => element.usage != 'CSCD',
+                    (element) => element.usage != 'CD' && element.usage != 'CS',
                   )
                   .toList();
             }

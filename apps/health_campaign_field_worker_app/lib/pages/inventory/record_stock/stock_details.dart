@@ -727,7 +727,8 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
 
                                       List<FacilityModel> facilities =
                                           unfilteredFacilities.where((element) {
-                                        return element.usage == 'CSCD'
+                                        return element.usage == 'CS' ||
+                                                element.usage == 'CD'
                                             ? projectMappedFacilities
                                                     .firstWhereOrNull(
                                                   (element1) =>
