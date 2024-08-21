@@ -146,10 +146,11 @@ class DigitDobPicker extends StatelessWidget {
                       _isDatePickerProgrammaticallyChanging = true;
                       form.control(datePickerFormControl).value =
                           viewToModelValue(digitDob);
-
+                      control.markAsTouched();
                       onChangeOfFormControl?.call(
                           form.control(datePickerFormControl)
                               as FormControl<dynamic>);
+
                       // _isDatePickerProgrammaticallyChanging = false;
                     },
                   ),
@@ -195,10 +196,11 @@ class DigitDobPicker extends StatelessWidget {
                       _isDatePickerProgrammaticallyChanging = true;
                       form.control(datePickerFormControl).value =
                           viewToModelValue(digitDob);
-
+                      control.markAsTouched();
                       onChangeOfFormControl?.call(
                           form.control(datePickerFormControl)
                               as FormControl<dynamic>);
+
                       // _isDatePickerProgrammaticallyChanging = false;
                     },
                   ),
