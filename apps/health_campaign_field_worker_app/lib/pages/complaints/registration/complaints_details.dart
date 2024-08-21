@@ -334,6 +334,9 @@ class _ComplaintsDetailsPageState
                                     isRequired: true,
                                     inputFormatters: [
                                       RemoveEmojiInputFormatter(),
+                                      FilteringTextInputFormatter.allow(
+                                        RegExp("[a-zA-Z ]"),
+                                      ),
                                     ],
                                     validationMessages: {
                                       'required': (object) =>
