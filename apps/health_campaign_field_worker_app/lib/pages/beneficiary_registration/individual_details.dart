@@ -689,7 +689,13 @@ class _IndividualDetailsPageState
                                 ),
                                 onChangeOfFormControl: (formControl) {
                                   // Handle changes to the control's value here
-                                  if (formControl.touched) {
+                                  if (formControl.touched ||
+                                      (form.control(_monthsKey)
+                                              as FormControl<dynamic>)
+                                          .touched ||
+                                      (form.control(_yearsKey)
+                                              as FormControl<dynamic>)
+                                          .touched) {
                                     final value = formControl.value;
                                     if (value == null) {
                                       formControl.setErrors({'': true});
