@@ -689,26 +689,28 @@ class _IndividualDetailsPageState
                                 ),
                                 onChangeOfFormControl: (formControl) {
                                   // Handle changes to the control's value here
-                                  final value = formControl.value;
-                                  if (value == null) {
-                                    formControl.setErrors({'': true});
-                                  } else {
-                                    DigitDOBAge age =
-                                        DigitDateUtils.calculateAge(value);
-                                    if ((age.years == 0 && age.months == 0) ||
-                                        age.months > 11 ||
-                                        (age.years > 150 ||
-                                            (age.years == 150 &&
-                                                age.months > 0))) {
+                                  if (formControl.touched) {
+                                    final value = formControl.value;
+                                    if (value == null) {
                                       formControl.setErrors({'': true});
-                                    } else if (widget.isHeadOfHousehold &&
-                                        age.years < 18) {
-                                      isHeadAgeValid = false;
                                     } else {
-                                      if (widget.isHeadOfHousehold) {
-                                        isHeadAgeValid = true;
+                                      DigitDOBAge age =
+                                          DigitDateUtils.calculateAge(value);
+                                      if ((age.years == 0 && age.months == 0) ||
+                                          age.months > 11 ||
+                                          (age.years > 150 ||
+                                              (age.years == 150 &&
+                                                  age.months > 0))) {
+                                        formControl.setErrors({'': true});
+                                      } else if (widget.isHeadOfHousehold &&
+                                          age.years < 18) {
+                                        isHeadAgeValid = false;
+                                      } else {
+                                        if (widget.isHeadOfHousehold) {
+                                          isHeadAgeValid = true;
+                                        }
+                                        formControl.removeError('');
                                       }
-                                      formControl.removeError('');
                                     }
                                   }
                                 },

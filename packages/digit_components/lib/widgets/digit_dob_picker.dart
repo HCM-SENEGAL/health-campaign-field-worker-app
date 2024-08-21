@@ -82,14 +82,14 @@ class DigitDobPicker extends StatelessWidget {
                 // print(control.value);
                 DigitDOBAge? digitDOB = modelToViewValue(value);
                 if (digitDOB != null) {
-                  if (digitDOB.months != 0) {
-                    form.control(monthsFormControl).value =
-                        digitDOB.months.toString();
-                  }
-                  if (digitDOB.years != 0) {
-                    form.control(yearsFormControl).value =
-                        digitDOB.years.toString();
-                  }
+                  // if (digitDOB.months != 0) {
+                  form.control(monthsFormControl).value =
+                      digitDOB.months.toString();
+                  // }
+                  // if (digitDOB.years != 0) {
+                  form.control(yearsFormControl).value =
+                      digitDOB.years.toString();
+                  // }
                 }
                 onChangeOfFormControl?.call(form.control(datePickerFormControl)
                     as FormControl<dynamic>);
