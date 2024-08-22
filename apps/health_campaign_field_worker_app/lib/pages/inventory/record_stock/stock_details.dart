@@ -739,39 +739,45 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                       }).toList();
 
                                       return InkWell(
-                                        onTap: () async {
-                                          // clearQRCodes();
-                                          // form.control(_deliveryTeamKey).value =
-                                          //     '';
-                                          final parent = context.router.parent()
-                                              as StackRouter;
-                                          final facility =
-                                              await parent.push<FacilityModel>(
-                                            FacilitySelectionRoute(
-                                              facilities: facilities,
-                                            ),
-                                          );
+                                        onTap: facilities.isEmpty
+                                            ? null
+                                            : () async {
+                                                // clearQRCodes();
+                                                // form.control(_deliveryTeamKey).value =
+                                                //     '';
+                                                final parent = context.router
+                                                    .parent() as StackRouter;
+                                                final facility = await parent
+                                                    .push<FacilityModel>(
+                                                  FacilitySelectionRoute(
+                                                    facilities: facilities,
+                                                  ),
+                                                );
 
-                                          if (facility == null) return;
-                                          form
-                                              .control(_secondaryPartyKey)
-                                              .value = localizations.translate(
-                                            '${facility.name}',
-                                          );
+                                                if (facility == null) return;
+                                                form
+                                                        .control(_secondaryPartyKey)
+                                                        .value =
+                                                    localizations.translate(
+                                                  '${facility.name}',
+                                                );
 
-                                          setState(() {
-                                            selectedFacilityId = facility.id;
-                                          });
-                                          if (facility.id == 'Delivery Team') {
-                                            setState(() {
-                                              deliveryTeamSelected = true;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              deliveryTeamSelected = false;
-                                            });
-                                          }
-                                        },
+                                                setState(() {
+                                                  selectedFacilityId =
+                                                      facility.id;
+                                                });
+                                                if (facility.id ==
+                                                    'Delivery Team') {
+                                                  setState(() {
+                                                    deliveryTeamSelected = true;
+                                                  });
+                                                } else {
+                                                  setState(() {
+                                                    deliveryTeamSelected =
+                                                        false;
+                                                  });
+                                                }
+                                              },
                                         child: IgnorePointer(
                                           child: DigitTextFormField(
                                             hideKeyboard: true,
@@ -791,43 +797,51 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                               child: Icon(Icons.search),
                                             ),
                                             formControlName: _secondaryPartyKey,
-                                            onTap: () async {
-                                              // clearQRCodes();
-                                              // form
-                                              //     .control(_deliveryTeamKey)
-                                              //     .value = '';
-                                              final parent = context.router
-                                                  .parent() as StackRouter;
-                                              final facility = await parent
-                                                  .push<FacilityModel>(
-                                                FacilitySelectionRoute(
-                                                  facilities: facilities,
-                                                ),
-                                              );
+                                            onTap: facilities.isEmpty
+                                                ? null
+                                                : () async {
+                                                    // clearQRCodes();
+                                                    // form
+                                                    //     .control(_deliveryTeamKey)
+                                                    //     .value = '';
+                                                    final parent =
+                                                        context.router.parent()
+                                                            as StackRouter;
+                                                    final facility =
+                                                        await parent.push<
+                                                            FacilityModel>(
+                                                      FacilitySelectionRoute(
+                                                        facilities: facilities,
+                                                      ),
+                                                    );
 
-                                              if (facility == null) return;
-                                              form
-                                                      .control(_secondaryPartyKey)
-                                                      .value =
-                                                  localizations.translate(
-                                                '${facility.name}',
-                                              );
+                                                    if (facility == null)
+                                                      return;
+                                                    form
+                                                            .control(
+                                                                _secondaryPartyKey)
+                                                            .value =
+                                                        localizations.translate(
+                                                      '${facility.name}',
+                                                    );
 
-                                              setState(() {
-                                                selectedFacilityId =
-                                                    facility.id;
-                                              });
-                                              if (facility.id ==
-                                                  'Delivery Team') {
-                                                setState(() {
-                                                  deliveryTeamSelected = true;
-                                                });
-                                              } else {
-                                                setState(() {
-                                                  deliveryTeamSelected = false;
-                                                });
-                                              }
-                                            },
+                                                    setState(() {
+                                                      selectedFacilityId =
+                                                          facility.id;
+                                                    });
+                                                    if (facility.id ==
+                                                        'Delivery Team') {
+                                                      setState(() {
+                                                        deliveryTeamSelected =
+                                                            true;
+                                                      });
+                                                    } else {
+                                                      setState(() {
+                                                        deliveryTeamSelected =
+                                                            false;
+                                                      });
+                                                    }
+                                                  },
                                           ),
                                         ),
                                       );

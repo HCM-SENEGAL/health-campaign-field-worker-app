@@ -329,38 +329,43 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                     ),
                                   ]),
                                   InkWell(
-                                    onTap: () async {
-                                      clearQRCodes();
-                                      form.control(_teamCodeKey).value = '';
-                                      final parent = context.router.parent()
-                                          as StackRouter;
-                                      final facility =
-                                          await parent.push<FacilityModel>(
-                                        FacilitySelectionRoute(
-                                          facilities: filteredFacilities.isEmpty
-                                              ? facilities
-                                              : filteredFacilities,
-                                        ),
-                                      );
+                                    onTap: facilities.isEmpty
+                                        ? null
+                                        : () async {
+                                            clearQRCodes();
+                                            form.control(_teamCodeKey).value =
+                                                '';
+                                            final parent = context.router
+                                                .parent() as StackRouter;
+                                            final facility = await parent
+                                                .push<FacilityModel>(
+                                              FacilitySelectionRoute(
+                                                facilities:
+                                                    filteredFacilities.isEmpty
+                                                        ? facilities
+                                                        : filteredFacilities,
+                                              ),
+                                            );
 
-                                      if (facility == null) return;
-                                      form.control(_warehouseKey).value =
-                                          localizations
-                                              .translate('${facility.name}');
+                                            if (facility == null) return;
+                                            form.control(_warehouseKey).value =
+                                                localizations.translate(
+                                                    '${facility.name}');
 
-                                      setState(() {
-                                        selectedFacilityId = facility.id;
-                                      });
-                                      if (facility.id == 'Delivery Team') {
-                                        setState(() {
-                                          deliveryTeamSelected = true;
-                                        });
-                                      } else {
-                                        setState(() {
-                                          deliveryTeamSelected = false;
-                                        });
-                                      }
-                                    },
+                                            setState(() {
+                                              selectedFacilityId = facility.id;
+                                            });
+                                            if (facility.id ==
+                                                'Delivery Team') {
+                                              setState(() {
+                                                deliveryTeamSelected = true;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                deliveryTeamSelected = false;
+                                              });
+                                            }
+                                          },
                                     child: IgnorePointer(
                                       child: DigitTextFormField(
                                         hideKeyboard: true,
@@ -384,43 +389,56 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                         ),
                                         formControlName: _warehouseKey,
                                         readOnly: true,
-                                        onTap: () async {
-                                          context.read<ScannerBloc>().add(
-                                                const ScannerEvent
-                                                    .handleScanner(
-                                                  [],
-                                                  [],
-                                                ),
-                                              );
-                                          form.control(_teamCodeKey).value = '';
-                                          final parent = context.router.parent()
-                                              as StackRouter;
-                                          final facility =
-                                              await parent.push<FacilityModel>(
-                                            FacilitySelectionRoute(
-                                              facilities: facilities,
-                                            ),
-                                          );
+                                        onTap: facilities.isEmpty
+                                            ? null
+                                            : () async {
+                                                context.read<ScannerBloc>().add(
+                                                      const ScannerEvent
+                                                          .handleScanner(
+                                                        [],
+                                                        [],
+                                                      ),
+                                                    );
+                                                form
+                                                    .control(_teamCodeKey)
+                                                    .value = '';
+                                                final parent = context.router
+                                                    .parent() as StackRouter;
+                                                final facility = await parent
+                                                    .push<FacilityModel>(
+                                                  FacilitySelectionRoute(
+                                                    facilities:
+                                                        filteredFacilities
+                                                                .isEmpty
+                                                            ? facilities
+                                                            : filteredFacilities,
+                                                  ),
+                                                );
 
-                                          if (facility == null) return;
-                                          form.control(_warehouseKey).value =
-                                              localizations.translate(
-                                            '${facility.name}',
-                                          );
+                                                if (facility == null) return;
+                                                form
+                                                        .control(_warehouseKey)
+                                                        .value =
+                                                    localizations.translate(
+                                                  '${facility.name}',
+                                                );
 
-                                          setState(() {
-                                            selectedFacilityId = facility.id;
-                                          });
-                                          if (facility.id == 'Delivery Team') {
-                                            setState(() {
-                                              deliveryTeamSelected = true;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              deliveryTeamSelected = false;
-                                            });
-                                          }
-                                        },
+                                                setState(() {
+                                                  selectedFacilityId =
+                                                      facility.id;
+                                                });
+                                                if (facility.id ==
+                                                    'Delivery Team') {
+                                                  setState(() {
+                                                    deliveryTeamSelected = true;
+                                                  });
+                                                } else {
+                                                  setState(() {
+                                                    deliveryTeamSelected =
+                                                        false;
+                                                  });
+                                                }
+                                              },
                                       ),
                                     ),
                                   ),
