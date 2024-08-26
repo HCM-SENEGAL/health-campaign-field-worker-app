@@ -37,7 +37,6 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
   String? selectedFacilityId;
   FacilityModel? prevFacility;
   String? entryType;
-  bool isCommunityDistributor = false;
   FacilityModel? filteredFacility;
 
   @override
@@ -85,7 +84,12 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
         .toList()
         .isNotEmpty;
 
-    isCommunityDistributor = context.isCommunityDistributor;
+    bool isSupervisor = context.loggedInUserRoles
+        .where(
+          (role) => role.code == RolesType.fieldSupervisor.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
 
     return BlocBuilder<ProjectBloc, ProjectState>(
       builder: (ctx, projectState) {
@@ -119,7 +123,7 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                 [];
             // get distribution facilities for communityDistributor , solution customisation
             List<FacilityModel> filteredFacilities = [];
-            if (isCommunityDistributor) {
+            if (isSupervisor) {
               filteredFacilities = facilities
                   .where(
                     (element) => element.name == context.loggedInUser.userName,
@@ -128,6 +132,12 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
               if (filteredFacilities.isNotEmpty) {
                 filteredFacility = filteredFacilities.first;
               }
+            } else {
+              filteredFacilities = facilities
+                  .where(
+                    (element) => element.usage != 'CD' && element.usage != 'CS',
+                  )
+                  .toList();
             }
 
             // prevFacility = facilityState.whenOrNull(
@@ -319,39 +329,43 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                     ),
                                   ]),
                                   InkWell(
-                                    onTap: () async {
-                                      clearQRCodes();
-                                      form.control(_teamCodeKey).value = '';
-                                      final parent = context.router.parent()
-                                          as StackRouter;
-                                      final facility =
-                                          await parent.push<FacilityModel>(
-                                        FacilitySelectionRoute(
-                                          facilities: isCommunityDistributor &&
-                                                  filteredFacility != null
-                                              ? filteredFacilities
-                                              : facilities,
-                                        ),
-                                      );
+                                    onTap: facilities.isEmpty
+                                        ? null
+                                        : () async {
+                                            clearQRCodes();
+                                            form.control(_teamCodeKey).value =
+                                                '';
+                                            final parent = context.router
+                                                .parent() as StackRouter;
+                                            final facility = await parent
+                                                .push<FacilityModel>(
+                                              FacilitySelectionRoute(
+                                                facilities:
+                                                    filteredFacilities.isEmpty
+                                                        ? facilities
+                                                        : filteredFacilities,
+                                              ),
+                                            );
 
-                                      if (facility == null) return;
-                                      form.control(_warehouseKey).value =
-                                          localizations
-                                              .translate('${facility.name}');
+                                            if (facility == null) return;
+                                            form.control(_warehouseKey).value =
+                                                localizations.translate(
+                                                    '${facility.name}');
 
-                                      setState(() {
-                                        selectedFacilityId = facility.id;
-                                      });
-                                      if (facility.id == 'Delivery Team') {
-                                        setState(() {
-                                          deliveryTeamSelected = true;
-                                        });
-                                      } else {
-                                        setState(() {
-                                          deliveryTeamSelected = false;
-                                        });
-                                      }
-                                    },
+                                            setState(() {
+                                              selectedFacilityId = facility.id;
+                                            });
+                                            if (facility.id ==
+                                                'Delivery Team') {
+                                              setState(() {
+                                                deliveryTeamSelected = true;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                deliveryTeamSelected = false;
+                                              });
+                                            }
+                                          },
                                     child: IgnorePointer(
                                       child: DigitTextFormField(
                                         hideKeyboard: true,
@@ -375,43 +389,56 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                         ),
                                         formControlName: _warehouseKey,
                                         readOnly: true,
-                                        onTap: () async {
-                                          context.read<ScannerBloc>().add(
-                                                const ScannerEvent
-                                                    .handleScanner(
-                                                  [],
-                                                  [],
-                                                ),
-                                              );
-                                          form.control(_teamCodeKey).value = '';
-                                          final parent = context.router.parent()
-                                              as StackRouter;
-                                          final facility =
-                                              await parent.push<FacilityModel>(
-                                            FacilitySelectionRoute(
-                                              facilities: facilities,
-                                            ),
-                                          );
+                                        onTap: facilities.isEmpty
+                                            ? null
+                                            : () async {
+                                                context.read<ScannerBloc>().add(
+                                                      const ScannerEvent
+                                                          .handleScanner(
+                                                        [],
+                                                        [],
+                                                      ),
+                                                    );
+                                                form
+                                                    .control(_teamCodeKey)
+                                                    .value = '';
+                                                final parent = context.router
+                                                    .parent() as StackRouter;
+                                                final facility = await parent
+                                                    .push<FacilityModel>(
+                                                  FacilitySelectionRoute(
+                                                    facilities:
+                                                        filteredFacilities
+                                                                .isEmpty
+                                                            ? facilities
+                                                            : filteredFacilities,
+                                                  ),
+                                                );
 
-                                          if (facility == null) return;
-                                          form.control(_warehouseKey).value =
-                                              localizations.translate(
-                                            '${facility.name}',
-                                          );
+                                                if (facility == null) return;
+                                                form
+                                                        .control(_warehouseKey)
+                                                        .value =
+                                                    localizations.translate(
+                                                  '${facility.name}',
+                                                );
 
-                                          setState(() {
-                                            selectedFacilityId = facility.id;
-                                          });
-                                          if (facility.id == 'Delivery Team') {
-                                            setState(() {
-                                              deliveryTeamSelected = true;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              deliveryTeamSelected = false;
-                                            });
-                                          }
-                                        },
+                                                setState(() {
+                                                  selectedFacilityId =
+                                                      facility.id;
+                                                });
+                                                if (facility.id ==
+                                                    'Delivery Team') {
+                                                  setState(() {
+                                                    deliveryTeamSelected = true;
+                                                  });
+                                                } else {
+                                                  setState(() {
+                                                    deliveryTeamSelected =
+                                                        false;
+                                                  });
+                                                }
+                                              },
                                       ),
                                     ),
                                   ),

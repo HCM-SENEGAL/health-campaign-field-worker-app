@@ -46,6 +46,8 @@ class _IndividualDetailsPageState
   static const _idTypeKey = 'idType';
   static const _idNumberKey = 'idNumber';
   static const _dobKey = 'dob';
+  static const _monthsKey = 'months';
+  static const _yearsKey = 'years';
   static const _genderKey = 'gender';
   static const _mobileNumberKey = 'mobileNumber';
   bool isDuplicateTag = false;
@@ -657,6 +659,9 @@ class _IndividualDetailsPageState
                             individualDetailsShowcaseData.dateOfBirth.buildWith(
                               child: DigitDobPicker(
                                 datePickerFormControl: _dobKey,
+                                monthsFormControl: _monthsKey,
+                                yearsFormControl: _yearsKey,
+                                form: form,
                                 datePickerLabel: localizations.translate(
                                   i18.individualDetails.dobLabelText,
                                 ),
@@ -684,26 +689,34 @@ class _IndividualDetailsPageState
                                 ),
                                 onChangeOfFormControl: (formControl) {
                                   // Handle changes to the control's value here
-                                  final value = formControl.value;
-                                  if (value == null) {
-                                    formControl.setErrors({'': true});
-                                  } else {
-                                    DigitDOBAge age =
-                                        DigitDateUtils.calculateAge(value);
-                                    if ((age.years == 0 && age.months == 0) ||
-                                        age.months > 11 ||
-                                        (age.years > 150 ||
-                                            (age.years == 150 &&
-                                                age.months > 0))) {
+                                  if (formControl.touched ||
+                                      (form.control(_monthsKey)
+                                              as FormControl<dynamic>)
+                                          .touched ||
+                                      (form.control(_yearsKey)
+                                              as FormControl<dynamic>)
+                                          .touched) {
+                                    final value = formControl.value;
+                                    if (value == null) {
                                       formControl.setErrors({'': true});
-                                    } else if (widget.isHeadOfHousehold &&
-                                        age.years < 18) {
-                                      isHeadAgeValid = false;
                                     } else {
-                                      if (widget.isHeadOfHousehold) {
-                                        isHeadAgeValid = true;
+                                      DigitDOBAge age =
+                                          DigitDateUtils.calculateAge(value);
+                                      if ((age.years == 0 && age.months == 0) ||
+                                          age.months > 11 ||
+                                          (age.years > 150 ||
+                                              (age.years == 150 &&
+                                                  age.months > 0))) {
+                                        formControl.setErrors({'': true});
+                                      } else if (widget.isHeadOfHousehold &&
+                                          age.years < 18) {
+                                        isHeadAgeValid = false;
+                                      } else {
+                                        if (widget.isHeadOfHousehold) {
+                                          isHeadAgeValid = true;
+                                        }
+                                        formControl.removeError('');
                                       }
-                                      formControl.removeError('');
                                     }
                                   }
                                 },
@@ -1107,6 +1120,8 @@ class _IndividualDetailsPageState
               )
             : null,
       ),
+      _monthsKey: FormControl<String>(),
+      _yearsKey: FormControl<String>(),
       _genderKey: FormControl<String>(
         validators: [
           Validators.required,

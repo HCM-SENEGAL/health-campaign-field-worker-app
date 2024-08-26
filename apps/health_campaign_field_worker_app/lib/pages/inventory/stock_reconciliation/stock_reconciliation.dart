@@ -81,6 +81,13 @@ class _StockReconciliationPageState
         .toList()
         .isNotEmpty;
 
+    bool isSupervisor = context.loggedInUserRoles
+        .where(
+          (role) => role.code == RolesType.fieldSupervisor.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
+
     bool isCommunityDistributor = context.isCommunityDistributor;
 
     return BlocListener<BoundaryBloc, BoundaryState>(
@@ -409,95 +416,119 @@ class _StockReconciliationPageState
                                             ) ??
                                             [];
 
-                                        List<FacilityModel> filteredFacility =
+                                        List<FacilityModel> filteredFacilities =
                                             [];
-                                        if (isCommunityDistributor) {
-                                          filteredFacility = facilities
-                                              .where((element) =>
-                                                  element.name ==
-                                                  context.loggedInUser.userName)
-                                              .toList();
-                                        }
+                                        filteredFacilities = isSupervisor
+                                            ? facilities
+                                                .where((element) =>
+                                                    element.name ==
+                                                    context
+                                                        .loggedInUser.userName)
+                                                .toList()
+                                            : facilities
+                                                .where((element) =>
+                                                    element.usage != 'CD' &&
+                                                    element.usage != 'CS')
+                                                .toList();
 
                                         return InkWell(
-                                          onTap: () async {
-                                            final stockReconciliationBloc =
-                                                context.read<
-                                                    StockReconciliationBloc>();
+                                          onTap: facilities.isEmpty
+                                              ? null
+                                              : () async {
+                                                  final stockReconciliationBloc =
+                                                      context.read<
+                                                          StockReconciliationBloc>();
 
-                                            final facility = await context
-                                                .router
-                                                .push<FacilityModel>(
-                                              FacilitySelectionRoute(
-                                                facilities:
-                                                    isCommunityDistributor &&
-                                                            filteredFacility
-                                                                .isNotEmpty
-                                                        ? filteredFacility
-                                                        : facilities,
+                                                  final facility = await context
+                                                      .router
+                                                      .push<FacilityModel>(
+                                                    FacilitySelectionRoute(
+                                                      facilities:
+                                                          filteredFacilities
+                                                                  .isEmpty
+                                                              ? facilities
+                                                              : filteredFacilities,
+                                                    ),
+                                                  );
+
+                                                  if (facility == null) return;
+                                                  form
+                                                          .control(_facilityKey)
+                                                          .value =
+                                                      localizations.translate(
+                                                    '${facility.name}',
+                                                  );
+                                                  setState(() {
+                                                    selectedFacilityId =
+                                                        facility.id;
+                                                  });
+                                                  stockReconciliationBloc.add(
+                                                    StockReconciliationSelectFacilityEvent(
+                                                      facility,
+                                                    ),
+                                                  );
+                                                },
+                                          child: IgnorePointer(
+                                            child: DigitTextFormField(
+                                              hideKeyboard: true,
+                                              label: localizations.translate(
+                                                i18.stockReconciliationDetails
+                                                    .facilityLabel,
                                               ),
-                                            );
-
-                                            if (facility == null) return;
-                                            form.control(_facilityKey).value =
-                                                localizations.translate(
-                                              '${facility.name}',
-                                            );
-                                            setState(() {
-                                              selectedFacilityId = facility.id;
-                                            });
-                                            stockReconciliationBloc.add(
-                                              StockReconciliationSelectFacilityEvent(
-                                                facility,
+                                              suffix: const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Icon(Icons.search),
                                               ),
-                                            );
-                                          },
-                                          child: DigitTextFormField(
-                                            hideKeyboard: true,
-                                            label: localizations.translate(
-                                              i18.stockReconciliationDetails
-                                                  .facilityLabel,
-                                            ),
-                                            suffix: const Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Icon(Icons.search),
-                                            ),
-                                            formControlName: _facilityKey,
-                                            readOnly: true,
-                                            isRequired: true,
-                                            onTap: () async {
-                                              final stockReconciliationBloc =
-                                                  context.read<
-                                                      StockReconciliationBloc>();
+                                              formControlName: _facilityKey,
+                                              readOnly: true,
+                                              isRequired: true,
+                                              onTap: facilities.isEmpty
+                                                  ? null
+                                                  : () async {
+                                                      final stockReconciliationBloc =
+                                                          context.read<
+                                                              StockReconciliationBloc>();
 
-                                              final facility = await context
-                                                  .router
-                                                  .push<FacilityModel>(
-                                                FacilitySelectionRoute(
-                                                  facilities:
-                                                      isCommunityDistributor &&
-                                                              filteredFacility
-                                                                  .isNotEmpty
-                                                          ? filteredFacility
-                                                          : facilities,
-                                                ),
-                                              );
+                                                      final facility =
+                                                          await context.router
+                                                              .push<
+                                                                  FacilityModel>(
+                                                        FacilitySelectionRoute(
+                                                          facilities:
+                                                              filteredFacilities
+                                                                      .isEmpty
+                                                                  ? facilities
+                                                                  : filteredFacilities,
+                                                        ),
+                                                      );
 
-                                              if (facility == null) return;
-                                              form.control(_facilityKey).value =
-                                                  localizations.translate(
-                                                '${facility.name}',
-                                              );
-                                              setState(() {
-                                                selectedFacilityId =
-                                                    facility.id;
-                                              });
-                                              stockReconciliationBloc.add(
-                                                StockReconciliationSelectFacilityEvent(
-                                                  facility,
-                                                ),
-                                              );
-                                            },
+                                                      if (facility == null)
+                                                        return;
+                                                      form
+                                                              .control(_facilityKey)
+                                                              .value =
+                                                          localizations
+                                                              .translate(
+                                                        '${facility.name}',
+                                                      );
+                                                      setState(() {
+                                                        selectedFacilityId =
+                                                            facility.id;
+                                                      });
+                                                      stockReconciliationBloc
+                                                          .add(
+                                                        StockReconciliationSelectFacilityEvent(
+                                                          facility,
+                                                        ),
+                                                      );
+                                                    },
+                                              validationMessages: {
+                                                "required": (object) =>
+                                                    localizations.translate(i18
+                                                        .common
+                                                        .corecommonRequired),
+                                              },
+                                            ),
                                           ),
                                         );
                                       },

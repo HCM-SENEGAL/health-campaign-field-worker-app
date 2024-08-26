@@ -14,6 +14,7 @@ import '../../../utils/i18_key_constants.dart' as i18;
 import '../../../utils/utils.dart';
 import '../../../widgets/header/back_navigation_help_header.dart';
 import '../../../widgets/localized.dart';
+import 'package:remove_emoji_input_formatter/remove_emoji_input_formatter.dart';
 
 class ComplaintsDetailsPage extends LocalizedStatefulWidget {
   const ComplaintsDetailsPage({
@@ -331,6 +332,12 @@ class _ComplaintsDetailsPageState
                                     ),
                                     readOnly: isRaisedForSelf,
                                     isRequired: true,
+                                    inputFormatters: [
+                                      RemoveEmojiInputFormatter(),
+                                      FilteringTextInputFormatter.allow(
+                                        RegExp("[a-zA-Z ]"),
+                                      ),
+                                    ],
                                     validationMessages: {
                                       'required': (object) =>
                                           localizations.translate(i18.complaints
@@ -386,6 +393,9 @@ class _ComplaintsDetailsPageState
                             label: localizations.translate(
                               i18.complaints.supervisorName,
                             ),
+                            inputFormatters: [
+                              RemoveEmojiInputFormatter(),
+                            ],
                             validationMessages: {
                               'maxLength': (object) => localizations
                                   .translate(i18.common.maxCharsRequired)

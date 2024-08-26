@@ -110,6 +110,13 @@ class _InventoryReportDetailsPageState
         .toList()
         .isNotEmpty;
 
+    bool isSupervisor = context.loggedInUserRoles
+        .where(
+          (role) => role.code == RolesType.fieldSupervisor.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
+
     isCommunityDistributor = context.isCommunityDistributor;
 
     return Scaffold(
@@ -204,16 +211,19 @@ class _InventoryReportDetailsPageState
 
                                               List<FacilityModel>
                                                   filteredFacilities = [];
-                                              if (isCommunityDistributor) {
-                                                filteredFacilities = facilities
-                                                    .where(
-                                                      (element) =>
+                                              filteredFacilities = isSupervisor
+                                                  ? facilities
+                                                      .where((element) =>
                                                           element.name ==
                                                           context.loggedInUser
-                                                              .userName,
-                                                    )
-                                                    .toList();
-                                              }
+                                                              .userName)
+                                                      .toList()
+                                                  : facilities
+                                                      .where((element) =>
+                                                          element.usage !=
+                                                              'CD' &&
+                                                          element.usage != 'CS')
+                                                      .toList();
 
                                               final allFacilities =
                                                   state.whenOrNull(
@@ -232,41 +242,48 @@ class _InventoryReportDetailsPageState
                                               }
 
                                               return InkWell(
-                                                onTap: () async {
-                                                  final stockReconciliationBloc =
-                                                      context.read<
-                                                          StockReconciliationBloc>();
+                                                onTap: facilities.isEmpty
+                                                    ? null
+                                                    : () async {
+                                                        final stockReconciliationBloc =
+                                                            context.read<
+                                                                StockReconciliationBloc>();
 
-                                                  final facility = await context
-                                                      .router
-                                                      .push<FacilityModel>(
-                                                    FacilitySelectionRoute(
-                                                      facilities:
-                                                          isCommunityDistributor &&
-                                                                  filteredFacilities
-                                                                      .isNotEmpty
-                                                              ? filteredFacilities
-                                                              : facilities,
-                                                    ),
-                                                  );
+                                                        final facility =
+                                                            await context.router
+                                                                .push<
+                                                                    FacilityModel>(
+                                                          FacilitySelectionRoute(
+                                                            facilities:
+                                                                filteredFacilities
+                                                                        .isEmpty
+                                                                    ? facilities
+                                                                    : filteredFacilities,
+                                                          ),
+                                                        );
 
-                                                  if (facility == null) return;
-                                                  form
-                                                      .control(_facilityKey)
-                                                      .value = facility;
-                                                  stockReconciliationBloc.add(
-                                                    StockReconciliationSelectFacilityEvent(
-                                                      facility,
-                                                    ),
-                                                  );
+                                                        if (facility == null)
+                                                          return;
+                                                        form
+                                                            .control(
+                                                                _facilityKey)
+                                                            .value = facility;
+                                                        stockReconciliationBloc
+                                                            .add(
+                                                          StockReconciliationSelectFacilityEvent(
+                                                            facility,
+                                                          ),
+                                                        );
 
-                                                  handleSelection(form);
-                                                },
+                                                        handleSelection(form);
+                                                      },
                                                 child: IgnorePointer(
                                                   child: DigitTextFormField(
                                                     valueAccessor:
                                                         FacilityValueAccessor(
-                                                      facilities,
+                                                      filteredFacilities.isEmpty
+                                                          ? facilities
+                                                          : filteredFacilities,
                                                     ),
                                                     label:
                                                         localizations.translate(
@@ -282,35 +299,42 @@ class _InventoryReportDetailsPageState
                                                         _facilityKey,
                                                     readOnly: false,
                                                     isRequired: true,
-                                                    onTap: () async {
-                                                      final stockReconciliationBloc =
-                                                          context.read<
-                                                              StockReconciliationBloc>();
+                                                    onTap: facilities.isEmpty
+                                                        ? null
+                                                        : () async {
+                                                            final stockReconciliationBloc =
+                                                                context.read<
+                                                                    StockReconciliationBloc>();
 
-                                                      final facility =
-                                                          await context.router
-                                                              .push<
-                                                                  FacilityModel>(
-                                                        FacilitySelectionRoute(
-                                                          facilities:
-                                                              facilities,
-                                                        ),
-                                                      );
+                                                            final facility =
+                                                                await context
+                                                                    .router
+                                                                    .push<
+                                                                        FacilityModel>(
+                                                              FacilitySelectionRoute(
+                                                                facilities: filteredFacilities
+                                                                        .isEmpty
+                                                                    ? facilities
+                                                                    : filteredFacilities,
+                                                              ),
+                                                            );
 
-                                                      if (facility == null)
-                                                        return;
-                                                      form
-                                                          .control(_facilityKey)
-                                                          .value = facility;
-                                                      stockReconciliationBloc
-                                                          .add(
-                                                        StockReconciliationSelectFacilityEvent(
-                                                          facility,
-                                                        ),
-                                                      );
+                                                            if (facility ==
+                                                                null) return;
+                                                            form
+                                                                .control(
+                                                                    _facilityKey)
+                                                                .value = facility;
+                                                            stockReconciliationBloc
+                                                                .add(
+                                                              StockReconciliationSelectFacilityEvent(
+                                                                facility,
+                                                              ),
+                                                            );
 
-                                                      handleSelection(form);
-                                                    },
+                                                            handleSelection(
+                                                                form);
+                                                          },
                                                   ),
                                                 ),
                                               );
