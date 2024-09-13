@@ -408,7 +408,7 @@ bool isFirstCycle(ProjectType? projectType) {
 
   return cycle == null
       ? false
-      : cycle.id != 1
+      : cycle.id != 1 && cycle.id != 3
           ? false
           : true;
 }
