@@ -45,6 +45,10 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return BeneficiaryType.ivermectin;
       case "ALBENDAZOLE":
         return BeneficiaryType.albendazole;
+      case "SPAQ1":
+        return BeneficiaryType.spaq1;
+      case "SPAQ2":
+        return BeneficiaryType.spaq2;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -73,6 +77,10 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return "IVERMECTIN";
       case BeneficiaryType.albendazole:
         return "ALBENDAZOLE";
+      case BeneficiaryType.spaq1:
+        return "SPAQ1";
+      case BeneficiaryType.spaq2:
+        return "SPAQ2";
     }
   }
 }

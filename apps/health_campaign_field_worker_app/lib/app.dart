@@ -127,7 +127,7 @@ class MainApplicationState extends State<MainApplication>
             ],
             child: BlocBuilder<AppInitializationBloc, AppInitializationState>(
               builder: (context, appConfigState) {
-                const defaultLocale = Locale('fr', 'SN');
+                const defaultLocale = Locale('en', 'NG');
 
                 return BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, authState) {
@@ -145,7 +145,7 @@ class MainApplicationState extends State<MainApplication>
 
                     final localizationModulesList = appConfig.backendInterface;
                     // final firstLanguage = appConfig.languages?.first.value;
-                    const firstLanguage = 'fr_SN';
+                    const firstLanguage = 'en_NG';
                     final languages = appConfig.languages;
 
                     return MultiBlocProvider(

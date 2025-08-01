@@ -111,7 +111,7 @@ class _IsolateStartRequest {
 
 /* Singleton class : 
 Same instance be used by Background service and Main method */
-class LocalSqlDataStore extends _$LocalSqlDataStore {
+class LocalSqlDataStore extends _$_IsolateStartRequest {
   static LocalSqlDataStore? _instance;
 
   // Private constructor
