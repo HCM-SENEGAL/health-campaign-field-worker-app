@@ -38791,8 +38791,8 @@ class HFReferralCompanion extends UpdateCompanion<HFReferralData> {
   }
 }
 
-abstract class _$LocalSqlDataStore extends GeneratedDatabase {
-  _$LocalSqlDataStore(QueryExecutor e) : super(e);
+abstract class _$_IsolateStartRequest extends GeneratedDatabase {
+  _$_IsolateStartRequest(QueryExecutor e) : super(e);
   late final $AttendanceRegisterTable attendanceRegister =
       $AttendanceRegisterTable(this);
   late final $AttendanceTable attendance = $AttendanceTable(this);

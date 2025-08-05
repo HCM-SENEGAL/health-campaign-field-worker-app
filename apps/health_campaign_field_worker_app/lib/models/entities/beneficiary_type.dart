@@ -14,5 +14,7 @@ enum BeneficiaryType {
   @MappableValue("COB2") coblister2,
   @MappableValue("IVERMECTIN") ivermectin,
   @MappableValue("ALBENDAZOLE") albendazole,
+  @MappableValue("SPAQ1") spaq1,
+  @MappableValue("SPAQ2") spaq2,
   ;
 }
