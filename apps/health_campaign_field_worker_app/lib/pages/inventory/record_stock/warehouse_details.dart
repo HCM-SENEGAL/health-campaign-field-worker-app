@@ -279,15 +279,9 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    isDistributor && !isWareHouseMgr
-                                        ? localizations.translate(
-                                            i18.stockDetails
-                                                .transactionDetailsLabel,
-                                          )
-                                        : localizations.translate(
-                                            i18.warehouseDetails
-                                                .warehouseDetailsLabel,
-                                          ),
+                                    localizations.translate(
+                                      i18.stockDetails.stockDetailsLabel,
+                                    ),
                                     style: theme.textTheme.displayMedium,
                                   ),
                                   Column(children: [
