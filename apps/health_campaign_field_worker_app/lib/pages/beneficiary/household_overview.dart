@@ -71,6 +71,7 @@ class _HouseholdOverviewPageState
                       return ScrollableContent(
                         header: BackNavigationHelpHeaderWidget(
                           handleback: () {
+                            context.router.pop();
                             context
                                 .read<SearchBlocWrapper>()
                                 .searchHouseholdsBloc

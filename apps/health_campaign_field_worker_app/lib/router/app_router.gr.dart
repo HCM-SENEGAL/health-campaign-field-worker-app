@@ -149,6 +149,7 @@ class _$AppRouter extends RootStackRouter {
           key: args.key,
           appLocalizations: args.appLocalizations,
           enableViewHousehold: args.enableViewHousehold,
+          name: args.name,
         ),
       );
     },
@@ -348,6 +349,30 @@ class _$AppRouter extends RootStackRouter {
         child: HouseholdLocationPage(
           key: args.key,
           appLocalizations: args.appLocalizations,
+        ),
+      );
+    },
+    SummaryRoute.name: (routeData) {
+      final args = routeData.argsAs<SummaryRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: SummaryPage(
+          key: args.key,
+          appLocalizations: args.appLocalizations,
+          name: args.name,
+          individualModel: args.individualModel,
+        ),
+      );
+    },
+    BeneficiarySummaryRoute.name: (routeData) {
+      final args = routeData.argsAs<BeneficiarySummaryRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: BeneficiarySummaryPage(
+          key: args.key,
+          appLocalizations: args.appLocalizations,
+          name: args.name,
+          individualModel: args.individualModel,
         ),
       );
     },
@@ -777,6 +802,16 @@ class _$AppRouter extends RootStackRouter {
                 RouteConfig(
                   HouseholdLocationRoute.name,
                   path: 'household-location',
+                  parent: BeneficiaryRegistrationWrapperRoute.name,
+                ),
+                RouteConfig(
+                  SummaryRoute.name,
+                  path: 'beneficiary-summary',
+                  parent: BeneficiaryRegistrationWrapperRoute.name,
+                ),
+                RouteConfig(
+                  BeneficiarySummaryRoute.name,
+                  path: 'beneficiary-summary-page',
                   parent: BeneficiaryRegistrationWrapperRoute.name,
                 ),
               ],
@@ -1473,6 +1508,7 @@ class BeneficiaryAcknowledgementRoute
     Key? key,
     AppLocalizations? appLocalizations,
     bool? enableViewHousehold,
+    dynamic name,
   }) : super(
           BeneficiaryAcknowledgementRoute.name,
           path: 'beneficiary-acknowledgement',
@@ -1480,6 +1516,7 @@ class BeneficiaryAcknowledgementRoute
             key: key,
             appLocalizations: appLocalizations,
             enableViewHousehold: enableViewHousehold,
+            name: name,
           ),
         );
 
@@ -1491,6 +1528,7 @@ class BeneficiaryAcknowledgementRouteArgs {
     this.key,
     this.appLocalizations,
     this.enableViewHousehold,
+    this.name,
   });
 
   final Key? key;
@@ -1499,9 +1537,11 @@ class BeneficiaryAcknowledgementRouteArgs {
 
   final bool? enableViewHousehold;
 
+  final dynamic name;
+
   @override
   String toString() {
-    return 'BeneficiaryAcknowledgementRouteArgs{key: $key, appLocalizations: $appLocalizations, enableViewHousehold: $enableViewHousehold}';
+    return 'BeneficiaryAcknowledgementRouteArgs{key: $key, appLocalizations: $appLocalizations, enableViewHousehold: $enableViewHousehold, name: $name}';
   }
 }
 
@@ -2142,6 +2182,95 @@ class HouseholdLocationRouteArgs {
   @override
   String toString() {
     return 'HouseholdLocationRouteArgs{key: $key, appLocalizations: $appLocalizations}';
+  }
+}
+
+/// generated route for
+/// [SummaryPage]
+class SummaryRoute extends PageRouteInfo<SummaryRouteArgs> {
+  SummaryRoute({
+    Key? key,
+    AppLocalizations? appLocalizations,
+    required dynamic name,
+    IndividualModel? individualModel,
+  }) : super(
+          SummaryRoute.name,
+          path: 'beneficiary-summary',
+          args: SummaryRouteArgs(
+            key: key,
+            appLocalizations: appLocalizations,
+            name: name,
+            individualModel: individualModel,
+          ),
+        );
+
+  static const String name = 'SummaryRoute';
+}
+
+class SummaryRouteArgs {
+  const SummaryRouteArgs({
+    this.key,
+    this.appLocalizations,
+    required this.name,
+    this.individualModel,
+  });
+
+  final Key? key;
+
+  final AppLocalizations? appLocalizations;
+
+  final dynamic name;
+
+  final IndividualModel? individualModel;
+
+  @override
+  String toString() {
+    return 'SummaryRouteArgs{key: $key, appLocalizations: $appLocalizations, name: $name, individualModel: $individualModel}';
+  }
+}
+
+/// generated route for
+/// [BeneficiarySummaryPage]
+class BeneficiarySummaryRoute
+    extends PageRouteInfo<BeneficiarySummaryRouteArgs> {
+  BeneficiarySummaryRoute({
+    Key? key,
+    AppLocalizations? appLocalizations,
+    required dynamic name,
+    required IndividualModel individualModel,
+  }) : super(
+          BeneficiarySummaryRoute.name,
+          path: 'beneficiary-summary-page',
+          args: BeneficiarySummaryRouteArgs(
+            key: key,
+            appLocalizations: appLocalizations,
+            name: name,
+            individualModel: individualModel,
+          ),
+        );
+
+  static const String name = 'BeneficiarySummaryRoute';
+}
+
+class BeneficiarySummaryRouteArgs {
+  const BeneficiarySummaryRouteArgs({
+    this.key,
+    this.appLocalizations,
+    required this.name,
+    required this.individualModel,
+  });
+
+  final Key? key;
+
+  final AppLocalizations? appLocalizations;
+
+  final dynamic name;
+
+  final IndividualModel individualModel;
+
+  @override
+  String toString() {
+    return 'BeneficiarySummaryRouteArgs{key: $key, appLocalizations: $appLocalizations, name: $name, individualModel: $individualModel}';
   }
 }
 

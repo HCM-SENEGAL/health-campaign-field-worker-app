@@ -71,6 +71,7 @@ class Constants {
   late Future<Isar> _isar;
   late String _version;
   static final Constants _instance = Constants._();
+  final String dateMonthYearFormat = 'dd MMM yyyy';
   Constants._() {
     _isar = openIsar();
   }
