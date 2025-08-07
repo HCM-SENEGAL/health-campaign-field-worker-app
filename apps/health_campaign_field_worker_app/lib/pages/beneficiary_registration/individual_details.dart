@@ -50,6 +50,8 @@ class _IndividualDetailsPageState
   static const _yearsKey = 'years';
   static const _genderKey = 'gender';
   static const _mobileNumberKey = 'mobileNumber';
+  static const _pregnantKey = 'pregnant';
+  static const _hasChildBelow6MonthsKey = 'hasChildBelow6Months';
   bool isDuplicateTag = false;
   static const maxLength = 200;
   final clickedStatus = ValueNotifier<bool>(false);
@@ -57,6 +59,10 @@ class _IndividualDetailsPageState
   // static const _disabilityTypeKey = 'disabilityType';
   // static const _heightKey = 'height';
   bool isHeadAgeValid = true;
+  bool isFemale = false;
+  bool hasAgeAbove16Years = false;
+  final String yes = 'YES';
+  final String no = 'NO';
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +119,7 @@ class _IndividualDetailsPageState
                               if (form.control(_dobKey).value == null) {
                                 form.control(_dobKey).setErrors({'': true});
                               }
-                              if (!widget.isHeadOfHousehold &&
-                                  form.control(_idTypeKey).value == null) {
+                              if (form.control(_idTypeKey).value == null) {
                                 form.control(_idTypeKey).setErrors({'': true});
                               }
                               if (!isHeadAgeValid) {
@@ -196,9 +201,8 @@ class _IndividualDetailsPageState
                                   final scannerBloc =
                                       context.read<ScannerBloc>();
 
-                                  if (!widget.isHeadOfHousehold &&
-                                      (scannerBloc.state.duplicate ||
-                                          scannerBloc.state.qrcodes.isEmpty)) {
+                                  if (scannerBloc.state.duplicate ||
+                                      scannerBloc.state.qrcodes.isEmpty) {
                                     DigitToast.show(
                                       context,
                                       options: DigitToastOptions(
@@ -298,7 +302,6 @@ class _IndividualDetailsPageState
 
                                   if (tag != null &&
                                       tag != projectBeneficiaryModel?.tag &&
-                                      !widget.isHeadOfHousehold &&
                                       (scannerBloc.state.duplicate ||
                                           scannerBloc.state.qrcodes.isEmpty)) {
                                     DigitToast.show(
@@ -366,10 +369,8 @@ class _IndividualDetailsPageState
                                     final scannerBloc =
                                         context.read<ScannerBloc>();
 
-                                    if (!widget.isHeadOfHousehold &&
-                                        (scannerBloc.state.duplicate ||
-                                            scannerBloc
-                                                .state.qrcodes.isEmpty)) {
+                                    if (scannerBloc.state.duplicate ||
+                                        scannerBloc.state.qrcodes.isEmpty) {
                                       DigitToast.show(
                                         context,
                                         options: DigitToastOptions(
@@ -544,55 +545,65 @@ class _IndividualDetailsPageState
                               ),
                             ),
                             Offstage(
-                              offstage: widget.isHeadOfHousehold,
-                              child: BlocBuilder<AppInitializationBloc,
-                                  AppInitializationState>(
-                                builder: (context, state) => state.maybeWhen(
-                                  orElse: () => const Offstage(),
-                                  initialized: (appConfiguration, _) {
-                                    final idTypeOptions =
-                                        appConfiguration.idTypeOptions ??
-                                            <IdTypeOptions>[];
+                              offstage: !widget.isHeadOfHousehold,
+                              child: Column(
+                                children: [
+                                  DigitCheckbox(
+                                    label: localizations.translate(
+                                      i18.individualDetails.checkboxLabelText,
+                                    ),
+                                    value: widget.isHeadOfHousehold,
+                                  ),
+                                  const SizedBox(height: 12),
+                                ],
+                              ),
+                            ),
+                            BlocBuilder<AppInitializationBloc,
+                                AppInitializationState>(
+                              builder: (context, state) => state.maybeWhen(
+                                orElse: () => const Offstage(),
+                                initialized: (appConfiguration, _) {
+                                  final idTypeOptions =
+                                      appConfiguration.idTypeOptions ??
+                                          <IdTypeOptions>[];
 
-                                    return individualDetailsShowcaseData.idType
-                                        .buildWith(
-                                      child:
-                                          DigitReactiveSearchDropdown<String>(
-                                        label: localizations.translate(
-                                          i18.individualDetails.idTypeLabelText,
-                                        ),
-                                        form: form,
-                                        menuItems: idTypeOptions.map(
-                                          (e) {
-                                            return e.code;
-                                          },
-                                        ).toList(),
-                                        formControlName: _idTypeKey,
-                                        valueMapper: (value) {
-                                          return localizations.translate(value);
-                                        },
-                                        onSelected: (value) {
-                                          setState(() {
-                                            if (value == 'DEFAULT') {
-                                              form.control(_idNumberKey).value =
-                                                  IdGen.i.identifier.toString();
-                                            } else {
-                                              form.control(_idNumberKey).value =
-                                                  null;
-                                            }
-                                          });
-                                        },
-                                        isRequired: !widget.isHeadOfHousehold,
-                                        validationMessage:
-                                            localizations.translate(
-                                          i18.common.corecommonRequired,
-                                        ),
-                                        emptyText: localizations
-                                            .translate(i18.common.noMatchFound),
+                                  return individualDetailsShowcaseData.idType
+                                      .buildWith(
+                                    child: DigitReactiveSearchDropdown<String>(
+                                      label: localizations.translate(
+                                        i18.individualDetails.idTypeLabelText,
                                       ),
-                                    );
-                                  },
-                                ),
+                                      form: form,
+                                      menuItems: idTypeOptions.map(
+                                        (e) {
+                                          return e.code;
+                                        },
+                                      ).toList(),
+                                      formControlName: _idTypeKey,
+                                      valueMapper: (value) {
+                                        return localizations.translate(value);
+                                      },
+                                      onSelected: (value) {
+                                        setState(() {
+                                          if (value == 'DEFAULT') {
+                                            form.control(_idNumberKey).value =
+                                                IdGen.i.identifier.toString();
+                                          } else {
+                                            form.control(_idNumberKey).value =
+                                                null;
+                                          }
+                                        });
+                                      },
+                                      isRequired: !widget.isHeadOfHousehold,
+                                      validationMessage:
+                                          localizations.translate(
+                                        i18.common.corecommonRequired,
+                                      ),
+                                      emptyText: localizations
+                                          .translate(i18.common.noMatchFound),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             if (form.control(_idTypeKey).value != 'DEFAULT' &&
@@ -640,22 +651,9 @@ class _IndividualDetailsPageState
                                       );
                                     },
                                   ),
-                                  const SizedBox(height: 4),
                                 ],
                               ),
-                            if (form.control(_idTypeKey).value == 'DEFAULT')
-                              const SizedBox(
-                                height: kPadding,
-                              ),
-                            Offstage(
-                              offstage: !widget.isHeadOfHousehold,
-                              child: DigitCheckbox(
-                                label: localizations.translate(
-                                  i18.individualDetails.checkboxLabelText,
-                                ),
-                                value: widget.isHeadOfHousehold,
-                              ),
-                            ),
+                            const SizedBox(height: 12),
                             individualDetailsShowcaseData.dateOfBirth.buildWith(
                               child: DigitDobPicker(
                                 datePickerFormControl: _dobKey,
@@ -717,6 +715,9 @@ class _IndividualDetailsPageState
                                         }
                                         formControl.removeError('');
                                       }
+                                      setState(() {
+                                        hasAgeAbove16Years = age.years >= 16;
+                                      });
                                     }
                                   }
                                 },
@@ -754,119 +755,251 @@ class _IndividualDetailsPageState
                                               i18.common.corecommonRequired,
                                             ),
                                       },
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isFemale = value == 'FEMALE';
+                                        });
+                                      },
                                     ),
                                   );
                                 },
                               ),
                             ),
-                            Offstage(
-                              offstage: !widget.isHeadOfHousehold,
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  kPadding / 2,
-                                  kPadding,
-                                  kPadding / 2,
-                                  0,
-                                ),
-                                child: DigitTextFormField(
-                                  keyboardType: TextInputType.number,
-                                  formControlName: _mobileNumberKey,
-                                  label: localizations.translate(
-                                    i18.individualDetails.mobileNumberLabelText,
+                            if (form.control(_genderKey).value == 'FEMALE' &&
+                                form.control(_dobKey).value != null)
+                              Offstage(
+                                offstage: DigitDateUtils.calculateAge((form
+                                                .control(_dobKey)
+                                                .value as DateTime?)!)
+                                            .years <
+                                        16 ||
+                                    form.control(_genderKey).value != 'FEMALE',
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    kPadding / 2,
+                                    kPadding,
+                                    kPadding / 2,
+                                    0,
                                   ),
-                                  maxLength: 9,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                      RegExp("[0-9]"),
-                                    ),
-                                  ],
-                                  validationMessages: {
-                                    'mobileNumber': (object) =>
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 16),
+                                      Text(
                                         localizations.translate(i18
                                             .individualDetails
-                                            .mobileNumberInvalidFormatValidationMessage),
-                                  },
+                                            .memberPreganentLabelText),
+                                        style: theme.textTheme.bodyLarge,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: RadioListTile<String>(
+                                              title:
+                                                  Text(localizations.translate(
+                                                i18.common.coreCommonYes,
+                                              )),
+                                              value: yes,
+                                              groupValue: form
+                                                  .control(_pregnantKey)
+                                                  .value as String?,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  form
+                                                      .control(_pregnantKey)
+                                                      .value = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: RadioListTile<String>(
+                                              title:
+                                                  Text(localizations.translate(
+                                                i18.common.coreCommonNo,
+                                              )),
+                                              value: no,
+                                              groupValue: form
+                                                  .control(_pregnantKey)
+                                                  .value as String?,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  form
+                                                      .control(_pregnantKey)
+                                                      .value = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        localizations.translate(i18
+                                            .individualDetails
+                                            .hasChildBelow6MonthsLabelText),
+                                        style: theme.textTheme.bodyLarge,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: RadioListTile<String>(
+                                              title:
+                                                  Text(localizations.translate(
+                                                i18.common.coreCommonYes,
+                                              )),
+                                              value: yes,
+                                              groupValue: form
+                                                  .control(
+                                                    _hasChildBelow6MonthsKey,
+                                                  )
+                                                  .value as String?,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  form
+                                                      .control(
+                                                        _hasChildBelow6MonthsKey,
+                                                      )
+                                                      .value = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: RadioListTile<String>(
+                                              title:
+                                                  Text(localizations.translate(
+                                                i18.common.coreCommonNo,
+                                              )),
+                                              value: no,
+                                              groupValue: form
+                                                  .control(
+                                                    _hasChildBelow6MonthsKey,
+                                                  )
+                                                  .value as String?,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  form
+                                                      .control(
+                                                        _hasChildBelow6MonthsKey,
+                                                      )
+                                                      .value = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                kPadding / 2,
+                                kPadding,
+                                kPadding / 2,
+                                0,
+                              ),
+                              child: DigitTextFormField(
+                                keyboardType: TextInputType.number,
+                                formControlName: _mobileNumberKey,
+                                label: localizations.translate(
+                                  i18.individualDetails.mobileNumberLabelText,
+                                ),
+                                maxLength: 9,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp("[0-9]"),
+                                  ),
+                                ],
+                                validationMessages: {
+                                  'mobileNumber': (object) =>
+                                      localizations.translate(i18
+                                          .individualDetails
+                                          .mobileNumberInvalidFormatValidationMessage),
+                                },
                               ),
                             ),
                             const SizedBox(height: 16),
-                            if (!widget.isHeadOfHousehold)
-                              BlocBuilder<ScannerBloc, ScannerState>(
-                                builder: (context, state) => state
-                                        .qrcodes.isNotEmpty
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                3,
-                                            child: Text(
-                                              localizations.translate(
-                                                i18.deliverIntervention
-                                                    .voucherCode,
-                                              ),
-                                              style:
-                                                  theme.textTheme.headlineSmall,
+                            BlocBuilder<ScannerBloc, ScannerState>(
+                              builder: (context, state) => state
+                                      .qrcodes.isNotEmpty
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              3,
+                                          child: Text(
+                                            localizations.translate(
+                                              i18.deliverIntervention
+                                                  .voucherCode,
                                             ),
+                                            style:
+                                                theme.textTheme.headlineSmall,
                                           ),
-                                          Flexible(
-                                            child: Text(
-                                              overflow: TextOverflow.ellipsis,
-                                              localizations.translate(
-                                                  state.qrcodes.last),
-                                            ),
-                                          ),
-                                          IconButton(
-                                            color: theme.colorScheme.secondary,
-                                            icon: const Icon(Icons.qr_code),
-                                            onPressed: () {
-                                              context.read<ScannerBloc>().add(
-                                                    const ScannerEvent
-                                                        .handleScanner(
-                                                      [],
-                                                      [],
-                                                    ),
-                                                  );
-                                              // TODO : [Need to handle the Scanner event];
-                                              // context.read<ScannerBloc>().add(ScannerScanEvent())
-                                              context.router
-                                                  .push(QRScannerRoute(
-                                                quantity: 1,
-                                                isGS1code: false,
-                                                sinlgleValue: true,
-                                                isEditEnabled: true,
-                                              ));
-                                            },
-                                          ),
-                                        ],
-
-                                        // ignore: no-empty-block
-                                      )
-                                    : DigitOutlineIconButton(
-                                        onPressed: () {
-                                          context.read<ScannerBloc>().add(
-                                                const ScannerEvent
-                                                    .handleScanner(
-                                                  [],
-                                                  [],
-                                                ),
-                                              );
-                                          context.router.push(QRScannerRoute(
-                                            quantity: 1,
-                                            isGS1code: false,
-                                            sinlgleValue: true,
-                                          ));
-                                        },
-                                        icon: Icons.qr_code,
-                                        label: localizations.translate(
-                                          i18.individualDetails
-                                              .linkVoucherToIndividual,
                                         ),
+                                        Flexible(
+                                          child: Text(
+                                            overflow: TextOverflow.ellipsis,
+                                            localizations
+                                                .translate(state.qrcodes.last),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          color: theme.colorScheme.secondary,
+                                          icon: const Icon(Icons.qr_code),
+                                          onPressed: () {
+                                            context.read<ScannerBloc>().add(
+                                                  const ScannerEvent
+                                                      .handleScanner(
+                                                    [],
+                                                    [],
+                                                  ),
+                                                );
+                                            // TODO : [Need to handle the Scanner event];
+                                            // context.read<ScannerBloc>().add(ScannerScanEvent())
+                                            context.router.push(QRScannerRoute(
+                                              quantity: 1,
+                                              isGS1code: false,
+                                              sinlgleValue: true,
+                                              isEditEnabled: true,
+                                            ));
+                                          },
+                                        ),
+                                      ],
+
+                                      // ignore: no-empty-block
+                                    )
+                                  : DigitOutlineIconButton(
+                                      onPressed: () {
+                                        context.read<ScannerBloc>().add(
+                                              const ScannerEvent.handleScanner(
+                                                [],
+                                                [],
+                                              ),
+                                            );
+                                        context.router.push(QRScannerRoute(
+                                          quantity: 1,
+                                          isGS1code: false,
+                                          sinlgleValue: true,
+                                        ));
+                                      },
+                                      icon: Icons.qr_code,
+                                      label: localizations.translate(
+                                        i18.individualDetails
+                                            .linkVoucherToIndividual,
                                       ),
-                              ),
+                                    ),
+                            ),
                           ],
                         ),
                         // Padding(
@@ -1062,6 +1195,16 @@ class _IndividualDetailsPageState
               "projectTypeId",
               projectTypeId,
             ),
+          if (form.control(_pregnantKey).value != null)
+            AdditionalField(
+              AdditionalFieldsType.pregnant.name,
+              form.control(_pregnantKey).value,
+            ),
+          if (form.control(_hasChildBelow6MonthsKey).value != null)
+            AdditionalField(
+              AdditionalFieldsType.hasChildBelow6Months.name,
+              form.control(_hasChildBelow6MonthsKey).value,
+            ),
         ],
       ),
     );
@@ -1139,6 +1282,24 @@ class _IndividualDetailsPageState
               },
             ),
       ),
+      _pregnantKey: FormControl<String>(
+        validators: isFemale && hasAgeAbove16Years ? [Validators.required] : [],
+        value: individual?.additionalFields?.fields
+                .firstWhereOrNull(
+                  (element) => element.key == 'pregnant',
+                )
+                ?.value ??
+            'NO',
+      ),
+      _hasChildBelow6MonthsKey: FormControl<String>(
+        validators: isFemale && hasAgeAbove16Years ? [Validators.required] : [],
+        value: individual?.additionalFields?.fields
+                .firstWhereOrNull(
+                  (element) => element.key == 'hasChildBelow6Months',
+                )
+                ?.value ??
+            'NO',
+      ),
       // _heightKey: FormControl<String>(
       //   value: height,
       //   validators: [Validators.required],
@@ -1151,13 +1312,11 @@ class _IndividualDetailsPageState
         value: individual?.identifiers?.firstOrNull?.identifierType,
       ),
       _idNumberKey: FormControl<String>(
-        validators: widget.isHeadOfHousehold
-            ? []
-            : [
-                Validators.required,
-                CustomValidator.requiredMin2,
-                Validators.maxLength(64),
-              ],
+        validators: [
+          Validators.required,
+          CustomValidator.requiredMin2,
+          Validators.maxLength(64),
+        ],
         value: individual?.identifiers?.firstOrNull?.identifierId,
       ),
       // _disabilityTypeKey:

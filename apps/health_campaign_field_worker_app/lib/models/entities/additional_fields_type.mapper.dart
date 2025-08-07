@@ -25,6 +25,10 @@ class AdditionalFieldsTypeMapper extends EnumMapper<AdditionalFieldsType> {
   @override
   AdditionalFieldsType decode(dynamic value) {
     switch (value) {
+      case "pregnant":
+        return AdditionalFieldsType.pregnant;
+      case "hasChildBelow6Months":
+        return AdditionalFieldsType.hasChildBelow6Months;
       case "deliveryStrategy":
         return AdditionalFieldsType.deliveryStrategy;
       case "cycleIndex":
@@ -67,6 +71,10 @@ class AdditionalFieldsTypeMapper extends EnumMapper<AdditionalFieldsType> {
   @override
   dynamic encode(AdditionalFieldsType self) {
     switch (self) {
+      case AdditionalFieldsType.pregnant:
+        return "pregnant";
+      case AdditionalFieldsType.hasChildBelow6Months:
+        return "hasChildBelow6Months";
       case AdditionalFieldsType.deliveryStrategy:
         return "deliveryStrategy";
       case AdditionalFieldsType.cycleIndex:
