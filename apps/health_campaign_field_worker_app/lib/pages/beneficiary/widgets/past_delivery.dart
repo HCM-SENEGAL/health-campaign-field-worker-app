@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:digit_components/digit_components.dart';
 import 'package:digit_components/models/digit_table_model.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ Widget buildTableContent(
             fetchProductVariant(item, individualModel)!.productVariants ?? [];
 
         String resource = '';
+        String quantity = '';
 
         if (variant != null && productVariants.isNotEmpty) {
           final skuList = productVariants.map(
@@ -80,6 +82,13 @@ Widget buildTableContent(
           );
 
           resource = skuList.join('+');
+
+          final qty = productVariants
+              .firstWhereOrNull((element) =>
+                  variant.any((v) => v.id == element.productVariantId))
+              ?.quantity;
+
+          quantity = (qty?.toInt().toString()) ?? '0';
         }
 
         return Column(
@@ -110,12 +119,12 @@ Widget buildTableContent(
                   // otherwise, display an empty cell.
 
                   TableData(
-                    '${localizations.translate(i18.beneficiaryDetails.beneficiaryDeliveryText)} ${deliverInterventionState.dose}',
+                    '${localizations.translate(i18.beneficiaryDetails.beneficiaryDeliveryTDOText)} ${deliverInterventionState.dose}',
                     cellKey: 'dose',
                   ),
                   // Display the SKU value in the second column.
                   TableData(
-                    '${localizations.translate(resource.toString())}${deliverInterventionState.dose == 1 ? '(SP + AQ)' : '(AQ)'}',
+                    '$quantity ${localizations.translate(i18.deliverIntervention.capsuleLabel)} ${localizations.translate(resource.toString())}',
                     cellKey: 'resources',
                   ),
                 ]),

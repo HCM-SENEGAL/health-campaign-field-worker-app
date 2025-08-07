@@ -67,18 +67,20 @@ class _ResourceBeneficiaryCardState
                     menuItems: productVariants,
                     formControlName: 'resourceDelivered.${widget.cardIndex}',
                     valueMapper: (value) {
-                      final doseString =
-                          widget.doseIndex == 1 ? '(SP + AQ)' : '(AQ)';
+                      // final doseString =
+                      //     widget.doseIndex == 1 ? '(SP + AQ)' : '(AQ)';
                       if (widget.totalItems > 1) {
                         final skuList = productVariants.map(
                           (e) => e.sku,
                         );
 
-                        return skuList.join(' + ') + doseString;
+                        return skuList.join(' + ');
+                        //  + doseString;
                       }
 
                       return localizations.translate(
-                        (value.sku ?? value.id) + doseString,
+                        (value.sku ?? value.id),
+                        //  + doseString,
                       );
                     },
                     isRequired: true,
