@@ -8,14 +8,17 @@ import '../../../widgets/localized.dart';
 import '../../blocs/search_households/search_bloc_common_wrapper.dart';
 import '../../blocs/search_households/search_households.dart';
 import '../../blocs/search_households/search_by_head.dart';
+import '../../utils/utils.dart';
 
 class BeneficiaryAcknowledgementPage extends LocalizedStatefulWidget {
   final bool? enableViewHousehold;
+  final dynamic name;
 
   const BeneficiaryAcknowledgementPage({
     super.key,
     super.appLocalizations,
     this.enableViewHousehold,
+    this.name,
   });
 
   @override
@@ -25,6 +28,7 @@ class BeneficiaryAcknowledgementPage extends LocalizedStatefulWidget {
 
 class _BeneficiaryAcknowledgementPageState
     extends LocalizedState<BeneficiaryAcknowledgementPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

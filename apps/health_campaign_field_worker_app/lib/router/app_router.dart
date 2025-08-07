@@ -68,6 +68,8 @@ import '../pages/reports/beneficiary/beneficaries_report.dart';
 import '../pages/search_beneficiary.dart';
 import '../pages/search_referrals.dart';
 import '../pages/unauthenticated.dart';
+import '../pages/beneficiary_registration/summary_page.dart';
+import '../pages/beneficiary_registration/beneficiary_summary_page.dart';
 
 export 'package:auto_route/auto_route.dart';
 
@@ -109,6 +111,14 @@ part 'app_router.gr.dart';
               page: HouseholdLocationPage,
               path: 'household-location',
               initial: true,
+            ),
+            AutoRoute(
+              page: SummaryPage,
+              path: 'beneficiary-summary',
+            ),
+            AutoRoute(
+              page: BeneficiarySummaryPage,
+              path: 'beneficiary-summary-page',
             ),
           ],
         ),

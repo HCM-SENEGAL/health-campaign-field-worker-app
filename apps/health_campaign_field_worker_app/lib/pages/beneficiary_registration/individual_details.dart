@@ -64,6 +64,41 @@ class _IndividualDetailsPageState
   final String yes = 'YES';
   final String no = 'NO';
 
+  onSubmit(IndividualModel individual, bool isCreate) async {
+    final bloc = context.read<BeneficiaryRegistrationBloc>();
+    final router = context.router;
+    final name = individual.name?.givenName ?? '';
+
+    if (context.mounted) {
+      if (isCreate) {
+        router.push(SummaryRoute(name: name, individualModel: individual));
+      } else {
+        const SearchHouseholdsClearEvent();
+        SearchHouseholdsSearchByHouseholdHeadEvent(
+          searchText: name,
+          projectId: context.projectId,
+          isProximityEnabled: false,
+          limit: 10,
+          offset: 0,
+        );
+        router.popUntil(
+          (route) => route.settings.name == SearchBeneficiaryRoute.name,
+        );
+        router.push(BeneficiaryAcknowledgementRoute(
+          enableViewHousehold: true,
+        ));
+      }
+    }
+  }
+
+  onBeneficiarySubmit(name, individual) async {
+    final router = context.router;
+    router.push(BeneficiarySummaryRoute(
+      name: name,
+      individualModel: individual,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<BeneficiaryRegistrationBloc>();
@@ -78,23 +113,7 @@ class _IndividualDetailsPageState
             BeneficiaryRegistrationBloc, BeneficiaryRegistrationState>(
           listener: (context, state) {
             state.mapOrNull(
-              persisted: (value) {
-                if (value.navigateToRoot) {
-                  (router.parent() as StackRouter).pop();
-                } else {
-                  (router.parent() as StackRouter).pop();
-                  context.read<SearchBlocWrapper>().searchHouseholdsBloc.add(
-                        SearchHouseholdsEvent.searchByHousehold(
-                          householdModel: value.householdModel,
-                          projectId: context.projectId,
-                          isProximityEnabled: false,
-                        ),
-                      );
-                  router.push(BeneficiaryAcknowledgementRoute(
-                    enableViewHousehold: true,
-                  ));
-                }
-              },
+              persisted: (value) {},
             );
           },
           builder: (context, state) {
@@ -233,7 +252,7 @@ class _IndividualDetailsPageState
                                           label: localizations.translate(
                                             i18.common.coreCommonSubmit,
                                           ),
-                                          action: (context) {
+                                          action: (context) async {
                                             clickedStatus.value = true;
                                             Navigator.of(
                                               context,
@@ -254,6 +273,7 @@ class _IndividualDetailsPageState
                                     );
 
                                     if (submit ?? false) {
+                                      await onSubmit(individual, true);
                                       if (context.mounted) {
                                         final scannerBloc =
                                             context.read<ScannerBloc>();
@@ -424,21 +444,9 @@ class _IndividualDetailsPageState
                                       );
 
                                       if (submit ?? false) {
-                                        bloc.add(
-                                          BeneficiaryRegistrationAddMemberEvent(
-                                            beneficiaryType:
-                                                context.beneficiaryType,
-                                            householdModel: householdModel,
-                                            individualModel: individual,
-                                            addressModel: addressModel,
-                                            userUuid: userId,
-                                            projectId: context.projectId,
-                                            tag: scannerBloc
-                                                    .state.qrcodes.isNotEmpty
-                                                ? scannerBloc
-                                                    .state.qrcodes.first
-                                                : null,
-                                          ),
+                                        onBeneficiarySubmit(
+                                          individual.name?.givenName ?? "",
+                                          individual,
                                         );
                                       }
                                     }

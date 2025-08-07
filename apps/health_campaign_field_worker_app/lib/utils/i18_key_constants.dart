@@ -51,6 +51,8 @@ const ineligibilityReasons = IneligibilityReasons();
 class Common {
   const Common();
 
+  String get coreCommonSummaryDetails => 'CORE_COMMON_SUMMARY_DETAILS';
+
   String get coreCommonContinue => 'CORE_COMMON_CONTINUE';
 
   String get coreCommonLoading => 'CORE_COMMON_LOADING';

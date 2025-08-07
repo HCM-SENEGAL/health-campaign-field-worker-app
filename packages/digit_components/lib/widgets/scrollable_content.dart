@@ -23,7 +23,7 @@ class ScrollableContent extends StatelessWidget {
       this.children = const <Widget>[],
       this.slivers = const [],
       this.backgroundColor,
-      this.enableFixedButton = false});
+      this.enableFixedButton = false, bool enableFixedDigitButton = false});
 
   @override
   Widget build(BuildContext context) {
