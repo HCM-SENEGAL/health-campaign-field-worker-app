@@ -76,6 +76,11 @@ class MemberCard extends StatelessWidget {
     final cycleIndex =
         context.selectedCycle.id == 0 ? "" : "0${context.selectedCycle.id}";
 
+    final isFemaleIneligible = checkIfFemaleIneligible(
+      individual,
+      context.selectedCycle,
+    );
+
     return Container(
       decoration: BoxDecoration(
         color: DigitTheme.instance.colorScheme.background,
@@ -186,17 +191,13 @@ class MemberCard extends StatelessWidget {
             ),
             child: Offstage(
               offstage: beneficiaryType != BeneficiaryType.individual,
-              child: getStatus(
-                context,
-                theme,
-                deliveryComment,
-                isHead,
-              ),
+              child: getStatus(context, theme, deliveryComment, isHead),
             ),
           ),
           Offstage(
             offstage: beneficiaryType != BeneficiaryType.individual ||
-                (isNotEligible ||
+                (isFemaleIneligible ||
+                        isNotEligible ||
                         isBeneficiaryIneligible ||
                         isBeneficiarySick ||
                         (!successfulDelivery && deliveryComment.isNotEmpty)) &&
@@ -205,7 +206,7 @@ class MemberCard extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: Column(
                 children: [
-                  isHead || isNotEligible
+                  isNotEligible || isFemaleIneligible
                       ? const Offstage()
                       : getButtonType(
                           context,
@@ -216,10 +217,11 @@ class MemberCard extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  isHead || isNotEligible
+                  isNotEligible || isFemaleIneligible
                       ? const Offstage()
                       : lastCycleRunning
-                          ? (isNotEligible ||
+                          ? (isFemaleIneligible ||
+                                  isNotEligible ||
                                   isBeneficiaryIneligible ||
                                   isBeneficiarySick ||
                                   (!successfulDelivery &&
@@ -1409,6 +1411,9 @@ class MemberCard extends StatelessWidget {
       context.selectedProjectType,
     );
 
+    final bool isFemaleIneligible =
+        checkIfFemaleIneligible(individual, context.selectedCycle);
+
     final lastCycleRunning = isLastCycleRunning(tasks, context.selectedCycle);
     final allDoseDelivered = allDosesDelivered(
       tasks,
@@ -1439,7 +1444,8 @@ class MemberCard extends StatelessWidget {
 
                   final futureTaskList = tasks
                       ?.where(
-                          (task) => task.status == Status.delivered.toValue())
+                        (task) => task.status == Status.delivered.toValue(),
+                      )
                       .toList();
 
                   if ((futureTaskList ?? []).isNotEmpty) {
@@ -1460,7 +1466,8 @@ class MemberCard extends StatelessWidget {
                   ),
                 ),
               )
-            : isNotEligible ||
+            : isFemaleIneligible ||
+                    isNotEligible ||
                     isBeneficiaryIneligible ||
                     isBeneficiarySick ||
                     (!successfulDelivery &&
@@ -1676,101 +1683,127 @@ class MemberCard extends StatelessWidget {
     final bool lastCycleRunning =
         isLastCycleRunning(tasks, context.selectedCycle);
 
+    final bool isFemaleIneligible =
+        checkIfFemaleIneligible(individual, context.selectedCycle);
+
     IconData icon;
     String iconText;
     Color iconTextColor = theme.colorScheme.error;
     Color iconColor = theme.colorScheme.error;
 
-    // TODO ceck with amit once
-    if (isHead) {
-      icon = Icons.info;
-      iconText = i18.householdOverView.householdOverViewHouseholderHeadLabel;
-      iconTextColor = theme.colorScheme.surfaceTint;
-      iconColor = theme.colorScheme.surfaceTint;
-    } else {
-      if (lastCycleRunning) {
-        if (dosesDelivered) {
-          if (!isDelivered ||
-              isNotEligible ||
-              isBeneficiaryRefused ||
-              isBeneficiaryIneligible ||
-              isBeneficiarySick ||
-              isBeneficiaryAbsent ||
-              isBeneficiaryReferred) {
-            icon = Icons.info_rounded;
-            iconText = (isNotEligible || isBeneficiaryIneligible)
-                ? i18.householdOverView.householdOverViewNotEligibleIconLabel
-                : isBeneficiaryReferred
-                    ? i18.householdOverView
-                        .householdOverViewBeneficiaryReferredLabel
-                    : isBeneficiaryRefused
-                        ? Status.beneficiaryRefused.toValue()
-                        : isBeneficiarySick
-                            ? Status.beneficiarySick.toValue()
-                            : isBeneficiaryAbsent
-                                ? Status.beneficiaryAbsent.toValue()
-                                : i18.householdOverView
-                                    .householdOverViewNotDeliveredIconLabel;
-          } else if (!successfulDelivery && deliveryComment.isNotEmpty) {
-            icon = Icons.info_rounded;
-            iconText = deliveryComment;
-          } else {
-            icon = Icons.check_circle;
-            iconText =
-                i18.householdOverView.householdOverViewDeliveredIconLabel;
-            iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
-            iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
-          }
-        } else if (isNotEligible ||
-            isBeneficiaryIneligible ||
-            isBeneficiaryReferred ||
+    if (lastCycleRunning) {
+      if (dosesDelivered) {
+        if (!isDelivered ||
+            isFemaleIneligible ||
+            isNotEligible ||
             isBeneficiaryRefused ||
+            isBeneficiaryIneligible ||
             isBeneficiarySick ||
             isBeneficiaryAbsent ||
-            (!successfulDelivery && deliveryComment.isNotEmpty)) {
+            isBeneficiaryReferred) {
           icon = Icons.info_rounded;
           iconText = (isNotEligible || isBeneficiaryIneligible)
               ? i18.householdOverView.householdOverViewNotEligibleIconLabel
-              : !successfulDelivery && deliveryComment.isNotEmpty
-                  ? deliveryComment
-                  : isBeneficiaryReferred
-                      ? i18.householdOverView
-                          .householdOverViewBeneficiaryReferredLabel
-                      : isBeneficiaryRefused &&
-                              !checkIfValidTimeForDose(
-                                tasks,
-                                context.selectedCycle,
-                              )
-                          ? Status.beneficiaryRefused.toValue()
-                          : isBeneficiarySick
-                              ? Status.beneficiarySick.toValue()
-                              : isBeneficiaryAbsent &&
-                                      !checkIfValidTimeForDose(
-                                        tasks,
-                                        context.selectedCycle,
-                                      )
-                                  ? Status.beneficiaryAbsent.toValue()
-                                  : i18.householdOverView
-                                      .householdOverViewNotDeliveredIconLabel;
-        } else if (doseIndex == 0 || validDelivery) {
+              : isBeneficiaryReferred
+                  ? i18.householdOverView
+                      .householdOverViewBeneficiaryReferredLabel
+                  : isBeneficiaryRefused
+                      ? Status.beneficiaryRefused.toValue()
+                      : isBeneficiarySick
+                          ? Status.beneficiarySick.toValue()
+                          : isBeneficiaryAbsent
+                              ? Status.beneficiaryAbsent.toValue()
+                              : i18.householdOverView
+                                  .householdOverViewNotDeliveredIconLabel;
+        } else if (!successfulDelivery && deliveryComment.isNotEmpty) {
           icon = Icons.info_rounded;
-          iconText = Status.notAdministered.toValue();
+          iconText = deliveryComment;
         } else {
           icon = Icons.check_circle;
-          iconText = Status.administered.toValue();
+          iconText = i18.householdOverView.householdOverViewDeliveredIconLabel;
           iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
           iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
         }
+      } else if (isNotEligible ||
+          isBeneficiaryIneligible ||
+          isBeneficiaryReferred ||
+          isBeneficiaryRefused ||
+          isBeneficiarySick ||
+          isBeneficiaryAbsent ||
+          (!successfulDelivery && deliveryComment.isNotEmpty)) {
+        icon = Icons.info_rounded;
+        iconText = (isNotEligible || isBeneficiaryIneligible)
+            ? i18.householdOverView.householdOverViewNotEligibleIconLabel
+            : !successfulDelivery && deliveryComment.isNotEmpty
+                ? deliveryComment
+                : isBeneficiaryReferred
+                    ? i18.householdOverView
+                        .householdOverViewBeneficiaryReferredLabel
+                    : isBeneficiaryRefused &&
+                            !checkIfValidTimeForDose(
+                              tasks,
+                              context.selectedCycle,
+                            )
+                        ? Status.beneficiaryRefused.toValue()
+                        : isBeneficiarySick
+                            ? Status.beneficiarySick.toValue()
+                            : isBeneficiaryAbsent &&
+                                    !checkIfValidTimeForDose(
+                                      tasks,
+                                      context.selectedCycle,
+                                    )
+                                ? Status.beneficiaryAbsent.toValue()
+                                : i18.householdOverView
+                                    .householdOverViewNotDeliveredIconLabel;
+      } else if (doseIndex == 0 || validDelivery) {
+        icon = Icons.info_rounded;
+        iconText = Status.notAdministered.toValue();
       } else {
-        if (isNotEligible || isBeneficiaryIneligible) {
-          icon = Icons.info_rounded;
-          iconText =
-              i18.householdOverView.householdOverViewNotEligibleIconLabel;
-        } else {
-          icon = Icons.info_rounded;
-          iconText = Status.notAdministered.toValue();
-        }
+        icon = Icons.check_circle;
+        iconText = Status.administered.toValue();
+        iconTextColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
+        iconColor = DigitTheme.instance.colorScheme.onSurfaceVariant;
       }
+    } else {
+      if (isNotEligible || isBeneficiaryIneligible) {
+        icon = Icons.info_rounded;
+        iconText = i18.householdOverView.householdOverViewNotEligibleIconLabel;
+      } else {
+        icon = Icons.info_rounded;
+        iconText = Status.notAdministered.toValue();
+      }
+    }
+
+    if (isHead) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: DigitIconButton(
+              icon: Icons.info,
+              iconSize: 20,
+              iconText: localizations.translate(
+                i18.householdOverView.householdOverViewHouseholderHeadLabel,
+              ),
+              iconTextColor: theme.colorScheme.surfaceTint,
+              iconColor: theme.colorScheme.surfaceTint,
+            ),
+          ),
+          const SizedBox(height: kPadding / 2),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: DigitIconButton(
+              icon: icon,
+              iconSize: 20,
+              iconText: localizations.translate(iconText),
+              iconTextColor: iconTextColor,
+              iconColor: iconColor,
+            ),
+          ),
+          const SizedBox(height: kPadding / 2),
+        ],
+      );
     }
 
     return Align(

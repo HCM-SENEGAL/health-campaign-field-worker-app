@@ -453,6 +453,54 @@ bool checkIfBeneficiaryIneligible(
   return isBeneficiaryIneligible;
 }
 
+bool checkIfFemaleIneligible(
+  IndividualModel individual,
+  Cycle? currentCycle,
+) {
+  if (individual.gender == Gender.female) {
+    final ageInYears = DigitDateUtils.calculateAge(
+      DigitDateUtils.getFormattedDateToDateTime(
+            individual.dateOfBirth!,
+          ) ??
+          DateTime.now(),
+    ).years;
+    final ageInMonths = DigitDateUtils.calculateAge(
+      DigitDateUtils.getFormattedDateToDateTime(
+            individual.dateOfBirth!,
+          ) ??
+          DateTime.now(),
+    ).months;
+
+    int totalAgeInMonths = ageInYears * 12 + ageInMonths;
+    if (currentCycle != null &&
+        currentCycle.startDate != null &&
+        currentCycle.endDate != null) {
+      if (totalAgeInMonths >= 16 * 12) {
+        bool isPregnant = (individual.additionalFields?.fields
+                .where((e) =>
+                    e.key == AdditionalFieldsType.pregnant.name &&
+                    e.value == 'YES')
+                .firstOrNull !=
+            null);
+        bool hasChildBelow6Months = (individual.additionalFields?.fields
+                .where((e) =>
+                    e.key == AdditionalFieldsType.hasChildBelow6Months.name &&
+                    e.value == 'YES')
+                .firstOrNull !=
+            null);
+
+        return isPregnant || hasChildBelow6Months;
+      }
+
+      return false;
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
 bool checkIfBeneficiaryReferred(
   List<TaskModel>? tasks,
 ) {
