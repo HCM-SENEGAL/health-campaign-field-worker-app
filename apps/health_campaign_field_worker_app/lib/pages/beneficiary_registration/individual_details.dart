@@ -93,6 +93,13 @@ class _IndividualDetailsPageState
     ));
   }
 
+  String extractLastPart(String url) {
+  final regex = RegExp(r'cps\.pnlp\.sn/patients/([a-fA-F0-9\-]+)$');
+  final match = regex.firstMatch(url);
+  
+  return match != null ? match.group(1)! : url;
+}
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<BeneficiaryRegistrationBloc>();
@@ -824,7 +831,8 @@ class _IndividualDetailsPageState
                                             child: Text(
                                               overflow: TextOverflow.ellipsis,
                                               localizations.translate(
-                                                  state.qrcodes.last),
+                                                extractLastPart(state.qrcodes.last,),),
+                                                  // state.qrcodes.last,),
                                             ),
                                           ),
                                           IconButton(

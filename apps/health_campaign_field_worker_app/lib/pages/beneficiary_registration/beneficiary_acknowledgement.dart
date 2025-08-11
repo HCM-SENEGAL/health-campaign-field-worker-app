@@ -28,13 +28,15 @@ class BeneficiaryAcknowledgementPage extends LocalizedStatefulWidget {
 
 class _BeneficiaryAcknowledgementPageState
     extends LocalizedState<BeneficiaryAcknowledgementPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: DigitAcknowledgement.success(
         action: () {
           context.router.pop();
+          context.router.popUntilRouteWithName(
+            SearchBeneficiaryRoute.name,
+          );
         },
         secondaryAction: () {
           final bloc = context.read<SearchBlocWrapper>();

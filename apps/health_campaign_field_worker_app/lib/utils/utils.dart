@@ -643,9 +643,9 @@ bool validDoseDelivery(
   final absent = checkIfBeneficiaryAbsent(tasks);
   final referred = checkIfBeneficiaryReferred(tasks);
 
-  if (isFirstCycle(projectType)) {
-    return true;
-  }
+  // if (isFirstCycle(projectType)) {
+  //   return true;
+  // }
   var doseIndex = getDoseIndex(tasks, currentCycle);
 
   if (doseIndex == 0 && (refused || absent)) {

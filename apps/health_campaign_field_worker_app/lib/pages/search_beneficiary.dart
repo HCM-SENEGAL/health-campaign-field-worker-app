@@ -46,6 +46,7 @@ class _SearchBeneficiaryPageState
 
   @override
   void initState() {
+    isProximityEnabled = true;
     // Initialize the BlocWrapper with instances of SearchHouseholdsBloc, SearchMemberBloc, and ProximitySearchBloc
     blocWrapper = context.read<SearchBlocWrapper>();
 

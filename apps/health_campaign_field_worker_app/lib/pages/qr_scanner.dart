@@ -59,6 +59,9 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
   final _resourceController = TextEditingController();
   RegExp patternTraining = RegExp(r'^TRACPS24-\d{5}$');
   RegExp patternProd = RegExp(r'^DBLCPS24-\d{5}$');
+ RegExp patternNewQR = RegExp(
+  r'^(https?:\/\/)?cps\.pnlp\.sn\/patients\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
+);
 
   @override
   void initState() {
@@ -448,7 +451,8 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
                             String code = _resourceController.value.text
                                 .replaceAll(' ', '');
                             if (!patternTraining.hasMatch(code) &&
-                                !patternProd.hasMatch(code)) {
+                                !patternProd.hasMatch(code)  &&
+                                !patternNewQR.hasMatch(code)) {
                               await handleError(
                                 i18.deliverIntervention.scanValidResource,
                               );
@@ -619,7 +623,8 @@ class _QRScannerPageState extends LocalizedState<QRScannerPage> {
 
             return;
           } else if (!patternTraining.hasMatch(code) &&
-              !patternProd.hasMatch(code)) {
+              !patternProd.hasMatch(code) &&
+              !patternNewQR.hasMatch(code)) {
             await handleError(
               i18.deliverIntervention.scanValidResource,
             );

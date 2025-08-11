@@ -104,6 +104,7 @@ class SummaryBeneficiaryPageState
                     padding: EdgeInsets.only(bottom: 8),
                     child: BackNavigationHelpHeaderWidget(
                       showHelp: false,
+                      showBackNavigation: false,
                     ),
                   ),
                   Padding(
@@ -121,7 +122,7 @@ class SummaryBeneficiaryPageState
                   ),
                 ]),
                 footer: DigitCard(
-                  margin: const EdgeInsets.only(top: 8, bottom: 16),
+                  margin: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Column(
                     children: [
                       ValueListenableBuilder(
@@ -267,9 +268,7 @@ class SummaryBeneficiaryPageState
                                     LabelValueItem(
                                         label: localizations.translate(i18
                                             .individualDetails.nameLabelText),
-                                        value: widget.name ??
-                                            localizations.translate(
-                                                i18.common.coreCommonNA,),
+                                        value: '${widget.individualModel.name?.givenName} ${widget.individualModel.name?.familyName}',
                                         labelFlex: 5,
                                         padding: const EdgeInsets.only(
                                             bottom: 8,),),
