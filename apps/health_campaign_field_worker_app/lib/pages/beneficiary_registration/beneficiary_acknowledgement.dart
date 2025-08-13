@@ -33,9 +33,9 @@ class _BeneficiaryAcknowledgementPageState
     return Scaffold(
       body: DigitAcknowledgement.success(
         action: () {
-          context.router.pop();
-          context.router.popUntilRouteWithName(
-            SearchBeneficiaryRoute.name,
+          // context.router.pop();
+          context.router.push(
+            SearchBeneficiaryRoute(),
           );
         },
         secondaryAction: () {

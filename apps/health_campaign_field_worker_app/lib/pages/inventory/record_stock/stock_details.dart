@@ -96,7 +96,29 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    bool isWareHouseMgr = true;
+        bool isDistributor = context.loggedInUserRoles
+        .where(
+          (role) => role.code == RolesType.distributor.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
+    bool isWareHouseMgr = context.loggedInUserRoles
+        .where(
+          (role) =>
+              role.code == RolesType.healthFacilitySupervisor.toValue() ||
+              role.code == RolesType.warehouseManager.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
+        final isDRSWarehouseMgr = context.boundary.label == "DRS" && isWareHouseMgr;
+    final isDistrictWarehouseMgr =
+        context.boundary.label == "District" && isWareHouseMgr;
+        bool isSupervisor = context.loggedInUserRoles
+        .where(
+          (role) => role.code == RolesType.fieldSupervisor.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
 
     return PopScope(
       onPopInvoked: (didPop) {
@@ -737,6 +759,38 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                                 null
                                             : true;
                                       }).toList();
+
+                                      if ((entryType == StockRecordEntryType.receipt || 
+                                          entryType == StockRecordEntryType.returned) && isDRSWarehouseMgr) {
+                                        facilities = facilities.where((element) {
+                                          return element.usage == 'Central Facility';
+                                        }).toList();
+                                      }
+                                      else if (entryType == StockRecordEntryType.dispatch && isDRSWarehouseMgr) {
+                                        facilities = facilities.where((element) {
+                                          return element.usage == 'District Facility' ||
+                                          element.usage == 'Poste De Sante Facility';
+                                        }).toList();
+                                      }
+                                      else if ((entryType == StockRecordEntryType.receipt || 
+                                          entryType == StockRecordEntryType.returned) && isDistrictWarehouseMgr) {
+                                        facilities = facilities.where((element) {
+                                          return element.usage == 'DRS Facility' ||
+                                          element.usage == 'Central Facility';
+                                        }).toList();
+                                      }
+                                       else if (entryType == StockRecordEntryType.dispatch && isDistrictWarehouseMgr) {
+                                        facilities = facilities.where((element) {
+                                          return element.usage ==  "Poste De Sante Facility";
+                                        }).toList();
+                                      }
+                                      else {
+                                        facilities = facilities.where((element) {
+                                          return element.usage == 'District Facility' ||
+                                          element.usage == 'DRS Facility' ||
+                                          element.usage == 'Central Facility';
+                                        }).toList();
+                                      }
 
                                       return InkWell(
                                         onTap: facilities.isEmpty

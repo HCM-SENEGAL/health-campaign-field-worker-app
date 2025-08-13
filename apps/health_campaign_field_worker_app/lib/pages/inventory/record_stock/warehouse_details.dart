@@ -83,6 +83,9 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
         )
         .toList()
         .isNotEmpty;
+    final isDRSWarehouseMgr = context.boundary.label == "DRS" && isWareHouseMgr;
+    final isDistrictWarehouseMgr =
+        context.boundary.label == "District" && isWareHouseMgr;
 
     bool isSupervisor = context.loggedInUserRoles
         .where(
@@ -133,11 +136,30 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                 filteredFacility = filteredFacilities.first;
               }
             } else {
-              filteredFacilities = facilities
-                  .where(
-                    (element) => element.usage != 'CD' && element.usage != 'CS',
-                  )
-                  .toList();
+              // filteredFacilities = facilities
+              //     .where(
+              //       (element) => element.usage != 'CD' && element.usage != 'CS',
+              //     )
+              //     .toList();
+              if (isDRSWarehouseMgr) {
+                filteredFacilities = facilities
+                    .where(
+                      (element) => element.usage == 'DRS Facility',
+                    )
+                    .toList();
+              } else if (isDistrictWarehouseMgr) {
+                filteredFacilities = facilities
+                    .where(
+                      (element) => element.usage == 'District Facility',
+                    )
+                    .toList();
+              } else {
+                filteredFacilities = facilities
+                    .where(
+                      (element) => element.usage == "Poste De Sante Facility",
+                    )
+                    .toList();
+              }
             }
 
             // prevFacility = facilityState.whenOrNull(

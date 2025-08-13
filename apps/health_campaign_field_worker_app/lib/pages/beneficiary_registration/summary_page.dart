@@ -161,9 +161,9 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
                             if (submit ?? false) {
                               if (context.mounted) {
                                 final router = context.router;
-                                router.popUntil((route) =>
-                                    route.settings.name ==
-                                    SearchBeneficiaryRoute.name);
+                                // router.popUntil((route) =>
+                                //     route.settings.name ==
+                                //     SearchBeneficiaryRoute.name);
                                 context
                                     .read<SearchBlocWrapper>()
                                     .searchHouseholdsBloc

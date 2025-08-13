@@ -70,15 +70,15 @@ class _HouseholdOverviewPageState
                       }
 
                       return ScrollableContent(
-                        header: const BackNavigationHelpHeaderWidget(
-                          showcaseButton: ShowcaseButton(),
-                          // handleback: () {
-                          //   context.router.pop();
-                          //   context
-                          //       .read<SearchBlocWrapper>()
-                          //       .searchHouseholdsBloc
-                          //       .add(const SearchHouseholdsClearEvent());
-                          // },
+                        header: BackNavigationHelpHeaderWidget(
+                          showcaseButton: const ShowcaseButton(),
+                          handleback: () {
+                            // context
+                            //     .read<SearchBlocWrapper>()
+                            //     .searchHouseholdsBloc
+                            //     .add(const SearchHouseholdsClearEvent());
+                            context.router.popAndPush(SearchBeneficiaryRoute());
+                          },
                         ),
                         enableFixedButton: true,
                         footer: Offstage(

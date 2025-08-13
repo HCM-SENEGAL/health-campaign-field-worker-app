@@ -276,11 +276,9 @@ class _IndividualDetailsPageState
                                     );
 
                                     if (submit ?? false) {
-                                      await onSubmit(individual, true);
                                       if (context.mounted) {
                                         final scannerBloc =
                                             context.read<ScannerBloc>();
-
                                         bloc.add(
                                           BeneficiaryRegistrationCreateEvent(
                                             projectId: projectId,
@@ -293,6 +291,8 @@ class _IndividualDetailsPageState
                                                 : null,
                                           ),
                                         );
+                                        await onSubmit(individual, true);
+                                        
 
                                         scannerBloc.add(
                                           const ScannerEvent.handleScanner(
@@ -499,6 +499,11 @@ class _IndividualDetailsPageState
                             individualDetailsShowcaseData.nameOfIndividual
                                 .buildWith(
                               child: DigitTextFormField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp("[a-zA-Z]"),
+                                  ),
+                                ],
                                 formControlName: _individualNameKey,
                                 label: localizations.translate(
                                   i18.individualDetails.firstNameLabelText,
@@ -533,11 +538,11 @@ class _IndividualDetailsPageState
                                 label: localizations.translate(
                                   i18.individualDetails.lastNameLabelText,
                                 ),
-                                // inputFormatters: [
-                                //   FilteringTextInputFormatter.allow(RegExp(
-                                //     "[a-zA-Z ]",
-                                //   )),
-                                // ],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(RegExp(
+                                    "[a-zA-Z]",
+                                  )),
+                                ],
                                 maxLength: 200,
                                 isRequired: true,
                                 validationMessages: {
