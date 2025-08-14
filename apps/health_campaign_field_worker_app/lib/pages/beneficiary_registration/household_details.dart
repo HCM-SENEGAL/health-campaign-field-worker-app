@@ -264,7 +264,7 @@ class _HouseHoldDetailsPageState extends LocalizedState<HouseHoldDetailsPage> {
                               form: form,
                               formControlName: _memberCountKey,
                               label: localizations.translate(
-                                i18.householdDetails.noOfMembersCountLabel,
+                                i18.householdDetails.noOfMembersCountLabelmda,
                               ),
                               incrementer: true,
                             ),

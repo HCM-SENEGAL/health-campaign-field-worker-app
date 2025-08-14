@@ -83,9 +83,6 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
         )
         .toList()
         .isNotEmpty;
-    final isDRSWarehouseMgr = context.boundary.label == "DRS" && isWareHouseMgr;
-    final isDistrictWarehouseMgr =
-        context.boundary.label == "District" && isWareHouseMgr;
 
     bool isSupervisor = context.loggedInUserRoles
         .where(
@@ -136,30 +133,11 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                 filteredFacility = filteredFacilities.first;
               }
             } else {
-              // filteredFacilities = facilities
-              //     .where(
-              //       (element) => element.usage != 'CD' && element.usage != 'CS',
-              //     )
-              //     .toList();
-              if (isDRSWarehouseMgr) {
-                filteredFacilities = facilities
-                    .where(
-                      (element) => element.usage == 'DRS Facility',
-                    )
-                    .toList();
-              } else if (isDistrictWarehouseMgr) {
-                filteredFacilities = facilities
-                    .where(
-                      (element) => element.usage == 'District Facility',
-                    )
-                    .toList();
-              } else {
-                filteredFacilities = facilities
-                    .where(
-                      (element) => element.usage == "Poste De Sante Facility",
-                    )
-                    .toList();
-              }
+              filteredFacilities = facilities
+                  .where(
+                    (element) => element.usage != 'CD' && element.usage != 'CS',
+                  )
+                  .toList();
             }
 
             // prevFacility = facilityState.whenOrNull(
@@ -301,15 +279,9 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    isDistributor && !isWareHouseMgr
-                                        ? localizations.translate(
-                                            i18.stockDetails
-                                                .transactionDetailsLabel,
-                                          )
-                                        : localizations.translate(
-                                            i18.warehouseDetails
-                                                .warehouseDetailsLabel,
-                                          ),
+                                    localizations.translate(
+                                      i18.stockDetails.stockDetailsLabel,
+                                    ),
                                     style: theme.textTheme.displayMedium,
                                   ),
                                   Column(children: [

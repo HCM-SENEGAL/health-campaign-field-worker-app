@@ -501,7 +501,8 @@ class _HomePageState extends LocalizedState<HomePage> {
         .where((element) => state.actionsWrapper.actions
             .map((e) => e.displayName)
             .toList()
-            .contains(element))
+            .contains(element) ||
+            (element == i18.home.db))
         .toList();
 
     final showcaseKeys =

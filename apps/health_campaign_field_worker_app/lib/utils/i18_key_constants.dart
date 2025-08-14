@@ -939,6 +939,7 @@ class BeneficiaryDetails {
   String get beneficiaryDoseNo => 'BENEFICIARY_DETAILS_DOSE_NO';
   String get beneficiaryDose => 'BENEFICIARY_DETAILS_DOSE';
   String get beneficiaryDeliveryText => 'DELIVERY';
+  String get beneficiaryDeliveryTDOText => 'DELIVERY_TDO';
   String get beneficiaryStatus => 'BENEFICIARY_DETAILS_STATUS';
   String get beneficiaryResources => 'BENEFICIARY_DETAILS_RESOURCES';
   String get beneficiaryQuantity => 'BENEFICIARY_DETAILS_QUANTITY';
@@ -1041,6 +1042,11 @@ class IndividualDetails {
 
   String get dobErrorText => 'DOB_ERROR_MESSAGE';
 
+  String get memberPreganentLabelText => 'MEMBER_PREGNANT_LABEL_TEXT';
+
+  String get hasChildBelow6MonthsLabelText =>
+      'HAS_CHILD_BELOW_6_MONTHS_LABEL_TEXT';
+
   String get mobileNumberLabelText => 'MOBILE_NUMBER_LABEL_TEXT';
 
   String get heightLabelText => 'HEIGHT_LABEL_TEXT';
@@ -1132,6 +1138,7 @@ class HouseholdDetails {
       'HOUSEHOLD_DETAILS_DATE_OF_REGISTRATION_LABEL';
 
   String get noOfMembersCountLabel => 'NO_OF_MEMBERS_COUNT_LABEL';
+   String get noOfMembersCountLabelmda => 'NO_OF_MEMBERS_COUNT_LABEL_MDA';
 
   String get householdMemberLabel => 'HOUSEHOLD_MEMBER_LABEL';
   String get householdMembersLabel => 'HOUSEHOLD_MEMBERS_LABEL';
@@ -1296,12 +1303,14 @@ class DeliverIntervention {
       'DELIVER_INTERVENTION_RESOURCE_DELETE_PRIMARY_ACTION_LABEL';
   String get wasTheDoseAdministered => 'WAS_THE_DOSE_ADMINISTERED_LABEL';
   String get dose => 'DELIVER_INTERVENTION_DOSE';
+  String get doseTDO => 'DELIVER_INTERVENTION_DOSE_TDO';
   String get hidePastCycles => 'DELIVER_INTERVENTION_HIDE_PAST_CYCLES';
   String get viewPastCycles => 'DELIVER_INTERVENTION_VIEW_PAST_CYCLES';
   String get currentCycle => 'DELIVER_INTERVENTION_CURRENT_CYCLE';
   String get cycle => 'DELIVERY_CYCLE';
   String get recordTreatment => 'DELIVERY_RECORD_TREATMENT';
   String get recordCycle => 'RECORD_CYCLE';
+  String get recordText => 'RECORD_TEXT';
   String get recordPastDeliveryDeatils =>
       'DELIVER_INTERVENTION_PAST_DELIVERY_DETAILS';
   String get wasDosePastDeliveryDetails =>
@@ -1364,6 +1373,8 @@ class DeliverIntervention {
   String get successfulReadministration => "SUCCESSFUL_READMINISTRATION";
   String get childrenVomited => "CHILD_VOMITED";
   String get childrenVomitedTwice => "CHILD_VOMITED_TWICE";
+
+  String get capsuleLabel => "CAPSULE_LABEL";
 }
 
 class ProjectSelection {
@@ -1505,6 +1516,8 @@ class StockDetails {
   String get returnedSpaqDetails => 'RETURNED_SPAQ_DETAILS';
   String get damagedSpaqDetails => 'DAMAGED_SPAQ_DETAILS';
   String get quantityDamagedCountLabel => 'STOCK_DAMAGED_QUANTITY_LABEL';
+
+  String get stockDetailsLabel => 'STOCK_DETAILS_LABEL';
 }
 
 class StockReconciliationDetails {

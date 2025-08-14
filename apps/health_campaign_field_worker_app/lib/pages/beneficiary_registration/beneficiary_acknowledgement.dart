@@ -34,13 +34,14 @@ class _BeneficiaryAcknowledgementPageState
       body: DigitAcknowledgement.success(
         action: () {
           // context.router.pop();
+          final bloc = context.read<SearchBlocWrapper>();
+          bloc.searchHouseholdsBloc.add(const SearchHouseholdsClearEvent());
           context.router.push(
             SearchBeneficiaryRoute(),
           );
         },
         secondaryAction: () {
           final bloc = context.read<SearchBlocWrapper>();
-
           context.router.popAndPush(
             BeneficiaryWrapperRoute(
               wrapper: bloc.state.householdMembers.first,

@@ -79,8 +79,8 @@ class SummaryBeneficiaryPageState
                 //   limit: 10,
                 //   offset: 0,
                 // );
-                router.popUntil((route) =>
-                    route.settings.name == SearchBeneficiaryRoute.name);
+                // router.popUntil((route) =>
+                //     route.settings.name == SearchBeneficiaryRoute.name);
                 context.read<SearchBlocWrapper>().searchHouseholdsBloc.add(
                       SearchHouseholdsEvent.searchByHousehold(
                         householdModel: value.householdModel,

@@ -59,7 +59,6 @@ import 'package:attendance_management/models/attendee.dart' as p52;
 import 'package:attendance_management/models/staff.dart' as p53;
 import 'package:attendance_management/models/attendance_audit.dart' as p54;
 
-
 void initializeMappers() {
   p0.EntityModelMapper.ensureInitialized();
   p0.EntitySearchModelMapper.ensureInitialized();
@@ -202,7 +201,7 @@ void initializeMappers() {
   p51.PgrComplaintResponseModelMapper.ensureInitialized();
   p51.PgrComplainantResponseModelMapper.ensureInitialized();
   p51.PgrServiceResponseModelMapper.ensureInitialized();
-  p52.AttendeeSearchModelMapper.ensureInitialized();
+    p52.AttendeeSearchModelMapper.ensureInitialized();
   p52.AttendeeModelMapper.ensureInitialized();
   p52.AttendeeAdditionalFieldsMapper.ensureInitialized();
   p53.StaffSearchModelMapper.ensureInitialized();

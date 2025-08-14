@@ -73,11 +73,11 @@ class _HouseholdOverviewPageState
                         header: BackNavigationHelpHeaderWidget(
                           showcaseButton: const ShowcaseButton(),
                           handleback: () {
-                            // context
-                            //     .read<SearchBlocWrapper>()
-                            //     .searchHouseholdsBloc
-                            //     .add(const SearchHouseholdsClearEvent());
-                            context.router.popAndPush(SearchBeneficiaryRoute());
+                            context
+                                .read<SearchBlocWrapper>()
+                                .searchHouseholdsBloc
+                                .add(const SearchHouseholdsClearEvent());
+                            // context.router.popAndPush(SearchBeneficiaryRoute());
                           },
                         ),
                         enableFixedButton: true,
