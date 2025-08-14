@@ -124,7 +124,35 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
                           orElse: () {
                             return;
                           },
-                          persisted: (navigateToRoot, householdModel) async {
+                           persisted: (navigateToRoot, householdModel) {
+                            if (navigateToRoot) {
+                              (context.router.parent() as StackRouter).pop();
+                            } else {
+                              (context.router.parent() as StackRouter).pop();
+                              context
+                                  .read<SearchBlocWrapper>()
+                                  .searchHouseholdsBloc
+                                  .add(
+                                    SearchHouseholdsEvent.searchByHousehold(
+                                      householdModel: householdModel,
+                                      projectId: context.projectId,
+                                      isProximityEnabled: false,
+                                    ),
+                                  );
+                              context.router
+                                  .push(BeneficiaryAcknowledgementRoute(
+                                enableViewHousehold: true,
+                              ));
+                            }
+                          },
+                          create: (addressModel,
+                              householdModel,
+                              individualModel,
+                              registrationDate,
+                              searchQuery,
+                              loading,
+                              isHeadOfHousehold) async {
+                            // persisted: (navigateToRoot, householdModel) async {
                             final submit = await DigitDialog.show<bool>(
                               context,
                               options: DigitDialogOptions(
@@ -160,30 +188,28 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
 
                             if (submit ?? false) {
                               if (context.mounted) {
-                                final router = context.router;
-                                // router.popUntil((route) =>
-                                //     route.settings.name ==
-                                //     SearchBeneficiaryRoute.name);
-                                context
-                                    .read<SearchBlocWrapper>()
-                                    .searchHouseholdsBloc
-                                    .add(
-                                      SearchHouseholdsEvent.searchByHousehold(
-                                        householdModel: householdModel,
-                                        projectId: context.projectId,
-                                        isProximityEnabled: false,
-                                      ),
-                                    );
-                                context.router.push(
-                                  BeneficiaryAcknowledgementRoute(
-                                    enableViewHousehold: true,
-                                    name: widget.name,
+                                final scannerBloc = context.read<ScannerBloc>();
+                                final bloc =
+                                    context.read<BeneficiaryRegistrationBloc>();
+                                bloc.add(
+                                  BeneficiaryRegistrationCreateEvent(
+                                    projectId: context.projectId,
+                                    userUuid: context.loggedInUserUuid,
+                                    boundary: context.boundary,
+                                    tag: scannerBloc.state.qrcodes.isNotEmpty
+                                        ? scannerBloc.state.qrcodes.first
+                                        : null,
+                                  ),
+                                );
+                                scannerBloc.add(
+                                  const ScannerEvent.handleScanner(
+                                    [],
+                                    [],
                                   ),
                                 );
                               }
                             }
-                          },
-                        );
+                      },);
                       },
                     );
                   },

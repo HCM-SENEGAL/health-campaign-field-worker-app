@@ -277,29 +277,7 @@ class _IndividualDetailsPageState
 
                                     if (submit ?? false) {
                                       if (context.mounted) {
-                                        final scannerBloc =
-                                            context.read<ScannerBloc>();
-                                        bloc.add(
-                                          BeneficiaryRegistrationCreateEvent(
-                                            projectId: projectId,
-                                            userUuid: userId,
-                                            boundary: boundary,
-                                            tag: scannerBloc
-                                                    .state.qrcodes.isNotEmpty
-                                                ? scannerBloc
-                                                    .state.qrcodes.first
-                                                : null,
-                                          ),
-                                        );
                                         await onSubmit(individual, true);
-                                        
-
-                                        scannerBloc.add(
-                                          const ScannerEvent.handleScanner(
-                                            [],
-                                            [],
-                                          ),
-                                        );
                                       }
                                     }
                                   }
@@ -501,18 +479,13 @@ class _IndividualDetailsPageState
                               child: DigitTextFormField(
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
-                                    RegExp("[a-zA-Z]"),
+                                    RegExp("[a-zA-Z ]"),
                                   ),
                                 ],
                                 formControlName: _individualNameKey,
                                 label: localizations.translate(
                                   i18.individualDetails.firstNameLabelText,
                                 ),
-                                // inputFormatters: [
-                                //   FilteringTextInputFormatter.allow(RegExp(
-                                //     "[a-zA-Z ]",
-                                //   )),
-                                // ],
                                 isRequired: true,
                                 maxLength: 200,
                                 validationMessages: {
@@ -540,7 +513,7 @@ class _IndividualDetailsPageState
                                 ),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(RegExp(
-                                    "[a-zA-Z]",
+                                    "[a-zA-Z ]",
                                   )),
                                 ],
                                 maxLength: 200,

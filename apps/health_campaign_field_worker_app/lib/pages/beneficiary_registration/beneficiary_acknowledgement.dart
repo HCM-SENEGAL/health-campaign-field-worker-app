@@ -33,7 +33,8 @@ class _BeneficiaryAcknowledgementPageState
     return Scaffold(
       body: DigitAcknowledgement.success(
         action: () {
-          // context.router.pop();
+          final bloc = context.read<SearchBlocWrapper>();
+          bloc.searchHouseholdsBloc.add(const SearchHouseholdsClearEvent());
           context.router.push(
             SearchBeneficiaryRoute(),
           );

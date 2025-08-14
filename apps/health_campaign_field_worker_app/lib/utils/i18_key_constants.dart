@@ -905,6 +905,8 @@ class SearchBeneficiary {
   String get beneficiaryIndividualSearchHintText =>
       'BENEFICIARY_INDIVIDUAL_SEARCH_HINT_TEXT';
 
+  String get beneficiaryDeliveryTDOText => 'DELIVERY_TDO';
+
   String get beneficiaryInfoDescription => 'BENEFICIARY_INFO_DESCRIPTION';
 
   String get beneficiaryInfoTitle => 'BENEFICIARY_INFO_TITLE';
@@ -932,6 +934,7 @@ class BeneficiaryDetails {
       'BENEFICIARY_DETAILS_DELETE_ICON_LABEL';
   String get resourcesTobeDelivered => 'RESOURCES_TO_BE_DELIVERED';
   String get resourcesTobeProvided => 'RESOURCES_TO_BE_PROVIDED';
+  String get beneficiaryDeliveryTDOText => 'DELIVERY_TDO';
 
   String get beneficiaryAge => 'BENEFICIARY_AGE';
   String get beneficiaryHeight => 'BENEFICIARY_HEIGHT';
@@ -1316,6 +1319,8 @@ class DeliverIntervention {
   String get deliveryCommentRequired => 'DELIVERY_COMMENT_REQUIRED';
 
   String get unableToScan => 'UNABLE_TO_SCAN';
+
+  String get recordText => 'RECORD_TEXT';
 
   String get scanValidResource => 'SCAN_VALID_RESOURCE';
 
