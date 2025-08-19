@@ -36,12 +36,18 @@ class _BeneficiaryAcknowledgementPageState
           // context.router.pop();
           final bloc = context.read<SearchBlocWrapper>();
           bloc.searchHouseholdsBloc.add(const SearchHouseholdsClearEvent());
-          context.router.push(
-            SearchBeneficiaryRoute(),
+          context.router.popUntil(
+            (route) => route.settings.name == SearchBeneficiaryRoute.name,
           );
+          // context.router.popAndPush(
+          //   SearchBeneficiaryRoute(),
+          // );
         },
         secondaryAction: () {
           final bloc = context.read<SearchBlocWrapper>();
+          context.router.popUntil(
+            (route) => route.settings.name == SearchBeneficiaryRoute.name,
+          );
           context.router.popAndPush(
             BeneficiaryWrapperRoute(
               wrapper: bloc.state.householdMembers.first,

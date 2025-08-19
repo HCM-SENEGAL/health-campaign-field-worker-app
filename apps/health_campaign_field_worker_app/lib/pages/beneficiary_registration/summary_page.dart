@@ -75,31 +75,29 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
       child: Scaffold(
         body: BlocConsumer<BeneficiaryRegistrationBloc,
             BeneficiaryRegistrationState>(
-              listener: (context, state) {
-                state.mapOrNull(
-                  persisted: (persistedState) {
-                    if (persistedState.navigateToRoot) {
-                      (context.router.parent() as StackRouter).pop();
-                    } else {
-                      (context.router.parent() as StackRouter).pop();
-                      context
-                          .read<SearchBlocWrapper>()
-                          .searchHouseholdsBloc
-                          .add(
-                            SearchHouseholdsEvent.searchByHousehold(
-                              householdModel: persistedState.householdModel,
-                              projectId: context.projectId,
-                              isProximityEnabled: false,
-                            ),
-                          );
-                      context.router
-                          .popAndPush(BeneficiaryAcknowledgementRoute(
-                        enableViewHousehold: true,
-                      ));
-                    }
-                  },
-                );
+          listener: (context, state) {
+            state.mapOrNull(
+              persisted: (persistedState) {
+                if (persistedState.navigateToRoot) {
+                  (context.router.parent() as StackRouter).pop();
+                } else {
+                  (context.router.parent() as StackRouter).pop();
+                  context.router.popUntil((route) =>
+                      route.settings.name == SearchBeneficiaryRoute.name);
+                  context.read<SearchBlocWrapper>().searchHouseholdsBloc.add(
+                        SearchHouseholdsEvent.searchByHousehold(
+                          householdModel: persistedState.householdModel,
+                          projectId: context.projectId,
+                          isProximityEnabled: false,
+                        ),
+                      );
+                  context.router.push(BeneficiaryAcknowledgementRoute(
+                    enableViewHousehold: true,
+                  ));
+                }
               },
+            );
+          },
           builder: (context, householdState) {
             return ScrollableContent(
               enableFixedDigitButton: true,
