@@ -159,6 +159,10 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
         final isBeneficiaryReferred = checkIfBeneficiaryReferred(
           taskdata,
         );
+        final isFemaleIneligible = checkIfFemaleIneligible(
+          e,
+          context.selectedCycle,
+        );
         final isBeneficiaryIneligible = checkIfBeneficiaryIneligible(
               taskdata,
             ) &&
@@ -214,6 +218,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                       isBeneficiaryIneligible,
                       isBeneficiaryReferred,
                       isStatusReset,
+                      isFemaleIneligible,
                     ),
                     taskdata,
                   ),
@@ -230,6 +235,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                       isBeneficiaryAbsent: isBeneficiaryAbsent,
                       isBeneficiaryIneligible: isBeneficiaryIneligible,
                       isStatusReset: isStatusReset,
+                      isFemaleIneligible: isFemaleIneligible,
                       theme: theme,
                     ),
             ),
@@ -321,8 +327,8 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
                     householdMember.household.address?.pincode,
                   ].whereNotNull().take(2).join(' '),
                   subtitle: widget.distance != null
-                      ? '${householdMember.members.length ?? 1} ${householdMember.members.length == 1 ? localizations.translate(i18.householdDetails.householdMemberLabel) : localizations.translate(i18.householdDetails.householdMembersLabel)}\n${((widget.distance!) * 1000).round() > 999 ? '(${((widget.distance!).round())} km)' : '(${((widget.distance!) * 1000).round()} mts) ${localizations.translate(i18.beneficiaryDetails.fromCurrentLocation)}'}'
-                      : '${householdMember.members.length ?? 1} ${householdMember.members.length == 1 ? localizations.translate(i18.householdDetails.householdMemberLabel) : localizations.translate(i18.householdDetails.householdMembersLabel)}',
+                      ? '${householdMember.members.length ?? 1} ${householdMember.members.length == 1 ? localizations.translate(i18.householdDetails.householdMemberLabel) : localizations.translate(i18.householdDetails.householdMemberLabel)}\n${((widget.distance!) * 1000).round() > 999 ? '(${((widget.distance!).round())} km)' : '(${((widget.distance!) * 1000).round()} mts) ${localizations.translate(i18.beneficiaryDetails.fromCurrentLocation)}'}'
+                      : '${householdMember.members.length ?? 1} ${householdMember.members.length == 1 ? localizations.translate(i18.householdDetails.householdMemberLabel) : localizations.translate(i18.householdDetails.householdMemberLabel)}',
                   status: context.beneficiaryType == BeneficiaryType.individual
                       ? null
                       : (householdMember.tasks ?? []).isNotEmpty
@@ -388,7 +394,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     StatusKeys statusKeys,
     List<TaskModel>? taskData,
   ) {
-    if (statusKeys.isNotEligible || statusKeys.isBeneficiaryIneligible) {
+    if (statusKeys.isNotEligible || statusKeys.isBeneficiaryIneligible || statusKeys.isFemaleIneligible) {
       return localizations.translate(
         i18.householdOverView.householdOverViewNotEligibleIconLabel,
       );
@@ -429,6 +435,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
   // ignore: long-parameter-list
   Color getTableCellTextColor({
     required bool isNotEligible,
+    required bool isFemaleIneligible,
     required List<TaskModel>? taskdata,
     required bool isBeneficiaryRefused,
     required bool isBeneficiarySick,
@@ -440,6 +447,7 @@ class _ViewBeneficiaryCardState extends LocalizedState<ViewBeneficiaryCard> {
     return taskdata != null &&
             taskdata.isNotEmpty &&
             !isBeneficiaryRefused &&
+            !isFemaleIneligible &&
             !isBeneficiarySick &&
             !isBeneficiaryAbsent &&
             !isBeneficiaryIneligible &&

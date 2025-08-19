@@ -88,7 +88,7 @@ class SummaryBeneficiaryPageState
                         isProximityEnabled: false,
                       ),
                     );
-                router.push(BeneficiaryAcknowledgementRoute(
+                router.popAndPush(BeneficiaryAcknowledgementRoute(
                   enableViewHousehold: true,
                   // acknowledgementType: AcknowledgementType.addMember,
                 ));
@@ -100,11 +100,14 @@ class SummaryBeneficiaryPageState
             return ScrollableContent(
                 enableFixedDigitButton: true,
                 header: Column(children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(bottom: 8),
-                    child: BackNavigationHelpHeaderWidget(
+                    child:  BackNavigationHelpHeaderWidget(
                       showHelp: false,
-                      showBackNavigation: false,
+                      showBackNavigation: true,
+                    handleback: () {
+                      context.router.pop();
+                    },
                     ),
                   ),
                   Padding(

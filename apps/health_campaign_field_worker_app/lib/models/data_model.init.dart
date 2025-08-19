@@ -201,7 +201,7 @@ void initializeMappers() {
   p51.PgrComplaintResponseModelMapper.ensureInitialized();
   p51.PgrComplainantResponseModelMapper.ensureInitialized();
   p51.PgrServiceResponseModelMapper.ensureInitialized();
-    p52.AttendeeSearchModelMapper.ensureInitialized();
+  p52.AttendeeSearchModelMapper.ensureInitialized();
   p52.AttendeeModelMapper.ensureInitialized();
   p52.AttendeeAdditionalFieldsMapper.ensureInitialized();
   p53.StaffSearchModelMapper.ensureInitialized();

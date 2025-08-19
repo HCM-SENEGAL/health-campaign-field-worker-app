@@ -41,12 +41,7 @@ class IndividualDetailsPage extends LocalizedStatefulWidget {
 
 class _IndividualDetailsPageState
     extends LocalizedState<IndividualDetailsPage> {
-  
-  @override
-  void initState() {
-    super.initState();
-    clickedStatus.value = false;
-  }
+
   static const _individualNameKey = 'individualName';
   static const _individualLastNameKey = 'individualLastName';
   static const _idTypeKey = 'idType';
@@ -125,16 +120,6 @@ class _IndividualDetailsPageState
         builder: (context, form, child) => BlocConsumer<
             BeneficiaryRegistrationBloc, BeneficiaryRegistrationState>(
           listener: (context, state) {
-            // state.mapOrNull(
-            //   persisted: (value) {
-            //     if(value.navigateToRoot) {
-            //         (router.parent() as StackRouter).pop();
-            //     }
-            //     else {
-            //       context.router()
-            //     }
-            //   },
-            // );
           },
           builder: (context, state) {
             return ScrollableContent(
@@ -294,6 +279,7 @@ class _IndividualDetailsPageState
 
                                     if (submit ?? false) {
                                       if (context.mounted) { 
+                                        clickedStatus.value = false;
                                         await onSubmit(individual, true);
                                       }
                                     }
@@ -442,6 +428,7 @@ class _IndividualDetailsPageState
                                       );
 
                                       if (submit ?? false) {
+                                        clickedStatus.value = false;
                                         onBeneficiarySubmit(
                                           individual.name?.givenName ?? "",
                                           individual,
@@ -570,8 +557,14 @@ class _IndividualDetailsPageState
                                 orElse: () => const Offstage(),
                                 initialized: (appConfiguration, _) {
                                   final idTypeOptions =
-                                      appConfiguration.idTypeOptions ??
-                                          <IdTypeOptions>[];
+                                      appConfiguration.idTypeOptions != null &&
+                                              appConfiguration
+                                                  .idTypeOptions!.isNotEmpty
+                                          ? [
+                                              appConfiguration
+                                                  .idTypeOptions!.last,
+                                            ] 
+                                          : <IdTypeOptions>[];
 
                                   return individualDetailsShowcaseData.idType
                                       .buildWith(

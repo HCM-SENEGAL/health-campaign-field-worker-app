@@ -309,6 +309,7 @@ class StatusKeys {
   bool isBeneficiaryIneligible;
   bool isBeneficiaryReferred;
   bool isStatusReset;
+  bool isFemaleIneligible;
   StatusKeys(
     this.isNotEligible,
     this.isBeneficiaryRefused,
@@ -317,6 +318,7 @@ class StatusKeys {
     this.isBeneficiaryIneligible,
     this.isBeneficiaryReferred,
     this.isStatusReset,
+    this.isFemaleIneligible,
   );
 }
 

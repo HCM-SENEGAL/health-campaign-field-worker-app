@@ -73,17 +73,45 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
         Navigator.of(context).pop();
       },
       child: Scaffold(
-        body: BlocBuilder<BeneficiaryRegistrationBloc,
+        body: BlocConsumer<BeneficiaryRegistrationBloc,
             BeneficiaryRegistrationState>(
+              listener: (context, state) {
+                state.mapOrNull(
+                  persisted: (persistedState) {
+                    if (persistedState.navigateToRoot) {
+                      (context.router.parent() as StackRouter).pop();
+                    } else {
+                      (context.router.parent() as StackRouter).pop();
+                      context
+                          .read<SearchBlocWrapper>()
+                          .searchHouseholdsBloc
+                          .add(
+                            SearchHouseholdsEvent.searchByHousehold(
+                              householdModel: persistedState.householdModel,
+                              projectId: context.projectId,
+                              isProximityEnabled: false,
+                            ),
+                          );
+                      context.router
+                          .popAndPush(BeneficiaryAcknowledgementRoute(
+                        enableViewHousehold: true,
+                      ));
+                    }
+                  },
+                );
+              },
           builder: (context, householdState) {
             return ScrollableContent(
               enableFixedDigitButton: true,
               header: Column(children: [
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: BackNavigationHelpHeaderWidget(
                     showHelp: false,
-                    showBackNavigation: false,
+                    showBackNavigation: true,
+                    handleback: () {
+                      context.router.pop();
+                    },
                   ),
                 ),
                 Padding(
@@ -123,27 +151,6 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
                         householdState.maybeWhen(
                           orElse: () {
                             return;
-                          },
-                          persisted: (navigateToRoot, householdModel) {
-                            if (navigateToRoot) {
-                              (context.router.parent() as StackRouter).pop();
-                            } else {
-                              (context.router.parent() as StackRouter).pop();
-                              context
-                                  .read<SearchBlocWrapper>()
-                                  .searchHouseholdsBloc
-                                  .add(
-                                    SearchHouseholdsEvent.searchByHousehold(
-                                      householdModel: householdModel,
-                                      projectId: context.projectId,
-                                      isProximityEnabled: false,
-                                    ),
-                                  );
-                              context.router
-                                  .push(BeneficiaryAcknowledgementRoute(
-                                enableViewHousehold: true,
-                              ));
-                            }
                           },
                           create: (addressModel,
                               householdModel,

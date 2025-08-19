@@ -77,7 +77,7 @@ class _HouseholdOverviewPageState
                                 .read<SearchBlocWrapper>()
                                 .searchHouseholdsBloc
                                 .add(const SearchHouseholdsClearEvent());
-                            // context.router.popAndPush(SearchBeneficiaryRoute());
+                            context.router.popAndPush(SearchBeneficiaryRoute());
                           },
                         ),
                         enableFixedButton: true,
