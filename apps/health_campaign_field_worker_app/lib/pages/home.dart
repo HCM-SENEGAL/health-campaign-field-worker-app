@@ -403,7 +403,7 @@ class _HomePageState extends LocalizedState<HomePage> {
       ),
       i18.home.viewReportsLabel: homeShowcaseData.inventoryReport.buildWith(
         child: HomeItemCard(
-          icon: Icons.announcement,
+          icon: Icons.summarize,
           label: i18.home.viewReportsLabel,
           onPressed: () {
             context.router.push(
@@ -498,10 +498,11 @@ class _HomePageState extends LocalizedState<HomePage> {
     ];
 
     final List<String> filteredLabels = homeItemsLabel
-        .where((element) => state.actionsWrapper.actions
-            .map((e) => e.displayName)
-            .toList()
-            .contains(element) ||
+        .where((element) =>
+            state.actionsWrapper.actions
+                .map((e) => e.displayName)
+                .toList()
+                .contains(element) ||
             (element == i18.home.db))
         .toList();
 
