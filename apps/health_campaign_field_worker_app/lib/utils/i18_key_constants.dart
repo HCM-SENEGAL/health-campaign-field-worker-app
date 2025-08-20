@@ -1073,6 +1073,8 @@ class IndividualDetails {
 
   String get idNumberLengthError => 'ID_NUMBER_LENGTH_ERROR_MESSAGE';
 
+  String get idNumberLengthOneError => 'ID_NUMBER_LENGTH_ONE_ERROR_MESSAGE';
+
   String get lastNameIsRequiredError => 'LAST_NAME_REQUIRED_ERROR_MESSAGE';
   String get linkVoucherToIndividual => 'LINK_VOUCHER_TO_INDIVIDUAL';
   String get headAgeValidError => 'HEAD_VALID_AGE_ERROR_MESSAGE';
@@ -1287,6 +1289,13 @@ class DeliverIntervention {
 
   String get dialogContent => 'DELIVER_INTERVENTION_DIALOG_CONTENT';
 
+  String get dialogContentPartOne =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_ONE';
+  String get dialogContentPartTwo =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_TWO';
+  String get dialogContentPartThree =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_THREE';
+
   String get didYouObserveAdvEventsTitle =>
       'DID_YOU_OBSERVE_ADVERSE_EVENTS_TITLE';
   String get didYouObservePreviousAdvEventsTitle =>
@@ -1333,6 +1342,8 @@ class DeliverIntervention {
   String get resourceAlreadyScanned => 'RESOURCE_ALREADY_SCANNED';
 
   String get scannerLabel => 'SCANNER_LABEL';
+
+  String get scannerLabelForAMMCard => 'SCANNER_LABEL_FOR_AMM_CARD';
 
   String get noOfResourceScanned => 'NO_OF_RESOURCE_SCANNED';
 

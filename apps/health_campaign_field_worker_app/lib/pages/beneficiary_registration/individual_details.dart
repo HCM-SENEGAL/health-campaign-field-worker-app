@@ -41,10 +41,9 @@ class IndividualDetailsPage extends LocalizedStatefulWidget {
 
 class _IndividualDetailsPageState
     extends LocalizedState<IndividualDetailsPage> {
-
   static const _individualNameKey = 'individualName';
   static const _individualLastNameKey = 'individualLastName';
-  static const _idTypeKey = 'idType';
+  // static const _idTypeKey = 'idType';
   static const _idNumberKey = 'idNumber';
   static const _dobKey = 'dob';
   static const _monthsKey = 'months';
@@ -119,8 +118,7 @@ class _IndividualDetailsPageState
         form: () => buildForm(bloc.state),
         builder: (context, form, child) => BlocConsumer<
             BeneficiaryRegistrationBloc, BeneficiaryRegistrationState>(
-          listener: (context, state) {
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             return ScrollableContent(
               enableFixedButton: true,
@@ -143,9 +141,9 @@ class _IndividualDetailsPageState
                               if (form.control(_dobKey).value == null) {
                                 form.control(_dobKey).setErrors({'': true});
                               }
-                              if (form.control(_idTypeKey).value == null) {
-                                form.control(_idTypeKey).setErrors({'': true});
-                              }
+                              // if (form.control(_idTypeKey).value == null) {
+                              //   form.control(_idTypeKey).setErrors({'': true});
+                              // }
                               if (!isHeadAgeValid) {
                                 await DigitToast.show(
                                   context,
@@ -250,8 +248,37 @@ class _IndividualDetailsPageState
                                         titleText: localizations.translate(
                                           i18.deliverIntervention.dialogTitle,
                                         ),
-                                        contentText: localizations.translate(
-                                          i18.deliverIntervention.dialogContent,
+                                        content: RichText(
+                                          text: TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                            children: [
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartOne,
+                                                ),
+                                              ),
+                                              const TextSpan(text: ' '),
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartTwo,
+                                                ),
+                                                style: const TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                              const TextSpan(text: ' '),
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartThree,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         primaryAction: DigitDialogActions(
                                           label: localizations.translate(
@@ -278,7 +305,7 @@ class _IndividualDetailsPageState
                                     );
 
                                     if (submit ?? false) {
-                                      if (context.mounted) { 
+                                      if (context.mounted) {
                                         clickedStatus.value = false;
                                         await onSubmit(individual, true);
                                       }
@@ -399,9 +426,37 @@ class _IndividualDetailsPageState
                                           titleText: localizations.translate(
                                             i18.deliverIntervention.dialogTitle,
                                           ),
-                                          contentText: localizations.translate(
-                                            i18.deliverIntervention
-                                                .dialogContent,
+                                          content: RichText(
+                                            text: TextSpan(
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                              children: [
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartOne,
+                                                  ),
+                                                ),
+                                                const TextSpan(text: ' '),
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartTwo,
+                                                  ),
+                                                  style: const TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                const TextSpan(text: ' '),
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartThree,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           primaryAction: DigitDialogActions(
                                             label: localizations.translate(
@@ -551,107 +606,106 @@ class _IndividualDetailsPageState
                                 ],
                               ),
                             ),
-                            BlocBuilder<AppInitializationBloc,
-                                AppInitializationState>(
-                              builder: (context, state) => state.maybeWhen(
-                                orElse: () => const Offstage(),
-                                initialized: (appConfiguration, _) {
-                                  final idTypeOptions =
-                                      appConfiguration.idTypeOptions != null &&
-                                              appConfiguration
-                                                  .idTypeOptions!.isNotEmpty
-                                          ? [
-                                              appConfiguration
-                                                  .idTypeOptions!.last,
-                                            ] 
-                                          : <IdTypeOptions>[];
+                            // BlocBuilder<AppInitializationBloc,
+                            //     AppInitializationState>(
+                            //   builder: (context, state) => state.maybeWhen(
+                            //     orElse: () => const Offstage(),
+                            //     initialized: (appConfiguration, _) {
+                            //       final idTypeOptions =
+                            //           appConfiguration.idTypeOptions != null &&
+                            //                   appConfiguration
+                            //                       .idTypeOptions!.isNotEmpty
+                            //               ? [
+                            //                   appConfiguration
+                            //                       .idTypeOptions!.last,
+                            //                 ]
+                            //               : <IdTypeOptions>[];
 
-                                  return individualDetailsShowcaseData.idType
-                                      .buildWith(
-                                    child: DigitReactiveSearchDropdown<String>(
+                            //       return individualDetailsShowcaseData.idType
+                            //           .buildWith(
+                            //         child: DigitReactiveSearchDropdown<String>(
+                            //           label: localizations.translate(
+                            //             i18.individualDetails.idTypeLabelText,
+                            //           ),
+                            //           form: form,
+                            //           menuItems: idTypeOptions.map(
+                            //             (e) {
+                            //               return e.code;
+                            //             },
+                            //           ).toList(),
+                            //           formControlName: _idTypeKey,
+                            //           valueMapper: (value) {
+                            //             return localizations.translate(value);
+                            //           },
+                            //           onSelected: (value) {
+                            //             setState(() {
+                            //               if (value == 'DEFAULT') {
+                            //                 form.control(_idNumberKey).value =
+                            //                     IdGen.i.identifier.toString();
+                            //               } else {
+                            //                 form.control(_idNumberKey).value =
+                            //                     null;
+                            //               }
+                            //             });
+                            //           },
+                            //           isRequired: !widget.isHeadOfHousehold,
+                            //           validationMessage:
+                            //               localizations.translate(
+                            //             i18.common.corecommonRequired,
+                            //           ),
+                            //           emptyText: localizations
+                            //               .translate(i18.common.noMatchFound),
+                            //         ),
+                            //       );
+                            //     },
+                            //   ),
+                            // ),
+                            // if (form.control(_idTypeKey).value != 'DEFAULT' &&
+                            //     form.control(_idTypeKey).value != null)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ReactiveFormConsumer(
+                                  builder: (context, formGroup, child) {
+                                    return DigitTextFormField(
+                                      readOnly: false,
+                                      // form.control(_idTypeKey).value ==
+                                      //     'DEFAULT',
+                                      isRequired: form
+                                          .control(_idNumberKey)
+                                          .validators
+                                          .isNotEmpty,
+                                      formControlName: _idNumberKey,
                                       label: localizations.translate(
-                                        i18.individualDetails.idTypeLabelText,
+                                        i18.individualDetails.idNumberLabelText,
                                       ),
-                                      form: form,
-                                      menuItems: idTypeOptions.map(
-                                        (e) {
-                                          return e.code;
-                                        },
-                                      ).toList(),
-                                      formControlName: _idTypeKey,
-                                      valueMapper: (value) {
-                                        return localizations.translate(value);
+                                      maxLength: 64,
+                                      validationMessages: {
+                                        'required': (object) =>
+                                            localizations.translate(
+                                              '${i18.individualDetails.idNumberLabelText}_IS_REQUIRED',
+                                            ),
+                                        'min1': (object) =>
+                                            localizations.translate(
+                                              i18.individualDetails
+                                                  .idNumberLengthOneError,
+                                            ),
+                                        'maxLength': (object) =>
+                                            localizations.translate(
+                                              i18.individualDetails
+                                                  .idNumberLengthError,
+                                            ),
                                       },
-                                      onSelected: (value) {
-                                        setState(() {
-                                          if (value == 'DEFAULT') {
-                                            form.control(_idNumberKey).value =
-                                                IdGen.i.identifier.toString();
-                                          } else {
-                                            form.control(_idNumberKey).value =
-                                                null;
-                                          }
-                                        });
-                                      },
-                                      isRequired: !widget.isHeadOfHousehold,
-                                      validationMessage:
-                                          localizations.translate(
-                                        i18.common.corecommonRequired,
+                                      padding: const EdgeInsets.only(
+                                        top: kPadding * 2,
+                                        left: kPadding / 2,
+                                        right: kPadding / 2,
                                       ),
-                                      emptyText: localizations
-                                          .translate(i18.common.noMatchFound),
-                                    ),
-                                  );
-                                },
-                              ),
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
-                            if (form.control(_idTypeKey).value != 'DEFAULT' &&
-                                form.control(_idTypeKey).value != null)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ReactiveFormConsumer(
-                                    builder: (context, formGroup, child) {
-                                      return DigitTextFormField(
-                                        readOnly:
-                                            form.control(_idTypeKey).value ==
-                                                'DEFAULT',
-                                        isRequired: form
-                                            .control(_idNumberKey)
-                                            .validators
-                                            .isNotEmpty,
-                                        formControlName: _idNumberKey,
-                                        label: localizations.translate(
-                                          i18.individualDetails
-                                              .idNumberLabelText,
-                                        ),
-                                        maxLength: 64,
-                                        validationMessages: {
-                                          'required': (object) =>
-                                              localizations.translate(
-                                                '${i18.individualDetails.idNumberLabelText}_IS_REQUIRED',
-                                              ),
-                                          'min2': (object) =>
-                                              localizations.translate(
-                                                i18.individualDetails
-                                                    .idNumberLengthError,
-                                              ),
-                                          'maxLength': (object) =>
-                                              localizations.translate(
-                                                i18.individualDetails
-                                                    .idNumberLengthError,
-                                              ),
-                                        },
-                                        padding: const EdgeInsets.only(
-                                          top: kPadding * 2,
-                                          left: kPadding / 2,
-                                          right: kPadding / 2,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
                             const SizedBox(height: 12),
                             individualDetailsShowcaseData.dateOfBirth.buildWith(
                               child: DigitDobPicker(
@@ -1177,7 +1231,8 @@ class _IndividualDetailsPageState
       identifiers: [
         identifier.copyWith(
           identifierId: form.control(_idNumberKey).value ?? 'DEFAULT',
-          identifierType: form.control(_idTypeKey).value ?? 'DEFAULT',
+          identifierType: 'AMM CARD',
+          // form.control(_idTypeKey).value ?? 'DEFAULT',
         ),
       ],
       additionalFields: IndividualAdditionalFields(
@@ -1310,13 +1365,13 @@ class _IndividualDetailsPageState
           FormControl<String>(value: individual?.mobileNumber, validators: [
         CustomValidator.validMobileNumber,
       ]),
-      _idTypeKey: FormControl<String>(
-        value: individual?.identifiers?.firstOrNull?.identifierType,
-      ),
+      // _idTypeKey: FormControl<String>(
+      //   value: individual?.identifiers?.firstOrNull?.identifierType,
+      // ),
       _idNumberKey: FormControl<String>(
         validators: [
           Validators.required,
-          CustomValidator.requiredMin2,
+          CustomValidator.requiredMin1,
           Validators.maxLength(64),
         ],
         value: individual?.identifiers?.firstOrNull?.identifierId,

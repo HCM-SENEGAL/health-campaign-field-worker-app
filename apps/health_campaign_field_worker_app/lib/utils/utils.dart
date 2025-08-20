@@ -81,6 +81,16 @@ class CustomValidator {
         : {'required': true};
   }
 
+  static Map<String, dynamic>? requiredMin1(
+    AbstractControl<dynamic> control,
+  ) {
+    return control.value == null ||
+            control.value.toString().trim().length >= 1 ||
+            control.value.toString().trim().isEmpty
+        ? null
+        : {'min1': true};
+  }
+
   static Map<String, dynamic>? requiredMin2(
     AbstractControl<dynamic> control,
   ) {
@@ -490,8 +500,7 @@ bool checkIfFemaleIneligible(
             null);
 
         return isPregnant || hasChildBelow6Months;
-      }
-      else if (totalAgeInMonths <= 6) {
+      } else if (totalAgeInMonths <= 6) {
         return true;
       }
 
