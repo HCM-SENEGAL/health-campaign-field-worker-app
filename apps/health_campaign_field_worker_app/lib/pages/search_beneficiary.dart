@@ -480,7 +480,7 @@ class _SearchBeneficiaryPageState
                         },
                         icon: Icons.qr_code,
                         label: localizations.translate(
-                          i18.deliverIntervention.scannerLabel,
+                          i18.deliverIntervention.scannerLabelForAMMCard,
                         ),
                       ),
                     ],
