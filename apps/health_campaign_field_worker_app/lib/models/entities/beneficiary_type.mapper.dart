@@ -39,13 +39,15 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return BeneficiaryType.individual3;
       case "3-59MONTH":
         return BeneficiaryType.individual4;
-      case "60-167MONTH":
+      case "60-119MONTH":
         return BeneficiaryType.individual5;
-      case "167-1800MONTH":
+      case "120-167MONTH":
         return BeneficiaryType.individual6;
-      case "COB1":
+      case "168-1800MONTH":
+        return BeneficiaryType.individual7;
+      case "COBLISTER1":
         return BeneficiaryType.coblister1;
-      case "COB2":
+      case "COBLISTER2":
         return BeneficiaryType.coblister2;
       case "IVERMECTIN":
         return BeneficiaryType.ivermectin;
@@ -61,6 +63,8 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return BeneficiaryType.plaquette3;
       case "Plaquette 9":
         return BeneficiaryType.plaquette9;
+      case "DHAPQ":
+        return BeneficiaryType.dhapq;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -84,13 +88,15 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
       case BeneficiaryType.individual4:
         return "3-59MONTH";
       case BeneficiaryType.individual5:
-        return "60-167MONTH";
+        return "60-119MONTH";
       case BeneficiaryType.individual6:
-        return "167-1800MONTH";
+        return "120-167MONTH";
+      case BeneficiaryType.individual7:
+        return "168-1800MONTH";
       case BeneficiaryType.coblister1:
-        return "COB1";
+        return "COBLISTER1";
       case BeneficiaryType.coblister2:
-        return "COB2";
+        return "COBLISTER2";
       case BeneficiaryType.ivermectin:
         return "IVERMECTIN";
       case BeneficiaryType.albendazole:
@@ -105,6 +111,8 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return "Plaquette 3";
       case BeneficiaryType.plaquette9:
         return "Plaquette 9";
+      case BeneficiaryType.dhapq:
+        return "DHAPQ";
     }
   }
 }
