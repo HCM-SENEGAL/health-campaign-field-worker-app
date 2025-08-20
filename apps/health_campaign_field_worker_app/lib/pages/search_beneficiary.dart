@@ -44,6 +44,9 @@ class _SearchBeneficiaryPageState
 
   late final SearchBlocWrapper blocWrapper; // Declare BlocWrapper
 
+  Pattern get otherThanAlphabetsRegex =>
+      RegExp(r'[^a-zA-Z\s]'); // Matches non-alphabetic characters
+
   @override
   void initState() {
     isProximityEnabled = true;
@@ -247,6 +250,14 @@ class _SearchBeneficiaryPageState
                                       blocWrapper.clearEvent();
                                       if (value.isEmpty) {
                                         blocWrapper.clearEvent();
+                                      }
+                                      if (value
+                                          .contains(otherThanAlphabetsRegex)) {
+                                        value = value.replaceAll(
+                                          otherThanAlphabetsRegex,
+                                          '',
+                                        );
+                                        searchController.text = value;
                                       }
                                       if (value.trim().length < 2 &&
                                           !isProximityEnabled) {
