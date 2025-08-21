@@ -88,7 +88,15 @@ Widget buildTableContent(
                   variant.any((v) => v.id == element.productVariantId))
               ?.quantity;
 
-          quantity = (qty?.toInt().toString()) ?? '0';
+          if (qty == null) {
+            quantity = '0';
+          } else if (qty == 0) {
+            quantity = '0';
+          } else if (qty == 0.5) {
+            quantity = '1/2';
+          } else {
+            quantity = (qty?.toInt().toString()) ?? '0';
+          }
         }
 
         return Column(

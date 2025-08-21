@@ -849,9 +849,9 @@ DoseCriteriaModel? fetchProductVariant(
         final maxAge = int.parse(ageRange.last);
 
         // temp change for SMC specific use case
-        if (maxAge == 120 && individualAgeInMonths > 120) {
-          return true;
-        }
+        // if (maxAge == 120 && individualAgeInMonths > 120) {
+        //   return true;
+        // }
 
         return individualAgeInMonths >= minAge &&
             individualAgeInMonths <= maxAge;
