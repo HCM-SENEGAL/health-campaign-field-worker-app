@@ -164,8 +164,36 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
                                 titleText: localizations.translate(
                                   i18.deliverIntervention.dialogTitle,
                                 ),
-                                contentText: localizations.translate(
-                                  i18.deliverIntervention.dialogContent,
+                                content: RichText(
+                                  text: TextSpan(
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                    children: [
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartOne,
+                                        ),
+                                      ),
+                                      const TextSpan(text: ' '),
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartTwo,
+                                        ),
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      const TextSpan(text: ' '),
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartThree,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 primaryAction: DigitDialogActions(
                                   label: localizations.translate(
