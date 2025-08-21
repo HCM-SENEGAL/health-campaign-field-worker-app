@@ -47,7 +47,7 @@ Widget buildTableContent(
   final productVariants =
       fetchProductVariant(item, individualModel)?.productVariants;
   final numRows = productVariants?.length ?? 0;
-  const rowHeight = 82;
+  const rowHeight = 100;
   const paddingHeight = kPadding * 2;
   final containerHeight = (numRows + 1) * rowHeight + paddingHeight;
 

@@ -594,7 +594,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                               return;
                                             }
                                           }
-                                          // }
+                                          }
 
                                           final cycleIndex = context
                                                       .selectedCycle.id ==
@@ -752,7 +752,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                               const RecordStockCreateStockEntryEvent(),
                                             );
                                           }
-                                        }
+                                        // }
                                       },
                                 child: Center(
                                   child: Text(
@@ -921,12 +921,12 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                                 element.usage !=
                                                     'Central Facility';
                                           }).toList();
-                                          facilities.add(
-                                            FacilityModel(
-                                              id: 'Delivery Team',
-                                              name: 'CDD Team',
-                                            ),
-                                          );
+                                          // facilities.add(
+                                          //   FacilityModel(
+                                          //     id: 'Delivery Team',
+                                          //     name: 'CDD Team',
+                                          //   ),
+                                          // );
                                         }
                                       }
 

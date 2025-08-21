@@ -39,9 +39,9 @@ class _BeneficiaryAcknowledgementPageState
           context.router.popUntil(
             (route) => route.settings.name == SearchBeneficiaryRoute.name,
           );
-          // context.router.popAndPush(
-          //   SearchBeneficiaryRoute(),
-          // );
+          context.router.popAndPush(
+            SearchBeneficiaryRoute(),
+          );
         },
         secondaryAction: () {
           final bloc = context.read<SearchBlocWrapper>();

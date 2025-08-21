@@ -1253,12 +1253,16 @@ class _IndividualDetailsPageState
               "projectTypeId",
               projectTypeId,
             ),
-          if (form.control(_pregnantKey).value != null)
+          if (isFemale &&
+              hasAgeAbove16Years &&
+              form.control(_pregnantKey).value != null)
             AdditionalField(
               AdditionalFieldsType.pregnant.name,
               form.control(_pregnantKey).value,
             ),
-          if (form.control(_hasChildBelow6MonthsKey).value != null)
+          if (isFemale &&
+              hasAgeAbove16Years &&
+              form.control(_hasChildBelow6MonthsKey).value != null)
             AdditionalField(
               AdditionalFieldsType.hasChildBelow6Months.name,
               form.control(_hasChildBelow6MonthsKey).value,
