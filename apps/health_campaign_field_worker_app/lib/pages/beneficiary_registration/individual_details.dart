@@ -1231,7 +1231,8 @@ class _IndividualDetailsPageState
       identifiers: [
         identifier.copyWith(
           identifierId: form.control(_idNumberKey).value ?? 'DEFAULT',
-          identifierType: 'AMM CARD',
+          identifierType:
+              localizations.translate(i18.individualDetails.ammCardLabelText),
           // form.control(_idTypeKey).value ?? 'DEFAULT',
         ),
       ],

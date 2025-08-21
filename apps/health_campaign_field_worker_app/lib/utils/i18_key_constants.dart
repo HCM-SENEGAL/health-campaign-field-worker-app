@@ -1030,6 +1030,8 @@ class IndividualDetails {
 
   String get idNumberLabelText => 'ID_NUMBER_LABEL_TEXT';
 
+  String get ammCardLabelText => 'AMM_CARD';
+
   String get idNumberSuggestionText => 'ID_NUMBER_SUGGESTION_TEXT';
 
   String get dobLabelText => 'DOB_LABEL_TEXT';
