@@ -99,12 +99,15 @@ class SummaryBeneficiaryPageState
           builder: (context, householdState) {
             return ScrollableContent(
                 enableFixedDigitButton: true,
-                header: Column(children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 8),
-                    child: BackNavigationHelpHeaderWidget(
-                      showHelp: false,
-                      showBackNavigation: false,
+              header: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: BackNavigationHelpHeaderWidget(
+                    showHelp: false,
+                    showBackNavigation: true,
+                    handleback: () {
+                      context.router.pop();
+                    },
                     ),
                   ),
                   Padding(
@@ -150,9 +153,37 @@ class SummaryBeneficiaryPageState
                                   titleText: localizations.translate(
                                     i18.deliverIntervention.dialogTitle,
                                   ),
-                                  contentText: localizations.translate(
-                                    i18.deliverIntervention.dialogContent,
+                                  content: RichText(
+                                  text: TextSpan(
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                    children: [
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartOne,
+                                        ),
+                                      ),
+                                      const TextSpan(text: ' '),
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartTwo,
+                                        ),
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      const TextSpan(text: ' '),
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartThree,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                ),
                                   primaryAction: DigitDialogActions(
                                     label: localizations.translate(
                                       i18.common.coreCommonSubmit,

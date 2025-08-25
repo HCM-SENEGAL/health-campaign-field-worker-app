@@ -410,11 +410,68 @@ class _StockReconciliationPageState
                                         ),
                                       ),
                                       builder: (context, state) {
-                                        final facilities = state.whenOrNull(
-                                              fetched: (facilities, _, __) =>
-                                                  facilities,
+                                        final allFacilities = state.whenOrNull(
+                                              fetched: (facilities,
+                                                      allFacilities, __) =>
+                                                  allFacilities,
                                             ) ??
                                             [];
+
+                                         List<FacilityModel> facilities =
+                                            allFacilities;
+                                        List<FacilityModel>
+                                            filteredFacilityResult = [];
+                                        if (ctx.selectedProject.address
+                                                ?.boundaryType ==
+                                            'Country') {
+                                          filteredFacilityResult = allFacilities
+                                              .where((element) =>
+                                                  element.usage ==
+                                                  'Central Facility')
+                                              .toList();
+                                          facilities =
+                                              filteredFacilityResult.isEmpty
+                                                  ? facilities
+                                                  : filteredFacilityResult;
+                                        } else if (ctx.selectedProject.address
+                                                ?.boundaryType ==
+                                            'DRS') {
+                                          filteredFacilityResult = allFacilities
+                                              .where((element) =>
+                                                  element.usage ==
+                                                  'DRS Facility')
+                                              .toList();
+                                          facilities =
+                                              filteredFacilityResult.isEmpty
+                                                  ? facilities
+                                                  : filteredFacilityResult;
+                                        } else if (ctx.selectedProject.address
+                                                ?.boundaryType ==
+                                            'District') {
+                                          filteredFacilityResult = allFacilities
+                                              .where((element) =>
+                                                  element.usage ==
+                                                  'District Facility')
+                                              .toList();
+                                          facilities =
+                                              filteredFacilityResult.isEmpty
+                                                  ? facilities
+                                                  : filteredFacilityResult;
+                                        } else if (ctx.selectedProject.address
+                                                ?.boundaryType ==
+                                            'Poste De Sante') {
+                                          filteredFacilityResult = allFacilities
+                                              .where(
+                                                (element) =>
+                                                    element.usage ==
+                                                    'Poste De Sante Facility',
+                                              )
+                                              .toList();
+                                          facilities =
+                                              filteredFacilityResult.isEmpty
+                                                  ? facilities
+                                                  : filteredFacilityResult;
+                                        }
 
                                         List<FacilityModel> filteredFacilities =
                                             [];

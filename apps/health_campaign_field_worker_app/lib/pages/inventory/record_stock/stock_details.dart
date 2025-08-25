@@ -96,7 +96,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-        bool isDistributor = context.loggedInUserRoles
+    bool isDistributor = context.loggedInUserRoles
         .where(
           (role) => role.code == RolesType.distributor.toValue(),
         )
@@ -110,10 +110,16 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
         )
         .toList()
         .isNotEmpty;
-        final isDRSWarehouseMgr = context.boundary.label == "DRS" && isWareHouseMgr;
+    bool isHealthFacility = context.loggedInUserRoles
+        .where(
+          (role) => role.code == RolesType.healthFacilitySupervisor.toValue(),
+        )
+        .toList()
+        .isNotEmpty;
+    final isDRSWarehouseMgr = context.boundary.label == "DRS" && isWareHouseMgr;
     final isDistrictWarehouseMgr =
         context.boundary.label == "District" && isWareHouseMgr;
-        bool isSupervisor = context.loggedInUserRoles
+    bool isSupervisor = context.loggedInUserRoles
         .where(
           (role) => role.code == RolesType.fieldSupervisor.toValue(),
         )
@@ -286,228 +292,308 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
 
                                           return;
                                         }
-                                        if (deliveryTeamSelected) {
-                                          DigitToast.show(
-                                            context,
-                                            options: DigitToastOptions(
-                                              localizations.translate(
-                                                i18.stockDetails
-                                                    .teamCodeRequired,
-                                              ),
-                                              true,
-                                              theme,
+                                        // if (deliveryTeamSelected) {
+                                        // DigitToast.show(
+                                        //   context,
+                                        //   options: DigitToastOptions(
+                                        //     localizations.translate(
+                                        //       i18.stockDetails
+                                        //           .teamCodeRequired,
+                                        //     ),
+                                        //     true,
+                                        //     theme,
+                                        //   ),
+                                        // );
+                                        // } else if ((primaryId ==
+                                        //         secondaryParty?.id) ||
+                                        //     (primaryId == deliveryTeamName)) {
+                                        //   DigitToast.show(
+                                        //     context,
+                                        //     options: DigitToastOptions(
+                                        //       localizations.translate(
+                                        //         i18.stockDetails
+                                        //             .senderReceiverValidation,
+                                        //       ),
+                                        //       true,
+                                        //       theme,
+                                        //     ),
+                                        //   );
+                                        // } else {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+
+                                        final bloc =
+                                            context.read<RecordStockBloc>();
+
+                                        final productVariant = form
+                                            .control(_productVariantKey)
+                                            .value as ProductVariantModel;
+
+                                        switch (entryType) {
+                                          case StockRecordEntryType.receipt:
+                                            transactionReason =
+                                                TransactionReason.received;
+                                            break;
+                                          case StockRecordEntryType.dispatch:
+                                            transactionReason = null;
+                                            break;
+                                          case StockRecordEntryType.returned:
+                                            transactionReason =
+                                                TransactionReason.returned;
+                                            break;
+                                          default:
+                                            transactionReason = form
+                                                .control(
+                                                  _transactionReasonKey,
+                                                )
+                                                .value as TransactionReason?;
+                                            break;
+                                        }
+
+                                        final quantity = form
+                                            .control(_transactionQuantityKey)
+                                            .value;
+
+                                        // final waybillNumber = form
+                                        //     .control(_waybillNumberKey)
+                                        //     .value as String?;
+
+                                        // final waybillQuantity = form
+                                        //     .control(_waybillQuantityKey)
+                                        //     .value;
+
+                                        // final vehicleNumber = form
+                                        //     .control(_vehicleNumberKey)
+                                        //     .value as String?;
+
+                                        // final batchNumber = form
+                                        //     .control(_batchNumberKey)
+                                        //     .value as String?;
+
+                                        // final expiryDate = form
+                                        //     .control(_dateOfExpiry)
+                                        //     .value as DateTime?;
+
+                                        final lat = locationState.latitude;
+                                        final lng = locationState.longitude;
+
+                                        final hasLocationData =
+                                            lat != null && lng != null;
+
+                                        final comments = form
+                                            .control(_commentsKey)
+                                            .value as String?;
+
+                                        // final deliveryTeamName = form
+                                        //     .control(_deliveryTeamKey)
+                                        //     .value as String?;
+
+                                        String? senderId;
+                                        String? senderType;
+                                        String? receiverId;
+                                        String? receiverType;
+
+                                        final primaryType =
+                                            BlocProvider.of<RecordStockBloc>(
+                                          context,
+                                        ).state.primaryType;
+
+                                        // final primaryId =
+                                        //     BlocProvider.of<RecordStockBloc>(
+                                        //   context,
+                                        // ).state.primaryId;
+
+                                        switch (entryType) {
+                                          case StockRecordEntryType.receipt:
+                                          case StockRecordEntryType.loss:
+                                          case StockRecordEntryType.damaged:
+                                            senderId = secondaryParty?.id;
+                                            senderType = "WAREHOUSE";
+                                            receiverId = primaryId;
+                                            receiverType = primaryType;
+
+                                            break;
+                                          case StockRecordEntryType.dispatch:
+                                          case StockRecordEntryType.returned:
+                                            receiverId = secondaryParty?.id;
+                                            receiverType = "WAREHOUSE";
+                                            senderId = primaryId;
+                                            senderType = primaryType;
+                                            break;
+                                        }
+
+                                        if (entryType ==
+                                            StockRecordEntryType.dispatch) {
+                                          int issueQuantity = quantity ?? 0;
+
+                                          List<StockModel>
+                                              stocksByProductVAriant =
+                                              stockState.existingStocks
+                                                  .where((element) =>
+                                                      element
+                                                          .productVariantId ==
+                                                      productVariant.id)
+                                                  .toList();
+
+                                          num stockReceived = _getQuantityCount(
+                                            stocksByProductVAriant.where(
+                                              (e) =>
+                                                  e.transactionType ==
+                                                      TransactionType
+                                                          .received &&
+                                                  e.transactionReason ==
+                                                      TransactionReason
+                                                          .received,
                                             ),
                                           );
-                                          // } else if ((primaryId ==
-                                          //         secondaryParty?.id) ||
-                                          //     (primaryId == deliveryTeamName)) {
-                                          //   DigitToast.show(
-                                          //     context,
-                                          //     options: DigitToastOptions(
-                                          //       localizations.translate(
-                                          //         i18.stockDetails
-                                          //             .senderReceiverValidation,
-                                          //       ),
-                                          //       true,
-                                          //       theme,
-                                          //     ),
-                                          //   );
-                                        } else {
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
 
-                                          final bloc =
-                                              context.read<RecordStockBloc>();
+                                          num stockIssued = _getQuantityCount(
+                                            stocksByProductVAriant.where(
+                                              (e) =>
+                                                  e.transactionType ==
+                                                      TransactionType
+                                                          .dispatched &&
+                                                  e.transactionReason == null,
+                                            ),
+                                          );
 
-                                          final productVariant = form
-                                              .control(_productVariantKey)
-                                              .value as ProductVariantModel;
+                                          num stockReturned = _getQuantityCount(
+                                            stocksByProductVAriant.where(
+                                              (e) =>
+                                                  e.transactionType ==
+                                                      TransactionType
+                                                          .received &&
+                                                  e.transactionReason ==
+                                                      TransactionReason
+                                                          .returned,
+                                            ),
+                                          );
 
-                                          switch (entryType) {
-                                            case StockRecordEntryType.receipt:
-                                              transactionReason =
-                                                  TransactionReason.received;
-                                              break;
-                                            case StockRecordEntryType.dispatch:
-                                              transactionReason = null;
-                                              break;
-                                            case StockRecordEntryType.returned:
-                                              transactionReason =
-                                                  TransactionReason.returned;
-                                              break;
-                                            default:
-                                              transactionReason = form
-                                                  .control(
-                                                    _transactionReasonKey,
-                                                  )
-                                                  .value as TransactionReason?;
-                                              break;
-                                          }
-
-                                          final quantity = form
-                                              .control(_transactionQuantityKey)
-                                              .value;
-
-                                          // final waybillNumber = form
-                                          //     .control(_waybillNumberKey)
-                                          //     .value as String?;
-
-                                          // final waybillQuantity = form
-                                          //     .control(_waybillQuantityKey)
-                                          //     .value;
-
-                                          // final vehicleNumber = form
-                                          //     .control(_vehicleNumberKey)
-                                          //     .value as String?;
-
-                                          // final batchNumber = form
-                                          //     .control(_batchNumberKey)
-                                          //     .value as String?;
-
-                                          // final expiryDate = form
-                                          //     .control(_dateOfExpiry)
-                                          //     .value as DateTime?;
-
-                                          final lat = locationState.latitude;
-                                          final lng = locationState.longitude;
-
-                                          final hasLocationData =
-                                              lat != null && lng != null;
-
-                                          final comments = form
-                                              .control(_commentsKey)
-                                              .value as String?;
-
-                                          // final deliveryTeamName = form
-                                          //     .control(_deliveryTeamKey)
-                                          //     .value as String?;
-
-                                          String? senderId;
-                                          String? senderType;
-                                          String? receiverId;
-                                          String? receiverType;
-
-                                          final primaryType =
-                                              BlocProvider.of<RecordStockBloc>(
-                                            context,
-                                          ).state.primaryType;
-
-                                          final primaryId =
-                                              BlocProvider.of<RecordStockBloc>(
-                                            context,
-                                          ).state.primaryId;
-
-                                          switch (entryType) {
-                                            case StockRecordEntryType.receipt:
-                                            case StockRecordEntryType.loss:
-                                            case StockRecordEntryType.damaged:
-                                              senderId = secondaryParty?.id;
-                                              senderType = "WAREHOUSE";
-                                              receiverId = primaryId;
-                                              receiverType = primaryType;
-
-                                              break;
-                                            case StockRecordEntryType.dispatch:
-                                            case StockRecordEntryType.returned:
-                                              receiverId = secondaryParty?.id;
-                                              receiverType = "WAREHOUSE";
-                                              senderId = primaryId;
-                                              senderType = primaryType;
-                                              break;
-                                          }
-
-                                          if (entryType ==
-                                              StockRecordEntryType.dispatch) {
-                                            int issueQuantity = quantity ?? 0;
-
-                                            List<StockModel>
-                                                stocksByProductVAriant =
-                                                stockState.existingStocks
-                                                    .where((element) =>
-                                                        element
-                                                            .productVariantId ==
-                                                        productVariant.id)
-                                                    .toList();
-
-                                            num stockReceived =
-                                                _getQuantityCount(
-                                              stocksByProductVAriant.where(
-                                                (e) =>
-                                                    e.transactionType ==
-                                                        TransactionType
-                                                            .received &&
-                                                    e.transactionReason ==
-                                                        TransactionReason
-                                                            .received,
-                                              ),
-                                            );
-
-                                            num stockIssued = _getQuantityCount(
-                                              stocksByProductVAriant.where(
-                                                (e) =>
-                                                    e.transactionType ==
-                                                        TransactionType
-                                                            .dispatched &&
-                                                    e.transactionReason == null,
-                                              ),
-                                            );
-
-                                            num stockReturned =
-                                                _getQuantityCount(
-                                              stocksByProductVAriant.where(
-                                                (e) =>
-                                                    e.transactionType ==
-                                                        TransactionType
-                                                            .received &&
-                                                    e.transactionReason ==
-                                                        TransactionReason
-                                                            .returned,
-                                              ),
-                                            );
-
-                                            num stockInHand = (stockReceived +
-                                                    stockReturned) -
-                                                (stockIssued);
-                                            if (issueQuantity > stockInHand) {
-                                              final alert =
-                                                  await DigitDialog.show<bool>(
-                                                context,
-                                                options: DigitDialogOptions(
-                                                  titleText:
+                                          num stockInHand =
+                                              (stockReceived + stockReturned) -
+                                                  (stockIssued);
+                                          if (issueQuantity > stockInHand) {
+                                            final alert =
+                                                await DigitDialog.show<bool>(
+                                              context,
+                                              options: DigitDialogOptions(
+                                                titleText:
+                                                    localizations.translate(
+                                                  i18.stockDetails
+                                                      .countDialogTitle,
+                                                ),
+                                                contentText: localizations
+                                                    .translate(
+                                                      i18.stockDetails
+                                                          .countContent,
+                                                    )
+                                                    .replaceAll(
+                                                      '{}',
+                                                      stockInHand.toString(),
+                                                    ),
+                                                primaryAction:
+                                                    DigitDialogActions(
+                                                  label:
                                                       localizations.translate(
                                                     i18.stockDetails
-                                                        .countDialogTitle,
+                                                        .countDialogSuccess,
                                                   ),
-                                                  contentText: localizations
-                                                      .translate(
-                                                        i18.stockDetails
-                                                            .countContent,
-                                                      )
-                                                      .replaceAll(
-                                                        '{}',
-                                                        stockInHand.toString(),
-                                                      ),
-                                                  primaryAction:
-                                                      DigitDialogActions(
-                                                    label:
-                                                        localizations.translate(
-                                                      i18.stockDetails
-                                                          .countDialogSuccess,
-                                                    ),
-                                                    action: (context) {
-                                                      Navigator.of(
-                                                        context,
-                                                        rootNavigator: true,
-                                                      ).pop(false);
-                                                    },
-                                                  ),
+                                                  action: (context) {
+                                                    Navigator.of(
+                                                      context,
+                                                      rootNavigator: true,
+                                                    ).pop(false);
+                                                  },
                                                 ),
-                                              );
+                                              ),
+                                            );
 
-                                              if (!(alert ?? false)) {
-                                                return;
-                                              }
+                                            if (!(alert ?? false)) {
+                                              return;
                                             }
+                                          }
+                                        } else if (entryType ==
+                                            StockRecordEntryType.returned) {
+                                          int returnQuantity = quantity ?? 0;
+
+                                          List<StockModel>
+                                              stocksByProductVAriant =
+                                              stockState.existingStocks
+                                                  .where((element) =>
+                                                      element
+                                                          .productVariantId ==
+                                                      productVariant.id)
+                                                  .toList();
+
+                                          num stockIssued = _getQuantityCount(
+                                            stocksByProductVAriant.where(
+                                              (e) =>
+                                                  e.transactionType ==
+                                                      TransactionType
+                                                          .dispatched &&
+                                                  e.transactionReason == null,
+                                            ),
+                                          );
+
+                                          num stockReturned = _getQuantityCount(
+                                            stocksByProductVAriant.where(
+                                              (e) =>
+                                                  e.transactionType ==
+                                                      TransactionType
+                                                          .received &&
+                                                  e.transactionReason ==
+                                                      TransactionReason
+                                                          .returned,
+                                            ),
+                                          );
+
+                                          num maxReturnAllowed =
+                                              (stockIssued < stockReturned)
+                                                  ? 0
+                                                  : stockIssued - stockReturned;
+
+                                          if (returnQuantity >
+                                              maxReturnAllowed) {
+                                            final alert =
+                                                await DigitDialog.show<bool>(
+                                              context,
+                                              options: DigitDialogOptions(
+                                                titleText:
+                                                    localizations.translate(
+                                                  i18.stockDetails
+                                                      .countDialogTitle,
+                                                ),
+                                                contentText: localizations
+                                                    .translate(
+                                                      i18.stockDetails
+                                                          .countContent,
+                                                    )
+                                                    .replaceAll(
+                                                      '{}',
+                                                      maxReturnAllowed
+                                                          .toString(),
+                                                    ),
+                                                primaryAction:
+                                                    DigitDialogActions(
+                                                  label:
+                                                      localizations.translate(
+                                                    i18.stockDetails
+                                                        .countDialogSuccess,
+                                                  ),
+                                                  action: (context) {
+                                                    Navigator.of(
+                                                      context,
+                                                      rootNavigator: true,
+                                                    ).pop(false);
+                                                  },
+                                                ),
+                                              ),
+                                            );
+
+                                            if (!(alert ?? false)) {
+                                              return;
+                                            }
+                                          }
                                           }
 
                                           final cycleIndex = context
@@ -625,6 +711,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                           );
 
                                           final submit =
+                                              // ignore: use_build_context_synchronously
                                               await DigitDialog.show<bool>(
                                             context,
                                             options: DigitDialogOptions(
@@ -666,7 +753,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                               const RecordStockCreateStockEntryEvent(),
                                             );
                                           }
-                                        }
+                                        // }
                                       },
                                 child: Center(
                                   child: Text(
@@ -760,37 +847,144 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                             : true;
                                       }).toList();
 
-                                      if ((entryType == StockRecordEntryType.receipt || 
-                                          entryType == StockRecordEntryType.returned) && isDRSWarehouseMgr) {
-                                        facilities = facilities.where((element) {
-                                          return element.usage == 'Central Facility';
-                                        }).toList();
+                                      bool isDispatch = entryType ==
+                                          StockRecordEntryType.dispatch;
+                                      bool isReceipt = entryType ==
+                                          StockRecordEntryType.receipt;
+                                      bool isReturned = entryType ==
+                                          StockRecordEntryType.returned;
+                                      if (context.selectedProject.address
+                                              ?.boundaryType ==
+                                          'Country') {
+                                        if (isReceipt) {
+                                          facilities =
+                                              facilities.where((element) {
+                                            return element.usage ==
+                                                'Central Facility';
+                                          }).toList();
+                                        } else if (isDispatch || isReturned) {
+                                          facilities =
+                                              facilities.where((element) {
+                                            return element.usage ==
+                                                'DRS Facility';
+                                          }).toList();
+                                        }
+                                      } else if (context.selectedProject.address
+                                              ?.boundaryType ==
+                                          'DRS') {
+                                        if (isReceipt) {
+                                          facilities =
+                                              facilities.where((element) {
+                                            return element.usage ==
+                                                'Central Facility';
+                                          }).toList();
+                                        } else if (isDispatch || isReturned) {
+                                          facilities =
+                                              facilities.where((element) {
+                                            return element.usage ==
+                                                "District Facility";
+                                          }).toList();
+                                        }
+                                      } else if (context.selectedProject.address
+                                              ?.boundaryType ==
+                                          'District') {
+                                        if (isReceipt) {
+                                          facilities =
+                                              facilities.where((element) {
+                                            return element.usage ==
+                                                'DRS Facility';
+                                          }).toList();
+                                        } else if (isDispatch || isReturned) {
+                                          facilities =
+                                              facilities.where((element) {
+                                            return element.usage ==
+                                                "Poste De Sante Facility";
+                                          }).toList();
+                                        }
+                                      } else if (context.selectedProject.address
+                                              ?.boundaryType ==
+                                          'Poste De Sante') {
+                                        if (isReceipt) {
+                                          facilities =
+                                              facilities.where((element) {
+                                            return element.usage ==
+                                                'District Facility';
+                                          }).toList();
+                                        } else if (isDispatch || isReturned) {
+                                          facilities =
+                                              facilities.where((element) {
+                                            return element.usage !=
+                                                    'Poste De Sante Facility' &&
+                                                element.usage !=
+                                                    'District Facility' &&
+                                                element.usage !=
+                                                    'DRS Facility' &&
+                                                element.usage !=
+                                                    'Central Facility';
+                                          }).toList();
+                                          // facilities.add(
+                                          //   FacilityModel(
+                                          //     id: 'Delivery Team',
+                                          //     name: 'CDD Team',
+                                          //   ),
+                                          // );
+                                        }
                                       }
-                                      else if (entryType == StockRecordEntryType.dispatch && isDRSWarehouseMgr) {
-                                        facilities = facilities.where((element) {
-                                          return element.usage == 'District Facility' ||
-                                          element.usage == 'Poste De Sante Facility';
-                                        }).toList();
-                                      }
-                                      else if ((entryType == StockRecordEntryType.receipt || 
-                                          entryType == StockRecordEntryType.returned) && isDistrictWarehouseMgr) {
-                                        facilities = facilities.where((element) {
-                                          return element.usage == 'DRS Facility' ||
-                                          element.usage == 'Central Facility';
-                                        }).toList();
-                                      }
-                                       else if (entryType == StockRecordEntryType.dispatch && isDistrictWarehouseMgr) {
-                                        facilities = facilities.where((element) {
-                                          return element.usage ==  "Poste De Sante Facility";
-                                        }).toList();
-                                      }
-                                      else {
-                                        facilities = facilities.where((element) {
-                                          return element.usage == 'District Facility' ||
-                                          element.usage == 'DRS Facility' ||
-                                          element.usage == 'Central Facility';
-                                        }).toList();
-                                      }
+
+                                      // if ((entryType ==
+                                      //             StockRecordEntryType
+                                      //                 .receipt ||
+                                      //         entryType ==
+                                      //             StockRecordEntryType
+                                      //                 .returned) &&
+                                      //     isDRSWarehouseMgr) {
+                                      //   facilities =
+                                      //       facilities.where((element) {
+                                      //     return element.usage ==
+                                      //         'Central Facility';
+                                      //   }).toList();
+                                      // } else if (entryType ==
+                                      //         StockRecordEntryType.dispatch &&
+                                      //     isDRSWarehouseMgr) {
+                                      //   facilities =
+                                      //       facilities.where((element) {
+                                      //     return element.usage ==
+                                      //             'District Facility' ||
+                                      //         element.usage ==
+                                      //             'Poste De Sante Facility';
+                                      //   }).toList();
+                                      // } else if ((entryType ==
+                                      //             StockRecordEntryType
+                                      //                 .receipt ||
+                                      //         entryType ==
+                                      //             StockRecordEntryType
+                                      //                 .returned) &&
+                                      //     isDistrictWarehouseMgr) {
+                                      //   facilities =
+                                      //       facilities.where((element) {
+                                      //     return element.usage ==
+                                      //             'DRS Facility' ||
+                                      //         element.usage ==
+                                      //             'Central Facility';
+                                      //   }).toList();
+                                      // } else if (entryType ==
+                                      //         StockRecordEntryType.dispatch &&
+                                      //     isDistrictWarehouseMgr) {
+                                      //   facilities =
+                                      //       facilities.where((element) {
+                                      //     return element.usage ==
+                                      //         "Poste De Sante Facility";
+                                      //   }).toList();
+                                      // } else {
+                                      //   facilities =
+                                      //       facilities.where((element) {
+                                      //     return element.usage ==
+                                      //             'District Facility' ||
+                                      //         element.usage == 'DRS Facility' ||
+                                      //         element.usage ==
+                                      //             'Central Facility';
+                                      //   }).toList();
+                                      // }
 
                                       return InkWell(
                                         onTap: facilities.isEmpty
@@ -953,9 +1147,9 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                             '${quantityCountLabel}_VALIDATION',
                                           ),
                                       "max": (object) =>
-                                          "${localizations.translate(
+                                          localizations.translate(
                                             '${quantityCountLabel}_MAX_ERROR',
-                                          )} $maxStockQuantity",
+                                          ),
                                       "min": (object) =>
                                           localizations.translate(
                                             '${quantityCountLabel}_MIN_ERROR',

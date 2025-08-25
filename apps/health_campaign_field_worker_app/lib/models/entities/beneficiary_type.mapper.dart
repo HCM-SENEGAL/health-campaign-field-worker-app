@@ -43,9 +43,9 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return BeneficiaryType.individual5;
       case "167-1800MONTH":
         return BeneficiaryType.individual6;
-      case "COB1":
+      case "COBLISTER1":
         return BeneficiaryType.coblister1;
-      case "COB2":
+      case "COBLISTER2":
         return BeneficiaryType.coblister2;
       case "IVERMECTIN":
         return BeneficiaryType.ivermectin;
@@ -61,6 +61,8 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return BeneficiaryType.plaquette3;
       case "Plaquette 9":
         return BeneficiaryType.plaquette9;
+      case "DHAPQ":
+        return BeneficiaryType.dhapq;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -88,9 +90,9 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
       case BeneficiaryType.individual6:
         return "167-1800MONTH";
       case BeneficiaryType.coblister1:
-        return "COB1";
+        return "COBLISTER1";
       case BeneficiaryType.coblister2:
-        return "COB2";
+        return "COBLISTER2";
       case BeneficiaryType.ivermectin:
         return "IVERMECTIN";
       case BeneficiaryType.albendazole:
@@ -105,6 +107,8 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return "Plaquette 3";
       case BeneficiaryType.plaquette9:
         return "Plaquette 9";
+      case BeneficiaryType.dhapq:
+        return "DHAPQ";
     }
   }
 }

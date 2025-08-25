@@ -73,17 +73,47 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
         Navigator.of(context).pop();
       },
       child: Scaffold(
-        body: BlocBuilder<BeneficiaryRegistrationBloc,
+         body: BlocConsumer<BeneficiaryRegistrationBloc,
             BeneficiaryRegistrationState>(
+          listener: (context, state) {
+                state.mapOrNull(
+                  persisted: (persistedState) {
+                    if (persistedState.navigateToRoot) {
+                      (context.router.parent() as StackRouter).pop();
+                    } else {
+                      (context.router.parent() as StackRouter).pop();
+                      context.router.popUntil((route) =>
+                      route.settings.name == SearchBeneficiaryRoute.name);
+                      context
+                          .read<SearchBlocWrapper>()
+                          .searchHouseholdsBloc
+                          .add(
+                            SearchHouseholdsEvent.searchByHousehold(
+                              householdModel: persistedState.householdModel,
+                              projectId: context.projectId,
+                              isProximityEnabled: false,
+                            ),
+                          );
+                      context.router
+                          .push(BeneficiaryAcknowledgementRoute(
+                        enableViewHousehold: true,
+                      ));
+                    }
+                  },
+                );
+              },
           builder: (context, householdState) {
             return ScrollableContent(
               enableFixedDigitButton: true,
               header: Column(children: [
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: BackNavigationHelpHeaderWidget(
                     showHelp: false,
-                    showBackNavigation: false,
+                    showBackNavigation: true,
+                    handleback: () {
+                      context.router.pop();
+                    },
                   ),
                 ),
                 Padding(
@@ -124,27 +154,6 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
                           orElse: () {
                             return;
                           },
-                           persisted: (navigateToRoot, householdModel) {
-                            if (navigateToRoot) {
-                              (context.router.parent() as StackRouter).pop();
-                            } else {
-                              (context.router.parent() as StackRouter).pop();
-                              context
-                                  .read<SearchBlocWrapper>()
-                                  .searchHouseholdsBloc
-                                  .add(
-                                    SearchHouseholdsEvent.searchByHousehold(
-                                      householdModel: householdModel,
-                                      projectId: context.projectId,
-                                      isProximityEnabled: false,
-                                    ),
-                                  );
-                              context.router
-                                  .push(BeneficiaryAcknowledgementRoute(
-                                enableViewHousehold: true,
-                              ));
-                            }
-                          },
                           create: (addressModel,
                               householdModel,
                               individualModel,
@@ -159,8 +168,36 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
                                 titleText: localizations.translate(
                                   i18.deliverIntervention.dialogTitle,
                                 ),
-                                contentText: localizations.translate(
-                                  i18.deliverIntervention.dialogContent,
+                                content: RichText(
+                                  text: TextSpan(
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                    children: [
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartOne,
+                                        ),
+                                      ),
+                                      const TextSpan(text: ' '),
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartTwo,
+                                        ),
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      const TextSpan(text: ' '),
+                                      TextSpan(
+                                        text: localizations.translate(
+                                          i18.deliverIntervention
+                                              .dialogContentPartThree,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 primaryAction: DigitDialogActions(
                                   label: localizations.translate(

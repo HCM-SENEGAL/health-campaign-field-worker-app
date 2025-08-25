@@ -83,9 +83,6 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
         )
         .toList()
         .isNotEmpty;
-    final isDRSWarehouseMgr = context.boundary.label == "DRS" && isWareHouseMgr;
-    final isDistrictWarehouseMgr =
-        context.boundary.label == "District" && isWareHouseMgr;
 
     bool isSupervisor = context.loggedInUserRoles
         .where(
@@ -111,20 +108,57 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
             );
           },
           builder: (ctx, facilityState) {
-            final facilities = facilityState.whenOrNull(
-                  fetched: (facilities, _, __) {
+            final allFacilities = facilityState.whenOrNull(
+                  fetched: (facilities, allFacilities, __) {
                     List<FacilityModel> teamFacilities = [];
                     teamFacilities.addAll(
-                      facilities,
+                      allFacilities,
                     );
 
                     return isDistributor && !isWareHouseMgr
                         ? teamFacilities
-                        : facilities;
+                        : allFacilities;
                   },
                 ) ??
                 [];
-            // get distribution facilities for communityDistributor , solution customisation
+
+            // filter facility logic based on boundary type
+            List<FacilityModel> facilities = allFacilities;
+            List<FacilityModel> filteredFacilityResult = [];
+            if (ctx.selectedProject.address?.boundaryType == 'Country') {
+              filteredFacilityResult = allFacilities
+                  .where((element) => element.usage == 'Central Facility')
+                  .toList();
+              facilities = filteredFacilityResult.isEmpty
+                  ? facilities
+                  : filteredFacilityResult;
+            } else if (ctx.selectedProject.address?.boundaryType == 'DRS') {
+              filteredFacilityResult = allFacilities
+                  .where((element) => element.usage == 'DRS Facility')
+                  .toList();
+              facilities = filteredFacilityResult.isEmpty
+                  ? facilities
+                  : filteredFacilityResult;
+            } else if (ctx.selectedProject.address?.boundaryType ==
+                'District') {
+              filteredFacilityResult = allFacilities
+                  .where((element) => element.usage == 'District Facility')
+                  .toList();
+              facilities = filteredFacilityResult.isEmpty
+                  ? facilities
+                  : filteredFacilityResult;
+            } else if (ctx.selectedProject.address?.boundaryType ==
+                'Poste De Sante') {
+              filteredFacilityResult = allFacilities
+                  .where(
+                    (element) => element.usage == 'Poste De Sante Facility',
+                  )
+                  .toList();
+              facilities = filteredFacilityResult.isEmpty
+                  ? facilities
+                  : filteredFacilityResult;
+            }
+
             List<FacilityModel> filteredFacilities = [];
             if (isSupervisor) {
               filteredFacilities = facilities
@@ -136,30 +170,11 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                 filteredFacility = filteredFacilities.first;
               }
             } else {
-              // filteredFacilities = facilities
-              //     .where(
-              //       (element) => element.usage != 'CD' && element.usage != 'CS',
-              //     )
-              //     .toList();
-              if (isDRSWarehouseMgr) {
-                filteredFacilities = facilities
-                    .where(
-                      (element) => element.usage == 'DRS Facility',
-                    )
-                    .toList();
-              } else if (isDistrictWarehouseMgr) {
-                filteredFacilities = facilities
-                    .where(
-                      (element) => element.usage == 'District Facility',
-                    )
-                    .toList();
-              } else {
-                filteredFacilities = facilities
-                    .where(
-                      (element) => element.usage == "Poste De Sante Facility",
-                    )
-                    .toList();
-              }
+              filteredFacilities = facilities
+                  .where(
+                    (element) => element.usage != 'CD' && element.usage != 'CS',
+                  )
+                  .toList();
             }
 
             // prevFacility = facilityState.whenOrNull(
@@ -301,15 +316,9 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    isDistributor && !isWareHouseMgr
-                                        ? localizations.translate(
-                                            i18.stockDetails
-                                                .transactionDetailsLabel,
-                                          )
-                                        : localizations.translate(
-                                            i18.warehouseDetails
-                                                .warehouseDetailsLabel,
-                                          ),
+                                    localizations.translate(
+                                      i18.stockDetails.stockDetailsLabel,
+                                    ),
                                     style: theme.textTheme.displayMedium,
                                   ),
                                   Column(children: [

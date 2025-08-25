@@ -94,11 +94,11 @@ class _IndividualDetailsPageState
   }
 
   String extractLastPart(String url) {
-  final regex = RegExp(r'cps\.pnlp\.sn/patients/([a-fA-F0-9\-]+)$');
-  final match = regex.firstMatch(url);
-  
-  return match != null ? match.group(1)! : url;
-}
+    final regex = RegExp(r'cps\.pnlp\.sn/patients/([a-fA-F0-9\-]+)$');
+    final match = regex.firstMatch(url);
+
+    return match != null ? match.group(1)! : url;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -248,8 +248,37 @@ class _IndividualDetailsPageState
                                         titleText: localizations.translate(
                                           i18.deliverIntervention.dialogTitle,
                                         ),
-                                        contentText: localizations.translate(
-                                          i18.deliverIntervention.dialogContent,
+                                        content: RichText(
+                                          text: TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                            children: [
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartOne,
+                                                ),
+                                              ),
+                                              const TextSpan(text: ' '),
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartTwo,
+                                                ),
+                                                style: const TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                              const TextSpan(text: ' '),
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartThree,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         primaryAction: DigitDialogActions(
                                           label: localizations.translate(
@@ -277,6 +306,7 @@ class _IndividualDetailsPageState
 
                                     if (submit ?? false) {
                                       if (context.mounted) {
+                                        clickedStatus.value = false;
                                         await onSubmit(individual, true);
                                       }
                                     }
@@ -399,9 +429,37 @@ class _IndividualDetailsPageState
                                           titleText: localizations.translate(
                                             i18.deliverIntervention.dialogTitle,
                                           ),
-                                          contentText: localizations.translate(
-                                            i18.deliverIntervention
-                                                .dialogContent,
+                                          content: RichText(
+                                            text: TextSpan(
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                              children: [
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartOne,
+                                                  ),
+                                                ),
+                                                const TextSpan(text: ' '),
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartTwo,
+                                                  ),
+                                                  style: const TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                const TextSpan(text: ' '),
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartThree,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           primaryAction: DigitDialogActions(
                                             label: localizations.translate(
@@ -428,6 +486,7 @@ class _IndividualDetailsPageState
                                       );
 
                                       if (submit ?? false) {
+                                        clickedStatus.value = false;
                                         onBeneficiarySubmit(
                                           individual.name?.givenName ?? "",
                                           individual,
@@ -544,8 +603,15 @@ class _IndividualDetailsPageState
                                   orElse: () => const Offstage(),
                                   initialized: (appConfiguration, _) {
                                     final idTypeOptions =
-                                        appConfiguration.idTypeOptions ??
-                                            <IdTypeOptions>[];
+                                        appConfiguration.idTypeOptions !=
+                                                    null &&
+                                                appConfiguration
+                                                    .idTypeOptions!.isNotEmpty
+                                            ? [
+                                                appConfiguration
+                                                    .idTypeOptions!.first,
+                                              ]
+                                            : <IdTypeOptions>[];
 
                                     return individualDetailsShowcaseData.idType
                                         .buildWith(
@@ -614,10 +680,10 @@ class _IndividualDetailsPageState
                                               localizations.translate(
                                                 '${i18.individualDetails.idNumberLabelText}_IS_REQUIRED',
                                               ),
-                                          'min2': (object) =>
+                                          'min1': (object) =>
                                               localizations.translate(
                                                 i18.individualDetails
-                                                    .idNumberLengthError,
+                                                    .idNumberLengthOneError,
                                               ),
                                           'maxLength': (object) =>
                                               localizations.translate(
@@ -695,6 +761,8 @@ class _IndividualDetailsPageState
                                     } else {
                                       DigitDOBAge age =
                                           DigitDateUtils.calculateAge(value);
+                                      final totalAgeInMonths =
+                                          (age.years * 12) + age.months;
                                       if ((age.years == 0 && age.months == 0) ||
                                           age.months > 11 ||
                                           (age.years > 150 ||
@@ -704,6 +772,11 @@ class _IndividualDetailsPageState
                                       } else if (widget.isHeadOfHousehold &&
                                           age.years < 18) {
                                         isHeadAgeValid = false;
+                                      } else if (!widget.isHeadOfHousehold &&
+                                          (totalAgeInMonths < 3 ||
+                                              totalAgeInMonths > 120)) {
+                                        formControl
+                                            .setErrors({'ageLimit': true});
                                       } else {
                                         if (widget.isHeadOfHousehold) {
                                           isHeadAgeValid = true;
@@ -809,8 +882,11 @@ class _IndividualDetailsPageState
                                             child: Text(
                                               overflow: TextOverflow.ellipsis,
                                               localizations.translate(
-                                                extractLastPart(state.qrcodes.last,),),
-                                                  // state.qrcodes.last,),
+                                                extractLastPart(
+                                                  state.qrcodes.last,
+                                                ),
+                                              ),
+                                              // state.qrcodes.last,),
                                             ),
                                           ),
                                           IconButton(
@@ -1149,7 +1225,7 @@ class _IndividualDetailsPageState
             ? []
             : [
                 Validators.required,
-                CustomValidator.requiredMin2,
+                CustomValidator.requiredMin1,
                 Validators.maxLength(64),
               ],
         value: individual?.identifiers?.firstOrNull?.identifierId,

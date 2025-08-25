@@ -1073,6 +1073,8 @@ class IndividualDetails {
   String get lastNameIsRequiredError => 'LAST_NAME_REQUIRED_ERROR_MESSAGE';
   String get linkVoucherToIndividual => 'LINK_VOUCHER_TO_INDIVIDUAL';
   String get headAgeValidError => 'HEAD_VALID_AGE_ERROR_MESSAGE';
+
+  String get idNumberLengthOneError => 'ID_NUMBER_LENGTH_ONE_ERROR_MESSAGE';
 }
 
 class HouseholdLocation {
@@ -1282,6 +1284,14 @@ class DeliverIntervention {
   String get dialogTitle => 'DELIVER_INTERVENTION_DIALOG_TITLE';
 
   String get dialogContent => 'DELIVER_INTERVENTION_DIALOG_CONTENT';
+
+  String get dialogContentPartOne =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_ONE';
+  String get dialogContentPartTwo =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_TWO';
+  String get dialogContentPartThree =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_THREE';
+
 
   String get didYouObserveAdvEventsTitle =>
       'DID_YOU_OBSERVE_ADVERSE_EVENTS_TITLE';
@@ -1510,6 +1520,7 @@ class StockDetails {
   String get returnedSpaqDetails => 'RETURNED_SPAQ_DETAILS';
   String get damagedSpaqDetails => 'DAMAGED_SPAQ_DETAILS';
   String get quantityDamagedCountLabel => 'STOCK_DAMAGED_QUANTITY_LABEL';
+  String get stockDetailsLabel => 'STOCK_DETAILS_LABEL';
 }
 
 class StockReconciliationDetails {

@@ -13,15 +13,15 @@ enum BeneficiaryType {
   @MappableValue("3-59MONTH") individual4,
   @MappableValue("60-167MONTH") individual5,
   @MappableValue("167-1800MONTH") individual6,
-  @MappableValue("COB1") coblister1,
-  @MappableValue("COB2") coblister2,
+  @MappableValue("COBLISTER1") coblister1,
+  @MappableValue("COBLISTER2") coblister2,
   @MappableValue("IVERMECTIN") ivermectin,
   @MappableValue("ALBENDAZOLE") albendazole,
   @MappableValue("SPAQ1") spaq1,
   @MappableValue("SPAQ2") spaq2,
   @MappableValue("Plaquette 6") plaquette6,
   @MappableValue("Plaquette 3") plaquette3,
-  @MappableValue("Plaquette 9") plaquette9,
-  
+  @MappableValue("Plaquette 9") plaquette9, 
+  @MappableValue("DHAPQ") dhapq,
   ;
 }

@@ -70,15 +70,24 @@ class _HouseholdOverviewPageState
                       }
 
                       return ScrollableContent(
-                        header: BackNavigationHelpHeaderWidget(
-                          showcaseButton: const ShowcaseButton(),
-                          handleback: () {
-                            // context
-                            //     .read<SearchBlocWrapper>()
-                            //     .searchHouseholdsBloc
-                            //     .add(const SearchHouseholdsClearEvent());
-                            context.router.popAndPush(SearchBeneficiaryRoute());
-                          },
+                        header: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 8),
+                              child: BackNavigationHelpHeaderWidget(
+                                showHelp: false,
+                                showBackNavigation: true,
+                                handleback: () {
+                                  context
+                                      .read<SearchBlocWrapper>()
+                                      .searchHouseholdsBloc
+                                      .add(const SearchHouseholdsClearEvent());
+                                  context.router
+                                      .popAndPush(SearchBeneficiaryRoute());
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                         enableFixedButton: true,
                         footer: Offstage(
