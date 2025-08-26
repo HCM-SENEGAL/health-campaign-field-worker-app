@@ -1292,7 +1292,6 @@ class DeliverIntervention {
   String get dialogContentPartThree =>
       'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_THREE';
 
-
   String get didYouObserveAdvEventsTitle =>
       'DID_YOU_OBSERVE_ADVERSE_EVENTS_TITLE';
   String get didYouObservePreviousAdvEventsTitle =>
@@ -1309,6 +1308,7 @@ class DeliverIntervention {
       'DELIVER_INTERVENTION_RESOURCE_DELETE_PRIMARY_ACTION_LABEL';
   String get wasTheDoseAdministered => 'WAS_THE_DOSE_ADMINISTERED_LABEL';
   String get dose => 'DELIVER_INTERVENTION_DOSE';
+  String get doseTDO => 'DELIVER_INTERVENTION_DOSE_TDO';
   String get hidePastCycles => 'DELIVER_INTERVENTION_HIDE_PAST_CYCLES';
   String get viewPastCycles => 'DELIVER_INTERVENTION_VIEW_PAST_CYCLES';
   String get currentCycle => 'DELIVER_INTERVENTION_CURRENT_CYCLE';
