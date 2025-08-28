@@ -417,7 +417,7 @@ class _StockReconciliationPageState
                                             ) ??
                                             [];
 
-                                         List<FacilityModel> facilities =
+                                        List<FacilityModel> facilities =
                                             allFacilities;
                                         List<FacilityModel>
                                             filteredFacilityResult = [];
@@ -758,7 +758,7 @@ class _StockReconciliationPageState
                                       iconColor: theme.colorScheme.surfaceTint,
                                       description: localizations.translate(
                                         i18.stockReconciliationDetails
-                                            .infoCardContent,
+                                            .infoCardContentCoblister,
                                       ),
                                       title: localizations.translate(
                                         i18.stockReconciliationDetails

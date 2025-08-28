@@ -1559,6 +1559,10 @@ class StockReconciliationDetails {
   String get infoCardTitle => 'STOCK_RECONCILIATION_INFO_CARD_TITLE';
 
   String get infoCardContent => 'STOCK_RECONCILIATION_INFO_CARD_CONTENT_SPAQ';
+
+  String get infoCardContentCoblister =>
+      'STOCK_RECONCILIATION_INFO_CARD_CONTENT_COBLISTER';
+
   String get infoCardDescription =>
       'STOCK_RECONCILIATION_INFO_CARD_DESCRIPTION_SPAQ';
 
