@@ -775,8 +775,7 @@ class _IndividualDetailsPageState
                                       } else if (!widget.isHeadOfHousehold &&
                                           (totalAgeInMonths < 3 ||
                                               totalAgeInMonths > 120)) {
-                                        formControl
-                                            .setErrors({'ageLimit': true});
+                                        formControl.setErrors({'': true});
                                       } else {
                                         if (widget.isHeadOfHousehold) {
                                           isHeadAgeValid = true;
