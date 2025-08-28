@@ -57,7 +57,7 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
       _transactionQuantityKey: FormControl<int>(validators: [
         Validators.number,
         Validators.required,
-        Validators.min(0),
+        Validators.min(1),
         Validators.max(maxStockQuantity),
       ]),
       _transactionReasonKey: FormControl<TransactionReason>(),
@@ -594,165 +594,158 @@ class _StockDetailsPageState extends LocalizedState<StockDetailsPage> {
                                               return;
                                             }
                                           }
-                                          }
+                                        }
 
-                                          final cycleIndex = context
-                                                      .selectedCycle.id ==
-                                                  0
-                                              ? ""
-                                              : "0${context.selectedCycle.id}";
+                                        final cycleIndex = context
+                                                    .selectedCycle.id ==
+                                                0
+                                            ? ""
+                                            : "0${context.selectedCycle.id}";
 
-                                          final projectTypeId = context
-                                                      .selectedProjectType ==
-                                                  null
-                                              ? ""
-                                              : context.selectedProjectType!.id;
+                                        final projectTypeId =
+                                            context.selectedProjectType == null
+                                                ? ""
+                                                : context
+                                                    .selectedProjectType!.id;
 
-                                          final stockModel = StockModel(
-                                            clientReferenceId:
-                                                IdGen.i.identifier,
-                                            productVariantId: productVariant.id,
-                                            transactionReason:
-                                                transactionReason,
-                                            transactionType: transactionType,
-                                            referenceId: stockState.projectId,
-                                            referenceIdType: 'PROJECT',
-                                            quantity: quantity.toString(),
-                                            // waybillNumber: waybillNumber,
-                                            receiverId: receiverId,
-                                            receiverType: receiverType,
-                                            senderId: senderId,
-                                            senderType: senderType,
-                                            facilityId: primaryId,
-                                            transactingPartyId:
-                                                secondaryParty?.id,
-                                            transactingPartyType: "WAREHOUSE",
-                                            auditDetails: AuditDetails(
-                                              createdBy:
-                                                  context.loggedInUserUuid,
-                                              createdTime: context
-                                                  .millisecondsSinceEpoch(),
-                                            ),
-                                            clientAuditDetails:
-                                                ClientAuditDetails(
-                                              createdBy:
-                                                  context.loggedInUserUuid,
-                                              createdTime: context
-                                                  .millisecondsSinceEpoch(),
-                                              lastModifiedBy:
-                                                  context.loggedInUserUuid,
-                                              lastModifiedTime: context
-                                                  .millisecondsSinceEpoch(),
-                                            ),
-                                            additionalFields: [
-                                                      // waybillQuantity,
-                                                      comments,
-                                                      // batchNumber,
-                                                      // expiryDate,
-                                                    ].any((element) =>
-                                                        element != null) ||
-                                                    hasLocationData
-                                                ? StockAdditionalFields(
-                                                    version: 1,
-                                                    fields: [
-                                                      // if (waybillQuantity !=
-                                                      //     null)
-                                                      //   AdditionalField(
-                                                      //     'waybill_quantity',
-                                                      //     waybillQuantity
-                                                      //         .toString(),
-                                                      //   ),
-                                                      if (comments != null)
-                                                        AdditionalField(
-                                                          'comments',
-                                                          comments,
-                                                        ),
-                                                      // if (batchNumber != null)
-                                                      //   AdditionalField(
-                                                      //     _batchNumberKey,
-                                                      //     batchNumber,
-                                                      //   ),
-                                                      // if (expiryDate != null)
-                                                      //   AdditionalField(
-                                                      //     _dateOfExpiry,
-                                                      //     expiryDate
-                                                      //         .millisecondsSinceEpoch,
-                                                      //   ),
-                                                      if (hasLocationData) ...[
-                                                        AdditionalField(
-                                                          'lat',
-                                                          lat,
-                                                        ),
-                                                        AdditionalField(
-                                                          'lng',
-                                                          lng,
-                                                        ),
-                                                      ],
-                                                      if (cycleIndex.isNotEmpty)
-                                                        AdditionalField(
-                                                          "cycleIndex",
-                                                          cycleIndex,
-                                                        ),
-                                                      if (projectTypeId
-                                                          .isNotEmpty)
-                                                        AdditionalField(
-                                                          "projectTypeId",
-                                                          projectTypeId,
-                                                        ),
+                                        final stockModel = StockModel(
+                                          clientReferenceId: IdGen.i.identifier,
+                                          productVariantId: productVariant.id,
+                                          transactionReason: transactionReason,
+                                          transactionType: transactionType,
+                                          referenceId: stockState.projectId,
+                                          referenceIdType: 'PROJECT',
+                                          quantity: quantity.toString(),
+                                          // waybillNumber: waybillNumber,
+                                          receiverId: receiverId,
+                                          receiverType: receiverType,
+                                          senderId: senderId,
+                                          senderType: senderType,
+                                          facilityId: primaryId,
+                                          transactingPartyId:
+                                              secondaryParty?.id,
+                                          transactingPartyType: "WAREHOUSE",
+                                          auditDetails: AuditDetails(
+                                            createdBy: context.loggedInUserUuid,
+                                            createdTime: context
+                                                .millisecondsSinceEpoch(),
+                                          ),
+                                          clientAuditDetails:
+                                              ClientAuditDetails(
+                                            createdBy: context.loggedInUserUuid,
+                                            createdTime: context
+                                                .millisecondsSinceEpoch(),
+                                            lastModifiedBy:
+                                                context.loggedInUserUuid,
+                                            lastModifiedTime: context
+                                                .millisecondsSinceEpoch(),
+                                          ),
+                                          additionalFields: [
+                                                    // waybillQuantity,
+                                                    comments,
+                                                    // batchNumber,
+                                                    // expiryDate,
+                                                  ].any((element) =>
+                                                      element != null) ||
+                                                  hasLocationData
+                                              ? StockAdditionalFields(
+                                                  version: 1,
+                                                  fields: [
+                                                    // if (waybillQuantity !=
+                                                    //     null)
+                                                    //   AdditionalField(
+                                                    //     'waybill_quantity',
+                                                    //     waybillQuantity
+                                                    //         .toString(),
+                                                    //   ),
+                                                    if (comments != null)
+                                                      AdditionalField(
+                                                        'comments',
+                                                        comments,
+                                                      ),
+                                                    // if (batchNumber != null)
+                                                    //   AdditionalField(
+                                                    //     _batchNumberKey,
+                                                    //     batchNumber,
+                                                    //   ),
+                                                    // if (expiryDate != null)
+                                                    //   AdditionalField(
+                                                    //     _dateOfExpiry,
+                                                    //     expiryDate
+                                                    //         .millisecondsSinceEpoch,
+                                                    //   ),
+                                                    if (hasLocationData) ...[
+                                                      AdditionalField(
+                                                        'lat',
+                                                        lat,
+                                                      ),
+                                                      AdditionalField(
+                                                        'lng',
+                                                        lng,
+                                                      ),
                                                     ],
-                                                  )
-                                                : null,
-                                          );
+                                                    if (cycleIndex.isNotEmpty)
+                                                      AdditionalField(
+                                                        "cycleIndex",
+                                                        cycleIndex,
+                                                      ),
+                                                    if (projectTypeId
+                                                        .isNotEmpty)
+                                                      AdditionalField(
+                                                        "projectTypeId",
+                                                        projectTypeId,
+                                                      ),
+                                                  ],
+                                                )
+                                              : null,
+                                        );
 
-                                          bloc.add(
-                                            RecordStockSaveStockDetailsEvent(
-                                              stockModel: stockModel,
+                                        bloc.add(
+                                          RecordStockSaveStockDetailsEvent(
+                                            stockModel: stockModel,
+                                          ),
+                                        );
+
+                                        final submit =
+                                            // ignore: use_build_context_synchronously
+                                            await DigitDialog.show<bool>(
+                                          context,
+                                          options: DigitDialogOptions(
+                                            titleText: localizations.translate(
+                                              i18.stockDetails.dialogTitle,
                                             ),
-                                          );
-
-                                          final submit =
-                                              // ignore: use_build_context_synchronously
-                                              await DigitDialog.show<bool>(
-                                            context,
-                                            options: DigitDialogOptions(
-                                              titleText:
-                                                  localizations.translate(
-                                                i18.stockDetails.dialogTitle,
+                                            contentText:
+                                                localizations.translate(
+                                              i18.stockDetails.dialogContent,
+                                            ),
+                                            primaryAction: DigitDialogActions(
+                                              label: localizations.translate(
+                                                i18.common.coreCommonSubmit,
                                               ),
-                                              contentText:
-                                                  localizations.translate(
-                                                i18.stockDetails.dialogContent,
-                                              ),
-                                              primaryAction: DigitDialogActions(
-                                                label: localizations.translate(
-                                                  i18.common.coreCommonSubmit,
-                                                ),
-                                                action: (context) {
-                                                  Navigator.of(
-                                                    context,
-                                                    rootNavigator: true,
-                                                  ).pop(true);
-                                                },
-                                              ),
-                                              secondaryAction:
-                                                  DigitDialogActions(
-                                                label: localizations.translate(
-                                                  i18.common.coreCommonCancel,
-                                                ),
-                                                action: (context) =>
-                                                    Navigator.of(
+                                              action: (context) {
+                                                Navigator.of(
                                                   context,
                                                   rootNavigator: true,
-                                                ).pop(false),
-                                              ),
+                                                ).pop(true);
+                                              },
                                             ),
-                                          );
+                                            secondaryAction: DigitDialogActions(
+                                              label: localizations.translate(
+                                                i18.common.coreCommonCancel,
+                                              ),
+                                              action: (context) => Navigator.of(
+                                                context,
+                                                rootNavigator: true,
+                                              ).pop(false),
+                                            ),
+                                          ),
+                                        );
 
-                                          if (submit ?? false) {
-                                            bloc.add(
-                                              const RecordStockCreateStockEntryEvent(),
-                                            );
-                                          }
+                                        if (submit ?? false) {
+                                          bloc.add(
+                                            const RecordStockCreateStockEntryEvent(),
+                                          );
+                                        }
                                         // }
                                       },
                                 child: Center(
