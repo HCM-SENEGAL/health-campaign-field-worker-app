@@ -223,8 +223,7 @@ class _IndividualDetailsPageState
                                       context.read<ScannerBloc>();
 
                                   if (!widget.isHeadOfHousehold &&
-                                      (scannerBloc.state.duplicate ||
-                                          scannerBloc.state.qrcodes.isEmpty)) {
+                                      (scannerBloc.state.duplicate)) {
                                     DigitToast.show(
                                       context,
                                       options: DigitToastOptions(
@@ -334,8 +333,7 @@ class _IndividualDetailsPageState
                                   if (tag != null &&
                                       tag != projectBeneficiaryModel?.tag &&
                                       !widget.isHeadOfHousehold &&
-                                      (scannerBloc.state.duplicate ||
-                                          scannerBloc.state.qrcodes.isEmpty)) {
+                                      (scannerBloc.state.duplicate)) {
                                     DigitToast.show(
                                       context,
                                       options: DigitToastOptions(
@@ -402,9 +400,7 @@ class _IndividualDetailsPageState
                                         context.read<ScannerBloc>();
 
                                     if (!widget.isHeadOfHousehold &&
-                                        (scannerBloc.state.duplicate ||
-                                            scannerBloc
-                                                .state.qrcodes.isEmpty)) {
+                                        (scannerBloc.state.duplicate)) {
                                       DigitToast.show(
                                         context,
                                         options: DigitToastOptions(
