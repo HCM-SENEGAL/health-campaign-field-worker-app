@@ -37,9 +37,15 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return BeneficiaryType.individual2;
       case "60-120MONTH":
         return BeneficiaryType.individual3;
-      case "COB1":
+      case "3-59MONTH":
+        return BeneficiaryType.individual4;
+      case "60-167MONTH":
+        return BeneficiaryType.individual5;
+      case "167-1800MONTH":
+        return BeneficiaryType.individual6;
+      case "COBLISTER1":
         return BeneficiaryType.coblister1;
-      case "COB2":
+      case "COBLISTER2":
         return BeneficiaryType.coblister2;
       case "IVERMECTIN":
         return BeneficiaryType.ivermectin;
@@ -49,6 +55,14 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return BeneficiaryType.spaq1;
       case "SPAQ2":
         return BeneficiaryType.spaq2;
+      case "Plaquette 6":
+        return BeneficiaryType.plaquette6;
+      case "Plaquette 3":
+        return BeneficiaryType.plaquette3;
+      case "Plaquette 9":
+        return BeneficiaryType.plaquette9;
+      case "DHAPQ":
+        return BeneficiaryType.dhapq;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -69,10 +83,16 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return "12-59MONTH";
       case BeneficiaryType.individual3:
         return "60-120MONTH";
+      case BeneficiaryType.individual4:
+        return "3-59MONTH";
+      case BeneficiaryType.individual5:
+        return "60-167MONTH";
+      case BeneficiaryType.individual6:
+        return "167-1800MONTH";
       case BeneficiaryType.coblister1:
-        return "COB1";
+        return "COBLISTER1";
       case BeneficiaryType.coblister2:
-        return "COB2";
+        return "COBLISTER2";
       case BeneficiaryType.ivermectin:
         return "IVERMECTIN";
       case BeneficiaryType.albendazole:
@@ -81,6 +101,14 @@ class BeneficiaryTypeMapper extends EnumMapper<BeneficiaryType> {
         return "SPAQ1";
       case BeneficiaryType.spaq2:
         return "SPAQ2";
+      case BeneficiaryType.plaquette6:
+        return "Plaquette 6";
+      case BeneficiaryType.plaquette3:
+        return "Plaquette 3";
+      case BeneficiaryType.plaquette9:
+        return "Plaquette 9";
+      case BeneficiaryType.dhapq:
+        return "DHAPQ";
     }
   }
 }

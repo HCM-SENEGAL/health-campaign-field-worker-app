@@ -86,11 +86,26 @@ class _ChecklistPageState extends LocalizedState<ChecklistPage> {
                                 "SUPERVISION_GRID"
                               ];
 
-                              serviceDefinitionList.sort((a, b) =>
-                                  checklistArray
-                                      .indexOf(a.code!.split('.')[1])
-                                      .compareTo(checklistArray
-                                          .indexOf(b.code!.split('.')[1])));
+                              Map<String, int> checklistOrdering = {
+                                'SPC_ADMINISTRATION': 1,
+                                'SURVEY_FORM': 3,
+                                'CAMPAIGN_PREPARATION': 0,
+                                'TREATMENT_EVALUATION': 2,
+                                'SUMMARY_FULL_TREATMENT': 4,
+                                'SUPERVISION_GRID': 5,
+                              };
+
+                              // Sort serviceDefinitionList based on ordering
+                              serviceDefinitionList.sort((a, b) {
+                                final aKey = a.code!.split('.')[1];
+                                final bKey = b.code!.split('.')[1];
+
+                                final aOrder = checklistOrdering[aKey] ??
+                                    999; // 999 = push unknowns to the end
+                                final bOrder = checklistOrdering[bKey] ?? 999;
+
+                                return aOrder.compareTo(bOrder);
+                              });
 
                               final values = serviceDefinitionList.where(
                                 (item) => !roles

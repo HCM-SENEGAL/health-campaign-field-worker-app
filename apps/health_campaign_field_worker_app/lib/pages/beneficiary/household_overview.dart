@@ -20,6 +20,7 @@ import '../../widgets/action_card/action_card.dart';
 import '../../widgets/header/back_navigation_help_header.dart';
 import '../../widgets/localized.dart';
 import '../../widgets/member_card/member_card.dart';
+import '../../widgets/showcase/showcase_button.dart';
 
 class HouseholdOverviewPage extends LocalizedStatefulWidget {
   const HouseholdOverviewPage({super.key, super.appLocalizations});
@@ -69,13 +70,24 @@ class _HouseholdOverviewPageState
                       }
 
                       return ScrollableContent(
-                        header: BackNavigationHelpHeaderWidget(
-                          handleback: () {
-                            context
-                                .read<SearchBlocWrapper>()
-                                .searchHouseholdsBloc
-                                .add(const SearchHouseholdsClearEvent());
-                          },
+                        header: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 8),
+                              child: BackNavigationHelpHeaderWidget(
+                                showHelp: false,
+                                showBackNavigation: true,
+                                handleback: () {
+                                  context
+                                      .read<SearchBlocWrapper>()
+                                      .searchHouseholdsBloc
+                                      .add(const SearchHouseholdsClearEvent());
+                                  context.router
+                                      .popAndPush(SearchBeneficiaryRoute());
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                         enableFixedButton: true,
                         footer: Offstage(

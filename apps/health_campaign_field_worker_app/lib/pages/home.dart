@@ -403,7 +403,7 @@ class _HomePageState extends LocalizedState<HomePage> {
       ),
       i18.home.viewReportsLabel: homeShowcaseData.inventoryReport.buildWith(
         child: HomeItemCard(
-          icon: Icons.announcement,
+          icon: Icons.summarize,
           label: i18.home.viewReportsLabel,
           onPressed: () {
             context.router.push(

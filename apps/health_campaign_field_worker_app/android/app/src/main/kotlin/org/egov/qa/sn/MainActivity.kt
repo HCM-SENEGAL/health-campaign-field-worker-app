@@ -1,4 +1,4 @@
-package org.egov.qa.sn
+package org.egov.sn
 import android.app.NotificationManager
 import android.content.Context
 import io.flutter.embedding.android.FlutterActivity

@@ -58,6 +58,48 @@ class _IndividualDetailsPageState
   // static const _heightKey = 'height';
   bool isHeadAgeValid = true;
 
+  onSubmit(IndividualModel individual, bool isCreate) async {
+    final bloc = context.read<BeneficiaryRegistrationBloc>();
+    final router = context.router;
+    final name = individual.name?.givenName ?? '';
+
+    if (context.mounted) {
+      if (isCreate) {
+        router.push(SummaryRoute(name: name, individualModel: individual));
+      } else {
+        const SearchHouseholdsClearEvent();
+        SearchHouseholdsSearchByHouseholdHeadEvent(
+          searchText: name,
+          projectId: context.projectId,
+          isProximityEnabled: false,
+          limit: 10,
+          offset: 0,
+        );
+        router.popUntil(
+          (route) => route.settings.name == SearchBeneficiaryRoute.name,
+        );
+        router.push(BeneficiaryAcknowledgementRoute(
+          enableViewHousehold: true,
+        ));
+      }
+    }
+  }
+
+  onBeneficiarySubmit(name, individual) async {
+    final router = context.router;
+    router.push(BeneficiarySummaryRoute(
+      name: name,
+      individualModel: individual,
+    ));
+  }
+
+  String extractLastPart(String url) {
+    final regex = RegExp(r'cps\.pnlp\.sn/patients/([a-fA-F0-9\-]+)$');
+    final match = regex.firstMatch(url);
+
+    return match != null ? match.group(1)! : url;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<BeneficiaryRegistrationBloc>();
@@ -72,23 +114,7 @@ class _IndividualDetailsPageState
             BeneficiaryRegistrationBloc, BeneficiaryRegistrationState>(
           listener: (context, state) {
             state.mapOrNull(
-              persisted: (value) {
-                if (value.navigateToRoot) {
-                  (router.parent() as StackRouter).pop();
-                } else {
-                  (router.parent() as StackRouter).pop();
-                  context.read<SearchBlocWrapper>().searchHouseholdsBloc.add(
-                        SearchHouseholdsEvent.searchByHousehold(
-                          householdModel: value.householdModel,
-                          projectId: context.projectId,
-                          isProximityEnabled: false,
-                        ),
-                      );
-                  router.push(BeneficiaryAcknowledgementRoute(
-                    enableViewHousehold: true,
-                  ));
-                }
-              },
+              persisted: (value) {},
             );
           },
           builder: (context, state) {
@@ -197,8 +223,7 @@ class _IndividualDetailsPageState
                                       context.read<ScannerBloc>();
 
                                   if (!widget.isHeadOfHousehold &&
-                                      (scannerBloc.state.duplicate ||
-                                          scannerBloc.state.qrcodes.isEmpty)) {
+                                      (scannerBloc.state.duplicate)) {
                                     DigitToast.show(
                                       context,
                                       options: DigitToastOptions(
@@ -222,14 +247,43 @@ class _IndividualDetailsPageState
                                         titleText: localizations.translate(
                                           i18.deliverIntervention.dialogTitle,
                                         ),
-                                        contentText: localizations.translate(
-                                          i18.deliverIntervention.dialogContent,
+                                        content: RichText(
+                                          text: TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                            children: [
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartOne,
+                                                ),
+                                              ),
+                                              const TextSpan(text: ' '),
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartTwo,
+                                                ),
+                                                style: const TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                              const TextSpan(text: ' '),
+                                              TextSpan(
+                                                text: localizations.translate(
+                                                  i18.deliverIntervention
+                                                      .dialogContentPartThree,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         primaryAction: DigitDialogActions(
                                           label: localizations.translate(
                                             i18.common.coreCommonSubmit,
                                           ),
-                                          action: (context) {
+                                          action: (context) async {
                                             clickedStatus.value = true;
                                             Navigator.of(
                                               context,
@@ -251,28 +305,8 @@ class _IndividualDetailsPageState
 
                                     if (submit ?? false) {
                                       if (context.mounted) {
-                                        final scannerBloc =
-                                            context.read<ScannerBloc>();
-
-                                        bloc.add(
-                                          BeneficiaryRegistrationCreateEvent(
-                                            projectId: projectId,
-                                            userUuid: userId,
-                                            boundary: boundary,
-                                            tag: scannerBloc
-                                                    .state.qrcodes.isNotEmpty
-                                                ? scannerBloc
-                                                    .state.qrcodes.first
-                                                : null,
-                                          ),
-                                        );
-
-                                        scannerBloc.add(
-                                          const ScannerEvent.handleScanner(
-                                            [],
-                                            [],
-                                          ),
-                                        );
+                                        clickedStatus.value = false;
+                                        await onSubmit(individual, true);
                                       }
                                     }
                                   }
@@ -299,8 +333,7 @@ class _IndividualDetailsPageState
                                   if (tag != null &&
                                       tag != projectBeneficiaryModel?.tag &&
                                       !widget.isHeadOfHousehold &&
-                                      (scannerBloc.state.duplicate ||
-                                          scannerBloc.state.qrcodes.isEmpty)) {
+                                      (scannerBloc.state.duplicate)) {
                                     DigitToast.show(
                                       context,
                                       options: DigitToastOptions(
@@ -367,9 +400,7 @@ class _IndividualDetailsPageState
                                         context.read<ScannerBloc>();
 
                                     if (!widget.isHeadOfHousehold &&
-                                        (scannerBloc.state.duplicate ||
-                                            scannerBloc
-                                                .state.qrcodes.isEmpty)) {
+                                        (scannerBloc.state.duplicate)) {
                                       DigitToast.show(
                                         context,
                                         options: DigitToastOptions(
@@ -394,9 +425,37 @@ class _IndividualDetailsPageState
                                           titleText: localizations.translate(
                                             i18.deliverIntervention.dialogTitle,
                                           ),
-                                          contentText: localizations.translate(
-                                            i18.deliverIntervention
-                                                .dialogContent,
+                                          content: RichText(
+                                            text: TextSpan(
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                              children: [
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartOne,
+                                                  ),
+                                                ),
+                                                const TextSpan(text: ' '),
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartTwo,
+                                                  ),
+                                                  style: const TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                const TextSpan(text: ' '),
+                                                TextSpan(
+                                                  text: localizations.translate(
+                                                    i18.deliverIntervention
+                                                        .dialogContentPartThree,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           primaryAction: DigitDialogActions(
                                             label: localizations.translate(
@@ -423,21 +482,10 @@ class _IndividualDetailsPageState
                                       );
 
                                       if (submit ?? false) {
-                                        bloc.add(
-                                          BeneficiaryRegistrationAddMemberEvent(
-                                            beneficiaryType:
-                                                context.beneficiaryType,
-                                            householdModel: householdModel,
-                                            individualModel: individual,
-                                            addressModel: addressModel,
-                                            userUuid: userId,
-                                            projectId: context.projectId,
-                                            tag: scannerBloc
-                                                    .state.qrcodes.isNotEmpty
-                                                ? scannerBloc
-                                                    .state.qrcodes.first
-                                                : null,
-                                          ),
+                                        clickedStatus.value = false;
+                                        onBeneficiarySubmit(
+                                          individual.name?.givenName ?? "",
+                                          individual,
                                         );
                                       }
                                     }
@@ -484,15 +532,15 @@ class _IndividualDetailsPageState
                             individualDetailsShowcaseData.nameOfIndividual
                                 .buildWith(
                               child: DigitTextFormField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp("[a-zA-Z ]"),
+                                  ),
+                                ],
                                 formControlName: _individualNameKey,
                                 label: localizations.translate(
                                   i18.individualDetails.firstNameLabelText,
                                 ),
-                                // inputFormatters: [
-                                //   FilteringTextInputFormatter.allow(RegExp(
-                                //     "[a-zA-Z ]",
-                                //   )),
-                                // ],
                                 isRequired: true,
                                 maxLength: 200,
                                 validationMessages: {
@@ -518,11 +566,11 @@ class _IndividualDetailsPageState
                                 label: localizations.translate(
                                   i18.individualDetails.lastNameLabelText,
                                 ),
-                                // inputFormatters: [
-                                //   FilteringTextInputFormatter.allow(RegExp(
-                                //     "[a-zA-Z ]",
-                                //   )),
-                                // ],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(RegExp(
+                                    "[a-zA-Z ]",
+                                  )),
+                                ],
                                 maxLength: 200,
                                 isRequired: true,
                                 validationMessages: {
@@ -551,8 +599,15 @@ class _IndividualDetailsPageState
                                   orElse: () => const Offstage(),
                                   initialized: (appConfiguration, _) {
                                     final idTypeOptions =
-                                        appConfiguration.idTypeOptions ??
-                                            <IdTypeOptions>[];
+                                        appConfiguration.idTypeOptions !=
+                                                    null &&
+                                                appConfiguration
+                                                    .idTypeOptions!.isNotEmpty
+                                            ? [
+                                                appConfiguration
+                                                    .idTypeOptions!.first,
+                                              ]
+                                            : <IdTypeOptions>[];
 
                                     return individualDetailsShowcaseData.idType
                                         .buildWith(
@@ -621,10 +676,10 @@ class _IndividualDetailsPageState
                                               localizations.translate(
                                                 '${i18.individualDetails.idNumberLabelText}_IS_REQUIRED',
                                               ),
-                                          'min2': (object) =>
+                                          'min1': (object) =>
                                               localizations.translate(
                                                 i18.individualDetails
-                                                    .idNumberLengthError,
+                                                    .idNumberLengthOneError,
                                               ),
                                           'maxLength': (object) =>
                                               localizations.translate(
@@ -702,6 +757,8 @@ class _IndividualDetailsPageState
                                     } else {
                                       DigitDOBAge age =
                                           DigitDateUtils.calculateAge(value);
+                                      final totalAgeInMonths =
+                                          (age.years * 12) + age.months;
                                       if ((age.years == 0 && age.months == 0) ||
                                           age.months > 11 ||
                                           (age.years > 150 ||
@@ -711,6 +768,10 @@ class _IndividualDetailsPageState
                                       } else if (widget.isHeadOfHousehold &&
                                           age.years < 18) {
                                         isHeadAgeValid = false;
+                                      } else if (!widget.isHeadOfHousehold &&
+                                          (totalAgeInMonths < 3 ||
+                                              totalAgeInMonths > 120)) {
+                                        formControl.setErrors({'': true});
                                       } else {
                                         if (widget.isHeadOfHousehold) {
                                           isHeadAgeValid = true;
@@ -816,7 +877,11 @@ class _IndividualDetailsPageState
                                             child: Text(
                                               overflow: TextOverflow.ellipsis,
                                               localizations.translate(
-                                                  state.qrcodes.last),
+                                                extractLastPart(
+                                                  state.qrcodes.last,
+                                                ),
+                                              ),
+                                              // state.qrcodes.last,),
                                             ),
                                           ),
                                           IconButton(
@@ -1155,7 +1220,7 @@ class _IndividualDetailsPageState
             ? []
             : [
                 Validators.required,
-                CustomValidator.requiredMin2,
+                CustomValidator.requiredMin1,
                 Validators.maxLength(64),
               ],
         value: individual?.identifiers?.firstOrNull?.identifierId,

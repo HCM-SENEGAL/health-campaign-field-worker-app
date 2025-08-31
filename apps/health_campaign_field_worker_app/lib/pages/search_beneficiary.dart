@@ -30,7 +30,7 @@ class SearchBeneficiaryPage extends LocalizedStatefulWidget {
 class _SearchBeneficiaryPageState
     extends LocalizedState<SearchBeneficiaryPage> {
   final TextEditingController searchController = TextEditingController();
-  bool isProximityEnabled = false;
+  bool isProximityEnabled = true;
   int offset = 0;
   int limit = 10;
 
@@ -44,8 +44,12 @@ class _SearchBeneficiaryPageState
 
   late final SearchBlocWrapper blocWrapper; // Declare BlocWrapper
 
+  Pattern get otherThanAlphabetsRegex =>
+      RegExp(r'[^a-zA-Z\s]'); // Matches non-alphabetic characters
+
   @override
   void initState() {
+    isProximityEnabled = true;
     // Initialize the BlocWrapper with instances of SearchHouseholdsBloc, SearchMemberBloc, and ProximitySearchBloc
     blocWrapper = context.read<SearchBlocWrapper>();
 
@@ -246,6 +250,14 @@ class _SearchBeneficiaryPageState
                                       blocWrapper.clearEvent();
                                       if (value.isEmpty) {
                                         blocWrapper.clearEvent();
+                                      }
+                                      if (value
+                                          .contains(otherThanAlphabetsRegex)) {
+                                        value = value.replaceAll(
+                                          otherThanAlphabetsRegex,
+                                          '',
+                                        );
+                                        searchController.text = value;
                                       }
                                       if (value.trim().length < 2 &&
                                           !isProximityEnabled) {

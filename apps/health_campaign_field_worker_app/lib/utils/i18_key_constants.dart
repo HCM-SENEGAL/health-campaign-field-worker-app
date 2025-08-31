@@ -51,6 +51,8 @@ const ineligibilityReasons = IneligibilityReasons();
 class Common {
   const Common();
 
+  String get coreCommonSummaryDetails => 'CORE_COMMON_SUMMARY_DETAILS';
+
   String get coreCommonContinue => 'CORE_COMMON_CONTINUE';
 
   String get coreCommonLoading => 'CORE_COMMON_LOADING';
@@ -903,6 +905,8 @@ class SearchBeneficiary {
   String get beneficiaryIndividualSearchHintText =>
       'BENEFICIARY_INDIVIDUAL_SEARCH_HINT_TEXT';
 
+  String get beneficiaryDeliveryTDOText => 'DELIVERY_TDO';
+
   String get beneficiaryInfoDescription => 'BENEFICIARY_INFO_DESCRIPTION';
 
   String get beneficiaryInfoTitle => 'BENEFICIARY_INFO_TITLE';
@@ -930,6 +934,7 @@ class BeneficiaryDetails {
       'BENEFICIARY_DETAILS_DELETE_ICON_LABEL';
   String get resourcesTobeDelivered => 'RESOURCES_TO_BE_DELIVERED';
   String get resourcesTobeProvided => 'RESOURCES_TO_BE_PROVIDED';
+  String get beneficiaryDeliveryTDOText => 'DELIVERY_TDO';
 
   String get beneficiaryAge => 'BENEFICIARY_AGE';
   String get beneficiaryHeight => 'BENEFICIARY_HEIGHT';
@@ -1068,6 +1073,8 @@ class IndividualDetails {
   String get lastNameIsRequiredError => 'LAST_NAME_REQUIRED_ERROR_MESSAGE';
   String get linkVoucherToIndividual => 'LINK_VOUCHER_TO_INDIVIDUAL';
   String get headAgeValidError => 'HEAD_VALID_AGE_ERROR_MESSAGE';
+
+  String get idNumberLengthOneError => 'ID_NUMBER_LENGTH_ONE_ERROR_MESSAGE';
 }
 
 class HouseholdLocation {
@@ -1278,6 +1285,13 @@ class DeliverIntervention {
 
   String get dialogContent => 'DELIVER_INTERVENTION_DIALOG_CONTENT';
 
+  String get dialogContentPartOne =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_ONE';
+  String get dialogContentPartTwo =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_TWO';
+  String get dialogContentPartThree =>
+      'DELIVER_INTERVENTION_DIALOG_CONTENT_PART_THREE';
+
   String get didYouObserveAdvEventsTitle =>
       'DID_YOU_OBSERVE_ADVERSE_EVENTS_TITLE';
   String get didYouObservePreviousAdvEventsTitle =>
@@ -1294,6 +1308,7 @@ class DeliverIntervention {
       'DELIVER_INTERVENTION_RESOURCE_DELETE_PRIMARY_ACTION_LABEL';
   String get wasTheDoseAdministered => 'WAS_THE_DOSE_ADMINISTERED_LABEL';
   String get dose => 'DELIVER_INTERVENTION_DOSE';
+  String get doseTDO => 'DELIVER_INTERVENTION_DOSE_TDO';
   String get hidePastCycles => 'DELIVER_INTERVENTION_HIDE_PAST_CYCLES';
   String get viewPastCycles => 'DELIVER_INTERVENTION_VIEW_PAST_CYCLES';
   String get currentCycle => 'DELIVER_INTERVENTION_CURRENT_CYCLE';
@@ -1314,6 +1329,8 @@ class DeliverIntervention {
   String get deliveryCommentRequired => 'DELIVERY_COMMENT_REQUIRED';
 
   String get unableToScan => 'UNABLE_TO_SCAN';
+
+  String get recordText => 'RECORD_TEXT';
 
   String get scanValidResource => 'SCAN_VALID_RESOURCE';
 
@@ -1503,6 +1520,7 @@ class StockDetails {
   String get returnedSpaqDetails => 'RETURNED_SPAQ_DETAILS';
   String get damagedSpaqDetails => 'DAMAGED_SPAQ_DETAILS';
   String get quantityDamagedCountLabel => 'STOCK_DAMAGED_QUANTITY_LABEL';
+  String get stockDetailsLabel => 'STOCK_DETAILS_LABEL';
 }
 
 class StockReconciliationDetails {
@@ -1541,6 +1559,10 @@ class StockReconciliationDetails {
   String get infoCardTitle => 'STOCK_RECONCILIATION_INFO_CARD_TITLE';
 
   String get infoCardContent => 'STOCK_RECONCILIATION_INFO_CARD_CONTENT_SPAQ';
+
+  String get infoCardContentCoblister =>
+      'STOCK_RECONCILIATION_INFO_CARD_CONTENT_COBLISTER';
+
   String get infoCardDescription =>
       'STOCK_RECONCILIATION_INFO_CARD_DESCRIPTION_SPAQ';
 

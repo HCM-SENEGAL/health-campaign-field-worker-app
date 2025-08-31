@@ -8,14 +8,17 @@ import '../../../widgets/localized.dart';
 import '../../blocs/search_households/search_bloc_common_wrapper.dart';
 import '../../blocs/search_households/search_households.dart';
 import '../../blocs/search_households/search_by_head.dart';
+import '../../utils/utils.dart';
 
 class BeneficiaryAcknowledgementPage extends LocalizedStatefulWidget {
   final bool? enableViewHousehold;
+  final dynamic name;
 
   const BeneficiaryAcknowledgementPage({
     super.key,
     super.appLocalizations,
     this.enableViewHousehold,
+    this.name,
   });
 
   @override
@@ -30,11 +33,20 @@ class _BeneficiaryAcknowledgementPageState
     return Scaffold(
       body: DigitAcknowledgement.success(
         action: () {
-          context.router.pop();
+          final bloc = context.read<SearchBlocWrapper>();
+          bloc.searchHouseholdsBloc.add(const SearchHouseholdsClearEvent());
+          context.router.popUntil(
+            (route) => route.settings.name == SearchBeneficiaryRoute.name,
+          );
+          context.router.popAndPush(
+            SearchBeneficiaryRoute(),
+          );
         },
         secondaryAction: () {
           final bloc = context.read<SearchBlocWrapper>();
-
+          context.router.popUntil(
+            (route) => route.settings.name == SearchBeneficiaryRoute.name,
+          );
           context.router.popAndPush(
             BeneficiaryWrapperRoute(
               wrapper: bloc.state.householdMembers.first,
