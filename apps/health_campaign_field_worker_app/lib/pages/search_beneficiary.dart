@@ -31,6 +31,8 @@ class _SearchBeneficiaryPageState
     extends LocalizedState<SearchBeneficiaryPage> {
   final TextEditingController searchController = TextEditingController();
   bool isProximityEnabled = true;
+  bool isMobileNumberSearchEnabled = false;
+  bool isMobileNumberSearchInfoShow = false;
   int offset = 0;
   int limit = 10;
 
@@ -47,9 +49,17 @@ class _SearchBeneficiaryPageState
   Pattern get otherThanAlphabetsRegex =>
       RegExp(r'[^a-zA-Z\s]'); // Matches non-alphabetic characters
 
+  Pattern get otherThanAlphabetsAndNumbersRegex => RegExp(
+        r'[^a-zA-Z0-9\s]',
+      ); // Matches non-alphabetic and non-numeric characters
+
+  Pattern get otherThanMobileNumberRegex =>
+      RegExp(r'[^0-9]'); // Matches non-numeric characters
+
   @override
   void initState() {
     isProximityEnabled = true;
+    isMobileNumberSearchEnabled = false;
     // Initialize the BlocWrapper with instances of SearchHouseholdsBloc, SearchMemberBloc, and ProximitySearchBloc
     blocWrapper = context.read<SearchBlocWrapper>();
 
@@ -115,6 +125,7 @@ class _SearchBeneficiaryPageState
   @override
   void dispose() {
     isProximityEnabled = false;
+    isMobileNumberSearchEnabled = false;
     blocWrapper.clearEvent();
     super.dispose();
   }
@@ -149,6 +160,23 @@ class _SearchBeneficiaryPageState
                       offset: offset + limit,
                       limit: limit,
                     ));
+                    setState(() {
+                      offset = (offset + limit);
+                    });
+                  } else if (metrics.atEdge &&
+                      isMobileNumberSearchEnabled &&
+                      searchController.text.trim().length ==
+                          mobileNumberLength &&
+                      metrics.pixels != 0) {
+                    blocWrapper.searchByMobileNumberBloc
+                        .add(SearchHouseholdsEvent.searchByMobileNumber(
+                      mobileNumber: searchController.text,
+                      projectId: context.projectId,
+                      isProximityEnabled: isProximityEnabled,
+                      offset: offset + limit,
+                      limit: limit,
+                    ));
+
                     setState(() {
                       offset = (offset + limit);
                     });
@@ -241,8 +269,11 @@ class _SearchBeneficiaryPageState
                                   DigitSearchBar(
                                     controller: searchController,
                                     hintText: localizations.translate(
-                                      i18.searchBeneficiary
-                                          .beneficiarySearchHintText,
+                                      isMobileNumberSearchEnabled
+                                          ? i18.searchBeneficiary
+                                              .beneficiaryMobileNumberSearchHintText
+                                          : i18.searchBeneficiary
+                                              .beneficiarySearchHintText,
                                     ),
                                     textCapitalization:
                                         TextCapitalization.words,
@@ -251,16 +282,36 @@ class _SearchBeneficiaryPageState
                                       if (value.isEmpty) {
                                         blocWrapper.clearEvent();
                                       }
-                                      if (value
-                                          .contains(otherThanAlphabetsRegex)) {
+                                      if (value.contains(
+                                        otherThanAlphabetsAndNumbersRegex,
+                                      )) {
                                         value = value.replaceAll(
-                                          otherThanAlphabetsRegex,
+                                          otherThanAlphabetsAndNumbersRegex,
                                           '',
                                         );
                                         searchController.text = value;
                                       }
+                                      if (isMobileNumberSearchEnabled &&
+                                          value.contains(
+                                            otherThanMobileNumberRegex,
+                                          )) {
+                                        value = value.replaceAll(
+                                          otherThanMobileNumberRegex,
+                                          '',
+                                        );
+                                        searchController.text = value;
+                                      }
+                                      if (isMobileNumberSearchEnabled &&
+                                          value.length > mobileNumberLength) {
+                                        value = value.substring(
+                                          0,
+                                          mobileNumberLength,
+                                        );
+                                        searchController.text = value;
+                                      }
                                       if (value.trim().length < 2 &&
-                                          !isProximityEnabled) {
+                                          !isProximityEnabled &&
+                                          !isMobileNumberSearchEnabled) {
                                         blocWrapper.clearEvent();
 
                                         return;
@@ -274,6 +325,38 @@ class _SearchBeneficiaryPageState
                                                 locationState.longitude!,
                                             projectId: context.projectId,
                                             maxRadius: appConfig.maxRadius!,
+                                            offset: offset,
+                                            limit: limit,
+                                          ),
+                                        );
+                                      } else if (isMobileNumberSearchEnabled &&
+                                          value.trim().length !=
+                                              mobileNumberLength) {
+                                        blocWrapper.clearEvent();
+                                        setState(() {
+                                          isMobileNumberSearchInfoShow =
+                                              value.trim().isNotEmpty;
+                                        });
+
+                                        return;
+                                      } else if (isMobileNumberSearchEnabled &&
+                                          value.trim().length ==
+                                              mobileNumberLength) {
+                                        setState(() {
+                                          isMobileNumberSearchInfoShow = false;
+                                        });
+                                        blocWrapper.searchByMobileNumberBloc
+                                            .add(
+                                          SearchHouseholdsEvent
+                                              .searchByMobileNumber(
+                                            mobileNumber: value,
+                                            projectId: context.projectId,
+                                            isProximityEnabled:
+                                                isProximityEnabled,
+                                            latitude: locationState.latitude,
+                                            longitude: locationState.longitude,
+                                            maxRadius: appConfig.maxRadius,
+                                            tag: null,
                                             offset: offset,
                                             limit: limit,
                                           ),
@@ -298,59 +381,97 @@ class _SearchBeneficiaryPageState
                                     },
                                   ),
                                   locationState.latitude != null
-                                      ? Row(
+                                      ? Column(
                                           children: [
-                                            Switch(
-                                              value: isProximityEnabled,
-                                              onChanged: (value) {
-                                                searchController.clear();
-                                                setState(() {
-                                                  isProximityEnabled = value;
-                                                  lat = locationState.latitude!;
-                                                  long =
-                                                      locationState.longitude!;
-                                                  offset = 0;
-                                                  limit = 10;
-                                                });
+                                            Row(
+                                              children: [
+                                                Switch(
+                                                  value: isProximityEnabled,
+                                                  onChanged: (value) {
+                                                    searchController.clear();
+                                                    setState(() {
+                                                      isProximityEnabled =
+                                                          value;
+                                                      isMobileNumberSearchEnabled =
+                                                          false;
+                                                      lat = locationState
+                                                          .latitude!;
+                                                      long = locationState
+                                                          .longitude!;
+                                                      offset = 0;
+                                                      limit = 10;
+                                                    });
 
-                                                if (locationState
-                                                        .hasPermissions &&
-                                                    value &&
-                                                    locationState.latitude !=
-                                                        null &&
-                                                    locationState.longitude !=
-                                                        null &&
-                                                    appConfig.maxRadius !=
-                                                        null &&
-                                                    isProximityEnabled) {
-                                                  blocWrapper
-                                                      .proximitySearchBloc
-                                                      .add(
-                                                    SearchHouseholdsEvent
-                                                        .searchByProximity(
-                                                      latitude: locationState
-                                                          .latitude!,
-                                                      longititude: locationState
-                                                          .longitude!,
-                                                      projectId:
-                                                          context.projectId,
-                                                      maxRadius:
-                                                          appConfig.maxRadius!,
-                                                      offset: offset,
-                                                      limit: limit,
-                                                    ),
-                                                  );
-                                                } else {
-                                                  isProximityEnabled = false;
-                                                  blocWrapper.clearEvent();
-                                                }
-                                              },
+                                                    if (locationState
+                                                            .hasPermissions &&
+                                                        value &&
+                                                        locationState
+                                                                .latitude !=
+                                                            null &&
+                                                        locationState
+                                                                .longitude !=
+                                                            null &&
+                                                        appConfig.maxRadius !=
+                                                            null &&
+                                                        isProximityEnabled) {
+                                                      blocWrapper
+                                                          .proximitySearchBloc
+                                                          .add(
+                                                        SearchHouseholdsEvent
+                                                            .searchByProximity(
+                                                          latitude:
+                                                              locationState
+                                                                  .latitude!,
+                                                          longititude:
+                                                              locationState
+                                                                  .longitude!,
+                                                          projectId:
+                                                              context.projectId,
+                                                          maxRadius: appConfig
+                                                              .maxRadius!,
+                                                          offset: offset,
+                                                          limit: limit,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      isProximityEnabled =
+                                                          false;
+                                                      blocWrapper.clearEvent();
+                                                    }
+                                                  },
+                                                ),
+                                                Text(
+                                                  localizations.translate(
+                                                    i18.searchBeneficiary
+                                                        .proximityLabel,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              localizations.translate(
-                                                i18.searchBeneficiary
-                                                    .proximityLabel,
-                                              ),
+                                            Row(
+                                              children: [
+                                                Switch(
+                                                  value:
+                                                      isMobileNumberSearchEnabled,
+                                                  onChanged: (value) {
+                                                    searchController.clear();
+                                                    setState(() {
+                                                      isMobileNumberSearchEnabled =
+                                                          value;
+                                                      isProximityEnabled =
+                                                          false;
+                                                      searchController.clear();
+                                                      blocWrapper.clearEvent();
+                                                    });
+                                                  },
+                                                ),
+                                                Text(
+                                                  localizations.translate(
+                                                    i18.searchBeneficiary
+                                                        .phoneNumberSearchLabel,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         )
@@ -360,7 +481,18 @@ class _SearchBeneficiaryPageState
                             },
                           ),
                           const SizedBox(height: kPadding * 2),
-                          if (searchHouseholdsState.resultsNotFound &&
+                          if (isMobileNumberSearchEnabled &&
+                              isMobileNumberSearchInfoShow) ...{
+                            DigitInfoCard(
+                              description: localizations.translate(
+                                i18.searchBeneficiary
+                                    .beneficiaryMobileNumberSearchInfoDescription,
+                              ),
+                              title: localizations.translate(
+                                i18.searchBeneficiary.beneficiaryInfoTitle,
+                              ),
+                            ),
+                          } else if (searchHouseholdsState.resultsNotFound &&
                               !searchHouseholdsState.loading)
                             DigitInfoCard(
                               description: localizations.translate(
@@ -422,6 +554,7 @@ class _SearchBeneficiaryPageState
                                   );
                                   setState(() {
                                     isProximityEnabled = false;
+                                    isMobileNumberSearchEnabled = false;
                                   });
                                   searchController.clear();
 
@@ -466,6 +599,7 @@ class _SearchBeneficiaryPageState
                                 searchController.clear();
                                 blocWrapper.clearEvent();
                                 isProximityEnabled = false;
+                                isMobileNumberSearchEnabled = false;
                               },
                         child: Center(
                           child: Text(localizations.translate(
@@ -483,6 +617,7 @@ class _SearchBeneficiaryPageState
                         onPressed: () {
                           blocWrapper.clearEvent();
                           isProximityEnabled = false;
+                          isMobileNumberSearchEnabled = false;
                           context.router.push(QRScannerRoute(
                             quantity: 1,
                             isGS1code: false,

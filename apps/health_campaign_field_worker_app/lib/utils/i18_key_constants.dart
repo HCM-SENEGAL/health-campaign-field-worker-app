@@ -902,6 +902,9 @@ class SearchBeneficiary {
 
   String get beneficiarySearchHintText => 'BENEFICIARY_SEARCH_HINT_TEXT';
 
+  String get beneficiaryMobileNumberSearchHintText =>
+      'BENEFICIARY_MOBILE_NUMBER_SEARCH_HINT_TEXT';
+
   String get beneficiaryIndividualSearchHintText =>
       'BENEFICIARY_INDIVIDUAL_SEARCH_HINT_TEXT';
 
@@ -910,6 +913,9 @@ class SearchBeneficiary {
   String get beneficiaryInfoDescription => 'BENEFICIARY_INFO_DESCRIPTION';
 
   String get beneficiaryInfoTitle => 'BENEFICIARY_INFO_TITLE';
+
+  String get beneficiaryMobileNumberSearchInfoDescription =>
+      'BENEFICIARY_MOBILE_NUMBER_SEARCH_INFO_DESCRIPTION';
 
   String get beneficiaryAddActionLabel => 'BENEFICIARY_ADD_ACTION_LABEL';
 
@@ -920,6 +926,8 @@ class SearchBeneficiary {
   String get monthsAbbr => 'MONTHS_ABBR';
 
   String get proximityLabel => 'PROXIMITY_LABEL';
+
+  String get phoneNumberSearchLabel => 'PHONE_NUMBER_SEARCH_LABEL';
 }
 
 class BeneficiaryDetails {

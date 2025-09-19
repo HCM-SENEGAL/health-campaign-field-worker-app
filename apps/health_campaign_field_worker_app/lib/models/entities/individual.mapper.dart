@@ -46,6 +46,9 @@ class IndividualSearchModelMapper
   static NameSearchModel? _$name(IndividualSearchModel v) => v.name;
   static const Field<IndividualSearchModel, NameSearchModel> _f$name =
       Field('name', _$name, opt: true);
+  static String? _$mobileNumber(IndividualSearchModel v) => v.mobileNumber;
+  static const Field<IndividualSearchModel, String> _f$mobileNumber =
+      Field('mobileNumber', _$mobileNumber, opt: true);
   static Gender? _$gender(IndividualSearchModel v) => v.gender;
   static const Field<IndividualSearchModel, Gender> _f$gender =
       Field('gender', _$gender, opt: true);
@@ -76,6 +79,7 @@ class IndividualSearchModelMapper
     #clientReferenceId: _f$clientReferenceId,
     #tenantId: _f$tenantId,
     #name: _f$name,
+    #mobileNumber: _f$mobileNumber,
     #gender: _f$gender,
     #identifiers: _f$identifiers,
     #boundaryCode: _f$boundaryCode,
@@ -103,6 +107,7 @@ class IndividualSearchModelMapper
         clientReferenceId: data.dec(_f$clientReferenceId),
         tenantId: data.dec(_f$tenantId),
         name: data.dec(_f$name),
+        mobileNumber: data.dec(_f$mobileNumber),
         gender: data.dec(_f$gender),
         identifiers: data.dec(_f$identifiers),
         boundaryCode: data.dec(_f$boundaryCode));
@@ -187,6 +192,7 @@ abstract class IndividualSearchModelCopyWith<
       List<String>? clientReferenceId,
       String? tenantId,
       NameSearchModel? name,
+      String? mobileNumber,
       Gender? gender,
       List<IdentifierSearchModel>? identifiers,
       String? boundaryCode});
@@ -246,6 +252,7 @@ class _IndividualSearchModelCopyWithImpl<$R, $Out>
           Object? clientReferenceId = $none,
           Object? tenantId = $none,
           Object? name = $none,
+          Object? mobileNumber = $none,
           Object? gender = $none,
           Object? identifiers = $none,
           Object? boundaryCode = $none}) =>
@@ -258,6 +265,7 @@ class _IndividualSearchModelCopyWithImpl<$R, $Out>
         if (clientReferenceId != $none) #clientReferenceId: clientReferenceId,
         if (tenantId != $none) #tenantId: tenantId,
         if (name != $none) #name: name,
+        if (mobileNumber != $none) #mobileNumber: mobileNumber,
         if (gender != $none) #gender: gender,
         if (identifiers != $none) #identifiers: identifiers,
         if (boundaryCode != $none) #boundaryCode: boundaryCode
@@ -274,6 +282,7 @@ class _IndividualSearchModelCopyWithImpl<$R, $Out>
               data.get(#clientReferenceId, or: $value.clientReferenceId),
           tenantId: data.get(#tenantId, or: $value.tenantId),
           name: data.get(#name, or: $value.name),
+          mobileNumber: data.get(#mobileNumber, or: $value.mobileNumber),
           gender: data.get(#gender, or: $value.gender),
           identifiers: data.get(#identifiers, or: $value.identifiers),
           boundaryCode: data.get(#boundaryCode, or: $value.boundaryCode));
