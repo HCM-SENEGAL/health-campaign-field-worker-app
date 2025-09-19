@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_radio_button/group_radio_button.dart';
+import 'package:intl/intl.dart';
 
 import '../../blocs/service/service.dart';
 import '../../blocs/service_definition/service_definition.dart';
@@ -52,6 +53,23 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
           ),
         );
     super.initState();
+  }
+
+  bool isDateAttribute(String? code) {
+    return (code == "SMAE_Q4" ||
+        code == "SMAE_Q15" ||
+        code == "SMAE_Q16" ||
+        code == "SMAE_Q22" ||
+        code == "SMAE_Q23" ||
+        code == "SAE_Q4" ||
+        code == "SAE_Q15" ||
+        code == "SAE_Q16" ||
+        code == "SAE_Q22" ||
+        code == "SAE_Q23");
+  }
+
+  bool isAutoPopulatedDate(String? code) {
+    return (code == "SMAE_Q4" || code == "SAE_Q4");
   }
 
   @override
@@ -310,31 +328,64 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                 DigitTextField(
                                   autoValidation:
                                       AutovalidateMode.onUserInteraction,
-                                  isRequired: false,
-                                  controller: controller[index],
-                                  // inputFormatter: [
-                                  //   FilteringTextInputFormatter.allow(RegExp(
-                                  //     "[a-zA-Z0-9]",
-                                  //   )),
-                                  // ],
+                                  isRequired: e.required ?? false,
+                                  hintText: isDateAttribute(e.code)
+                                      ? 'dd/MM/yyyy HH:mm'
+                                      : null,
+                                  controller: controller[index]
+                                    ..text = isAutoPopulatedDate(e.code)
+                                        ? DateFormat("dd/MM/yyyy HH:mm")
+                                            .format(DateTime.now().toLocal())
+                                        : controller[index].text,
+                                  // keep existing if already filled
+                                  inputFormatter: [
+                                    if (isDateAttribute(e.code) &&
+                                        !isAutoPopulatedDate(e.code))
+                                      DateTimeInputFormatter(), // custom formatter for date+time
+                                  ],
+                                  readOnly: isAutoPopulatedDate(e.code),
                                   validator: (value) {
-                                    if (((value == null || value == '') &&
+                                    if (((value == null || value.isEmpty) &&
                                         e.required == true)) {
                                       return localizations
                                           .translate("${e.code}_REQUIRED");
                                     }
-                                    if (e.regex != null) {
-                                      return (RegExp(e.regex!).hasMatch(value!))
-                                          ? null
-                                          : localizations
+
+                                    // Regex for dd/MM/yyyy HH:mm
+                                    final regex = isDateAttribute(e.code)
+                                        ? RegExp(r'^(0[1-9]|[12][0-9]|3[01])/'
+                                            r'(0[1-9]|1[0-2])/'
+                                            r'([0-9]{4})\s'
+                                            r'([01][0-9]|2[0-3]):([0-5][0-9])$')
+                                        : (e.regex != null
+                                            ? RegExp(e.regex!)
+                                            : null);
+
+                                    if (value != null &&
+                                        value.isNotEmpty &&
+                                        regex != null) {
+                                      if (!regex.hasMatch(value)) {
+                                        return localizations
+                                            .translate("${e.code}_REGEX");
+                                      }
+
+                                      if (isDateAttribute(e.code)) {
+                                        try {
+                                          DateFormat("dd/MM/yyyy HH:mm")
+                                              .parseStrict(value);
+                                        } catch (_) {
+                                          return localizations
                                               .translate("${e.code}_REGEX");
+                                        }
+                                      }
                                     }
 
                                     return null;
                                   },
-                                  label: '${localizations.translate(
-                                        '${value.selectedServiceDefinition?.code}.${e.code}',
-                                      ).trim()} ${e.required == true ? '*' : ''}',
+                                  label: localizations
+                                      .translate(
+                                          '${value.selectedServiceDefinition?.code}.${e.code}')
+                                      .trim(),
                                 ),
                               ] else if (e.dataType == 'Number' &&
                                   !(e.code ?? '').contains('.')) ...[
@@ -997,5 +1048,28 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
     );
 
     return shouldNavigateBack ?? false;
+  }
+}
+
+class DateTimeInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    var text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    final buffer = StringBuffer();
+    for (int i = 0; i < text.length; i++) {
+      buffer.write(text[i]);
+      if (i == 1 || i == 3) buffer.write('/');
+      if (i == 7) buffer.write(' ');
+      if (i == 9) buffer.write(':');
+    }
+
+    return TextEditingValue(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: buffer.length),
+    );
   }
 }
