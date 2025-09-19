@@ -143,7 +143,8 @@ class _IndividualDetailsPageState
                                   form.control(_idTypeKey).value == null) {
                                 form.control(_idTypeKey).setErrors({'': true});
                               }
-                              if (!isHeadAgeValid) {
+                              if (form.control(_genderKey).value == 'MALE' &&
+                                  !isHeadAgeValid) {
                                 await DigitToast.show(
                                   context,
                                   options: DigitToastOptions(
