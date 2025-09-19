@@ -177,6 +177,16 @@ class _WarehouseDetailsPageState extends LocalizedState<WarehouseDetailsPage> {
                   .toList();
             }
 
+            List<FacilityModel> currentBoundaryFaciclity = filteredFacilities
+                .where((element) =>
+                    element.address?.boundary ==
+                    ctx.selectedProject.address?.boundary)
+                .toList();
+
+            filteredFacilities = currentBoundaryFaciclity.isNotEmpty
+                ? currentBoundaryFaciclity
+                : filteredFacilities;
+
             // prevFacility = facilityState.whenOrNull(
             //   fetched: (_, __, facility) => facility,
             // );
