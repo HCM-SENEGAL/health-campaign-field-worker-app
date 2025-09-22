@@ -57,13 +57,16 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
 
   bool isDateAttribute(String? code) {
     return (code == "SMAE_Q4" ||
-        code == "SMAE_Q15" ||
         code == "SMAE_Q16" ||
+        code == "SAE_Q4" ||
+        code == "SAE_Q16");
+  }
+
+  bool isDateTimeAttribute(String? code) {
+    return (code == "SMAE_Q15" ||
         code == "SMAE_Q22" ||
         code == "SMAE_Q23" ||
-        code == "SAE_Q4" ||
         code == "SAE_Q15" ||
-        code == "SAE_Q16" ||
         code == "SAE_Q22" ||
         code == "SAE_Q23");
   }
@@ -329,19 +332,24 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                   autoValidation:
                                       AutovalidateMode.onUserInteraction,
                                   isRequired: e.required ?? false,
-                                  hintText: isDateAttribute(e.code)
+                                  hintText: isDateTimeAttribute(e.code)
                                       ? 'dd/MM/yyyy HH:mm'
-                                      : null,
+                                      : (isDateAttribute(e.code)
+                                          ? 'dd/MM/yyyy'
+                                          : null),
                                   controller: controller[index]
                                     ..text = isAutoPopulatedDate(e.code)
-                                        ? DateFormat("dd/MM/yyyy HH:mm")
+                                        ? DateFormat("dd/MM/yyyy")
                                             .format(DateTime.now().toLocal())
                                         : controller[index].text,
                                   // keep existing if already filled
                                   inputFormatter: [
-                                    if (isDateAttribute(e.code) &&
+                                    if (isDateTimeAttribute(e.code) &&
                                         !isAutoPopulatedDate(e.code))
                                       DateTimeInputFormatter(), // custom formatter for date+time
+                                    if (isDateAttribute(e.code) &&
+                                        !isAutoPopulatedDate(e.code))
+                                      DateInputFormatter(), // custom formatter for date only
                                   ],
                                   readOnly: isAutoPopulatedDate(e.code),
                                   validator: (value) {
@@ -352,14 +360,20 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                     }
 
                                     // Regex for dd/MM/yyyy HH:mm
-                                    final regex = isDateAttribute(e.code)
+                                    final regex = isDateTimeAttribute(e.code)
                                         ? RegExp(r'^(0[1-9]|[12][0-9]|3[01])/'
                                             r'(0[1-9]|1[0-2])/'
                                             r'([0-9]{4})\s'
                                             r'([01][0-9]|2[0-3]):([0-5][0-9])$')
-                                        : (e.regex != null
-                                            ? RegExp(e.regex!)
-                                            : null);
+                                        : (isDateAttribute(e.code)
+                                            ? RegExp(
+                                                r'^(0[1-9]|[12][0-9]|3[01])/'
+                                                r'(0[1-9]|1[0-2])/'
+                                                r'([0-9]{4})$',
+                                              )
+                                            : (e.regex != null
+                                                ? RegExp(e.regex!)
+                                                : null));
 
                                     if (value != null &&
                                         value.isNotEmpty &&
@@ -369,10 +383,52 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                             .translate("${e.code}_REGEX");
                                       }
 
-                                      if (isDateAttribute(e.code)) {
+                                      if (isDateTimeAttribute(e.code)) {
                                         try {
-                                          DateFormat("dd/MM/yyyy HH:mm")
-                                              .parseStrict(value);
+                                          final parsedDate =
+                                              DateFormat("dd/MM/yyyy HH:mm")
+                                                  .parseStrict(value);
+                                          final now = DateTime.now();
+                                          // final minDate = DateTime(2000, 1, 1);
+
+                                          final today = DateTime(
+                                            now.year,
+                                            now.month,
+                                            now.day,
+                                          );
+                                          final inputDateOnly = DateTime(
+                                            parsedDate.year,
+                                            parsedDate.month,
+                                            parsedDate.day,
+                                          );
+
+                                          if (inputDateOnly.isAfter(today)) {
+                                            return localizations.translate(
+                                              "${e.code}_NO_FUTURE_DATE",
+                                            );
+                                          }
+
+                                          // if (parsedDate.isBefore(minDate)) {
+                                          //   return localizations.translate(
+                                          //     "${e.code}_BEFORE_MIN_DATE",
+                                          //   );
+                                          // }
+                                        } catch (_) {
+                                          return localizations
+                                              .translate("${e.code}_REGEX");
+                                        }
+                                      } else if (isDateAttribute(e.code)) {
+                                        try {
+                                          final parsedDate =
+                                              DateFormat("dd/MM/yyyy")
+                                                  .parseStrict(value);
+                                          final now = DateTime.now();
+
+                                          if (parsedDate.isAfter(now)) {
+                                            return localizations.translate(
+                                              "${e.code}_NO_FUTURE_DATE",
+                                            );
+                                          }
                                         } catch (_) {
                                           return localizations
                                               .translate("${e.code}_REGEX");
@@ -384,7 +440,8 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                   },
                                   label: localizations
                                       .translate(
-                                          '${value.selectedServiceDefinition?.code}.${e.code}')
+                                        '${value.selectedServiceDefinition?.code}.${e.code}',
+                                      )
                                       .trim(),
                                 ),
                               ] else if (e.dataType == 'Number' &&
@@ -796,7 +853,7 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
           },
           label: '${localizations.translate(
                 '${selectedServiceDefinition?.code}.${item.code}',
-              ).trim()} ${item.required == true ? '*' : ''}',
+              ).trim()} ',
         ),
       );
     } else if (item.dataType == 'Number') {
@@ -1051,25 +1108,36 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
   }
 }
 
-class DateTimeInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    var text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+class DateInputFormatter extends BaseDateFormatter {
+  DateInputFormatter() : super(8); // ddMMyyyy
 
+  @override
+  String formatDigits(String digits) {
     final buffer = StringBuffer();
-    for (int i = 0; i < text.length; i++) {
-      buffer.write(text[i]);
-      if (i == 1 || i == 3) buffer.write('/');
+    for (int i = 0; i < digits.length; i++) {
+      buffer.write(digits[i]);
+      if (i == 1) buffer.write('/');
+      if (i == 3) buffer.write('/');
+    }
+
+    return buffer.toString();
+  }
+}
+
+class DateTimeInputFormatter extends BaseDateFormatter {
+  DateTimeInputFormatter() : super(12); // ddMMyyyyHHmm
+
+  @override
+  String formatDigits(String digits) {
+    final buffer = StringBuffer();
+    for (int i = 0; i < digits.length; i++) {
+      buffer.write(digits[i]);
+      if (i == 1) buffer.write('/');
+      if (i == 3) buffer.write('/');
       if (i == 7) buffer.write(' ');
       if (i == 9) buffer.write(':');
     }
 
-    return TextEditingValue(
-      text: buffer.toString(),
-      selection: TextSelection.collapsed(offset: buffer.length),
-    );
+    return buffer.toString();
   }
 }
