@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:digit_components/digit_components.dart';
 import 'package:digit_components/utils/date_utils.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ import '../../utils/i18_key_constants.dart' as i18;
 import '../../utils/utils.dart';
 import '../../widgets/header/back_navigation_help_header.dart';
 import '../../widgets/localized.dart';
-import 'package:collection/collection.dart';
 
 class ChecklistViewPage extends LocalizedStatefulWidget {
   final String? referralClientRefId;
@@ -71,8 +71,18 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
         code == "SAE_Q23");
   }
 
+  bool isAutoPopulated(String? code) {
+    return (code == "SMAE_Q3" || code == "SAE_Q3");
+  }
+
   bool isAutoPopulatedDate(String? code) {
     return (code == "SMAE_Q4" || code == "SAE_Q4");
+  }
+
+  String autoPopulateBoundary(String? code) {
+    return code == "SMAE_Q3" || code == "SAE_Q3"
+        ? context.boundary.name ?? ""
+        : "";
   }
 
   @override
@@ -338,10 +348,13 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                           ? 'dd/MM/yyyy'
                                           : null),
                                   controller: controller[index]
-                                    ..text = isAutoPopulatedDate(e.code)
-                                        ? DateFormat("dd/MM/yyyy")
-                                            .format(DateTime.now().toLocal())
-                                        : controller[index].text,
+                                    ..text = isAutoPopulated(e.code)
+                                        ? autoPopulateBoundary(e.code)
+                                        : (isAutoPopulatedDate(e.code)
+                                            ? DateFormat("dd/MM/yyyy").format(
+                                                DateTime.now().toLocal(),
+                                              )
+                                            : controller[index].text),
                                   // keep existing if already filled
                                   inputFormatter: [
                                     if (isDateTimeAttribute(e.code) &&
@@ -351,7 +364,8 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                         !isAutoPopulatedDate(e.code))
                                       DateInputFormatter(), // custom formatter for date only
                                   ],
-                                  readOnly: isAutoPopulatedDate(e.code),
+                                  readOnly: isAutoPopulated(e.code) ||
+                                      isAutoPopulatedDate(e.code),
                                   validator: (value) {
                                     if (((value == null || value.isEmpty) &&
                                         e.required == true)) {

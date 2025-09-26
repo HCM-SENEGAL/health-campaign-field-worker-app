@@ -143,8 +143,7 @@ class _IndividualDetailsPageState
                                   form.control(_idTypeKey).value == null) {
                                 form.control(_idTypeKey).setErrors({'': true});
                               }
-                              if (form.control(_genderKey).value == 'MALE' &&
-                                  !isHeadAgeValid) {
+                              if (!isHeadAgeValid) {
                                 await DigitToast.show(
                                   context,
                                   options: DigitToastOptions(
@@ -767,7 +766,7 @@ class _IndividualDetailsPageState
                                                   age.months > 0))) {
                                         formControl.setErrors({'': true});
                                       } else if (widget.isHeadOfHousehold &&
-                                          age.years < 18) {
+                                          age.years < 15) {
                                         isHeadAgeValid = false;
                                       } else if (!widget.isHeadOfHousehold &&
                                           (totalAgeInMonths < 3 ||
