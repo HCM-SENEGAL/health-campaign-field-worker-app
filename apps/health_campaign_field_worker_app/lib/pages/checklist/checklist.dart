@@ -83,7 +83,8 @@ class _ChecklistPageState extends LocalizedState<ChecklistPage> {
                                 "CAMPAIGN_PREPARATION",
                                 "TREATMENT_EVALUATION",
                                 "SUMMARY_FULL_TREATMENT",
-                                "SUPERVISION_GRID"
+                                "SUPERVISION_GRID",
+                                "ADVERSE_EFFECTS_MONITORING",
                               ];
 
                               serviceDefinitionList.sort((a, b) =>

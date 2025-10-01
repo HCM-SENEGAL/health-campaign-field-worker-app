@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:digit_components/digit_components.dart';
 import 'package:digit_components/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_radio_button/group_radio_button.dart';
+import 'package:intl/intl.dart';
 
 import '../../blocs/service/service.dart';
 import '../../blocs/service_definition/service_definition.dart';
@@ -15,15 +17,14 @@ import '../../utils/i18_key_constants.dart' as i18;
 import '../../utils/utils.dart';
 import '../../widgets/header/back_navigation_help_header.dart';
 import '../../widgets/localized.dart';
-import 'package:collection/collection.dart';
 
 class ChecklistViewPage extends LocalizedStatefulWidget {
   final String? referralClientRefId;
   const ChecklistViewPage({
-    Key? key,
+    super.key,
     this.referralClientRefId,
     super.appLocalizations,
-  }) : super(key: key);
+  });
 
   @override
   State<ChecklistViewPage> createState() => _ChecklistViewPageState();
@@ -52,6 +53,36 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
           ),
         );
     super.initState();
+  }
+
+  bool isDateAttribute(String? code) {
+    return (code == "SMAE_Q4" ||
+        code == "SMAE_Q16" ||
+        code == "SAE_Q4" ||
+        code == "SAE_Q16");
+  }
+
+  bool isDateTimeAttribute(String? code) {
+    return (code == "SMAE_Q15" ||
+        code == "SMAE_Q22" ||
+        code == "SMAE_Q23" ||
+        code == "SAE_Q15" ||
+        code == "SAE_Q22" ||
+        code == "SAE_Q23");
+  }
+
+  bool isAutoPopulated(String? code) {
+    return (code == "SMAE_Q3" || code == "SAE_Q3");
+  }
+
+  bool isAutoPopulatedDate(String? code) {
+    return (code == "SMAE_Q4" || code == "SAE_Q4");
+  }
+
+  String autoPopulateBoundary(String? code) {
+    return code == "SMAE_Q3" || code == "SAE_Q3"
+        ? context.boundary.name ?? ""
+        : "";
   }
 
   @override
@@ -310,31 +341,122 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
                                 DigitTextField(
                                   autoValidation:
                                       AutovalidateMode.onUserInteraction,
-                                  isRequired: false,
-                                  controller: controller[index],
-                                  // inputFormatter: [
-                                  //   FilteringTextInputFormatter.allow(RegExp(
-                                  //     "[a-zA-Z0-9]",
-                                  //   )),
-                                  // ],
+                                  isRequired: e.required ?? false,
+                                  hintText: isDateTimeAttribute(e.code)
+                                      ? 'dd/MM/yyyy HH:mm'
+                                      : (isDateAttribute(e.code)
+                                          ? 'dd/MM/yyyy'
+                                          : null),
+                                  controller: controller[index]
+                                    ..text = isAutoPopulated(e.code)
+                                        ? autoPopulateBoundary(e.code)
+                                        : (isAutoPopulatedDate(e.code)
+                                            ? DateFormat("dd/MM/yyyy").format(
+                                                DateTime.now().toLocal(),
+                                              )
+                                            : controller[index].text),
+                                  // keep existing if already filled
+                                  inputFormatter: [
+                                    if (isDateTimeAttribute(e.code) &&
+                                        !isAutoPopulatedDate(e.code))
+                                      DateTimeInputFormatter(), // custom formatter for date+time
+                                    if (isDateAttribute(e.code) &&
+                                        !isAutoPopulatedDate(e.code))
+                                      DateInputFormatter(), // custom formatter for date only
+                                  ],
+                                  readOnly: isAutoPopulated(e.code) ||
+                                      isAutoPopulatedDate(e.code),
                                   validator: (value) {
-                                    if (((value == null || value == '') &&
+                                    if (((value == null || value.isEmpty) &&
                                         e.required == true)) {
                                       return localizations
                                           .translate("${e.code}_REQUIRED");
                                     }
-                                    if (e.regex != null) {
-                                      return (RegExp(e.regex!).hasMatch(value!))
-                                          ? null
-                                          : localizations
+
+                                    // Regex for dd/MM/yyyy HH:mm
+                                    final regex = isDateTimeAttribute(e.code)
+                                        ? RegExp(r'^(0[1-9]|[12][0-9]|3[01])/'
+                                            r'(0[1-9]|1[0-2])/'
+                                            r'([0-9]{4})\s'
+                                            r'([01][0-9]|2[0-3]):([0-5][0-9])$')
+                                        : (isDateAttribute(e.code)
+                                            ? RegExp(
+                                                r'^(0[1-9]|[12][0-9]|3[01])/'
+                                                r'(0[1-9]|1[0-2])/'
+                                                r'([0-9]{4})$',
+                                              )
+                                            : (e.regex != null
+                                                ? RegExp(e.regex!)
+                                                : null));
+
+                                    if (value != null &&
+                                        value.isNotEmpty &&
+                                        regex != null) {
+                                      if (!regex.hasMatch(value)) {
+                                        return localizations
+                                            .translate("${e.code}_REGEX");
+                                      }
+
+                                      if (isDateTimeAttribute(e.code)) {
+                                        try {
+                                          final parsedDate =
+                                              DateFormat("dd/MM/yyyy HH:mm")
+                                                  .parseStrict(value);
+                                          final now = DateTime.now();
+                                          // final minDate = DateTime(2000, 1, 1);
+
+                                          final today = DateTime(
+                                            now.year,
+                                            now.month,
+                                            now.day,
+                                          );
+                                          final inputDateOnly = DateTime(
+                                            parsedDate.year,
+                                            parsedDate.month,
+                                            parsedDate.day,
+                                          );
+
+                                          if (inputDateOnly.isAfter(today)) {
+                                            return localizations.translate(
+                                              "${e.code}_NO_FUTURE_DATE",
+                                            );
+                                          }
+
+                                          // if (parsedDate.isBefore(minDate)) {
+                                          //   return localizations.translate(
+                                          //     "${e.code}_BEFORE_MIN_DATE",
+                                          //   );
+                                          // }
+                                        } catch (_) {
+                                          return localizations
                                               .translate("${e.code}_REGEX");
+                                        }
+                                      } else if (isDateAttribute(e.code)) {
+                                        try {
+                                          final parsedDate =
+                                              DateFormat("dd/MM/yyyy")
+                                                  .parseStrict(value);
+                                          final now = DateTime.now();
+
+                                          if (parsedDate.isAfter(now)) {
+                                            return localizations.translate(
+                                              "${e.code}_NO_FUTURE_DATE",
+                                            );
+                                          }
+                                        } catch (_) {
+                                          return localizations
+                                              .translate("${e.code}_REGEX");
+                                        }
+                                      }
                                     }
 
                                     return null;
                                   },
-                                  label: '${localizations.translate(
+                                  label: localizations
+                                      .translate(
                                         '${value.selectedServiceDefinition?.code}.${e.code}',
-                                      ).trim()} ${e.required == true ? '*' : ''}',
+                                      )
+                                      .trim(),
                                 ),
                               ] else if (e.dataType == 'Number' &&
                                   !(e.code ?? '').contains('.')) ...[
@@ -745,7 +867,7 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
           },
           label: '${localizations.translate(
                 '${selectedServiceDefinition?.code}.${item.code}',
-              ).trim()} ${item.required == true ? '*' : ''}',
+              ).trim()} ',
         ),
       );
     } else if (item.dataType == 'Number') {
@@ -997,5 +1119,39 @@ class _ChecklistViewPageState extends LocalizedState<ChecklistViewPage> {
     );
 
     return shouldNavigateBack ?? false;
+  }
+}
+
+class DateInputFormatter extends BaseDateFormatter {
+  DateInputFormatter() : super(8); // ddMMyyyy
+
+  @override
+  String formatDigits(String digits) {
+    final buffer = StringBuffer();
+    for (int i = 0; i < digits.length; i++) {
+      buffer.write(digits[i]);
+      if (i == 1) buffer.write('/');
+      if (i == 3) buffer.write('/');
+    }
+
+    return buffer.toString();
+  }
+}
+
+class DateTimeInputFormatter extends BaseDateFormatter {
+  DateTimeInputFormatter() : super(12); // ddMMyyyyHHmm
+
+  @override
+  String formatDigits(String digits) {
+    final buffer = StringBuffer();
+    for (int i = 0; i < digits.length; i++) {
+      buffer.write(digits[i]);
+      if (i == 1) buffer.write('/');
+      if (i == 3) buffer.write('/');
+      if (i == 7) buffer.write(' ');
+      if (i == 9) buffer.write(':');
+    }
+
+    return buffer.toString();
   }
 }
