@@ -1080,6 +1080,7 @@ class IndividualDetails {
   String get lastNameIsRequiredError => 'LAST_NAME_REQUIRED_ERROR_MESSAGE';
   String get linkVoucherToIndividual => 'LINK_VOUCHER_TO_INDIVIDUAL';
   String get headAgeValidError => 'HEAD_VALID_AGE_ERROR_MESSAGE';
+  String get headAgeValidErrorForMda => 'HEAD_VALID_AGE_ERROR_FOR_MDA_MESSAGE';
 }
 
 class HouseholdLocation {
@@ -1142,7 +1143,7 @@ class HouseholdDetails {
       'HOUSEHOLD_DETAILS_DATE_OF_REGISTRATION_LABEL';
 
   String get noOfMembersCountLabel => 'NO_OF_MEMBERS_COUNT_LABEL';
-  String get noOfMembersCountLabelmda => 'NO_OF_MEMBERS_COUNT_LABEL_MDA';
+  String get noOfMembersCountLabelMda => 'NO_OF_MEMBERS_COUNT_LABEL_MDA';
 
   String get householdMemberLabel => 'HOUSEHOLD_MEMBER_LABEL';
   String get householdMembersLabel => 'HOUSEHOLD_MEMBERS_LABEL';

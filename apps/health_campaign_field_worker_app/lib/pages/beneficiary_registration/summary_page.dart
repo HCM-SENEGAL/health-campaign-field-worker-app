@@ -315,7 +315,7 @@ class SummaryPageState extends LocalizedState<SummaryPage> {
                           items: [
                             LabelValueItem(
                               label: localizations.translate(
-                                i18.householdDetails.noOfMembersCountLabel,
+                                i18.householdDetails.noOfMembersCountLabelMda,
                               ),
                               value: householdState.householdModel?.memberCount
                                       .toString() ??

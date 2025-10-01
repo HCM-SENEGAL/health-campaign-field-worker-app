@@ -149,7 +149,8 @@ class _IndividualDetailsPageState
                                   context,
                                   options: DigitToastOptions(
                                     localizations.translate(i18
-                                        .individualDetails.headAgeValidError),
+                                        .individualDetails
+                                        .headAgeValidErrorForMda),
                                     true,
                                     theme,
                                   ),

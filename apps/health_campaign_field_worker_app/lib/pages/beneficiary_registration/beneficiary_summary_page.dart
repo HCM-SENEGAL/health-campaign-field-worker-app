@@ -274,14 +274,16 @@ class SummaryBeneficiaryPageState
                         child: LabelValueSummary(
                           padding: EdgeInsets.zero,
                           heading: localizations.translate(
-                              i18.householdDetails.householdDetailsLabel),
+                            i18.householdDetails.householdDetailsLabel,
+                          ),
                           headingStyle: textTheme.headlineLarge!.copyWith(
                             color: theme.colorScheme.primary,
                           ),
                           items: [
                             LabelValueItem(
                               label: localizations.translate(
-                                  i18.householdDetails.noOfMembersCountLabel),
+                                i18.householdDetails.noOfMembersCountLabelMda,
+                              ),
                               value: householdState.householdModel?.memberCount
                                       .toString() ??
                                   '0',
