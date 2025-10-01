@@ -13,6 +13,7 @@ import 'package:digit_components/widgets/digit_dialog.dart';
 import 'package:digit_components/widgets/digit_sync_dialog.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formula_parser/formula_parser.dart';
@@ -81,7 +82,7 @@ class CustomValidator {
         : {'required': true};
   }
 
-   static Map<String, dynamic>? requiredMin1(
+  static Map<String, dynamic>? requiredMin1(
     AbstractControl<dynamic> control,
   ) {
     return control.value == null ||
@@ -90,7 +91,6 @@ class CustomValidator {
         ? null
         : {'min1': true};
   }
-
 
   static Map<String, dynamic>? requiredMin2(
     AbstractControl<dynamic> control,
@@ -1054,4 +1054,56 @@ getSelectedLanguage(AppInitialized state, int index) {
       state.appConfiguration.languages![index].value == selectedLanguage;
 
   return isSelected;
+}
+
+abstract class BaseDateFormatter extends TextInputFormatter {
+  final int maxDigits;
+
+  BaseDateFormatter(this.maxDigits);
+
+  /// Subclass will define how digits are formatted with separators
+  String formatDigits(String digits);
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final newText = newValue.text;
+
+    // Extract only digits
+    final digits = newText.replaceAll(RegExp(r'[^0-9]'), '');
+    final limited = digits.substring(0, min(digits.length, maxDigits));
+
+    // Raw cursor position (count of digits before caret)
+    final rawCursorPos =
+        _digitCountBeforeCursor(newText, newValue.selection.end);
+
+    final formatted = formatDigits(limited);
+
+    // Digit positions in formatted string
+    final digitPositions = <int>[];
+    for (int i = 0; i < formatted.length; i++) {
+      if (RegExp(r'\d').hasMatch(formatted[i])) {
+        digitPositions.add(i + 1);
+      }
+    }
+
+    // Map cursor back
+    int selectionIndex = 0;
+    selectionIndex = rawCursorPos > 0 && rawCursorPos <= digitPositions.length
+        ? digitPositions[rawCursorPos - 1]
+        : formatted.length;
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: selectionIndex),
+    );
+  }
+
+  int _digitCountBeforeCursor(String text, int cursor) {
+    final before = text.substring(0, min(cursor, text.length));
+
+    return before.replaceAll(RegExp(r'[^0-9]'), '').length;
+  }
 }

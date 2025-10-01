@@ -766,7 +766,7 @@ class _IndividualDetailsPageState
                                                   age.months > 0))) {
                                         formControl.setErrors({'': true});
                                       } else if (widget.isHeadOfHousehold &&
-                                          age.years < 18) {
+                                          age.years < 15) {
                                         isHeadAgeValid = false;
                                       } else if (!widget.isHeadOfHousehold &&
                                           (totalAgeInMonths < 3 ||

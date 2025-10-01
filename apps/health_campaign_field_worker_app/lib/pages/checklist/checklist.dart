@@ -77,15 +77,6 @@ class _ChecklistPageState extends LocalizedState<ChecklistPage> {
                                 ...value.serviceDefinitionList,
                               ];
 
-                              final checklistArray = [
-                                "SPC_ADMINISTRATION",
-                                "SURVEY_FORM",
-                                "CAMPAIGN_PREPARATION",
-                                "TREATMENT_EVALUATION",
-                                "SUMMARY_FULL_TREATMENT",
-                                "SUPERVISION_GRID"
-                              ];
-
                               Map<String, int> checklistOrdering = {
                                 'SPC_ADMINISTRATION': 1,
                                 'SURVEY_FORM': 3,

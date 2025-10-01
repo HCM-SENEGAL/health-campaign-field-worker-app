@@ -235,6 +235,18 @@ class SearchHouseholdsEvent with _$SearchHouseholdsEvent {
     required int limit,
   }) = SearchHouseholdsSearchByHouseholdHeadEvent;
 
+  const factory SearchHouseholdsEvent.searchByMobileNumber({
+    required String mobileNumber,
+    required String projectId,
+    required final bool isProximityEnabled,
+    double? latitude,
+    double? longitude,
+    double? maxRadius,
+    String? tag,
+    required int offset,
+    required int limit,
+  }) = SearchHouseholdsSearchByMobileNumberEvent;
+
   const factory SearchHouseholdsEvent.searchByProximity({
     required double latitude,
     required double longititude,

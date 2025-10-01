@@ -95,6 +95,10 @@ class IndividualLocalRepository
                 sql.name.otherNames.equals(
                   query.name!.otherNames!,
                 ),
+              if (query.mobileNumber != null)
+                sql.individual.mobileNumber.equals(
+                  query.mobileNumber!,
+                ),
               if (userId != null)
                 sql.individual.auditCreatedBy.equals(
                   userId,

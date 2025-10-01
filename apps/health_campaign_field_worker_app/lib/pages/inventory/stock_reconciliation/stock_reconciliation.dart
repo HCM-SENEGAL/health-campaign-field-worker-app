@@ -488,6 +488,20 @@ class _StockReconciliationPageState
                                                     element.usage != 'CS')
                                                 .toList();
 
+                                        List<FacilityModel>
+                                            currentBoundaryFaciclity =
+                                            filteredFacilities
+                                                .where((element) =>
+                                                    element.address?.boundary ==
+                                                    ctx.selectedProject.address
+                                                        ?.boundary)
+                                                .toList();
+
+                                        filteredFacilities =
+                                            currentBoundaryFaciclity.isNotEmpty
+                                                ? currentBoundaryFaciclity
+                                                : filteredFacilities;
+
                                         return InkWell(
                                           onTap: facilities.isEmpty
                                               ? null

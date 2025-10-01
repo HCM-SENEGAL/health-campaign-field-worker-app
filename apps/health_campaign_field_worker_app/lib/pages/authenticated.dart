@@ -14,6 +14,7 @@ import '../blocs/localization/app_localization.dart';
 import '../blocs/search_households/project_beneficiaries_downsync.dart';
 import '../blocs/search_households/proximity_search.dart';
 import '../blocs/search_households/search_bloc_common_wrapper.dart';
+import '../blocs/search_households/search_by_mobile_number.dart';
 import '../blocs/search_households/search_households.dart';
 import '../blocs/search_households/search_by_head.dart';
 import '../blocs/search_households/tag_by_search.dart';
@@ -172,6 +173,37 @@ class AuthenticatedPageWrapper extends StatelessWidget {
                         create: (context) {
                           final isar = context.read<Isar>();
 
+                          return SearchByMobileNumberBloc(
+                            beneficiaryType: context.beneficiaryType,
+                            userUid: context.loggedInUserUuid,
+                            projectId: context.projectId,
+                            addressRepository: AddressLocalRepository(
+                              context.read<LocalSqlDataStore>(),
+                              AddressOpLogManager(isar),
+                            ),
+                            projectBeneficiary: context.repository<
+                                ProjectBeneficiaryModel,
+                                ProjectBeneficiarySearchModel>(),
+                            householdMember: context.repository<
+                                HouseholdMemberModel,
+                                HouseholdMemberSearchModel>(),
+                            household: context.repository<HouseholdModel,
+                                HouseholdSearchModel>(),
+                            individual: context.repository<IndividualModel,
+                                IndividualSearchModel>(),
+                            taskDataRepository: context
+                                .repository<TaskModel, TaskSearchModel>(),
+                            sideEffectDataRepository: context.repository<
+                                SideEffectModel, SideEffectSearchModel>(),
+                            referralDataRepository: context.repository<
+                                ReferralModel, ReferralSearchModel>(),
+                          );
+                        },
+                      ),
+                      BlocProvider(
+                        create: (context) {
+                          final isar = context.read<Isar>();
+
                           return ProximitySearchBloc(
                             beneficiaryType: context.beneficiaryType,
                             userUid: context.loggedInUserUuid,
@@ -232,11 +264,12 @@ class AuthenticatedPageWrapper extends StatelessWidget {
                       ),
                       BlocProvider(
                         create: (context) {
-
                           return SearchBlocWrapper(
                             searchHouseholdsBloc:
                                 context.read<SearchHouseholdsBloc>(),
                             searchByHeadBloc: context.read<SearchByHeadBloc>(),
+                            searchByMobileNumberBloc:
+                                context.read<SearchByMobileNumberBloc>(),
                             proximitySearchBloc:
                                 context.read<ProximitySearchBloc>(),
                             tagSearchBloc: context.read<TagSearchBloc>(),
